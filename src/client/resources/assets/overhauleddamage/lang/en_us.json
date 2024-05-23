@@ -64,18 +64,26 @@
 	"attribute.name.generic.parry_stamina_cost": "Parry Stamina Cost",
 
 
+	"death.attack.mob_bashing": "%s was smashed into the ground by %s",
+	"death.attack.mob_piercing": "%s was stabbed to death by %s",
+	"death.attack.mob_slashing": "%s was cut into pieces by %s",
+	"death.attack.bleeding": "%s lost to much blood",
+	"death.attack.burning": "%s burned to ash",
+	"death.attack.poison": "%s was poisoned",
+	"death.attack.shocked": "%s was electrocuted",
+
+
+	"effect.overhauleddamage.fall_immune": "Fall Immunity",
+	"effect.overhauleddamage.calamity": "Calamity",
+	"effect.overhauleddamage.staggered": "Staggered",
+	"effect.overhauleddamage.bleeding": "Bleeding",
+	"effect.overhauleddamage.burning": "Burning",
+	"effect.overhauleddamage.chilled": "Chilled",
+	"effect.overhauleddamage.frozen": "Frozen",
+	"effect.overhauleddamage.poison": "Poisoned",
+	"effect.overhauleddamage.shocked": "Shocked",
+
+
 	"hud.action_impaired.frozen": "You are frozen",
-	"hud.action_impaired.staggered": "You are staggered",
-
-
-	"death.attack.mob_bashing_damage_type": "%s was smashed into the ground by %s",
-	"death.attack.mob_bashing_damage_type.item": "%s was smashed into the ground by %s using %s",
-	"death.attack.mob_piercing_damage_type": "%s was stabbed to death by %s",
-	"death.attack.mob_piercing_damage_type.item": "%s was stabbed to death by %s using %s",
-	"death.attack.mob_slashing_damage_type": "%s was cut into pieces by %s",
-	"death.attack.mob_slashing_damage_type.item": "%s was cut into pieces by %s using %s",
-	"death.attack.bleeding_damage_type": "%s lost to much blood",
-	"death.attack.burning_damage_type": "%s burned to ash",
-	"death.attack.poison_damage_type": "%s was poisoned",
-	"death.attack.shocked_damage_type": "%s was electrocuted"
+	"hud.action_impaired.staggered": "You are staggered"
 }
