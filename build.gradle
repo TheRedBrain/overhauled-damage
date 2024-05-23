@@ -1,6 +1,7 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version '1.5-SNAPSHOT'
 	id 'maven-publish'
+	id "com.modrinth.minotaur" version "2.+"
 }
 
 version = project.mod_version
@@ -11,18 +12,44 @@ base {
 }
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	// Cloth Config
+	maven {
+		url "https://maven.shedaniel.me/"
+	}
+
+	// Cloth Config
+	maven {
+		name = "TerraformersMC"
+		url = "https://maven.terraformersmc.com/"
+	}
+
+	// Stamina Attributes, Spell Power, Spell Engine
+	maven {
+		name = "Modrinth"
+		url = "https://api.modrinth.com/maven"
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+
+	// Player Animator
+	maven {
+		name "KosmX's maven"
+		url 'https://maven.kosmx.dev/'
+	}
+
+	// Tiny Config
+	maven {
+		url 'https://jitpack.io'
+	}
+
 }
 
 loom {
     splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"overhauleddamage" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -38,7 +65,25 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+
+	// Cloth Config
+	modImplementation ("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config}")
+
+	// Stamina Attributes
+	modImplementation "maven.modrinth:stamina-attributes:${project.stamina_attributes}"
+
+	// Spell Engine
+	modImplementation("maven.modrinth:spell-engine:${project.spell_engine_version}")
+
+	// Spell Power
+	modImplementation("maven.modrinth:spell-power:${project.spell_power_version}")
+
+	// Player Animation Lib
+	modImplementation("dev.kosmx.player-anim:player-animation-lib-fabric:${project.player_anim}")
+
+	// Tiny Config
+	implementation ("com.github.ZsoltMolnarrr:TinyConfig:${project.tiny_config_version}")
+
 }
 
 processResources {
@@ -50,7 +95,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 17
 }
 
 java {
@@ -59,8 +104,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {

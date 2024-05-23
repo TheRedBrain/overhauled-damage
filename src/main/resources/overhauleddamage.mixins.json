@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.github.theredbrain.overhauleddamage.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "entity.LivingEntityMixin",
+    "entity.attribute.EntityAttributesMixin",
+    "entity.damage.DamageSourcesMixin",
+    "entity.player.PlayerEntityMixin",
+    "spell_engine.EntityActionsAllowedSemanticTypeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+	}
+}
