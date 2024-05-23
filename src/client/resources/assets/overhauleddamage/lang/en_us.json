@@ -1,5 +1,4 @@
 {
-
 	"attribute.name.generic.additional_bashing_damage": "Additional Bashing Damage",
 	"attribute.name.generic.increased_bashing_damage": "Increased Bashing Damage",
 	
@@ -8,7 +7,9 @@
 	
 	"attribute.name.generic.additional_slashing_damage": "Additional Slashing Damage",
 	"attribute.name.generic.increased_slashing_damage": "Increased Slashing Damage",
-	
+
+	"attribute.name.generic.blocked_physical_damage": "Blocked Physical Damage",
+
 	"attribute.name.generic.max_bleeding_build_up": "Max Bleeding Build Up",
 	"attribute.name.generic.bleeding_duration": "Bleeding Duration",
 	"attribute.name.generic.bleeding_tick_threshold": "Bleeding Tick Threshold",
@@ -16,6 +17,7 @@
 	
 	"attribute.name.generic.additional_frost_damage": "Additional Frost Damage",
 	"attribute.name.generic.increased_frost_damage": "Increased Frost Damage",
+	"attribute.name.generic.blocked_frost_damage": "Blocked Frost Damage",
 	"attribute.name.generic.frost_resistance": "Frost Resistance",
 	"attribute.name.generic.max_freeze_build_up": "Max Freeze Build Up",
 	"attribute.name.generic.freeze_duration": "Freeze Duration",
@@ -24,6 +26,7 @@
 	
 	"attribute.name.generic.additional_fire_damage": "Additional Fire Damage",
 	"attribute.name.generic.increased_fire_damage": "Increased Fire Damage",
+	"attribute.name.generic.blocked_fire_damage": "Blocked Fire Damage",
 	"attribute.name.generic.fire_resistance": "Fire Resistance",
 	"attribute.name.generic.max_burn_build_up": "Max Burn Build Up",
 	"attribute.name.generic.burn_duration": "Burn Duration",
@@ -32,6 +35,7 @@
 	
 	"attribute.name.generic.additional_lightning_damage": "Additional Lightning Damage",
 	"attribute.name.generic.increased_lightning_damage": "Increased Lightning Damage",
+	"attribute.name.generic.blocked_lightning_damage": "Blocked Lightning Damage",
 	"attribute.name.generic.lightning_resistance": "Lightning Resistance",
 	"attribute.name.generic.max_shock_build_up": "Max Shock Build Up",
 	"attribute.name.generic.shock_duration": "Shock Duration",
@@ -40,6 +44,7 @@
 	
 	"attribute.name.generic.additional_poison_damage": "Additional Poison Damage",
 	"attribute.name.generic.increased_poison_damage": "Increased Poison Damage",
+	"attribute.name.generic.blocked_poison_damage": "Blocked Poison Damage",
 	"attribute.name.generic.poison_resistance": "Poison Resistance",
 	"attribute.name.generic.max_poison_build_up": "Max Poison Build Up",
 	"attribute.name.generic.poison_duration": "Poison Duration",
@@ -51,19 +56,26 @@
 	"attribute.name.generic.stagger_tick_threshold": "Stagger Tick Threshold",
 	"attribute.name.generic.stagger_build_up_reduction": "Stagger Build-Up Reduction",
 
+	"attribute.name.generic.block_force": "Block Force",
+	"attribute.name.generic.parry_bonus": "Parry Bonus",
+	"attribute.name.generic.parry_window": "Parry Window",
 
+	"attribute.name.generic.block_stamina_cost": "Block Stamina Cost",
+	"attribute.name.generic.parry_stamina_cost": "Parry Stamina Cost",
+
+
+	"hud.action_impaired.frozen": "You are frozen",
 	"hud.action_impaired.staggered": "You are staggered",
 
 
-	"death.attack.player_bashing": "%s was smashed into the ground by %s",
-	"death.attack.player_bashing.item": "%s was smashed into the ground by %s using %s",
-	"death.attack.player_piercing": "%s was stabbed to death by %s",
-	"death.attack.player_piercing.item": "%s was stabbed to death by %s using %s",
-	"death.attack.player_slashing": "%s was cut into pieces by %s",
-	"death.attack.player_slashing.item": "%s was cut into pieces by %s using %s",
-	"death.attack.player_unarmed": "%s was beaten to death by %s using their bare hands!",
-	"death.attack.zweihander_one_handed": "%s was smashed into the ground by %s",
-	"death.attack.zweihander_one_handed.item": "%s was smashed into the ground by %s using %s",
-	"death.attack.zweihander_two_handed": "%s was cut in half by %s",
-	"death.attack.zweihander_two_handed.item": "%s was cut in half by %s using %s"
+	"death.attack.mob_bashing_damage_type": "%s was smashed into the ground by %s",
+	"death.attack.mob_bashing_damage_type.item": "%s was smashed into the ground by %s using %s",
+	"death.attack.mob_piercing_damage_type": "%s was stabbed to death by %s",
+	"death.attack.mob_piercing_damage_type.item": "%s was stabbed to death by %s using %s",
+	"death.attack.mob_slashing_damage_type": "%s was cut into pieces by %s",
+	"death.attack.mob_slashing_damage_type.item": "%s was cut into pieces by %s using %s",
+	"death.attack.bleeding_damage_type": "%s lost to much blood",
+	"death.attack.burning_damage_type": "%s burned to ash",
+	"death.attack.poison_damage_type": "%s was poisoned",
+	"death.attack.shocked_damage_type": "%s was electrocuted"
 }

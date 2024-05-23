@@ -19,7 +19,7 @@ When a build-up reaches a threshold, the corresponding status effect is applied 
 
 Build-ups are displayed in the HUD, which can be disabled in the client config.
 
-## Blocking, Parrying and Stagger
+## Blocking and Parrying
 Shields are completely overhauled. They no longer provide complete damage immunity.
 
 Only a limited amount of damage is blocked, blocking costs [stamina](https://modrinth.com/mod/stamina-attributes) and when the shield is raised just before a hit, the attack is parried.
