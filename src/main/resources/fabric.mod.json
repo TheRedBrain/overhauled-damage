@@ -33,7 +33,7 @@
 		"java": ">=17",
 		"fabric-api": "*",
 		"cloth-config": ">=11.1.106",
-		"staminaattributes": ">=1.0.0",
+		"staminaattributes": ">=1.2.1",
 		"spell_engine": ">=0.12.5"
 	}
 }

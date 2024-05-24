@@ -11,7 +11,10 @@
     "minecraft:mob_projectile",
     "minecraft:player_attack",
     "minecraft:player_explosion",
-    "minecraft:spit",
+    {
+      "id": "minecraft:spit",
+      "required": false
+    },
     "minecraft:thrown",
     "minecraft:unattributed_fireball",
     "minecraft:wither_skull",
