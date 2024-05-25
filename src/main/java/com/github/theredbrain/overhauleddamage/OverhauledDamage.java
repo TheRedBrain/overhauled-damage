@@ -2,7 +2,6 @@ package com.github.theredbrain.overhauleddamage;
 
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.config.ServerConfigWrapper;
-import com.github.theredbrain.overhauleddamage.registry.StatusEffectsRegistry;
 import com.google.gson.Gson;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
@@ -106,8 +105,6 @@ public class OverhauledDamage implements ModInitializer {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             sender.sendPacket(ServerConfigSync.ID, serverConfigSerialized);
         });
-
-        StatusEffectsRegistry.init();
 
     }
 

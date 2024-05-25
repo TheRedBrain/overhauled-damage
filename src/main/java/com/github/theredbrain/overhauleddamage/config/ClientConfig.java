@@ -8,11 +8,8 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
         name = "client"
 )
 public class ClientConfig implements ConfigData {
-    @Comment("""
-            Changes HUD elements like the health bar, disables some like the armor bar
-            and adds new ones like a stamina bar.
-            """)
-    public boolean show_effect_build_up_bars = false;
+    @Comment("When an effect build-up is greater 0, a bar shows the progress until the effect is applied.")
+    public boolean show_effect_build_up_bars = true;
     public ClientConfig() {
 
     }

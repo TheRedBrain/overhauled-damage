@@ -18,6 +18,9 @@
 		],
 		"client": [
 			"com.github.theredbrain.overhauleddamage.OverhauledDamageClient"
+		],
+		"modmenu": [
+			"com.github.theredbrain.overhauleddamage.compatibility.ModMenuCompatibility"
 		]
 	},
 	"mixins": [
@@ -33,7 +36,6 @@
 		"java": ">=17",
 		"fabric-api": "*",
 		"cloth-config": ">=11.1.106",
-		"staminaattributes": ">=1.2.1",
-		"spell_engine": ">=0.12.5"
+		"staminaattributes": ">=1.2.1"
 	}
 }

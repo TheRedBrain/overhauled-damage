@@ -6,8 +6,7 @@
     "entity.LivingEntityMixin",
     "entity.attribute.EntityAttributesMixin",
     "entity.damage.DamageSourcesMixin",
-    "entity.player.PlayerEntityMixin",
-    "spell_engine.EntityActionsAllowedSemanticTypeMixin"
+    "entity.player.PlayerEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

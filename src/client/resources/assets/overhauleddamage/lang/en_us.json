@@ -67,23 +67,8 @@
 	"death.attack.mob_bashing": "%s was smashed into the ground by %s",
 	"death.attack.mob_piercing": "%s was stabbed to death by %s",
 	"death.attack.mob_slashing": "%s was cut into pieces by %s",
-	"death.attack.bleeding": "%s lost to much blood",
-	"death.attack.burning": "%s burned to ash",
-	"death.attack.poison": "%s was poisoned",
-	"death.attack.shocked": "%s was electrocuted",
 
 
-	"effect.overhauleddamage.fall_immune": "Fall Immunity",
-	"effect.overhauleddamage.calamity": "Calamity",
-	"effect.overhauleddamage.staggered": "Staggered",
-	"effect.overhauleddamage.bleeding": "Bleeding",
-	"effect.overhauleddamage.burning": "Burning",
-	"effect.overhauleddamage.chilled": "Chilled",
-	"effect.overhauleddamage.frozen": "Frozen",
-	"effect.overhauleddamage.poison": "Poisoned",
-	"effect.overhauleddamage.shocked": "Shocked",
-
-
-	"hud.action_impaired.frozen": "You are frozen",
-	"hud.action_impaired.staggered": "You are staggered"
+	"text.autoconfig.overhauleddamage.title": "Overhauled Damage",
+	"text.autoconfig.overhauleddamage.option.client.show_effect_build_up_bars": "Show effect build-up bars"
 }

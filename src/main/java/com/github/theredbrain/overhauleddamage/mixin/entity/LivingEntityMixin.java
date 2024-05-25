@@ -2,7 +2,6 @@ package com.github.theredbrain.overhauleddamage.mixin.entity;
 
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
-import com.github.theredbrain.overhauleddamage.registry.StatusEffectsRegistry;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
 import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
 import net.minecraft.advancement.criterion.Criteria;
@@ -22,11 +21,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -166,14 +167,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     private int shockTickTimer = 0;
     @Unique
     private int blockingTime = 0;
-    @Unique
-    private double oldPosX = 0.0;
-    @Unique
-    private double oldPosY = 0.0;
-    @Unique
-    private double oldPosZ = 0.0;
-    @Unique
-    private boolean isMoving = false;
 
     @Unique
     private static final TrackedData<Float> BLEEDING_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
@@ -457,17 +450,22 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
             return;
         }
 
-        if (source.isIn(DamageTypeTags.IS_FALL) && this.hasStatusEffect(StatusEffectsRegistry.FALL_IMMUNE)) {
+        StatusEffect fall_immune_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.fall_immune_status_effect_identifier));
+        if (source.isIn(DamageTypeTags.IS_FALL) && fall_immune_status_effect != null && this.hasStatusEffect(fall_immune_status_effect)) {
             return;
         }
 
-        if (this.hasStatusEffect(StatusEffectsRegistry.STAGGERED)) {
+        StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
+        if (staggered_status_effect != null && this.hasStatusEffect(staggered_status_effect)) {
             amount = amount * 2;
         }
 
-        StatusEffectInstance calamityEffectInstance = this.getStatusEffect(StatusEffectsRegistry.CALAMITY);
-        if (calamityEffectInstance != null) {
-            amount = amount * 2 + calamityEffectInstance.getAmplifier();
+        StatusEffect calamity_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.calamity_status_effect_identifier));
+        if (calamity_status_effect != null) {
+            StatusEffectInstance calamityEffectInstance = this.getStatusEffect(calamity_status_effect);
+            if (calamityEffectInstance != null) {
+                amount = amount * 2 + calamityEffectInstance.getAmplifier();
+            }
         }
 
         float f = amount;
@@ -660,13 +658,15 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
             // apply chilled and frozen
             if (frost_amount > 0) {
-                int chilledDuration = (int) Math.ceil(frost_amount);
-                StatusEffectInstance statusEffectInstance = this.getStatusEffect(StatusEffectsRegistry.CHILLED);
-                if (statusEffectInstance != null) {
-                    chilledDuration = chilledDuration + statusEffectInstance.getDuration();
+                StatusEffect chilled_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.chilled_status_effect_identifier));
+                if (chilled_status_effect != null) {
+                    int chilledDuration = (int) Math.ceil(frost_amount);
+                    StatusEffectInstance statusEffectInstance = this.getStatusEffect(chilled_status_effect);
+                    if (statusEffectInstance != null) {
+                        chilledDuration = chilledDuration + statusEffectInstance.getDuration();
+                    }
+                    this.addStatusEffect(new StatusEffectInstance(chilled_status_effect, chilledDuration, 0, false, false, true));
                 }
-                this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.CHILLED, chilledDuration, 0, false, false, true));
-
                 this.overhauleddamage$addFreezeBuildUp(frost_amount);
             }
 
@@ -702,11 +702,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     public void overhauleddamage$tick(CallbackInfo ci) {
         if (!this.getWorld().isClient) {
 
-            this.isMoving = this.oldPosX != this.getX() || this.oldPosY != this.getY() || this.oldPosZ != this.getZ();
-            this.oldPosX = this.getX();
-            this.oldPosY = this.getY();
-            this.oldPosZ = this.getZ();
-
             if (this.isBlocking()) {
                 this.blockingTime++;
             } else if (this.blockingTime > 0) {
@@ -717,8 +712,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 this.bleedingTickTimer++;
                 if (this.bleedingTickTimer >= this.overhauleddamage$getBleedingTickThreshold()) {
                     if (this.overhauleddamage$getBleedingBuildUp() >= this.overhauleddamage$getMaxBleedingBuildUp()) {
-                        this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.BLEEDING, this.overhauleddamage$getBleedingDuration(), 0, false, false, true));
-                        this.overhauleddamage$setBleedingBuildUp(-this.overhauleddamage$getMaxBleedingBuildUp());
+                        StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.bleeding_status_effect_identifier));
+                        if (bleeding_status_effect != null) {
+                            this.addStatusEffect(new StatusEffectInstance(bleeding_status_effect, this.overhauleddamage$getBleedingDuration(), 0, false, false, true));
+                        }
+//                        this.overhauleddamage$setBleedingBuildUp(-this.overhauleddamage$getMaxBleedingBuildUp()); // TODO play test
+                        this.overhauleddamage$setBleedingBuildUp(0);
                     } else {
                         this.overhauleddamage$addBleedingBuildUp(-this.overhauleddamage$getBleedingBuildUpReduction());
                     }
@@ -730,12 +729,15 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 this.burnTickTimer++;
                 if (this.burnTickTimer >= this.overhauleddamage$getBurnTickThreshold()) {
                     if (this.overhauleddamage$getBurnBuildUp() >= this.overhauleddamage$getMaxBurnBuildUp()) {
-                        int burnDuration = this.overhauleddamage$getBurnDuration();
-                        StatusEffectInstance statusEffectInstance = this.getStatusEffect(StatusEffectsRegistry.BURNING);
-                        if (statusEffectInstance != null) {
-                            burnDuration = burnDuration + statusEffectInstance.getDuration();
+                        StatusEffect burning_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.burning_status_effect_identifier));
+                        if (burning_status_effect != null) {
+                            int burnDuration = this.overhauleddamage$getBurnDuration();
+                            StatusEffectInstance statusEffectInstance = this.getStatusEffect(burning_status_effect);
+                            if (statusEffectInstance != null) {
+                                burnDuration = burnDuration + statusEffectInstance.getDuration();
+                            }
+                            this.addStatusEffect(new StatusEffectInstance(burning_status_effect, burnDuration, 0, false, false, true));
                         }
-                        this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.BURNING, burnDuration, 0, false, false, true));
                         this.overhauleddamage$setBurnBuildUp(0);
                     } else {
                         this.overhauleddamage$addBurnBuildUp(-this.overhauleddamage$getBurnBuildUpReduction());
@@ -748,7 +750,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 this.freezeTickTimer++;
                 if (this.freezeTickTimer >= this.overhauleddamage$getFreezeTickThreshold()) {
                     if (this.overhauleddamage$getFreezeBuildUp() >= this.overhauleddamage$getMaxFreezeBuildUp()) {
-                        this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.FROZEN, this.overhauleddamage$getFreezeDuration(), 0, false, false, true));
+                        StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.frozen_status_effect_identifier));
+                        if (freeze_status_effect != null) {
+                            this.addStatusEffect(new StatusEffectInstance(freeze_status_effect, this.overhauleddamage$getFreezeDuration(), 0, false, false, true));
+                        }
                         this.overhauleddamage$setFreezeBuildUp(0);
                     } else {
                         this.overhauleddamage$addFreezeBuildUp(-this.overhauleddamage$getFreezeBuildUpReduction());
@@ -761,7 +766,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 this.staggerTickTimer++;
                 if (this.staggerTickTimer >= this.overhauleddamage$getStaggerTickThreshold()) {
                     if (this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp()) {
-                        this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.STAGGERED, this.overhauleddamage$getStaggerDuration(), 0, false, false, true));
+                        StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
+                        if (staggered_status_effect != null) {
+                            this.addStatusEffect(new StatusEffectInstance(staggered_status_effect, this.overhauleddamage$getStaggerDuration(), 0, false, false, true));
+                        }
                         this.overhauleddamage$setStaggerBuildUp(0);
                     } else {
                         this.overhauleddamage$addStaggerBuildUp(-this.overhauleddamage$getStaggerBuildUpReduction());
@@ -775,11 +783,14 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 if (this.poisonTickTimer >= this.overhauleddamage$getPoisonTickThreshold()) {
                     if (this.overhauleddamage$getPoisonBuildUp() >= this.overhauleddamage$getMaxPoisonBuildUp()) {
                         int poisonAmplifier = 0;
-                        StatusEffectInstance statusEffectInstance = this.getStatusEffect(StatusEffectsRegistry.POISON);
-                        if (statusEffectInstance != null) {
-                            poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
+                        StatusEffect poison_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.poison_status_effect_identifier));
+                        if (poison_status_effect != null) {
+                            StatusEffectInstance statusEffectInstance = this.getStatusEffect(poison_status_effect);
+                            if (statusEffectInstance != null) {
+                                poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
+                            }
+                            this.addStatusEffect(new StatusEffectInstance(poison_status_effect, this.overhauleddamage$getPoisonDuration(), poisonAmplifier, false, false, true));
                         }
-                        this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.POISON, this.overhauleddamage$getPoisonDuration(), poisonAmplifier, false, false, true));
                         this.overhauleddamage$setPoisonBuildUp(0);
                     } else {
                         this.overhauleddamage$addPoisonBuildUp(-this.overhauleddamage$getPoisonBuildUpReduction());
@@ -792,7 +803,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 this.shockTickTimer++;
                 if (this.shockTickTimer >= this.overhauleddamage$getShockTickThreshold()) {
                     if (this.overhauleddamage$getShockBuildUp() >= this.overhauleddamage$getMaxShockBuildUp()) {
-                        this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.SHOCKED, this.overhauleddamage$getShockDuration(), 0, false, false, false));
+                        StatusEffect shocked_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.shocked_status_effect_identifier));
+                        if (shocked_status_effect != null) {
+                            this.addStatusEffect(new StatusEffectInstance(shocked_status_effect, this.overhauleddamage$getShockDuration(), 0, false, false, false));
+                        }
                         this.overhauleddamage$setShockBuildUp(0);
                     } else {
                         this.overhauleddamage$addShockBuildUp(-this.overhauleddamage$getShockBuildUpReduction());
@@ -800,14 +814,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                     this.shockTickTimer = 0;
                 }
             }
-
-            StatusEffectInstance burningStatusEffectInstance = this.getStatusEffect(StatusEffectsRegistry.BURNING);
-            if (burningStatusEffectInstance != null && this.isTouchingWaterOrRain()) {
-                int oldBurnDuration = burningStatusEffectInstance.getDuration();
-                this.removeStatusEffect(StatusEffectsRegistry.BURNING);
-                this.addStatusEffect(new StatusEffectInstance(StatusEffectsRegistry.BURNING, oldBurnDuration - 5, 0, false, false, true));
-            }
-
         }
     }
 
@@ -815,11 +821,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     @Inject(method = "isBlocking", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
     public void overhauleddamage$isBlocking(CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(true);
-    }
-
-    @Override
-    public boolean doesRenderOnFire() {
-        return super.doesRenderOnFire() || (this.hasStatusEffect(StatusEffectsRegistry.BURNING) && !this.isSpectator());
     }
 
     @Override
@@ -860,7 +861,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     // region bleeding build up
     @Override
     public void overhauleddamage$addBleedingBuildUp(float amount) {
-        if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !this.hasStatusEffect(StatusEffectsRegistry.BLEEDING)) {
+        StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.bleeding_status_effect_identifier));
+        if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f && bleeding_status_effect != null && !this.hasStatusEffect(bleeding_status_effect)) {
             float f = this.overhauleddamage$getBleedingBuildUp();
             this.overhauleddamage$setBleedingBuildUp(f + amount);
             if (amount > 0) {
@@ -987,7 +989,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
     @Override
     public void overhauleddamage$addFreezeBuildUp(float amount) {
-        if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && !this.hasStatusEffect(StatusEffectsRegistry.FROZEN)) {
+        StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.frozen_status_effect_identifier));
+        if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect != null && !this.hasStatusEffect(freeze_status_effect)) {
             float f = this.overhauleddamage$getFreezeBuildUp();
             this.overhauleddamage$setFreezeBuildUp(f + amount);
             if (amount > 0) {
@@ -1030,7 +1033,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     // region stagger build up
     @Override
     public void overhauleddamage$addStaggerBuildUp(float amount) {
-        if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && !this.hasStatusEffect(StatusEffectsRegistry.STAGGERED)) {
+        StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
+        if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect != null && !this.hasStatusEffect(staggered_status_effect)) {
             float f = this.overhauleddamage$getStaggerBuildUp();
             this.overhauleddamage$setStaggerBuildUp(f + amount);
             if (amount > 0) {
@@ -1226,10 +1230,5 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     @Override
     public boolean overhauleddamage$canParry() {
         return false;
-    }
-
-    @Override
-    public boolean overhauleddamage$isMoving() {
-        return this.isMoving;
     }
 }
