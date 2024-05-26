@@ -865,8 +865,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f && bleeding_status_effect != null && !this.hasStatusEffect(bleeding_status_effect)) {
             float f = this.overhauleddamage$getBleedingBuildUp();
             this.overhauleddamage$setBleedingBuildUp(f + amount);
-            if (amount > 0) {
+            if (this.overhauleddamage$getBleedingBuildUp() > this.overhauleddamage$getMaxBleedingBuildUp()) {
                 this.bleedingTickTimer = this.overhauleddamage$getBleedingTickThreshold();
+            } else if (amount > 0) {
+                this.bleedingTickTimer = 0;
             }
         }
     }
@@ -928,8 +930,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     public void overhauleddamage$addBurnBuildUp(float amount) {
         if (this.overhauleddamage$getMaxBurnBuildUp() != -1.0f) {
             this.overhauleddamage$setBurnBuildUp(this.overhauleddamage$getBurnBuildUp() + amount);
-            if (amount > 0) {
+            if (this.overhauleddamage$getBurnBuildUp() > this.overhauleddamage$getMaxBurnBuildUp()) {
                 this.burnTickTimer = this.overhauleddamage$getBurnTickThreshold();
+            } else if (amount > 0) {
+                this.burnTickTimer = 0;
             }
         }
     }
@@ -993,8 +997,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect != null && !this.hasStatusEffect(freeze_status_effect)) {
             float f = this.overhauleddamage$getFreezeBuildUp();
             this.overhauleddamage$setFreezeBuildUp(f + amount);
-            if (amount > 0) {
+            if (this.overhauleddamage$getFreezeBuildUp() > this.overhauleddamage$getMaxFreezeBuildUp()) {
                 this.freezeTickTimer = this.overhauleddamage$getFreezeTickThreshold();
+            } else if (amount > 0) {
+                this.freezeTickTimer = 0;
             }
         }
     }
@@ -1037,8 +1043,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect != null && !this.hasStatusEffect(staggered_status_effect)) {
             float f = this.overhauleddamage$getStaggerBuildUp();
             this.overhauleddamage$setStaggerBuildUp(f + amount);
-            if (amount > 0) {
+            if (this.overhauleddamage$getStaggerBuildUp() > this.overhauleddamage$getMaxStaggerBuildUp()) {
                 this.staggerTickTimer = this.overhauleddamage$getStaggerTickThreshold();
+            } else if (amount > 0) {
+                this.staggerTickTimer = 0;
             }
         }
     }
@@ -1101,8 +1109,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         if (this.overhauleddamage$getMaxPoisonBuildUp() != -1.0f) {
             float f = this.overhauleddamage$getPoisonBuildUp();
             this.overhauleddamage$setPoisonBuildUp(f + amount);
-            if (amount > 0) {
+            if (this.overhauleddamage$getPoisonBuildUp() > this.overhauleddamage$getMaxPoisonBuildUp()) {
                 this.poisonTickTimer = this.overhauleddamage$getPoisonTickThreshold();
+            } else if (amount > 0) {
+                this.poisonTickTimer = 0;
             }
         }
     }
@@ -1165,8 +1175,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         if (this.overhauleddamage$getMaxShockBuildUp() != -1.0f) {
             float f = this.overhauleddamage$getShockBuildUp();
             this.overhauleddamage$setShockBuildUp(f + amount);
-            if (amount > 0) {
+            if (this.overhauleddamage$getShockBuildUp() > this.overhauleddamage$getMaxShockBuildUp()) {
                 this.shockTickTimer = this.overhauleddamage$getShockTickThreshold();
+            } else if (amount > 0) {
+                this.shockTickTimer = 0;
             }
         }
     }

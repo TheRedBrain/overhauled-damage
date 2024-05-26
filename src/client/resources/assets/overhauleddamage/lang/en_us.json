@@ -70,5 +70,62 @@
 
 
 	"text.autoconfig.overhauleddamage.title": "Overhauled Damage",
-	"text.autoconfig.overhauleddamage.option.client.show_effect_build_up_bars": "Show effect build-up bars"
+	"text.autoconfig.overhauleddamage.option.client.show_effect_build_up_elements": "Effect build-ups are displayed in the HUD",
+	"text.autoconfig.overhauleddamage.option.client.use_custom_textures": "Use custom textures.",
+	"text.autoconfig.overhauleddamage.option.client.dynamic_x_offset_increase": "Dynamic X offset increase",
+	"text.autoconfig.overhauleddamage.option.client.dynamic_y_offset_increase": "Dynamic Y offset increase",
+	
+	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_element_x_offset": "Bleeding element X offset",
+	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_element_y_offset": "Bleeding element Y offset",
+	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_bar_additional_length": "Bleeding element additional length",
+	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_background_texture_id": "Bleeding element background texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_foreground_texture_id": "Bleeding element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_texture_width": "Bleeding element texture width",
+	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_texture_height": "Bleeding element texture height",
+	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_fill_direction": "Bleeding element fill direction",
+	
+	"text.autoconfig.overhauleddamage.option.client.burn_build_up_element_x_offset": "Burn element X offset",
+	"text.autoconfig.overhauleddamage.option.client.burn_build_up_element_y_offset": "Burn element Y offset",
+	"text.autoconfig.overhauleddamage.option.client.burn_build_up_bar_additional_length": "Burn element additional length",
+	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_background_texture_id": "Burn element background texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_foreground_texture_id": "Burn element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_texture_width": "Burn element texture width",
+	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_texture_height": "Burn element texture height",
+	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_fill_direction": "Burn element fill direction",
+	
+	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_element_x_offset": "Freeze element X offset",
+	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_element_y_offset": "Freeze element Y offset",
+	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_bar_additional_length": "Freeze element additional length",
+	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_background_texture_id": "Freeze element background texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_foreground_texture_id": "Freeze element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_texture_width": "Freeze element texture width",
+	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_texture_height": "Freeze element texture height",
+	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_fill_direction": "Freeze element fill direction",
+	
+	"text.autoconfig.overhauleddamage.option.client.poison_build_up_element_x_offset": "Poison element X offset",
+	"text.autoconfig.overhauleddamage.option.client.poison_build_up_element_y_offset": "Poison element Y offset",
+	"text.autoconfig.overhauleddamage.option.client.poison_build_up_bar_additional_length": "Poison element additional length",
+	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_background_texture_id": "Poison element background texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_foreground_texture_id": "Poison element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_texture_width": "Poison element texture width",
+	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_texture_height": "Poison element texture height",
+	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_fill_direction": "Poison element fill direction",
+	
+	"text.autoconfig.overhauleddamage.option.client.shock_build_up_element_x_offset": "Shock element X offset",
+	"text.autoconfig.overhauleddamage.option.client.shock_build_up_element_y_offset": "Shock element Y offset",
+	"text.autoconfig.overhauleddamage.option.client.shock_build_up_bar_additional_length": "Shock element additional length",
+	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_background_texture_id": "Shock element background texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_foreground_texture_id": "Shock element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_texture_width": "Shock element texture width",
+	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_texture_height": "Shock element texture height",
+	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_fill_direction": "Shock element fill direction",
+	
+	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_element_x_offset": "Stagger element X offset",
+	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_element_y_offset": "Stagger element Y offset",
+	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_bar_additional_length": "Stagger element additional length",
+	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_background_texture_id": "Stagger element background texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_foreground_texture_id": "Stagger element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_texture_width": "Stagger element texture width",
+	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_texture_height": "Stagger element texture height",
+	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_fill_direction": "Stagger element fill direction"
 }
