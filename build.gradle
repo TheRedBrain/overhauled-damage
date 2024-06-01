@@ -107,6 +107,7 @@ modrinth {
 			new ModDependency('P7dR8mSH', 'required'), // Fabric API
 			new ModDependency('9s6osm5g', 'required'), // Cloth Config
 			new ModDependency('QKOE26gD', 'required'), // Stamina Attributes
+			new ModDependency('wLmM53ED', 'optional'), // Various Status Effects
 	]
 	changelog = "${update_changelog}"
 }
