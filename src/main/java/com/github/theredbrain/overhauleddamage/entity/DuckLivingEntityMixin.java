@@ -85,4 +85,5 @@ public interface DuckLivingEntityMixin {
     float overhauleddamage$getParryStaminaCost();
 
     boolean overhauleddamage$canParry();
+    int overhauleddamage$getBlockingTime();
 }

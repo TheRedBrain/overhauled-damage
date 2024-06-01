@@ -4,41 +4,38 @@ import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
 import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTracker;
+import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.passive.WolfEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.registry.tag.EntityTypeTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin(value = LivingEntity.class, priority = 950)
+@Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements DuckLivingEntityMixin {
 
     @Shadow
@@ -46,15 +43,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
     @Shadow
     public abstract boolean addStatusEffect(StatusEffectInstance effect);
-
-    @Shadow
-    public abstract DamageTracker getDamageTracker();
-
-    @Shadow
-    public abstract void setHealth(float health);
-
-    @Shadow
-    public abstract float getHealth();
 
     @Shadow
     public abstract @Nullable StatusEffectInstance getStatusEffect(StatusEffect effect);
@@ -75,77 +63,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     public abstract void stopUsingItem();
 
     @Shadow
-    public abstract boolean removeStatusEffect(StatusEffect type);
-
-    @Shadow
     public abstract float getAbsorptionAmount();
 
     @Shadow
     public abstract void setAbsorptionAmount(float amount);
-
-    @Shadow
-    public abstract boolean isDead();
-
-    @Shadow
-    public abstract boolean isSleeping();
-
-    @Shadow
-    public abstract void wakeUp();
-
-    @Shadow
-    protected int despawnCounter;
-    @Shadow
-    @Final
-    public LimbAnimator limbAnimator;
-
-    @Shadow
-    public abstract void setAttacker(@Nullable LivingEntity attacker);
-
-    @Shadow
-    protected float lastDamageTaken;
-
-    @Shadow
-    public int hurtTime;
-
-    @Shadow
-    public int maxHurtTime;
-
-    @Shadow
-    @Nullable
-    protected PlayerEntity attackingPlayer;
-
-    @Shadow
-    protected int playerHitTimer;
-
-    @Shadow
-    public abstract void takeKnockback(double strength, double x, double z);
-
-    @Shadow
-    public abstract void tiltScreen(double deltaX, double deltaZ);
-
-    @Shadow
-    protected abstract boolean tryUseTotem(DamageSource source);
-
-    @Shadow
-    protected abstract @Nullable SoundEvent getDeathSound();
-
-    @Shadow
-    public abstract void onDeath(DamageSource damageSource);
-
-    @Shadow
-    protected abstract float getSoundVolume();
-
-    @Shadow
-    public abstract float getSoundPitch();
-
-    @Shadow
-    protected abstract void playHurtSound(DamageSource source);
-
-    @Shadow
-    private @Nullable DamageSource lastDamageSource;
-
-    @Shadow
-    private long lastDamageTime;
 
     @Shadow
     public abstract boolean blockedByShield(DamageSource source);
@@ -316,139 +237,38 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
     }
 
-    /**
-     * @author TheRedBrain
-     * @reason complete overhaul
-     */
-    @Overwrite
-    public boolean damage(DamageSource source, float amount) {
-        if (this.isInvulnerableTo(source)) {
-            return false;
-        } else if (this.getWorld().isClient) {
-            return false;
-        } else if (this.isDead()) {
-            return false;
-        }
-
-        if (this.isSleeping() && !this.getWorld().isClient) {
-            this.wakeUp();
-        }
-
-        this.despawnCounter = 0;
-        float f = amount;
-        boolean bl = false;
-        float g = 0.0F;
-
-        if (source.isIn(DamageTypeTags.IS_FREEZING) && this.getType().isIn(EntityTypeTags.FREEZE_HURTS_EXTRA_TYPES)) {
-            amount *= 5.0F;
-        }
-
-        this.limbAnimator.setSpeed(1.5F);
-        boolean bl2 = true;
-        if ((float) this.timeUntilRegen > 10.0F && !source.isIn(DamageTypeTags.BYPASSES_COOLDOWN)) {
-            if (amount <= this.lastDamageTaken) {
-                return false;
-            }
-
-            this.applyDamage(source, amount - this.lastDamageTaken);
-            this.lastDamageTaken = amount;
-            bl2 = false;
-        } else {
-            this.lastDamageTaken = amount;
-            this.timeUntilRegen = 20;
-            this.applyDamage(source, amount);
-            this.maxHurtTime = 10;
-            this.hurtTime = this.maxHurtTime;
-        }
-
-        Entity entity2 = source.getAttacker();
-        if (entity2 != null) {
-            if (entity2 instanceof LivingEntity livingEntity2) {
-                if (!source.isIn(DamageTypeTags.NO_ANGER)) {
-                    this.setAttacker(livingEntity2);
-                }
-            }
-
-            if (entity2 instanceof PlayerEntity playerEntity) {
-                this.playerHitTimer = 100;
-                this.attackingPlayer = playerEntity;
-            } else if (entity2 instanceof WolfEntity wolfEntity) {
-                if (wolfEntity.isTamed()) {
-                    this.playerHitTimer = 100;
-                    LivingEntity var11 = wolfEntity.getOwner();
-                    if (var11 instanceof PlayerEntity playerEntity2) {
-                        this.attackingPlayer = playerEntity2;
-                    } else {
-                        this.attackingPlayer = null;
-                    }
-                }
-            }
-        }
-
-        if (bl2) {
-            this.getWorld().sendEntityDamage(this, source);
-
-            if (!source.isIn(DamageTypeTags.NO_IMPACT) && amount > 0.0F) {
-                this.scheduleVelocityUpdate();
-            }
-
-            if (entity2 != null && !source.isIn(DamageTypeTags.IS_EXPLOSION)) {
-                double d = entity2.getX() - this.getX();
-
-                double e;
-                for (e = entity2.getZ() - this.getZ(); d * d + e * e < 1.0E-4; e = (Math.random() - Math.random()) * 0.01) {
-                    d = (Math.random() - Math.random()) * 0.01;
-                }
-
-                this.takeKnockback(0.4000000059604645, d, e);
-                if (!bl) {
-                    this.tiltScreen(d, e);
-                }
-            }
-        }
-
-        if (this.isDead()) {
-            if (!this.tryUseTotem(source)) {
-                SoundEvent soundEvent = this.getDeathSound();
-                if (bl2 && soundEvent != null) {
-                    this.playSound(soundEvent, this.getSoundVolume(), this.getSoundPitch());
-                }
-
-                this.onDeath(source);
-            }
-        } else if (bl2) {
-            this.playHurtSound(source);
-        }
-
-        boolean bl3 = amount > 0.0F;
-        if (bl3) {
-            this.lastDamageSource = source;
-            this.lastDamageTime = this.getWorld().getTime();
-        }
-
-        if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity) {
-            Criteria.ENTITY_HURT_PLAYER.trigger((ServerPlayerEntity) (Object) this, source, f, amount, bl);
-            if (g > 0.0F && g < 3.4028235E37F) {
-                ((ServerPlayerEntity) (Object) this).increaseStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(g * 10.0F));
-            }
-        }
-
-        if (entity2 instanceof ServerPlayerEntity) {
-            Criteria.PLAYER_HURT_ENTITY.trigger((ServerPlayerEntity) entity2, this, source, f, amount, bl);
-        }
-
-        return bl3;
+    // disables the vanilla armor calculation
+    @Redirect(
+            method = "applyArmorToDamage",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
+            )
+    )
+    public boolean overhauleddamage$redirect_bypassesArmor(DamageSource instance, TagKey<DamageType> tag) {
+        return true;
     }
 
-    /**
-     * @author TheRedBrain
-     * @reason complete overhaul of the damage calculation
-     */
-    @Overwrite
-    public void applyDamage(DamageSource source, float amount) {
-        if (this.isInvulnerableTo(source)) {
-            return;
-        }
+    // disables the vanilla shield blocking
+    @Redirect(
+            method = "damage",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/LivingEntity;blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z"
+            )
+    )
+    public boolean overhauleddamage$redirect_blockedByShield(LivingEntity instance, DamageSource source) {
+        return false;
+    }
+
+    @Inject(method = "applyDamage",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V",
+                    ordinal = 0
+            ),
+            locals= LocalCapture.CAPTURE_FAILSOFT)
+    private void overhauleddamage$custom_damageCalculation(DamageSource source, float amount, CallbackInfo ci, float var9) {
 
         StatusEffect fall_immune_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.fall_immune_status_effect_identifier));
         if (source.isIn(DamageTypeTags.IS_FALL) && fall_immune_status_effect != null && this.hasStatusEffect(fall_immune_status_effect)) {
@@ -687,15 +507,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
             }
         }
 
-        applied_damage = applied_damage + true_amount;
-        if (applied_damage != 0.0F) {
-            this.getDamageTracker().onDamage(source, applied_damage);
-            this.setHealth(this.getHealth() - applied_damage);
-            if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity serverPlayerEntity && applied_damage < 3.4028235E37f) {
-                serverPlayerEntity.increaseStat(Stats.DAMAGE_TAKEN, Math.round(applied_damage * 10.0f));
-            }
-            this.emitGameEvent(GameEvent.ENTITY_DAMAGE);
-        }
+        var9 = applied_damage + true_amount;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -1242,5 +1054,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     @Override
     public boolean overhauleddamage$canParry() {
         return false;
+    }
+
+    @Override
+    public int overhauleddamage$getBlockingTime() {
+        return this.blockingTime;
     }
 }
