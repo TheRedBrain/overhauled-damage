@@ -19,23 +19,23 @@ public class ServerConfig implements ConfigData {
     @Comment("When set to 'true', blocking requires the player to have at least 1 stamina.")
     public boolean blocking_requires_stamina = true;
     @Comment("This status effect is applied when the bleeding build-up reaches the threshold")
-    public String bleeding_status_effect_identifier = "";
+    public String bleeding_status_effect_identifier = "variousstatuseffects:bleeding";
     @Comment("This status effect is applied when the burning build-up reaches the threshold")
-    public String burning_status_effect_identifier = "";
+    public String burning_status_effect_identifier = "variousstatuseffects:burning";
     @Comment("This status effect is applied when frost damage is received")
-    public String chilled_status_effect_identifier = "";
+    public String chilled_status_effect_identifier = "variousstatuseffects:chilled";
     @Comment("This status effect is applied when the freeze build-up reaches the threshold")
-    public String frozen_status_effect_identifier = "";
+    public String frozen_status_effect_identifier = "variousstatuseffects:frozen";
     @Comment("This status effect is applied when the poison build-up reaches the threshold")
-    public String poison_status_effect_identifier = "";
+    public String poison_status_effect_identifier = "variousstatuseffects:poison";
     @Comment("This status effect is applied when the shock build-up reaches the threshold")
-    public String shocked_status_effect_identifier = "";
+    public String shocked_status_effect_identifier = "variousstatuseffects:shocked";
     @Comment("This status effect is applied when the stagger build-up reaches the threshold")
-    public String staggered_status_effect_identifier = "";
+    public String staggered_status_effect_identifier = "variousstatuseffects:staggered";
     @Comment("This status effect prevents all fall damage")
-    public String fall_immune_status_effect_identifier = "";
+    public String fall_immune_status_effect_identifier = "variousstatuseffects:fall_immune";
     @Comment("This status effect multiplies incoming damage based on its amplifier")
-    public String calamity_status_effect_identifier = "";
+    public String calamity_status_effect_identifier = "variousstatuseffects:calamity";
     public ServerConfig() {
 
     }

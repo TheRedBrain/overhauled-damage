@@ -37,5 +37,8 @@
 		"fabric-api": "*",
 		"cloth-config": ">=11.1.106",
 		"staminaattributes": ">=1.2.1"
+	},
+	"suggests": {
+		"variousstatuseffects": "*"
 	}
 }
