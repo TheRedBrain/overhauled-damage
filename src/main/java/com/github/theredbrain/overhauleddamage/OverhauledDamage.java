@@ -127,11 +127,11 @@ public class OverhauledDamage implements ModInitializer {
     }
 
     public static Identifier identifier(String path) {
-        return new Identifier(MOD_ID, path);
+        return Identifier.of(MOD_ID, path);
     }
 
     public static void info(String message) {
-        LOGGER.info("[" + MOD_ID + "] [info]: " + message);
+        LOGGER.info("[" + MOD_ID + "] [info]: {}", message);
     }
 
 }

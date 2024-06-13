@@ -13,6 +13,8 @@ Elemental damage is reduced by resistances, applies status effect build-ups but 
 Piercing and slashing damage can apply bleeding build-up.\
 Taking physical or lightning damage adds to the stagger build-up.
 
+Damage can be 'true damage', which means it is not reduced by armor or other resistances.
+
 ### Wait, what are "Effect build-ups"?
 Build-ups are a value just like health, which is normally 0. Attacks can apply build-ups to the player (or other entities).
 When a build-up reaches a threshold, the corresponding status effect is applied and the build-up is set to 0. Build-ups are also lowered over time.
@@ -48,34 +50,42 @@ There is an option to use custom textures, which have to be provided by a resour
 
 ## How does it work?
 
-Overhauled Damage uses both damage type tags and entity attributes.
+Overhauled Damage uses damage type tags, entity attributes and its server config file for its damage calculation.
 
 Damage in Minecraft consists of an amount and a "damage source". The source includes the attacking entity, its position and a "damage type".
 The damage type determines the death message and is also used to check several things. This includes checking for immunities, damage reductions based on enchantments and damaging armor items.
 These checks don't look for each individual damage type, but for "tags", which are collections of damage types defined via a data pack.
+Overhauled Damage uses tags to determine if a damage_type can apply bleeding build-up and if it applies 'true damage'
 
 "Entity attributes" control things like maximum health, armor and attack strength. Status effects, potions and commands can manipulate these attributes.
 Most aspects of Overhauled Damage are controlled by attributes, like the thresholds for effect build-ups, blocked damage, elemental resistances, etc.
 
+In the server config damage types can be associated with an array of values, which determine the multipliers used when calculating the different elemental and physical damage amounts.
 ## Examples
 
 We look at an attack of the damage type "mod_id:test_damage_type" with an amount of 4.
 
 ### Example 1
 
-"mod_id:test_damage_type" is in the "has_bashing_division_of_1" damage type tag.
+"mod_id:test_damage_type" has the following damage_type_multipliers: {**1.0F**, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F}
 
 Our attack deals 4 points of bashing damage.
 
 ### Example 2
 
-"mod_id:test_damage_type" is in the "has_bashing_division_of_1" AND in the "has_piercing_division_of_1" damage type tag.
+"mod_id:test_damage_type" has the following damage_type_multipliers: {**1.0F**, **1.0F**, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F}
 
 Our attack deals 4 points of bashing and 4 points of piercing damage, so 8 points in total.
 
 ### Example 3
 
-"mod_id:test_damage_type" is in the "has_bashing_division_of_0_5" AND in the "has_piercing_division_of_0_5" damage type tag.
-Notice the change from "division_of_1" to "division_of_0_5".
+"mod_id:test_damage_type" has the following damage_type_multipliers: {**0.5F**, **0.5F**, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F}
 
 Our attack deals 2 points of bashing and 2 points of piercing damage, so 4 points in total.
+
+### Example 4
+
+"mod_id:test_damage_type" has the following damage_type_multipliers: {**1.5F**, **0.5F**, 0.0F, 0.0F, 0.0F, 0.0F, **1.0F**}
+
+Our attack deals 6 points of bashing and 2 points of piercing damage, so 8 points in total.
+It also applies 4 points of shock build-up.

@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,6 +35,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.LinkedHashMap;
+import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements DuckLivingEntityMixin {
@@ -270,17 +274,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
             locals= LocalCapture.CAPTURE_FAILSOFT)
     private void overhauleddamage$custom_damageCalculation(DamageSource source, float amount, CallbackInfo ci, float var9) {
 
-        StatusEffect fall_immune_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.fall_immune_status_effect_identifier));
+        var serverConfig = OverhauledDamage.serverConfig;
+        StatusEffect fall_immune_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.fall_immune_status_effect_identifier));
         if (source.isIn(DamageTypeTags.IS_FALL) && fall_immune_status_effect != null && this.hasStatusEffect(fall_immune_status_effect)) {
             return;
         }
 
-        StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
+        StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.staggered_status_effect_identifier));
         if (staggered_status_effect != null && this.hasStatusEffect(staggered_status_effect)) {
             amount = amount * 2;
         }
 
-        StatusEffect calamity_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.calamity_status_effect_identifier));
+        StatusEffect calamity_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.calamity_status_effect_identifier));
         if (calamity_status_effect != null) {
             StatusEffectInstance calamityEffectInstance = this.getStatusEffect(calamity_status_effect);
             if (calamityEffectInstance != null) {
@@ -313,26 +318,37 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         }
 
         if (amount > 0) {
-            float bashing_multiplier = source.isIn(Tags.HAS_BASHING_DIVISION_OF_1) ? 1.0f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_9) ? 0.9f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_8) ? 0.8f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_7) ? 0.7f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_6) ? 0.6f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_5) ? 0.5f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_4) ? 0.4f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_3) ? 0.3f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_2) ? 0.2f : source.isIn(Tags.HAS_BASHING_DIVISION_OF_0_1) ? 0.1f : 0;
-            float bashing_amount = amount * bashing_multiplier;
 
-            float piercing_multiplier = source.isIn(Tags.HAS_PIERCING_DIVISION_OF_1) ? 1.0f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_9) ? 0.9f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_8) ? 0.8f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_7) ? 0.7f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_6) ? 0.6f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_5) ? 0.5f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_4) ? 0.4f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_3) ? 0.3f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_2) ? 0.2f : source.isIn(Tags.HAS_PIERCING_DIVISION_OF_0_1) ? 0.1f : 0;
-            float piercing_amount = amount * piercing_multiplier;
+            LinkedHashMap<String, Float[]> damage_type_multipliers = serverConfig.damage_type_multipliers;
 
-            float slashing_multiplier = source.isIn(Tags.HAS_SLASHING_DIVISION_OF_1) ? 1.0f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_9) ? 0.9f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_8) ? 0.8f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_7) ? 0.7f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_6) ? 0.6f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_5) ? 0.5f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_4) ? 0.4f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_3) ? 0.3f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_2) ? 0.2f : source.isIn(Tags.HAS_SLASHING_DIVISION_OF_0_1) ? 0.1f : 0;
-            float slashing_amount = amount * slashing_multiplier;
+            String damageTypeId = "";
+            Float[] damage_type_multiplier = null;
+            Optional<RegistryKey<DamageType>> optional = source.getTypeRegistryEntry().getKey();
 
-            float poison_multiplier = source.isIn(Tags.HAS_POISON_DIVISION_OF_1) ? 1.0f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_9) ? 0.9f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_8) ? 0.8f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_7) ? 0.7f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_6) ? 0.6f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_5) ? 0.5f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_4) ? 0.4f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_3) ? 0.3f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_2) ? 0.2f : source.isIn(Tags.HAS_POISON_DIVISION_OF_0_1) ? 0.1f : 0;
-            float poison_amount = amount * poison_multiplier;
+            if (optional.isPresent()) {
+                damageTypeId = optional.get().getValue().toString();
+            }
+            if (!damageTypeId.isEmpty()) {
+                damage_type_multiplier = damage_type_multipliers.get(damageTypeId);
+            }
 
-            float fire_multiplier = source.isIn(Tags.HAS_FIRE_DIVISION_OF_1) ? 1.0f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_9) ? 0.9f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_8) ? 0.8f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_7) ? 0.7f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_6) ? 0.6f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_5) ? 0.5f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_4) ? 0.4f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_3) ? 0.3f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_2) ? 0.2f : source.isIn(Tags.HAS_FIRE_DIVISION_OF_0_1) ? 0.1f : 0;
-            float fire_amount = amount * fire_multiplier;
+            float bashing_amount = 0.0F;
+            float piercing_amount = 0.0F;
+            float slashing_amount = 0.0F;
+            float poison_amount = 0.0F;
+            float fire_amount = 0.0F;
+            float frost_amount = 0.0F;
+            float lightning_amount = 0.0F;
 
-            float frost_multiplier = source.isIn(Tags.HAS_FROST_DIVISION_OF_1) ? 1.0f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_9) ? 0.9f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_8) ? 0.8f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_7) ? 0.7f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_6) ? 0.6f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_5) ? 0.5f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_4) ? 0.4f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_3) ? 0.3f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_2) ? 0.2f : source.isIn(Tags.HAS_FROST_DIVISION_OF_0_1) ? 0.1f : 0;
-            float frost_amount = amount * frost_multiplier;
-
-            float lightning_multiplier = source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_1) ? 1.0f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_9) ? 0.9f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_8) ? 0.8f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_7) ? 0.7f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_6) ? 0.6f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_5) ? 0.5f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_4) ? 0.4f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_3) ? 0.3f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_2) ? 0.2f : source.isIn(Tags.HAS_LIGHTNING_DIVISION_OF_0_1) ? 0.1f : 0;
-            float lightning_amount = amount * lightning_multiplier;
+            if (damage_type_multiplier != null && damage_type_multiplier.length == 7) {
+                bashing_amount = amount * damage_type_multiplier[0];
+                piercing_amount = amount * damage_type_multiplier[1];
+                slashing_amount = amount * damage_type_multiplier[2];
+                poison_amount = amount * damage_type_multiplier[3];
+                fire_amount = amount * damage_type_multiplier[4];
+                frost_amount = amount * damage_type_multiplier[5];
+                lightning_amount = amount * damage_type_multiplier[6];
+            }
 
             LivingEntity attacker = null;
             if (source.getAttacker() instanceof LivingEntity) {
@@ -350,7 +366,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
             // region shield blocks
             ItemStack shieldItemStack = this.getOffHandStack();
-            if (this.isBlocking() && this.blockedByShield(source) && (((StaminaUsingEntity) this).staminaattributes$getStamina() > 0 || OverhauledDamage.serverConfig.blocking_requires_stamina)) {
+            if (this.isBlocking() && this.blockedByShield(source) && (((StaminaUsingEntity) this).staminaattributes$getStamina() > 0 || serverConfig.blocking_requires_stamina)) {
                 // try to parry the attack
                 boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
                 double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
@@ -461,7 +477,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
             applied_damage = piercing_amount + bashing_amount + slashing_amount;
 
             // taking damage interrupts eating food, drinking potions, etc
-            if (applied_damage > 0.0f && !this.isBlocking() && OverhauledDamage.serverConfig.damage_interrupts_item_usage) {
+            if (applied_damage > 0.0f && !this.isBlocking() && serverConfig.damage_interrupts_item_usage) {
                 this.stopUsingItem();
             }
 
@@ -478,7 +494,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
             // apply chilled and frozen
             if (frost_amount > 0) {
-                StatusEffect chilled_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.chilled_status_effect_identifier));
+                StatusEffect chilled_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.chilled_status_effect_identifier));
                 if (chilled_status_effect != null) {
                     int chilledDuration = (int) Math.ceil(frost_amount);
                     StatusEffectInstance statusEffectInstance = this.getStatusEffect(chilled_status_effect);
@@ -674,13 +690,19 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     @Override
     public void overhauleddamage$addBleedingBuildUp(float amount) {
         StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.bleeding_status_effect_identifier));
-        if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f && bleeding_status_effect != null && !this.hasStatusEffect(bleeding_status_effect)) {
-            float f = this.overhauleddamage$getBleedingBuildUp();
-            this.overhauleddamage$setBleedingBuildUp(f + amount);
-            if (this.overhauleddamage$getBleedingBuildUp() > this.overhauleddamage$getMaxBleedingBuildUp()) {
-                this.bleedingTickTimer = this.overhauleddamage$getBleedingTickThreshold();
-            } else if (amount > 0) {
-                this.bleedingTickTimer = 0;
+        if (bleeding_status_effect == null) {
+            if (this.overhauleddamage$getBleedingBuildUp() > 0) {
+                this.overhauleddamage$setBleedingBuildUp(0);
+            }
+        } else {
+            if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !this.hasStatusEffect(bleeding_status_effect)) {
+                float f = this.overhauleddamage$getBleedingBuildUp();
+                this.overhauleddamage$setBleedingBuildUp(f + amount);
+                if (this.overhauleddamage$getBleedingBuildUp() > this.overhauleddamage$getMaxBleedingBuildUp()) {
+                    this.bleedingTickTimer = this.overhauleddamage$getBleedingTickThreshold();
+                } else if (amount > 0) {
+                    this.bleedingTickTimer = 0;
+                }
             }
         }
     }
