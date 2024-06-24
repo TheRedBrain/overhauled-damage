@@ -24,12 +24,15 @@ public class OverhauledDamage implements ModInitializer {
 
     public static EntityAttribute ADDITIONAL_BASHING_DAMAGE;
     public static EntityAttribute INCREASED_BASHING_DAMAGE;
+    public static EntityAttribute BASHING_RESISTANCE;
 
     public static EntityAttribute ADDITIONAL_PIERCING_DAMAGE;
     public static EntityAttribute INCREASED_PIERCING_DAMAGE;
+    public static EntityAttribute PIERCING_RESISTANCE;
 
     public static EntityAttribute ADDITIONAL_SLASHING_DAMAGE;
     public static EntityAttribute INCREASED_SLASHING_DAMAGE;
+    public static EntityAttribute SLASHING_RESISTANCE;
 
     public static EntityAttribute BLOCKED_PHYSICAL_DAMAGE;
 

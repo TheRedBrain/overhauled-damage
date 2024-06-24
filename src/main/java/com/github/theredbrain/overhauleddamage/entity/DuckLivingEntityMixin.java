@@ -1,16 +1,22 @@
 package com.github.theredbrain.overhauleddamage.entity;
 
+import net.minecraft.entity.damage.DamageSource;
+
 public interface DuckLivingEntityMixin {
 
+    float overhauleddamage$calculateOverhauledDamage(DamageSource damageSource, float amount);
     float overhauleddamage$getAdditionalBashingDamage();
     float overhauleddamage$getIncreasedBashingDamage();
+    float overhauleddamage$getBashingResistance();
 
     float overhauleddamage$getAdditionalPiercingDamage();
     float overhauleddamage$getIncreasedPiercingDamage();
+    float overhauleddamage$getPiercingResistance();
 
     float overhauleddamage$getAdditionalSlashingDamage();
     float overhauleddamage$getIncreasedSlashingDamage();
-    
+    float overhauleddamage$getSlashingResistance();
+
     float overhauleddamage$getBlockedPhysicalDamage();
 
     void overhauleddamage$addBleedingBuildUp(float amount);

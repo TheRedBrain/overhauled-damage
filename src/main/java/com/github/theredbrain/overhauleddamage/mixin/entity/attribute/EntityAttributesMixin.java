@@ -17,12 +17,15 @@ public class EntityAttributesMixin {
     static {
         OverhauledDamage.ADDITIONAL_BASHING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.additional_bashing_damage", new ClampedEntityAttribute("attribute.name.generic.additional_bashing_damage", 0.0, -1024.0, 1024.0).setTracked(true));
         OverhauledDamage.INCREASED_BASHING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.increased_bashing_damage", new ClampedEntityAttribute("attribute.name.generic.increased_bashing_damage", 1.0, -1024.0, 1024.0).setTracked(true));
+        OverhauledDamage.BASHING_RESISTANCE = register(OverhauledDamage.MOD_ID + ":generic.bashing_resistance", new ClampedEntityAttribute("attribute.name.generic.bashing_resistance", 0.0, -1024.0, 1024.0).setTracked(true));
 
         OverhauledDamage.ADDITIONAL_PIERCING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.additional_piercing_damage", new ClampedEntityAttribute("attribute.name.generic.additional_piercing_damage", 0.0, -1024.0, 1024.0).setTracked(true));
         OverhauledDamage.INCREASED_PIERCING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.increased_piercing_damage", new ClampedEntityAttribute("attribute.name.generic.increased_piercing_damage", 1.0, -1024.0, 1024.0).setTracked(true));
+        OverhauledDamage.PIERCING_RESISTANCE = register(OverhauledDamage.MOD_ID + ":generic.piercing_resistance", new ClampedEntityAttribute("attribute.name.generic.piercing_resistance", 0.0, -1024.0, 1024.0).setTracked(true));
 
         OverhauledDamage.ADDITIONAL_SLASHING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.additional_slashing_damage", new ClampedEntityAttribute("attribute.name.generic.additional_slashing_damage", 0.0, -1024.0, 1024.0).setTracked(true));
         OverhauledDamage.INCREASED_SLASHING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.increased_slashing_damage", new ClampedEntityAttribute("attribute.name.generic.increased_slashing_damage", 1.0, -1024.0, 1024.0).setTracked(true));
+        OverhauledDamage.SLASHING_RESISTANCE = register(OverhauledDamage.MOD_ID + ":generic.slashing_resistance", new ClampedEntityAttribute("attribute.name.generic.slashing_resistance", 0.0, -1024.0, 1024.0).setTracked(true));
 
         OverhauledDamage.BLOCKED_PHYSICAL_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.blocked_physical_damage", new ClampedEntityAttribute("attribute.name.generic.blocked_physical_damage", 0.0, 0.0, 1024.0).setTracked(true));
 

@@ -31,10 +31,10 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.LinkedHashMap;
 import java.util.Optional;
@@ -131,12 +131,15 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         cir.getReturnValue()
                 .add(OverhauledDamage.ADDITIONAL_BASHING_DAMAGE)
                 .add(OverhauledDamage.INCREASED_BASHING_DAMAGE)
+                .add(OverhauledDamage.BASHING_RESISTANCE)
 
                 .add(OverhauledDamage.ADDITIONAL_PIERCING_DAMAGE)
                 .add(OverhauledDamage.INCREASED_PIERCING_DAMAGE)
+                .add(OverhauledDamage.PIERCING_RESISTANCE)
 
                 .add(OverhauledDamage.ADDITIONAL_SLASHING_DAMAGE)
                 .add(OverhauledDamage.INCREASED_SLASHING_DAMAGE)
+                .add(OverhauledDamage.SLASHING_RESISTANCE)
 
                 .add(OverhauledDamage.BLOCKED_PHYSICAL_DAMAGE)
 
@@ -265,19 +268,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
         return false;
     }
 
-    @Inject(method = "applyDamage",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/LivingEntity;setAbsorptionAmount(F)V",
-                    ordinal = 0
-            ),
-            locals= LocalCapture.CAPTURE_FAILSOFT)
-    private void overhauleddamage$custom_damageCalculation(DamageSource source, float amount, CallbackInfo ci, float var9) {
+    @ModifyVariable(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), argsOnly = true)
+    private float overhauleddamage$applyDamage(float old, DamageSource source) {
+        return ((DuckLivingEntityMixin) (Object) this).overhauleddamage$calculateOverhauledDamage(source, old);
+    }
+
+    @Override
+    public float overhauleddamage$calculateOverhauledDamage(DamageSource source, float amount) {
 
         var serverConfig = OverhauledDamage.serverConfig;
         StatusEffect fall_immune_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.fall_immune_status_effect_identifier));
         if (source.isIn(DamageTypeTags.IS_FALL) && fall_immune_status_effect != null && this.hasStatusEffect(fall_immune_status_effect)) {
-            return;
+            return 0.0F;
         }
 
         StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.staggered_status_effect_identifier));
@@ -370,13 +372,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 // try to parry the attack
                 boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
                 double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
-                float blockedBashingDamage = (float) (bashing_amount - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
-                float blockedPiercingDamage = (float) (piercing_amount - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
-                float blockedSlashingDamage = (float) (slashing_amount - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
-                float blockedFireDamage = (float) (fire_amount - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFireDamage() * parryBonus);
-                float blockedFrostDamage = (float) (frost_amount - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFrostDamage() * parryBonus);
-                float blockedLightningDamage = (float) (lightning_amount - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedLightningDamage() * parryBonus);
-                float blockedPoisonDamage = (float) (poison_amount - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPoisonDamage() * parryBonus);
+                float blockedBashingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
+                float blockedPiercingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
+                float blockedSlashingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
+                float blockedFireDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFireDamage() * parryBonus);
+                float blockedFrostDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFrostDamage() * parryBonus);
+                float blockedLightningDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedLightningDamage() * parryBonus);
+                float blockedPoisonDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPoisonDamage() * parryBonus);
 
                 ((StaminaUsingEntity) this).staminaattributes$addStamina(tryParry ? - ((DuckLivingEntityMixin) this).overhauleddamage$getParryStaminaCost() : - ((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
 
@@ -465,6 +467,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
                 effectiveArmor = 0;
             }
 
+            bashing_amount = bashing_amount - (bashing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBashingResistance()) / 100;
+
+            piercing_amount = piercing_amount - (piercing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getPiercingResistance()) / 100;
+
+            slashing_amount = slashing_amount - (slashing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getSlashingResistance()) / 100;
+
             poison_amount = poison_amount - (poison_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getPoisonResistance()) / 100;
 
             fire_amount = fire_amount - (fire_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getFireResistance()) / 100;
@@ -523,7 +531,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
             }
         }
 
-        var9 = applied_damage + true_amount;
+        return applied_damage + true_amount;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -662,6 +670,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     }
 
     @Override
+    public float overhauleddamage$getBashingResistance() {
+        return (float) this.getAttributeValue(OverhauledDamage.BASHING_RESISTANCE);
+    }
+
+    @Override
     public float overhauleddamage$getAdditionalPiercingDamage() {
         return (float) this.getAttributeValue(OverhauledDamage.ADDITIONAL_PIERCING_DAMAGE);
     }
@@ -672,6 +685,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     }
 
     @Override
+    public float overhauleddamage$getPiercingResistance() {
+        return (float) this.getAttributeValue(OverhauledDamage.PIERCING_RESISTANCE);
+    }
+
+    @Override
     public float overhauleddamage$getAdditionalSlashingDamage() {
         return (float) this.getAttributeValue(OverhauledDamage.ADDITIONAL_SLASHING_DAMAGE);
     }
@@ -679,6 +697,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
     @Override
     public float overhauleddamage$getIncreasedSlashingDamage() {
         return (float) this.getAttributeValue(OverhauledDamage.INCREASED_SLASHING_DAMAGE);
+    }
+
+    @Override
+    public float overhauleddamage$getSlashingResistance() {
+        return (float) this.getAttributeValue(OverhauledDamage.SLASHING_RESISTANCE);
     }
 
     @Override
