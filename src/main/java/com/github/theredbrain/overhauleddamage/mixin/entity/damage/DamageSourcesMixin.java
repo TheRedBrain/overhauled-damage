@@ -18,20 +18,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(DamageSources.class)
 public abstract class DamageSourcesMixin {
 
-    @Shadow
-    protected abstract DamageSource create(RegistryKey<DamageType> key, @Nullable Entity attacker);
+	@Shadow
+	protected abstract DamageSource create(RegistryKey<DamageType> key, @Nullable Entity attacker);
 
-    @Inject(method = "mobAttack", at = @At("HEAD"), cancellable = true)
-    public void overhauleddamage$mobAttack(LivingEntity attacker, CallbackInfoReturnable<DamageSource> cir) {
-        if (attacker.getType().isIn(Tags.ATTACKS_WITH_BASHING)) {
-            cir.setReturnValue(this.create(DamageTypesRegistry.MOB_BASHING_DAMAGE_TYPE, attacker));
-            cir.cancel();
-        } else if (attacker.getType().isIn(Tags.ATTACKS_WITH_PIERCING)) {
-            cir.setReturnValue(this.create(DamageTypesRegistry.MOB_PIERCING_DAMAGE_TYPE, attacker));
-            cir.cancel();
-        } else if (attacker.getType().isIn(Tags.ATTACKS_WITH_SLASHING)) {
-            cir.setReturnValue(this.create(DamageTypesRegistry.MOB_SLASHING_DAMAGE_TYPE, attacker));
-            cir.cancel();
-        }
-    }
+	@Inject(method = "mobAttack", at = @At("HEAD"), cancellable = true)
+	public void overhauleddamage$mobAttack(LivingEntity attacker, CallbackInfoReturnable<DamageSource> cir) {
+		if (attacker.getType().isIn(Tags.ATTACKS_WITH_BASHING)) {
+			cir.setReturnValue(this.create(DamageTypesRegistry.MOB_BASHING_DAMAGE_TYPE, attacker));
+			cir.cancel();
+		} else if (attacker.getType().isIn(Tags.ATTACKS_WITH_PIERCING)) {
+			cir.setReturnValue(this.create(DamageTypesRegistry.MOB_PIERCING_DAMAGE_TYPE, attacker));
+			cir.cancel();
+		} else if (attacker.getType().isIn(Tags.ATTACKS_WITH_SLASHING)) {
+			cir.setReturnValue(this.create(DamageTypesRegistry.MOB_SLASHING_DAMAGE_TYPE, attacker));
+			cir.cancel();
+		}
+	}
 }
