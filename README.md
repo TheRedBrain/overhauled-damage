@@ -4,6 +4,8 @@ A complete overhaul to several mechanics revolving around damage. It is inspired
 It is however not a content mod, more of an API for other mods.
 
 ## New Damage Calculation
+Bashing, piercing, slashing, poison, fire, frost and lightning are from now on referred to as "attack types". (Not to be confused with the existing "damage types").
+
 Damage is split into physical and elemental damage which are split further into bashing, piercing and slashing (physical) and poison, fire, frost and lightning (elemental).
 
 Physical damage is reduced by armor and directly reduces health.\

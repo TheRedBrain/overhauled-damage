@@ -11,6 +11,7 @@
 		"sources": "https://github.com/TheRedBrain/overhauled-damage"
 	},
 	"license": "MIT",
+	"icon": "assets/overhauleddamage/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
