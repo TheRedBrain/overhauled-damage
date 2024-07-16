@@ -17,8 +17,9 @@ public class OverhauledDamageClient implements ClientModInitializer {
 		AutoConfig.register(ClientConfigWrapper.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
 		clientConfig = ((ClientConfigWrapper) AutoConfig.getConfigHolder(ClientConfigWrapper.class).getConfig()).client;
 
-		ClientPlayNetworking.registerGlobalReceiver(OverhauledDamage.ServerConfigSync.ID, (client, handler, buf, responseSender) -> {
-			OverhauledDamage.serverConfig = OverhauledDamage.ServerConfigSync.read(buf);
+		// Packets
+		ClientPlayNetworking.registerGlobalReceiver(OverhauledDamage.ServerConfigSyncPacket.PACKET_ID, (payload, context) -> {
+			OverhauledDamage.serverConfig = payload.serverConfig();
 		});
 	}
 }

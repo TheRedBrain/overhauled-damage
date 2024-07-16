@@ -26,17 +26,11 @@ public abstract class InGameHudMixin {
 	protected abstract PlayerEntity getCameraPlayer();
 
 	@Shadow
-	private int scaledWidth;
-
-	@Shadow
-	private int scaledHeight;
-
-	@Shadow
 	@Final
 	private MinecraftClient client;
 
 	@Unique
-	private static final Identifier BARS_TEXTURE = new Identifier("textures/gui/bars.png");
+	private static final Identifier BARS_TEXTURE = Identifier.of("textures/gui/bars.png");
 
 	@Inject(method = "renderStatusBars", at = @At("HEAD"))
 	private void overhauleddamage$renderStatusBars(DrawContext context, CallbackInfo ci) {
@@ -52,8 +46,8 @@ public abstract class InGameHudMixin {
 				int dynamic_y_offset_increment = clientConfig.dynamic_y_offset_increase;
 
 				//region bleeding build up
-				int buildUpElementX = this.scaledWidth / 2 + clientConfig.bleeding_build_up_element_x_offset;
-				int buildUpElementY = this.scaledHeight / 2 + clientConfig.bleeding_build_up_element_y_offset;
+				int buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.bleeding_build_up_element_x_offset;
+				int buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.bleeding_build_up_element_y_offset;
 				int currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
 				int maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
 
@@ -82,8 +76,8 @@ public abstract class InGameHudMixin {
 				//endregion bleeding build up
 
 				//region burn build up
-				buildUpElementX = this.scaledWidth / 2 + clientConfig.burn_build_up_element_x_offset;
-				buildUpElementY = this.scaledHeight / 2 + clientConfig.burn_build_up_element_y_offset;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.burn_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.burn_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
 
@@ -112,8 +106,8 @@ public abstract class InGameHudMixin {
 				//endregion burn build up
 
 				//region freeze build up
-				buildUpElementX = this.scaledWidth / 2 + clientConfig.freeze_build_up_element_x_offset;
-				buildUpElementY = this.scaledHeight / 2 + clientConfig.freeze_build_up_element_y_offset;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.freeze_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.freeze_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
 
@@ -142,8 +136,8 @@ public abstract class InGameHudMixin {
 				//endregion freeze build up
 
 				//region poison build up
-				buildUpElementX = this.scaledWidth / 2 + clientConfig.poison_build_up_element_x_offset;
-				buildUpElementY = this.scaledHeight / 2 + clientConfig.poison_build_up_element_y_offset;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.poison_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.poison_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
 
@@ -172,8 +166,8 @@ public abstract class InGameHudMixin {
 				//endregion poison build up
 
 				//region shock build up
-				buildUpElementX = this.scaledWidth / 2 + clientConfig.shock_build_up_element_x_offset;
-				buildUpElementY = this.scaledHeight / 2 + clientConfig.shock_build_up_element_y_offset;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.shock_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.shock_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
 
@@ -202,8 +196,8 @@ public abstract class InGameHudMixin {
 				//endregion shock build up
 
 				//region stagger build up
-				buildUpElementX = this.scaledWidth / 2 + clientConfig.stagger_build_up_element_x_offset;
-				buildUpElementY = this.scaledHeight / 2 + clientConfig.stagger_build_up_element_y_offset;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.stagger_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.stagger_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
 
