@@ -1,3 +1,7 @@
+# 2.0.1
+
+- fixed a crash when taking damage of some specific damage_types
+
 # 2.0.0
 
 Update to 1.21
