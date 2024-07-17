@@ -857,7 +857,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public void overhauleddamage$addFreezeBuildUp(float amount) {
 		Optional<RegistryEntry.Reference<StatusEffect>> freeze_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.frozen_status_effect_identifier));
-		if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect != null && !this.hasStatusEffect(freeze_status_effect.get())) {
+		if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect.isPresent() && !this.hasStatusEffect(freeze_status_effect.get())) {
 			float f = this.overhauleddamage$getFreezeBuildUp();
 			this.overhauleddamage$setFreezeBuildUp(f + amount);
 			if (this.overhauleddamage$getFreezeBuildUp() > this.overhauleddamage$getMaxFreezeBuildUp()) {
@@ -903,7 +903,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public void overhauleddamage$addStaggerBuildUp(float amount) {
 		Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
-		if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect != null && !this.hasStatusEffect(staggered_status_effect.get())) {
+		if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect.isPresent() && !this.hasStatusEffect(staggered_status_effect.get())) {
 			float f = this.overhauleddamage$getStaggerBuildUp();
 			this.overhauleddamage$setStaggerBuildUp(f + amount);
 			if (this.overhauleddamage$getStaggerBuildUp() > this.overhauleddamage$getMaxStaggerBuildUp()) {
