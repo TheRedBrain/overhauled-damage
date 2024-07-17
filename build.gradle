@@ -120,6 +120,7 @@ if(project.hasProperty('release_type')) {
             relations {
                 requiredDependency 'fabric-api'
                 requiredDependency 'cloth-config'
+                requiredDependency 'stamina-attributes'
             }
 
             mainArtifact(remapJar)
@@ -149,7 +150,7 @@ if(project.hasProperty('release_type')) {
             required.project 'fabric-api'
             required.project 'cloth-config'
             required.project 'stamina-attributes'
-            required.project 'various-status-effects'
+            optional.project 'various-status-effects'
         }
     }
 
