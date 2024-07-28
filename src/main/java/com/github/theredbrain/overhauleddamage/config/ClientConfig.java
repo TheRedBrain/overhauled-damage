@@ -2,6 +2,7 @@ package com.github.theredbrain.overhauleddamage.config;
 
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(
@@ -42,71 +43,99 @@ public class ClientConfig implements ConfigData {
 			"fill direction" indicates in which direction the foreground texture is drawn.
 			0: left to right, 1: bottom to top, 2: right to left, 3: top to bottom
 			""")
+	@ConfigEntry.Gui.PrefixText
 	public int bleeding_build_up_element_x_offset = -31;
 	public int bleeding_build_up_element_y_offset = 18;
+	public int bleeding_element_fill_direction = 0;
 
 	public int bleeding_build_up_bar_additional_length = 52;
+	public boolean enable_bleeding_build_up_bar_animation = true;
+	public int bleeding_build_up_bar_animation_interval = 1;
 
 	public String custom_bleeding_element_background_texture_id = "";
 	public String custom_bleeding_element_foreground_texture_id = "";
 	public int custom_bleeding_element_texture_width = 0;
 	public int custom_bleeding_element_texture_height = 0;
-	public int custom_bleeding_element_fill_direction = 0;
+
+	// ------------------------------------------------------------------
 
 	public int burn_build_up_element_x_offset = -31;
 	public int burn_build_up_element_y_offset = 18;
+	@ConfigEntry.BoundedDiscrete(max = 3)
+	public int burn_element_fill_direction = 0;
 
 	public int burn_build_up_bar_additional_length = 52;
+	public boolean enable_burn_build_up_bar_animation = true;
+	public int burn_build_up_bar_animation_interval = 1;
 
 	public String custom_burn_element_background_texture_id = "";
 	public String custom_burn_element_foreground_texture_id = "";
 	public int custom_burn_element_texture_width = 0;
 	public int custom_burn_element_texture_height = 0;
-	public int custom_burn_element_fill_direction = 0;
+
+	// ------------------------------------------------------------------
 
 	public int freeze_build_up_element_x_offset = -31;
 	public int freeze_build_up_element_y_offset = 18;
+	@ConfigEntry.BoundedDiscrete(max = 3)
+	public int freeze_element_fill_direction = 0;
 
 	public int freeze_build_up_bar_additional_length = 52;
+	public boolean enable_freeze_build_up_bar_animation = true;
+	public int freeze_build_up_bar_animation_interval = 1;
 
 	public String custom_freeze_element_background_texture_id = "";
 	public String custom_freeze_element_foreground_texture_id = "";
 	public int custom_freeze_element_texture_width = 0;
 	public int custom_freeze_element_texture_height = 0;
-	public int custom_freeze_element_fill_direction = 0;
+
+	// ------------------------------------------------------------------
 
 	public int poison_build_up_element_x_offset = -31;
 	public int poison_build_up_element_y_offset = 18;
+	@ConfigEntry.BoundedDiscrete(max = 3)
+	public int poison_element_fill_direction = 0;
 
 	public int poison_build_up_bar_additional_length = 52;
+	public boolean enable_poison_build_up_bar_animation = true;
+	public int poison_build_up_bar_animation_interval = 1;
 
 	public String custom_poison_element_background_texture_id = "";
 	public String custom_poison_element_foreground_texture_id = "";
 	public int custom_poison_element_texture_width = 0;
 	public int custom_poison_element_texture_height = 0;
-	public int custom_poison_element_fill_direction = 0;
+
+	// ------------------------------------------------------------------
 
 	public int shock_build_up_element_x_offset = -31;
 	public int shock_build_up_element_y_offset = 18;
+	@ConfigEntry.BoundedDiscrete(max = 3)
+	public int shock_element_fill_direction = 0;
 
 	public int shock_build_up_bar_additional_length = 52;
+	public boolean enable_shock_build_up_bar_animation = true;
+	public int shock_build_up_bar_animation_interval = 1;
 
 	public String custom_shock_element_background_texture_id = "";
 	public String custom_shock_element_foreground_texture_id = "";
 	public int custom_shock_element_texture_width = 0;
 	public int custom_shock_element_texture_height = 0;
-	public int custom_shock_element_fill_direction = 0;
+
+	// ------------------------------------------------------------------
 
 	public int stagger_build_up_element_x_offset = -31;
 	public int stagger_build_up_element_y_offset = 18;
+	@ConfigEntry.BoundedDiscrete(max = 3)
+	public int stagger_element_fill_direction = 0;
 
 	public int stagger_build_up_bar_additional_length = 52;
+	public boolean enable_stagger_build_up_bar_animation = true;
+	public int stagger_build_up_bar_animation_interval = 1;
 
 	public String custom_stagger_element_background_texture_id = "";
 	public String custom_stagger_element_foreground_texture_id = "";
 	public int custom_stagger_element_texture_width = 0;
 	public int custom_stagger_element_texture_height = 0;
-	public int custom_stagger_element_fill_direction = 0;
 
 	public ClientConfig() {
 
