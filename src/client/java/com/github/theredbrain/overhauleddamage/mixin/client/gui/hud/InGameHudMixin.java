@@ -2,6 +2,7 @@ package com.github.theredbrain.overhauleddamage.mixin.client.gui.hud;
 
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.OverhauledDamageClient;
+import com.github.theredbrain.overhauleddamage.config.ClientConfig;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -89,20 +90,21 @@ public abstract class InGameHudMixin {
 
 	@Inject(method = "renderStatusBars", at = @At("HEAD"))
 	private void overhauleddamage$renderStatusBars(DrawContext context, CallbackInfo ci) {
-		var clientConfig = OverhauledDamageClient.clientConfig;
-		if (clientConfig.show_effect_build_up_elements) {
+		var generalClientConfig = OverhauledDamageClient.clientConfigHolder.getConfig().generalClientConfig;
+		if (generalClientConfig.show_effect_build_up_elements) {
 			PlayerEntity playerEntity = this.getCameraPlayer();
 			if (playerEntity != null) {
-				boolean use_custom_textures = clientConfig.use_custom_textures;
+				boolean use_custom_textures = generalClientConfig.use_custom_textures;
 
 				int dynamic_x_offset = 0;
 				int dynamic_y_offset = 0;
-				int dynamic_x_offset_increment = clientConfig.dynamic_x_offset_increase;
-				int dynamic_y_offset_increment = clientConfig.dynamic_y_offset_increase;
+				int dynamic_x_offset_increment = generalClientConfig.dynamic_x_offset_increase;
+				int dynamic_y_offset_increment = generalClientConfig.dynamic_y_offset_increase;
 
 				//region bleeding build up
-				int buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.bleeding_build_up_element_x_offset;
-				int buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.bleeding_build_up_element_y_offset;
+				var bleedingClientConfig = OverhauledDamageClient.clientConfigHolder.getConfig().bleedingClientConfig;
+				int buildUpElementX = context.getScaledWindowWidth() / 2 + bleedingClientConfig.bleeding_build_up_element_x_offset;
+				int buildUpElementY = context.getScaledWindowHeight() / 2 + bleedingClientConfig.bleeding_build_up_element_y_offset;
 				int currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
 				int maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
 
@@ -118,11 +120,11 @@ public abstract class InGameHudMixin {
 								dynamic_x_offset,
 								buildUpElementY,
 								dynamic_y_offset,
-								Identifier.tryParse(clientConfig.custom_bleeding_element_background_texture_id),
-								Identifier.tryParse(clientConfig.custom_bleeding_element_foreground_texture_id),
-								clientConfig.custom_bleeding_element_texture_width,
-								clientConfig.custom_bleeding_element_texture_height,
-								clientConfig.bleeding_element_fill_direction
+								Identifier.tryParse(bleedingClientConfig.custom_bleeding_element_background_texture_id),
+								Identifier.tryParse(bleedingClientConfig.custom_bleeding_element_foreground_texture_id),
+								bleedingClientConfig.custom_bleeding_element_texture_width,
+								bleedingClientConfig.custom_bleeding_element_texture_height,
+								bleedingClientConfig.bleeding_element_fill_direction
 						);
 					} else {
 						this.drawFallbackEffectBuildUpElement(
@@ -134,12 +136,12 @@ public abstract class InGameHudMixin {
 								buildUpElementY,
 								dynamic_y_offset,
 								BLEEDING_TEXTURES,
-								clientConfig.bleeding_build_up_bar_additional_length,
-								clientConfig.bleeding_element_fill_direction,
+								bleedingClientConfig.bleeding_build_up_bar_additional_length,
+								bleedingClientConfig.bleeding_element_fill_direction,
 								0,
-								clientConfig.enable_bleeding_build_up_bar_animation,
+								bleedingClientConfig.enable_bleeding_build_up_bar_animation,
 								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUpReduction()),
-								clientConfig.bleeding_build_up_bar_animation_interval
+								bleedingClientConfig.bleeding_build_up_bar_animation_interval
 						);
 					}
 
@@ -150,8 +152,9 @@ public abstract class InGameHudMixin {
 				//endregion bleeding build up
 
 				//region burn build up
-				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.burn_build_up_element_x_offset;
-				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.burn_build_up_element_y_offset;
+				var burnClientConfig = OverhauledDamageClient.clientConfigHolder.getConfig().burnClientConfig;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + burnClientConfig.burn_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + burnClientConfig.burn_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
 
@@ -167,11 +170,11 @@ public abstract class InGameHudMixin {
 								dynamic_x_offset,
 								buildUpElementY,
 								dynamic_y_offset,
-								Identifier.tryParse(clientConfig.custom_burn_element_background_texture_id),
-								Identifier.tryParse(clientConfig.custom_burn_element_foreground_texture_id),
-								clientConfig.custom_burn_element_texture_width,
-								clientConfig.custom_burn_element_texture_height,
-								clientConfig.burn_element_fill_direction
+								Identifier.tryParse(burnClientConfig.custom_burn_element_background_texture_id),
+								Identifier.tryParse(burnClientConfig.custom_burn_element_foreground_texture_id),
+								burnClientConfig.custom_burn_element_texture_width,
+								burnClientConfig.custom_burn_element_texture_height,
+								burnClientConfig.burn_element_fill_direction
 						);
 					} else {
 						this.drawFallbackEffectBuildUpElement(
@@ -183,12 +186,12 @@ public abstract class InGameHudMixin {
 								buildUpElementY,
 								dynamic_y_offset,
 								BURN_TEXTURES,
-								clientConfig.burn_build_up_bar_additional_length,
-								clientConfig.burn_element_fill_direction,
+								burnClientConfig.burn_build_up_bar_additional_length,
+								burnClientConfig.burn_element_fill_direction,
 								1,
-								clientConfig.enable_burn_build_up_bar_animation,
+								burnClientConfig.enable_burn_build_up_bar_animation,
 								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUpReduction()),
-								clientConfig.burn_build_up_bar_animation_interval
+								burnClientConfig.burn_build_up_bar_animation_interval
 						);
 					}
 
@@ -199,8 +202,9 @@ public abstract class InGameHudMixin {
 				//endregion burn build up
 
 				//region freeze build up
-				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.freeze_build_up_element_x_offset;
-				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.freeze_build_up_element_y_offset;
+				var freezeClientConfig = OverhauledDamageClient.clientConfigHolder.getConfig().freezeClientConfig;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + freezeClientConfig.freeze_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + freezeClientConfig.freeze_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
 
@@ -216,11 +220,11 @@ public abstract class InGameHudMixin {
 								dynamic_x_offset,
 								buildUpElementY,
 								dynamic_y_offset,
-								Identifier.tryParse(clientConfig.custom_freeze_element_background_texture_id),
-								Identifier.tryParse(clientConfig.custom_freeze_element_foreground_texture_id),
-								clientConfig.custom_freeze_element_texture_width,
-								clientConfig.custom_freeze_element_texture_height,
-								clientConfig.freeze_element_fill_direction
+								Identifier.tryParse(freezeClientConfig.custom_freeze_element_background_texture_id),
+								Identifier.tryParse(freezeClientConfig.custom_freeze_element_foreground_texture_id),
+								freezeClientConfig.custom_freeze_element_texture_width,
+								freezeClientConfig.custom_freeze_element_texture_height,
+								freezeClientConfig.freeze_element_fill_direction
 						);
 					} else {
 						this.drawFallbackEffectBuildUpElement(
@@ -232,24 +236,25 @@ public abstract class InGameHudMixin {
 								buildUpElementY,
 								dynamic_y_offset,
 								FREEZE_TEXTURES,
-								clientConfig.freeze_build_up_bar_additional_length,
-								clientConfig.freeze_element_fill_direction,
+								freezeClientConfig.freeze_build_up_bar_additional_length,
+								freezeClientConfig.freeze_element_fill_direction,
 								2,
-								clientConfig.enable_freeze_build_up_bar_animation,
+								freezeClientConfig.enable_freeze_build_up_bar_animation,
 								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUpReduction()),
-								clientConfig.freeze_build_up_bar_animation_interval
+								freezeClientConfig.freeze_build_up_bar_animation_interval
 						);
 					}
 
-					dynamic_x_offset = dynamic_x_offset + clientConfig.dynamic_x_offset_increase;
-					dynamic_y_offset = dynamic_y_offset + clientConfig.dynamic_y_offset_increase;
+					dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
+					dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
 					this.client.getProfiler().pop();
 				}
 				//endregion freeze build up
 
 				//region poison build up
-				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.poison_build_up_element_x_offset;
-				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.poison_build_up_element_y_offset;
+				var poisonClientConfig = OverhauledDamageClient.clientConfigHolder.getConfig().poisonClientConfig;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + poisonClientConfig.poison_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + poisonClientConfig.poison_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
 
@@ -265,11 +270,11 @@ public abstract class InGameHudMixin {
 								dynamic_x_offset,
 								buildUpElementY,
 								dynamic_y_offset,
-								Identifier.tryParse(clientConfig.custom_poison_element_background_texture_id),
-								Identifier.tryParse(clientConfig.custom_poison_element_foreground_texture_id),
-								clientConfig.custom_poison_element_texture_width,
-								clientConfig.custom_poison_element_texture_height,
-								clientConfig.poison_element_fill_direction
+								Identifier.tryParse(poisonClientConfig.custom_poison_element_background_texture_id),
+								Identifier.tryParse(poisonClientConfig.custom_poison_element_foreground_texture_id),
+								poisonClientConfig.custom_poison_element_texture_width,
+								poisonClientConfig.custom_poison_element_texture_height,
+								poisonClientConfig.poison_element_fill_direction
 						);
 					} else {
 						this.drawFallbackEffectBuildUpElement(
@@ -281,24 +286,25 @@ public abstract class InGameHudMixin {
 								buildUpElementY,
 								dynamic_y_offset,
 								POISON_TEXTURES,
-								clientConfig.poison_build_up_bar_additional_length,
-								clientConfig.poison_element_fill_direction,
+								poisonClientConfig.poison_build_up_bar_additional_length,
+								poisonClientConfig.poison_element_fill_direction,
 								3,
-								clientConfig.enable_poison_build_up_bar_animation,
+								poisonClientConfig.enable_poison_build_up_bar_animation,
 								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUpReduction()),
-								clientConfig.poison_build_up_bar_animation_interval
+								poisonClientConfig.poison_build_up_bar_animation_interval
 						);
 					}
 
-					dynamic_x_offset = dynamic_x_offset + clientConfig.dynamic_x_offset_increase;
-					dynamic_y_offset = dynamic_y_offset + clientConfig.dynamic_y_offset_increase;
+					dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
+					dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
 					this.client.getProfiler().pop();
 				}
 				//endregion poison build up
 
 				//region shock build up
-				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.shock_build_up_element_x_offset;
-				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.shock_build_up_element_y_offset;
+				var shockClientConfig = OverhauledDamageClient.clientConfigHolder.getConfig().shockClientConfig;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + shockClientConfig.shock_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + shockClientConfig.shock_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
 
@@ -314,11 +320,11 @@ public abstract class InGameHudMixin {
 								dynamic_x_offset,
 								buildUpElementY,
 								dynamic_y_offset,
-								Identifier.tryParse(clientConfig.custom_shock_element_background_texture_id),
-								Identifier.tryParse(clientConfig.custom_shock_element_foreground_texture_id),
-								clientConfig.custom_shock_element_texture_width,
-								clientConfig.custom_shock_element_texture_height,
-								clientConfig.shock_element_fill_direction
+								Identifier.tryParse(shockClientConfig.custom_shock_element_background_texture_id),
+								Identifier.tryParse(shockClientConfig.custom_shock_element_foreground_texture_id),
+								shockClientConfig.custom_shock_element_texture_width,
+								shockClientConfig.custom_shock_element_texture_height,
+								shockClientConfig.shock_element_fill_direction
 						);
 					} else {
 						this.drawFallbackEffectBuildUpElement(
@@ -330,24 +336,25 @@ public abstract class InGameHudMixin {
 								buildUpElementY,
 								dynamic_y_offset,
 								SHOCK_TEXTURES,
-								clientConfig.shock_build_up_bar_additional_length,
-								clientConfig.shock_element_fill_direction,
+								shockClientConfig.shock_build_up_bar_additional_length,
+								shockClientConfig.shock_element_fill_direction,
 								4,
-								clientConfig.enable_shock_build_up_bar_animation,
+								shockClientConfig.enable_shock_build_up_bar_animation,
 								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUpReduction()),
-								clientConfig.shock_build_up_bar_animation_interval
+								shockClientConfig.shock_build_up_bar_animation_interval
 						);
 					}
 
-					dynamic_x_offset = dynamic_x_offset + clientConfig.dynamic_x_offset_increase;
-					dynamic_y_offset = dynamic_y_offset + clientConfig.dynamic_y_offset_increase;
+					dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
+					dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
 					this.client.getProfiler().pop();
 				}
 				//endregion shock build up
 
 				//region stagger build up
-				buildUpElementX = context.getScaledWindowWidth() / 2 + clientConfig.stagger_build_up_element_x_offset;
-				buildUpElementY = context.getScaledWindowHeight() / 2 + clientConfig.stagger_build_up_element_y_offset;
+				var staggerClientConfig = OverhauledDamageClient.clientConfigHolder.getConfig().staggerClientConfig;
+				buildUpElementX = context.getScaledWindowWidth() / 2 + staggerClientConfig.stagger_build_up_element_x_offset;
+				buildUpElementY = context.getScaledWindowHeight() / 2 + staggerClientConfig.stagger_build_up_element_y_offset;
 				currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
 				maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
 
@@ -364,11 +371,11 @@ public abstract class InGameHudMixin {
 								dynamic_x_offset,
 								buildUpElementY,
 								dynamic_y_offset,
-								Identifier.tryParse(clientConfig.custom_stagger_element_background_texture_id),
-								Identifier.tryParse(clientConfig.custom_stagger_element_foreground_texture_id),
-								clientConfig.custom_stagger_element_texture_width,
-								clientConfig.custom_stagger_element_texture_height,
-								clientConfig.stagger_element_fill_direction
+								Identifier.tryParse(staggerClientConfig.custom_stagger_element_background_texture_id),
+								Identifier.tryParse(staggerClientConfig.custom_stagger_element_foreground_texture_id),
+								staggerClientConfig.custom_stagger_element_texture_width,
+								staggerClientConfig.custom_stagger_element_texture_height,
+								staggerClientConfig.stagger_element_fill_direction
 						);
 					} else {
 						this.drawFallbackEffectBuildUpElement(
@@ -380,17 +387,17 @@ public abstract class InGameHudMixin {
 								buildUpElementY,
 								dynamic_y_offset,
 								STAGGER_TEXTURES,
-								clientConfig.stagger_build_up_bar_additional_length,
-								clientConfig.stagger_element_fill_direction,
+								staggerClientConfig.stagger_build_up_bar_additional_length,
+								staggerClientConfig.stagger_element_fill_direction,
 								5,
-								clientConfig.enable_stagger_build_up_bar_animation,
+								staggerClientConfig.enable_stagger_build_up_bar_animation,
 								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUpReduction()),
-								clientConfig.stagger_build_up_bar_animation_interval
+								staggerClientConfig.stagger_build_up_bar_animation_interval
 						);
 					}
 
-//					dynamic_x_offset = dynamic_x_offset + clientConfig.dynamic_x_offset_increase;
-//					dynamic_y_offset = dynamic_y_offset + clientConfig.dynamic_y_offset_increase;
+//					dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
+//					dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
 					this.client.getProfiler().pop();
 				}
 				//endregion stagger build up
@@ -399,29 +406,27 @@ public abstract class InGameHudMixin {
 	}
 
 	@Unique
-	private void drawCustomEffectBuildUpElement(DrawContext context, int currentBuildUp, int maxBuildUp, int buildUpElementX, int dynamic_x_offset, int buildUpElementY, int dynamic_y_offset, Identifier background_texture_id, Identifier foreground_texture_id, int texture_width, int texture_height, int fill_direction) {
+	private void drawCustomEffectBuildUpElement(DrawContext context, int currentBuildUp, int maxBuildUp, int buildUpElementX, int dynamic_x_offset, int buildUpElementY, int dynamic_y_offset, Identifier background_texture_id, Identifier foreground_texture_id, int texture_width, int texture_height, ClientConfig.FillDirection fill_direction) {
 
-		int normalizedBuildUpRatio = (int) (((double) currentBuildUp / Math.max(maxBuildUp, 1)) * ((fill_direction == 1 || fill_direction == 3) ? texture_height : texture_width));
+		int normalizedBuildUpRatio = (int) (((double) currentBuildUp / Math.max(maxBuildUp, 1)) * ((fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP || fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) ? texture_height : texture_width));
 
-//                context.drawGuiTexture(BURNING_BUILD_UP_BAR_BACKGROUND_TEXTURE, buildUpElementX, buildUpElementY, 62, 5);
 		context.drawTexture(background_texture_id, buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset, 0, 0, texture_width, texture_height, texture_width, texture_height);
 		if (normalizedBuildUpRatio > 0) {
 			// 0: left to right, 1: bottom to top, 2: right to left, 3: top to bottom
 			int offset;
 			switch (fill_direction) {
-				case 1:
+				case BOTTOM_TO_TOP:
 					offset = texture_height - normalizedBuildUpRatio;
 					context.drawTexture(foreground_texture_id, buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset + offset, 0, offset, texture_width, texture_height, texture_width, texture_height);
 					break;
-				case 2:
+				case RIGHT_TO_LEFT:
 					offset = texture_width - normalizedBuildUpRatio;
 					context.drawTexture(foreground_texture_id, buildUpElementX + dynamic_x_offset + offset, buildUpElementY + dynamic_y_offset, offset, 0, texture_width, texture_height, texture_width, texture_height);
 					break;
-				case 3:
+				case TOP_TO_BOTTOM:
 					context.drawTexture(foreground_texture_id, buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset, 0, 0, texture_width, normalizedBuildUpRatio, texture_width, texture_height);
 					break;
 				default:
-//                    context.drawGuiTexture(foreground_texture_id, buildUpElementX, buildUpElementY, normalizedBurnBuildUpRatio, 5);
 					context.drawTexture(foreground_texture_id, buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset, 0, 0, normalizedBuildUpRatio, texture_height, texture_width, texture_height);
 					break;
 			}
@@ -439,7 +444,7 @@ public abstract class InGameHudMixin {
 			int dynamic_y_offset,
 			Identifier[] fallback_texture_ids,
 			int fallback_additional_bar_length,
-			int fill_direction,
+			ClientConfig.FillDirection fill_direction,
 			int effect_id,
 			boolean enable_smooth_animation,
 			int build_up_reduction,
@@ -462,7 +467,7 @@ public abstract class InGameHudMixin {
 		}
 
 		// background
-		if (fill_direction == 1 || fill_direction == 3) {
+		if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP || fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
 			context.drawTexture(fallback_texture_ids[2], buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset, 0, 0, 5, 5, 5, 11);
 			if (fallback_additional_bar_length > 0) {
 				for (int i = 0; i < fallback_additional_bar_length; i++) {
@@ -485,7 +490,7 @@ public abstract class InGameHudMixin {
 		if (displayRatio > 0) {
 			int ratioFirstPart = Math.min(5, displayRatio);
 			int ratioLastPart = Math.min(5, displayRatio - 5 - fallback_additional_bar_length);
-			if (fill_direction == 1) {
+			if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP) {
 				// 1: bottom to top
 				context.drawTexture(fallback_texture_ids[3], buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset + 5 + fallback_additional_bar_length + (5 - ratioFirstPart), 0, 6 + (5 - ratioFirstPart),5,  ratioFirstPart, 5, 11);
 				if (displayRatio > 5 && fallback_additional_bar_length > 0) {
@@ -496,7 +501,7 @@ public abstract class InGameHudMixin {
 				if (displayRatio > (5 + fallback_additional_bar_length)) {
 					context.drawTexture(fallback_texture_ids[3], buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset + 5 - ratioLastPart, 0, 5 - ratioLastPart, 5, ratioLastPart, 5, 11);
 				}
-			} else if (fill_direction == 2) {
+			} else if (fill_direction == ClientConfig.FillDirection.RIGHT_TO_LEFT) {
 				// 2: right to left
 				context.drawTexture(fallback_texture_ids[1], buildUpElementX + dynamic_x_offset + 5 + fallback_additional_bar_length + (5 - ratioFirstPart), buildUpElementY + dynamic_y_offset, 177 + (5 - ratioFirstPart), 0, Math.min(5, displayRatio), 5, 182, 5);
 				if (displayRatio > 5 && fallback_additional_bar_length > 0) {
@@ -507,7 +512,7 @@ public abstract class InGameHudMixin {
 				if (displayRatio > (5 + fallback_additional_bar_length)) {
 					context.drawTexture(fallback_texture_ids[1], buildUpElementX + dynamic_x_offset + 5 - ratioLastPart, buildUpElementY + dynamic_y_offset, 5 - ratioLastPart, 0, ratioLastPart, 5, 182, 5);
 				}
-			} else if (fill_direction == 3) {
+			} else if (fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
 				// 3: top to bottom
 				context.drawTexture(fallback_texture_ids[3], buildUpElementX + dynamic_x_offset, buildUpElementY + dynamic_y_offset, 0, 0, 5, ratioFirstPart, 5, 11);
 				if (displayRatio > 5 && fallback_additional_bar_length > 0) {

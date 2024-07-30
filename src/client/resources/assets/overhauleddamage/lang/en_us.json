@@ -70,92 +70,136 @@
 
 
 	"text.autoconfig.overhauleddamage.title": "Overhauled Damage",
-	"text.autoconfig.overhauleddamage.option.client.show_effect_build_up_elements": "Effect build-ups are displayed in the HUD",
-	"text.autoconfig.overhauleddamage.option.client.use_custom_textures": "Use custom textures.",
-	"text.autoconfig.overhauleddamage.option.client.dynamic_x_offset_increase": "Dynamic X offset increase",
-	"text.autoconfig.overhauleddamage.option.client.dynamic_y_offset_increase": "Dynamic Y offset increase",
+
+	"text.autoconfig.overhauleddamage.category.generalClientConfig": "General",
+
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.show_effect_build_up_elements.@PrefixText": "When an effect build-up is greater 0, a HUD element shows the progress until the effect is applied.",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.show_effect_build_up_elements": "Effect build-ups are displayed in the HUD",
+
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.use_custom_textures.@PrefixText": "\n\nThe textures have to be provided by a resource pack.\nIt is recommended to use textures of equal dimensions.\nWhen the dynamic offsets are used as well, they should be at least equal to the texture dimensions.",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.use_custom_textures": "Enable custom textures.",
+
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_x_offset_increase.@PrefixText": "\n\nWhen multiple effect build-ups are displayed at the same time, these values are added to every elements position offset, multiplied by the amount off elements already on screen.\nThe order is: bleeding, burn, freeze, poison, shock, stagger\n\nExample: The burn, poison and stagger elements are currently displayed\nThe burn element is at its normal position\nThe poison element is offset by 'dynamic_x_offset_increase' on the x axis and by 'dynamic_y_offset_increase' on the y axis\nThe stagger element is offset by 'dynamic_x_offset_increase' times 2 on the x axis and by 'dynamic_y_offset_increase' times 2 on the y axis",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_x_offset_increase": "Dynamic X offset increase",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_y_offset_increase": "Dynamic Y offset increase",
+
+
+	"text.autoconfig.overhauleddamage.category.bleedingClientConfig": "Bleeding Build Up Bar",
 	
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_element_x_offset": "Bleeding element X offset",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_element_y_offset": "Bleeding element Y offset",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_element_fill_direction": "Bleeding element fill direction",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.enable_bleeding_build_up_bar_animation": "Enable bleeding element animation",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_bar_animation_interval": "Bleeding element animation interval",
 	
-	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_element_x_offset": "Bleeding element X offset",
-	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_element_y_offset": "Bleeding element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.bleeding_element_fill_direction": "Bleeding element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_bar_additional_length": "Bleeding element additional length",
-	"text.autoconfig.overhauleddamage.option.client.enable_bleeding_build_up_bar_animation": "Enable bleeding element animation",
-	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_bar_animation_interval": "Bleeding element animation interval",
-	
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_background_texture_id": "Bleeding element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_foreground_texture_id": "Bleeding element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_texture_width": "Bleeding element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_texture_height": "Bleeding element texture height",
-	
-	
-	"text.autoconfig.overhauleddamage.option.client.burn_build_up_element_x_offset": "Burn element X offset",
-	"text.autoconfig.overhauleddamage.option.client.burn_build_up_element_y_offset": "Burn element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.burn_element_fill_direction": "Burn element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.burn_build_up_bar_additional_length": "Burn element additional length",
-	"text.autoconfig.overhauleddamage.option.client.enable_burn_build_up_bar_animation": "Enable burn element animation",
-	"text.autoconfig.overhauleddamage.option.client.burn_build_up_bar_animation_interval": "Burn element animation interval",
-	
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_background_texture_id": "Burn element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_foreground_texture_id": "Burn element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_texture_width": "Burn element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_texture_height": "Burn element texture height",
-	
-	
-	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_element_x_offset": "Freeze element X offset",
-	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_element_y_offset": "Freeze element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.freeze_element_fill_direction": "Freeze element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_bar_additional_length": "Freeze element additional length",
-	"text.autoconfig.overhauleddamage.option.client.enable_freeze_build_up_bar_animation": "Enable freeze element animation",
-	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_bar_animation_interval": "Freeze element animation interval",
-	
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_background_texture_id": "Freeze element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_foreground_texture_id": "Freeze element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_texture_width": "Freeze element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_texture_height": "Freeze element texture height",
-	
-	
-	"text.autoconfig.overhauleddamage.option.client.poison_build_up_element_x_offset": "Poison element X offset",
-	"text.autoconfig.overhauleddamage.option.client.poison_build_up_element_y_offset": "Poison element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.poison_element_fill_direction": "Poison element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.poison_build_up_bar_additional_length": "Poison element additional length",
-	"text.autoconfig.overhauleddamage.option.client.enable_poison_build_up_bar_animation": "Enable poison element animation",
-	"text.autoconfig.overhauleddamage.option.client.poison_build_up_bar_animation_interval": "Poison element animation interval",
-	
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_background_texture_id": "Poison element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_foreground_texture_id": "Poison element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_texture_width": "Poison element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_texture_height": "Poison element texture height",
-	
-	
-	"text.autoconfig.overhauleddamage.option.client.shock_build_up_element_x_offset": "Shock element X offset",
-	"text.autoconfig.overhauleddamage.option.client.shock_build_up_element_y_offset": "Shock element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.shock_element_fill_direction": "Shock element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.shock_build_up_bar_additional_length": "Shock element additional length",
-	"text.autoconfig.overhauleddamage.option.client.enable_shock_build_up_bar_animation": "Enable shock element animation",
-	"text.autoconfig.overhauleddamage.option.client.shock_build_up_bar_animation_interval": "Shock element animation interval",
-	
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_background_texture_id": "Shock element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_foreground_texture_id": "Shock element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_texture_width": "Shock element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_texture_height": "Shock element texture height",
-	
-	
-	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_element_x_offset": "Stagger element X offset",
-	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_element_y_offset": "Stagger element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.stagger_element_fill_direction": "Stagger element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_bar_additional_length": "Stagger element additional length",
-	"text.autoconfig.overhauleddamage.option.client.enable_stagger_build_up_bar_animation": "Enable stagger element animation",
-	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_bar_animation_interval": "Stagger element animation interval",
-	
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_background_texture_id": "Stagger element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_foreground_texture_id": "Stagger element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_texture_width": "Stagger element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_texture_height": "Stagger element texture height"
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_bar_additional_length": "Bleeding element additional length",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_background_texture_id": "Bleeding element background texture id",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_foreground_texture_id": "Bleeding element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_texture_width": "Bleeding element texture width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_texture_height": "Bleeding element texture height",
+
+
+	"text.autoconfig.overhauleddamage.category.burnClientConfig": "Burn Build Up Bar",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_element_x_offset": "Burn element X offset",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_element_y_offset": "Burn element Y offset",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_element_fill_direction": "Burn element fill direction",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.enable_burn_build_up_bar_animation": "Enable burn element animation",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_bar_animation_interval": "Burn element animation interval",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_bar_additional_length": "Burn element additional length",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_background_texture_id": "Burn element background texture id",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_foreground_texture_id": "Burn element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_texture_width": "Burn element texture width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_texture_height": "Burn element texture height",
+
+
+	"text.autoconfig.overhauleddamage.category.freezeClientConfig": "Freeze Build Up Bar",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_element_x_offset": "Freeze element X offset",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_element_y_offset": "Freeze element Y offset",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_element_fill_direction": "Freeze element fill direction",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.enable_freeze_build_up_bar_animation": "Enable freeze element animation",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_bar_animation_interval": "Freeze element animation interval",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_bar_additional_length": "Freeze element additional length",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_background_texture_id": "Freeze element background texture id",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_foreground_texture_id": "Freeze element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_texture_width": "Freeze element texture width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_texture_height": "Freeze element texture height",
+
+
+	"text.autoconfig.overhauleddamage.category.poisonClientConfig": "Poison Build Up Bar",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_element_x_offset": "Poison element X offset",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_element_y_offset": "Poison element Y offset",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_element_fill_direction": "Poison element fill direction",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.enable_poison_build_up_bar_animation": "Enable poison element animation",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_bar_animation_interval": "Poison element animation interval",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_bar_additional_length": "Poison element additional length",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_background_texture_id": "Poison element background texture id",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_foreground_texture_id": "Poison element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_texture_width": "Poison element texture width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_texture_height": "Poison element texture height",
+
+
+	"text.autoconfig.overhauleddamage.category.shockClientConfig": "Shock Build Up Bar",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_element_x_offset": "Shock element X offset",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_element_y_offset": "Shock element Y offset",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_element_fill_direction": "Shock element fill direction",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.enable_shock_build_up_bar_animation": "Enable shock element animation",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_bar_animation_interval": "Shock element animation interval",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_bar_additional_length": "Shock element additional length",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_background_texture_id": "Shock element background texture id",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_foreground_texture_id": "Shock element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_texture_width": "Shock element texture width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_texture_height": "Shock element texture height",
+
+
+	"text.autoconfig.overhauleddamage.category.staggerClientConfig": "Stagger Build Up Bar",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_element_x_offset": "Stagger element X offset",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_element_y_offset": "Stagger element Y offset",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_element_fill_direction": "Stagger element fill direction",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.enable_stagger_build_up_bar_animation": "Enable stagger element animation",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_bar_animation_interval": "Stagger element animation interval",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_bar_additional_length": "Stagger element additional length",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_background_texture_id": "Stagger element background texture id",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_foreground_texture_id": "Stagger element foreground texture id",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_texture_width": "Stagger element texture width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_texture_height": "Stagger element texture height"
 }
