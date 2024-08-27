@@ -43,9 +43,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public boolean show_effect_build_up_elements = true;
 
 		@ConfigEntry.Gui.PrefixText()
-		public boolean use_custom_textures = false;
-
-		@ConfigEntry.Gui.PrefixText()
 		public int dynamic_x_offset_increase = 0;
 		public int dynamic_y_offset_increase = 6;
 
@@ -73,10 +70,12 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int bleeding_build_up_bar_additional_length = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public String custom_bleeding_element_background_texture_id = "";
-		public String custom_bleeding_element_foreground_texture_id = "";
-		public int custom_bleeding_element_texture_width = 0;
-		public int custom_bleeding_element_texture_height = 0;
+		public int horizontal_bleeding_build_up_bar_texture_width = 11;
+		public int horizontal_bleeding_build_up_bar_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_bleeding_build_up_bar_texture_width = 5;
+		public int vertical_bleeding_build_up_bar_texture_height = 11;
 
 		public BleedingClientConfig() {
 
@@ -101,10 +100,12 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int burn_build_up_bar_additional_length = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public String custom_burn_element_background_texture_id = "";
-		public String custom_burn_element_foreground_texture_id = "";
-		public int custom_burn_element_texture_width = 0;
-		public int custom_burn_element_texture_height = 0;
+		public int horizontal_burn_build_up_bar_texture_width = 11;
+		public int horizontal_burn_build_up_bar_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_burn_build_up_bar_texture_width = 5;
+		public int vertical_burn_build_up_bar_texture_height = 11;
 
 		public BurnClientConfig() {
 
@@ -129,10 +130,12 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int freeze_build_up_bar_additional_length = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public String custom_freeze_element_background_texture_id = "";
-		public String custom_freeze_element_foreground_texture_id = "";
-		public int custom_freeze_element_texture_width = 0;
-		public int custom_freeze_element_texture_height = 0;
+		public int horizontal_freeze_build_up_bar_texture_width = 11;
+		public int horizontal_freeze_build_up_bar_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_freeze_build_up_bar_texture_width = 5;
+		public int vertical_freeze_build_up_bar_texture_height = 11;
 
 		public FreezeClientConfig() {
 
@@ -157,10 +160,12 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int poison_build_up_bar_additional_length = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public String custom_poison_element_background_texture_id = "";
-		public String custom_poison_element_foreground_texture_id = "";
-		public int custom_poison_element_texture_width = 0;
-		public int custom_poison_element_texture_height = 0;
+		public int horizontal_poison_build_up_bar_texture_width = 11;
+		public int horizontal_poison_build_up_bar_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_poison_build_up_bar_texture_width = 5;
+		public int vertical_poison_build_up_bar_texture_height = 11;
 
 		public PoisonClientConfig() {
 
@@ -185,10 +190,12 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int shock_build_up_bar_additional_length = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public String custom_shock_element_background_texture_id = "";
-		public String custom_shock_element_foreground_texture_id = "";
-		public int custom_shock_element_texture_width = 0;
-		public int custom_shock_element_texture_height = 0;
+		public int horizontal_shock_build_up_bar_texture_width = 11;
+		public int horizontal_shock_build_up_bar_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_shock_build_up_bar_texture_width = 5;
+		public int vertical_shock_build_up_bar_texture_height = 11;
 
 		public ShockClientConfig() {
 
@@ -213,10 +220,12 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int stagger_build_up_bar_additional_length = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public String custom_stagger_element_background_texture_id = "";
-		public String custom_stagger_element_foreground_texture_id = "";
-		public int custom_stagger_element_texture_width = 0;
-		public int custom_stagger_element_texture_height = 0;
+		public int horizontal_stagger_build_up_bar_texture_width = 11;
+		public int horizontal_stagger_build_up_bar_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_stagger_build_up_bar_texture_width = 5;
+		public int vertical_stagger_build_up_bar_texture_height = 11;
 
 		public StaggerClientConfig() {
 

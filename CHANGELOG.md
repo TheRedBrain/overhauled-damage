@@ -1,3 +1,7 @@
+# 2.1.0
+
+- reworked/streamlined customization of effect build up bar textures
+
 # 2.0.1
 
 - fixed a crash when taking damage of some specific damage_types
