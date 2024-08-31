@@ -35,10 +35,10 @@
 		"minecraft": "${minecraft_version}",
 		"fabricloader": ">=${loader_version}",
 		"fabric-api": "*",
-		"cloth-config": ">=${cloth_config}",
-		"staminaattributes": ">=${stamina_attributes}"
+		"cloth-config": ">=${cloth_config}"
 	},
 	"suggests": {
-		"variousstatuseffects": "*"
+		"variousstatuseffects": "*",
+		"staminaattributes": "*"
 	}
 }

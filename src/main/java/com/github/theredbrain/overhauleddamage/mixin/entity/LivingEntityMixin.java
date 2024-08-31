@@ -3,7 +3,6 @@ package com.github.theredbrain.overhauleddamage.mixin.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
-import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
@@ -374,7 +373,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 			// region shield blocks
 			ItemStack shieldItemStack = this.getOffHandStack();
-			if (this.isBlocking() && this.blockedByShield(source) && (((StaminaUsingEntity) this).staminaattributes$getStamina() > 0 || serverConfig.blocking_requires_stamina)) {
+			if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded)) {
 				// try to parry the attack
 				boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
 				double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
@@ -386,9 +385,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				float blockedLightningDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedLightningDamage() * parryBonus);
 				float blockedPoisonDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPoisonDamage() * parryBonus);
 
-				((StaminaUsingEntity) this).staminaattributes$addStamina(tryParry ? -((DuckLivingEntityMixin) this).overhauleddamage$getParryStaminaCost() : -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
+				OverhauledDamage.addStamina(((LivingEntity) (Object) this), tryParry ? -((DuckLivingEntityMixin) this).overhauleddamage$getParryStaminaCost() : -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
 
-				if (((StaminaUsingEntity) this).staminaattributes$getStamina() >= 0) {
+				if (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) >= 0 || !OverhauledDamage.isStaminaAttributesLoaded) {
 
 					boolean isStaggered = false;
 					// apply stagger based on left over damage

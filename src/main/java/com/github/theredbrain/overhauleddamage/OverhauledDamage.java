@@ -2,6 +2,7 @@ package com.github.theredbrain.overhauleddamage;
 
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.config.ServerConfigWrapper;
+import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
 import com.google.gson.Gson;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
@@ -10,6 +11,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -90,6 +93,22 @@ public class OverhauledDamage implements ModInitializer {
 
 	public static RegistryEntry<EntityAttribute> BLOCK_STAMINA_COST;
 	public static RegistryEntry<EntityAttribute> PARRY_STAMINA_COST;
+
+	public static final boolean isStaminaAttributesLoaded = FabricLoader.getInstance().isModLoaded("staminaattributes");
+
+	public static float getCurrentStamina(LivingEntity livingEntity) {
+		float currentStamina = 0.0F;
+		if (isStaminaAttributesLoaded) {
+			currentStamina = ((StaminaUsingEntity) livingEntity).staminaattributes$getStamina();
+		}
+		return currentStamina;
+	}
+
+	public static void addStamina(LivingEntity livingEntity, float amount) {
+		if (isStaminaAttributesLoaded) {
+			((StaminaUsingEntity) livingEntity).staminaattributes$addStamina(amount);
+		}
+	}
 
 	@Override
 	public void onInitialize() {

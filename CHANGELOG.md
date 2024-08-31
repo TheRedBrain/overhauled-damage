@@ -1,6 +1,7 @@
 # 2.1.0
 
 - reworked/streamlined customization of effect build up bar textures
+- Stamina Attributes is now an optional dependency
 
 # 2.0.1
 
