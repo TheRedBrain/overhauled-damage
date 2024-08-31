@@ -77,6 +77,27 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_bleeding_build_up_bar_texture_width = 5;
 		public int vertical_bleeding_build_up_bar_texture_height = 11;
 
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_current_bleeding_value_overlay = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_bleeding_overlay_texture_width = 5;
+		public int horizontal_bleeding_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_bleeding_overlay_texture_width = 5;
+		public int vertical_bleeding_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_bleeding_build_up_bar_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int bleeding_build_up_bar_number_x_offset = 0;
+		public int bleeding_build_up_bar_number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int bleeding_build_up_bar_number_color = -6250336;
+
 		public BleedingClientConfig() {
 
 		}
@@ -106,6 +127,27 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_burn_build_up_bar_texture_width = 5;
 		public int vertical_burn_build_up_bar_texture_height = 11;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_current_burn_value_overlay = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_burn_overlay_texture_width = 5;
+		public int horizontal_burn_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_burn_overlay_texture_width = 5;
+		public int vertical_burn_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_burn_build_up_bar_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int burn_build_up_bar_number_x_offset = 0;
+		public int burn_build_up_bar_number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int burn_build_up_bar_number_color = -6250336;
 
 		public BurnClientConfig() {
 
@@ -137,6 +179,27 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_freeze_build_up_bar_texture_width = 5;
 		public int vertical_freeze_build_up_bar_texture_height = 11;
 
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_current_freeze_value_overlay = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_freeze_overlay_texture_width = 5;
+		public int horizontal_freeze_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_freeze_overlay_texture_width = 5;
+		public int vertical_freeze_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_freeze_build_up_bar_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int freeze_build_up_bar_number_x_offset = 0;
+		public int freeze_build_up_bar_number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int freeze_build_up_bar_number_color = -6250336;
+
 		public FreezeClientConfig() {
 
 		}
@@ -166,6 +229,27 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_poison_build_up_bar_texture_width = 5;
 		public int vertical_poison_build_up_bar_texture_height = 11;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_current_poison_value_overlay = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_poison_overlay_texture_width = 5;
+		public int horizontal_poison_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_poison_overlay_texture_width = 5;
+		public int vertical_poison_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_poison_build_up_bar_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int poison_build_up_bar_number_x_offset = 0;
+		public int poison_build_up_bar_number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int poison_build_up_bar_number_color = -6250336;
 
 		public PoisonClientConfig() {
 
@@ -197,6 +281,27 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_shock_build_up_bar_texture_width = 5;
 		public int vertical_shock_build_up_bar_texture_height = 11;
 
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_current_shock_value_overlay = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_shock_overlay_texture_width = 5;
+		public int horizontal_shock_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_shock_overlay_texture_width = 5;
+		public int vertical_shock_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_shock_build_up_bar_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int shock_build_up_bar_number_x_offset = 0;
+		public int shock_build_up_bar_number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int shock_build_up_bar_number_color = -6250336;
+
 		public ShockClientConfig() {
 
 		}
@@ -226,6 +331,27 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_stagger_build_up_bar_texture_width = 5;
 		public int vertical_stagger_build_up_bar_texture_height = 11;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_current_stagger_value_overlay = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_stagger_overlay_texture_width = 5;
+		public int horizontal_stagger_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_stagger_overlay_texture_width = 5;
+		public int vertical_stagger_overlay_texture_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_stagger_build_up_bar_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int stagger_build_up_bar_number_x_offset = 0;
+		public int stagger_build_up_bar_number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int stagger_build_up_bar_number_color = -6250336;
 
 		public StaggerClientConfig() {
 

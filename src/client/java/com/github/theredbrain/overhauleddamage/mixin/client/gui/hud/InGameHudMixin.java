@@ -7,6 +7,7 @@ import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,52 +32,66 @@ public abstract class InGameHudMixin {
 	@Final
 	private MinecraftClient client;
 
+	@Shadow public abstract TextRenderer getTextRenderer();
+
 	@Unique
 	private static final Identifier[] BLEEDING_TEXTURES = {
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_background.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_overlay.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_bleeding_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_bleeding_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_bleeding_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_bleeding_overlay.png")
 	};
 
 	@Unique
 	private static final Identifier[] BURN_TEXTURES = {
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_background.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_overlay.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_burn_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_burn_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_burn_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_burn_overlay.png")
 	};
 
 	@Unique
 	private static final Identifier[] FREEZE_TEXTURES = {
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_background.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_overlay.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_freeze_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_freeze_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_freeze_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_freeze_overlay.png")
 	};
 
 	@Unique
 	private static final Identifier[] POISON_TEXTURES = {
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_background.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_overlay.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_poison_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_poison_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_poison_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_poison_overlay.png")
 	};
 
 	@Unique
 	private static final Identifier[] SHOCK_TEXTURES = {
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_background.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_overlay.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_shock_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_shock_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_shock_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_shock_overlay.png")
 	};
 
 	@Unique
 	private static final Identifier[] STAGGER_TEXTURES = {
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_background.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_overlay.png"),
 			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_stagger_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_stagger_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_stagger_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_stagger_overlay.png")
 	};
 
 	@Unique
@@ -112,6 +127,9 @@ public abstract class InGameHudMixin {
 			int buildUpElementY = (context.getScaledWindowHeight() / 2 + bleedingClientConfig.bleeding_build_up_element_y_offset) + dynamic_y_offset;
 			int currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
 			int maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
+			String buildUpBarNumberString = String.valueOf(currentBuildUp);
+			int buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + bleedingClientConfig.bleeding_build_up_bar_number_x_offset;
+			int buildUpBarNumberY = context.getScaledWindowHeight() + bleedingClientConfig.bleeding_build_up_bar_number_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("bleeding_build_up_element");
@@ -128,11 +146,21 @@ public abstract class InGameHudMixin {
 						bleedingClientConfig.horizontal_bleeding_build_up_bar_texture_height,
 						bleedingClientConfig.vertical_bleeding_build_up_bar_texture_width,
 						bleedingClientConfig.vertical_bleeding_build_up_bar_texture_height,
+						bleedingClientConfig.horizontal_bleeding_overlay_texture_width,
+						bleedingClientConfig.horizontal_bleeding_overlay_texture_height,
+						bleedingClientConfig.vertical_bleeding_overlay_texture_width,
+						bleedingClientConfig.vertical_bleeding_overlay_texture_height,
 						bleedingClientConfig.bleeding_element_fill_direction,
 						0,
 						bleedingClientConfig.enable_bleeding_build_up_bar_animation,
+						bleedingClientConfig.show_current_bleeding_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUpReduction()),
-						bleedingClientConfig.bleeding_build_up_bar_animation_interval
+						bleedingClientConfig.bleeding_build_up_bar_animation_interval,
+						bleedingClientConfig.show_bleeding_build_up_bar_number,
+						buildUpBarNumberString,
+						buildUpBarNumberX,
+						buildUpBarNumberY,
+						bleedingClientConfig.bleeding_build_up_bar_number_color
 				);
 
 				dynamic_x_offset = dynamic_x_offset + dynamic_x_offset_increment;
@@ -147,6 +175,9 @@ public abstract class InGameHudMixin {
 			buildUpElementY = (context.getScaledWindowHeight() / 2 + burnClientConfig.burn_build_up_element_y_offset) + dynamic_y_offset;
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
+			buildUpBarNumberString = String.valueOf(currentBuildUp);
+			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + burnClientConfig.burn_build_up_bar_number_x_offset;
+			buildUpBarNumberY = context.getScaledWindowHeight() + burnClientConfig.burn_build_up_bar_number_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("burn_build_up_element");
@@ -163,11 +194,21 @@ public abstract class InGameHudMixin {
 						burnClientConfig.horizontal_burn_build_up_bar_texture_height,
 						burnClientConfig.vertical_burn_build_up_bar_texture_width,
 						burnClientConfig.vertical_burn_build_up_bar_texture_height,
+						burnClientConfig.horizontal_burn_overlay_texture_width,
+						burnClientConfig.horizontal_burn_overlay_texture_height,
+						burnClientConfig.vertical_burn_overlay_texture_width,
+						burnClientConfig.vertical_burn_overlay_texture_height,
 						burnClientConfig.burn_element_fill_direction,
 						1,
 						burnClientConfig.enable_burn_build_up_bar_animation,
+						burnClientConfig.show_current_burn_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUpReduction()),
-						burnClientConfig.burn_build_up_bar_animation_interval
+						burnClientConfig.burn_build_up_bar_animation_interval,
+						burnClientConfig.show_burn_build_up_bar_number,
+						buildUpBarNumberString,
+						buildUpBarNumberX,
+						buildUpBarNumberY,
+						burnClientConfig.burn_build_up_bar_number_color
 				);
 
 				dynamic_x_offset = dynamic_x_offset + dynamic_x_offset_increment;
@@ -182,6 +223,9 @@ public abstract class InGameHudMixin {
 			buildUpElementY = (context.getScaledWindowHeight() / 2 + freezeClientConfig.freeze_build_up_element_y_offset) + dynamic_y_offset;
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
+			buildUpBarNumberString = String.valueOf(currentBuildUp);
+			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + freezeClientConfig.freeze_build_up_bar_number_x_offset;
+			buildUpBarNumberY = context.getScaledWindowHeight() + freezeClientConfig.freeze_build_up_bar_number_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("freeze_build_up_element");
@@ -198,11 +242,21 @@ public abstract class InGameHudMixin {
 						freezeClientConfig.horizontal_freeze_build_up_bar_texture_height,
 						freezeClientConfig.vertical_freeze_build_up_bar_texture_width,
 						freezeClientConfig.vertical_freeze_build_up_bar_texture_height,
+						freezeClientConfig.horizontal_freeze_overlay_texture_width,
+						freezeClientConfig.horizontal_freeze_overlay_texture_height,
+						freezeClientConfig.vertical_freeze_overlay_texture_width,
+						freezeClientConfig.vertical_freeze_overlay_texture_height,
 						freezeClientConfig.freeze_element_fill_direction,
 						2,
 						freezeClientConfig.enable_freeze_build_up_bar_animation,
+						freezeClientConfig.show_current_freeze_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUpReduction()),
-						freezeClientConfig.freeze_build_up_bar_animation_interval
+						freezeClientConfig.freeze_build_up_bar_animation_interval,
+						freezeClientConfig.show_freeze_build_up_bar_number,
+						buildUpBarNumberString,
+						buildUpBarNumberX,
+						buildUpBarNumberY,
+						freezeClientConfig.freeze_build_up_bar_number_color
 				);
 
 				dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
@@ -217,6 +271,9 @@ public abstract class InGameHudMixin {
 			buildUpElementY = (context.getScaledWindowHeight() / 2 + poisonClientConfig.poison_build_up_element_y_offset) + dynamic_y_offset;
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
+			buildUpBarNumberString = String.valueOf(currentBuildUp);
+			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + poisonClientConfig.poison_build_up_bar_number_x_offset;
+			buildUpBarNumberY = context.getScaledWindowHeight() + poisonClientConfig.poison_build_up_bar_number_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("poison_build_up_element");
@@ -233,11 +290,21 @@ public abstract class InGameHudMixin {
 						poisonClientConfig.horizontal_poison_build_up_bar_texture_height,
 						poisonClientConfig.vertical_poison_build_up_bar_texture_width,
 						poisonClientConfig.vertical_poison_build_up_bar_texture_height,
+						poisonClientConfig.horizontal_poison_overlay_texture_width,
+						poisonClientConfig.horizontal_poison_overlay_texture_height,
+						poisonClientConfig.vertical_poison_overlay_texture_width,
+						poisonClientConfig.vertical_poison_overlay_texture_height,
 						poisonClientConfig.poison_element_fill_direction,
 						3,
 						poisonClientConfig.enable_poison_build_up_bar_animation,
+						poisonClientConfig.show_current_poison_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUpReduction()),
-						poisonClientConfig.poison_build_up_bar_animation_interval
+						poisonClientConfig.poison_build_up_bar_animation_interval,
+						poisonClientConfig.show_poison_build_up_bar_number,
+						buildUpBarNumberString,
+						buildUpBarNumberX,
+						buildUpBarNumberY,
+						poisonClientConfig.poison_build_up_bar_number_color
 				);
 
 				dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
@@ -252,6 +319,9 @@ public abstract class InGameHudMixin {
 			buildUpElementY = (context.getScaledWindowHeight() / 2 + shockClientConfig.shock_build_up_element_y_offset) + dynamic_y_offset;
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
+			buildUpBarNumberString = String.valueOf(currentBuildUp);
+			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + shockClientConfig.shock_build_up_bar_number_x_offset;
+			buildUpBarNumberY = context.getScaledWindowHeight() + shockClientConfig.shock_build_up_bar_number_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("shock_build_up_element");
@@ -268,11 +338,21 @@ public abstract class InGameHudMixin {
 						shockClientConfig.horizontal_shock_build_up_bar_texture_height,
 						shockClientConfig.vertical_shock_build_up_bar_texture_width,
 						shockClientConfig.vertical_shock_build_up_bar_texture_height,
+						shockClientConfig.horizontal_shock_overlay_texture_width,
+						shockClientConfig.horizontal_shock_overlay_texture_height,
+						shockClientConfig.vertical_shock_overlay_texture_width,
+						shockClientConfig.vertical_shock_overlay_texture_height,
 						shockClientConfig.shock_element_fill_direction,
 						4,
 						shockClientConfig.enable_shock_build_up_bar_animation,
+						shockClientConfig.show_current_shock_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUpReduction()),
-						shockClientConfig.shock_build_up_bar_animation_interval
+						shockClientConfig.shock_build_up_bar_animation_interval,
+						shockClientConfig.show_shock_build_up_bar_number,
+						buildUpBarNumberString,
+						buildUpBarNumberX,
+						buildUpBarNumberY,
+						shockClientConfig.shock_build_up_bar_number_color
 				);
 
 				dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
@@ -287,6 +367,9 @@ public abstract class InGameHudMixin {
 			buildUpElementY = (context.getScaledWindowHeight() / 2 + staggerClientConfig.stagger_build_up_element_y_offset) + dynamic_y_offset;
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
+			buildUpBarNumberString = String.valueOf(currentBuildUp);
+			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + staggerClientConfig.stagger_build_up_bar_number_x_offset;
+			buildUpBarNumberY = context.getScaledWindowHeight() + staggerClientConfig.stagger_build_up_bar_number_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("stagger_build_up_element");
@@ -303,11 +386,21 @@ public abstract class InGameHudMixin {
 						staggerClientConfig.horizontal_stagger_build_up_bar_texture_height,
 						staggerClientConfig.vertical_stagger_build_up_bar_texture_width,
 						staggerClientConfig.vertical_stagger_build_up_bar_texture_height,
+						staggerClientConfig.horizontal_stagger_overlay_texture_width,
+						staggerClientConfig.horizontal_stagger_overlay_texture_height,
+						staggerClientConfig.vertical_stagger_overlay_texture_width,
+						staggerClientConfig.vertical_stagger_overlay_texture_height,
 						staggerClientConfig.stagger_element_fill_direction,
 						5,
 						staggerClientConfig.enable_stagger_build_up_bar_animation,
+						staggerClientConfig.show_current_stagger_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUpReduction()),
-						staggerClientConfig.stagger_build_up_bar_animation_interval
+						staggerClientConfig.stagger_build_up_bar_animation_interval,
+						staggerClientConfig.show_stagger_build_up_bar_number,
+						buildUpBarNumberString,
+						buildUpBarNumberX,
+						buildUpBarNumberY,
+						staggerClientConfig.stagger_build_up_bar_number_color
 				);
 
 //					dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
@@ -332,11 +425,21 @@ public abstract class InGameHudMixin {
 			int horizontal_texture_height,
 			int vertical_texture_width,
 			int vertical_texture_height,
+			int horizontal_overlay_width,
+			int horizontal_overlay_height,
+			int vertical_overlay_width,
+			int vertical_overlay_height,
 			ClientConfig.FillDirection fill_direction,
 			int effect_id,
 			boolean enable_smooth_animation,
+			boolean show_current_value_overlay,
 			int build_up_reduction,
-			int build_up_bar_animation_interval
+			int build_up_bar_animation_interval,
+			boolean show_build_up_bar_number,
+			String buildUpBarNumberString,
+			int build_up_bar_number_x,
+			int build_up_bar_number_y,
+			int build_up_bar_number_color
 	) {
 
 		int barEndsLength; // TODO find better name
@@ -345,8 +448,9 @@ public abstract class InGameHudMixin {
 		} else {
 			barEndsLength = (horizontal_texture_width - 1) / 2;
 		}
-		
-		int normalizedBuildUpRatio = (int) (((double) currentBuildUp / Math.max(maxBuildUp, 1)) * (barEndsLength + additional_bar_length + barEndsLength));
+		int barLength = barEndsLength + additional_bar_length + barEndsLength;
+
+		int normalizedBuildUpRatio = (int) (((double) currentBuildUp / Math.max(maxBuildUp, 1)) * (barLength));
 
 		if (this.oldMaxBuildUps[effect_id] != maxBuildUp) {
 			this.oldMaxBuildUps[effect_id] = maxBuildUp;
@@ -363,13 +467,13 @@ public abstract class InGameHudMixin {
 
 		// background
 		if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP || fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
-			context.drawTexture(texture_ids[2], buildUpElementX, buildUpElementY, 0, 0, vertical_texture_width, barEndsLength, vertical_texture_width, vertical_texture_height);
+			context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY, 0, 0, vertical_texture_width, barEndsLength, vertical_texture_width, vertical_texture_height);
 			if (additional_bar_length > 0) {
 				for (int i = 0; i < additional_bar_length; i++) {
-					context.drawTexture(texture_ids[2], buildUpElementX, buildUpElementY + barEndsLength + i, 0, barEndsLength, vertical_texture_width, 1, vertical_texture_width, vertical_texture_height);
+					context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY + barEndsLength + i, 0, barEndsLength, vertical_texture_width, 1, vertical_texture_width, vertical_texture_height);
 				}
 			}
-			context.drawTexture(texture_ids[2], buildUpElementX, buildUpElementY + barEndsLength + additional_bar_length, 0, barEndsLength + 1, vertical_texture_width, barEndsLength, vertical_texture_width, vertical_texture_height);
+			context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY + barEndsLength + additional_bar_length, 0, barEndsLength + 1, vertical_texture_width, barEndsLength, vertical_texture_width, vertical_texture_height);
 		} else {
 			context.drawTexture(texture_ids[0], buildUpElementX, buildUpElementY, 0, 0, barEndsLength, horizontal_texture_height, horizontal_texture_width, horizontal_texture_height);
 			if (additional_bar_length > 0) {
@@ -387,21 +491,21 @@ public abstract class InGameHudMixin {
 			int ratioLastPart = Math.min(barEndsLength, displayRatio - barEndsLength - additional_bar_length);
 			if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP) {
 				// 1: bottom to top
-				context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY + barEndsLength + additional_bar_length + (barEndsLength - ratioFirstPart), 0, barEndsLength + 1 + (barEndsLength - ratioFirstPart), vertical_texture_width, ratioFirstPart, vertical_texture_width, vertical_texture_height);
+				context.drawTexture(texture_ids[4], buildUpElementX, buildUpElementY + barEndsLength + additional_bar_length + (barEndsLength - ratioFirstPart), 0, barEndsLength + 1 + (barEndsLength - ratioFirstPart), vertical_texture_width, ratioFirstPart, vertical_texture_width, vertical_texture_height);
 				if (displayRatio > barEndsLength && additional_bar_length > 0) {
 					for (int i = barEndsLength; i <= Math.min(barEndsLength + additional_bar_length, displayRatio); i++) {
-						context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY + barEndsLength + additional_bar_length + barEndsLength - i, 0, barEndsLength, vertical_texture_width, 1, vertical_texture_width, vertical_texture_height);
+						context.drawTexture(texture_ids[4], buildUpElementX, buildUpElementY + barLength - i, 0, barEndsLength, vertical_texture_width, 1, vertical_texture_width, vertical_texture_height);
 					}
 				}
 				if (displayRatio > (barEndsLength + additional_bar_length)) {
-					context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY + barEndsLength - ratioLastPart, 0, barEndsLength - ratioLastPart, vertical_texture_width, ratioLastPart, vertical_texture_width, vertical_texture_height);
+					context.drawTexture(texture_ids[4], buildUpElementX, buildUpElementY + barEndsLength - ratioLastPart, 0, barEndsLength - ratioLastPart, vertical_texture_width, ratioLastPart, vertical_texture_width, vertical_texture_height);
 				}
 			} else if (fill_direction == ClientConfig.FillDirection.RIGHT_TO_LEFT) {
 				// 2: right to left
 				context.drawTexture(texture_ids[1], buildUpElementX + barEndsLength + additional_bar_length + (barEndsLength - ratioFirstPart), buildUpElementY, barEndsLength + 1 + (barEndsLength - ratioFirstPart), 0, Math.min(barEndsLength, displayRatio), horizontal_texture_height, horizontal_texture_width, horizontal_texture_height);
 				if (displayRatio > barEndsLength && additional_bar_length > 0) {
 					for (int i = barEndsLength; i <= Math.min(barEndsLength + additional_bar_length, displayRatio); i++) {
-						context.drawTexture(texture_ids[1], buildUpElementX + barEndsLength + additional_bar_length + barEndsLength - i, buildUpElementY, barEndsLength, 0, 1, horizontal_texture_height, horizontal_texture_width, horizontal_texture_height);
+						context.drawTexture(texture_ids[1], buildUpElementX + barLength - i, buildUpElementY, barEndsLength, 0, 1, horizontal_texture_height, horizontal_texture_width, horizontal_texture_height);
 					}
 				}
 				if (displayRatio > (barEndsLength + additional_bar_length)) {
@@ -409,14 +513,14 @@ public abstract class InGameHudMixin {
 				}
 			} else if (fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
 				// 3: top to bottom
-				context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY, 0, 0, vertical_texture_width, ratioFirstPart, vertical_texture_width, vertical_texture_height);
+				context.drawTexture(texture_ids[4], buildUpElementX, buildUpElementY, 0, 0, vertical_texture_width, ratioFirstPart, vertical_texture_width, vertical_texture_height);
 				if (displayRatio > barEndsLength && additional_bar_length > 0) {
 					for (int i = barEndsLength; i < Math.min(barEndsLength + additional_bar_length, displayRatio); i++) {
-						context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY + i, 0, barEndsLength, vertical_texture_width, 1, vertical_texture_width, vertical_texture_height);
+						context.drawTexture(texture_ids[4], buildUpElementX, buildUpElementY + i, 0, barEndsLength, vertical_texture_width, 1, vertical_texture_width, vertical_texture_height);
 					}
 				}
 				if (displayRatio > (barEndsLength + additional_bar_length)) {
-					context.drawTexture(texture_ids[3], buildUpElementX, buildUpElementY + barEndsLength + additional_bar_length, 0, barEndsLength + 1, vertical_texture_width, ratioLastPart, vertical_texture_width, vertical_texture_height);
+					context.drawTexture(texture_ids[4], buildUpElementX, buildUpElementY + barEndsLength + additional_bar_length, 0, barEndsLength + 1, vertical_texture_width, ratioLastPart, vertical_texture_width, vertical_texture_height);
 				}
 			} else {
 				// 0: left to right
@@ -432,6 +536,38 @@ public abstract class InGameHudMixin {
 			}
 		}
 
-		// TODO current value indicator
+		// overlay
+		if (show_current_value_overlay) {
+			if (fill_direction == ClientConfig.FillDirection.BOTTOM_TO_TOP) {
+				// 1: bottom to top
+				if (currentBuildUp > 0 && currentBuildUp < maxBuildUp) {
+					context.drawTexture(texture_ids[2], buildUpElementX, buildUpElementY + barLength - normalizedBuildUpRatio - ((int) Math.floor(vertical_overlay_height / 2.0)), 0, 0, vertical_overlay_width, vertical_overlay_height, vertical_overlay_width, horizontal_overlay_height);
+				}
+			} else if (fill_direction == ClientConfig.FillDirection.RIGHT_TO_LEFT) {
+				// 2: right to left
+				if (currentBuildUp > 0 && currentBuildUp < maxBuildUp) {
+					context.drawTexture(texture_ids[2], buildUpElementX + barLength - normalizedBuildUpRatio - ((int) Math.floor(horizontal_overlay_width / 2.0)), buildUpElementY, 0, 0, horizontal_overlay_width, horizontal_overlay_height, horizontal_overlay_width, horizontal_overlay_height);
+				}
+			} else if (fill_direction == ClientConfig.FillDirection.TOP_TO_BOTTOM) {
+				// 3: top to bottom
+				if (currentBuildUp > 0 && currentBuildUp < maxBuildUp) {
+					context.drawTexture(texture_ids[2], buildUpElementX, buildUpElementY + normalizedBuildUpRatio - ((int) Math.floor(vertical_overlay_height / 2.0)), 0, 0, vertical_overlay_width, vertical_overlay_height, vertical_overlay_width, horizontal_overlay_height);
+				}
+			} else {
+				// 0: left to right
+				if (currentBuildUp > 0 && currentBuildUp < maxBuildUp) {
+					context.drawTexture(texture_ids[2], buildUpElementX + normalizedBuildUpRatio - ((int) Math.floor(horizontal_overlay_width / 2.0)), buildUpElementY, 0, 0, horizontal_overlay_width, horizontal_overlay_height, horizontal_overlay_width, horizontal_overlay_height);
+				}
+			}
+		}
+
+		// number
+		if (show_build_up_bar_number) {
+			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x + 1, build_up_bar_number_y, 0, false);
+			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x - 1, build_up_bar_number_y, 0, false);
+			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y + 1, 0, false);
+			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y - 1, 0, false);
+			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y, build_up_bar_number_color, false);
+		}
 	}
 }
