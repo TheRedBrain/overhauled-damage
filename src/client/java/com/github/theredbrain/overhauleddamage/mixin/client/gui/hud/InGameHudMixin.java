@@ -33,50 +33,50 @@ public abstract class InGameHudMixin {
 
 	@Unique
 	private static final Identifier[] BLEEDING_TEXTURES = {
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_bleeding_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_bleeding_progress.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_bleeding_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_bleeding_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_bleeding_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_bleeding_progress.png")
 	};
 
 	@Unique
 	private static final Identifier[] BURN_TEXTURES = {
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_burn_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_burn_progress.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_burn_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_burn_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_burn_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_burn_progress.png")
 	};
 
 	@Unique
 	private static final Identifier[] FREEZE_TEXTURES = {
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_freeze_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_freeze_progress.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_freeze_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_freeze_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_freeze_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_freeze_progress.png")
 	};
 
 	@Unique
 	private static final Identifier[] POISON_TEXTURES = {
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_poison_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_poison_progress.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_poison_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_poison_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_poison_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_poison_progress.png")
 	};
 
 	@Unique
 	private static final Identifier[] SHOCK_TEXTURES = {
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_shock_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_shock_progress.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_shock_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_shock_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_shock_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_shock_progress.png")
 	};
 
 	@Unique
 	private static final Identifier[] STAGGER_TEXTURES = {
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_stagger_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/horizontal_stagger_progress.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_stagger_background.png"),
-			OverhauledDamage.identifier("textures/gui/sprites/hud/effect_build_up_bars/vertical_stagger_progress.png")
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_stagger_background.png"),
+			OverhauledDamage.identifier("textures/gui/sprites/hud/vertical_stagger_progress.png")
 	};
 
 	@Unique
