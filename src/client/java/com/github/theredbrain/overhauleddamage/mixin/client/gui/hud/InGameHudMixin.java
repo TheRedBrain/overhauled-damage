@@ -128,8 +128,8 @@ public abstract class InGameHudMixin {
 			int currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
 			int maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
 			String buildUpBarNumberString = String.valueOf(currentBuildUp);
-			int buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + bleedingClientConfig.bleeding_build_up_bar_number_x_offset;
-			int buildUpBarNumberY = context.getScaledWindowHeight() + bleedingClientConfig.bleeding_build_up_bar_number_y_offset;
+			int buildUpBarNumberX = ((context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + bleedingClientConfig.bleeding_build_up_bar_number_x_offset) + dynamic_x_offset;
+			int buildUpBarNumberY = (context.getScaledWindowHeight() / 2 + bleedingClientConfig.bleeding_build_up_bar_number_y_offset) + dynamic_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("bleeding_build_up_element");
@@ -155,13 +155,19 @@ public abstract class InGameHudMixin {
 						bleedingClientConfig.enable_bleeding_build_up_bar_animation,
 						bleedingClientConfig.show_current_bleeding_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUpReduction()),
-						bleedingClientConfig.bleeding_build_up_bar_animation_interval,
-						bleedingClientConfig.show_bleeding_build_up_bar_number,
-						buildUpBarNumberString,
-						buildUpBarNumberX,
-						buildUpBarNumberY,
-						bleedingClientConfig.bleeding_build_up_bar_number_color
+						bleedingClientConfig.bleeding_build_up_bar_animation_interval
 				);
+
+				if (bleedingClientConfig.show_bleeding_build_up_bar_number) {
+					this.client.getProfiler().swap("bleeding_build_up_number");
+					this.drawEffectBuildUpNumber(
+							context,
+							buildUpBarNumberString,
+							buildUpBarNumberX,
+							buildUpBarNumberY,
+							bleedingClientConfig.bleeding_build_up_bar_number_color
+					);
+				}
 
 				dynamic_x_offset = dynamic_x_offset + dynamic_x_offset_increment;
 				dynamic_y_offset = dynamic_y_offset + dynamic_y_offset_increment;
@@ -176,8 +182,8 @@ public abstract class InGameHudMixin {
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
 			buildUpBarNumberString = String.valueOf(currentBuildUp);
-			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + burnClientConfig.burn_build_up_bar_number_x_offset;
-			buildUpBarNumberY = context.getScaledWindowHeight() + burnClientConfig.burn_build_up_bar_number_y_offset;
+			buildUpBarNumberX = ((context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + burnClientConfig.burn_build_up_bar_number_x_offset) + dynamic_x_offset;
+			buildUpBarNumberY = (context.getScaledWindowHeight() / 2 + burnClientConfig.burn_build_up_bar_number_y_offset) + dynamic_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("burn_build_up_element");
@@ -203,13 +209,19 @@ public abstract class InGameHudMixin {
 						burnClientConfig.enable_burn_build_up_bar_animation,
 						burnClientConfig.show_current_burn_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUpReduction()),
-						burnClientConfig.burn_build_up_bar_animation_interval,
-						burnClientConfig.show_burn_build_up_bar_number,
-						buildUpBarNumberString,
-						buildUpBarNumberX,
-						buildUpBarNumberY,
-						burnClientConfig.burn_build_up_bar_number_color
+						burnClientConfig.burn_build_up_bar_animation_interval
 				);
+
+				if (burnClientConfig.show_burn_build_up_bar_number) {
+					this.client.getProfiler().swap("burn_build_up_number");
+					this.drawEffectBuildUpNumber(
+							context,
+							buildUpBarNumberString,
+							buildUpBarNumberX,
+							buildUpBarNumberY,
+							burnClientConfig.burn_build_up_bar_number_color
+					);
+				}
 
 				dynamic_x_offset = dynamic_x_offset + dynamic_x_offset_increment;
 				dynamic_y_offset = dynamic_y_offset + dynamic_y_offset_increment;
@@ -224,8 +236,8 @@ public abstract class InGameHudMixin {
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
 			buildUpBarNumberString = String.valueOf(currentBuildUp);
-			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + freezeClientConfig.freeze_build_up_bar_number_x_offset;
-			buildUpBarNumberY = context.getScaledWindowHeight() + freezeClientConfig.freeze_build_up_bar_number_y_offset;
+			buildUpBarNumberX = ((context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + freezeClientConfig.freeze_build_up_bar_number_x_offset) + dynamic_x_offset;
+			buildUpBarNumberY = (context.getScaledWindowHeight() / 2 + freezeClientConfig.freeze_build_up_bar_number_y_offset) + dynamic_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("freeze_build_up_element");
@@ -251,13 +263,19 @@ public abstract class InGameHudMixin {
 						freezeClientConfig.enable_freeze_build_up_bar_animation,
 						freezeClientConfig.show_current_freeze_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUpReduction()),
-						freezeClientConfig.freeze_build_up_bar_animation_interval,
-						freezeClientConfig.show_freeze_build_up_bar_number,
-						buildUpBarNumberString,
-						buildUpBarNumberX,
-						buildUpBarNumberY,
-						freezeClientConfig.freeze_build_up_bar_number_color
+						freezeClientConfig.freeze_build_up_bar_animation_interval
 				);
+
+				if (freezeClientConfig.show_freeze_build_up_bar_number) {
+					this.client.getProfiler().swap("freeze_build_up_number");
+					this.drawEffectBuildUpNumber(
+							context,
+							buildUpBarNumberString,
+							buildUpBarNumberX,
+							buildUpBarNumberY,
+							freezeClientConfig.freeze_build_up_bar_number_color
+					);
+				}
 
 				dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
 				dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
@@ -272,8 +290,8 @@ public abstract class InGameHudMixin {
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
 			buildUpBarNumberString = String.valueOf(currentBuildUp);
-			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + poisonClientConfig.poison_build_up_bar_number_x_offset;
-			buildUpBarNumberY = context.getScaledWindowHeight() + poisonClientConfig.poison_build_up_bar_number_y_offset;
+			buildUpBarNumberX = ((context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + poisonClientConfig.poison_build_up_bar_number_x_offset) + dynamic_x_offset;
+			buildUpBarNumberY = (context.getScaledWindowHeight() / 2 + poisonClientConfig.poison_build_up_bar_number_y_offset) + dynamic_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("poison_build_up_element");
@@ -299,13 +317,19 @@ public abstract class InGameHudMixin {
 						poisonClientConfig.enable_poison_build_up_bar_animation,
 						poisonClientConfig.show_current_poison_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUpReduction()),
-						poisonClientConfig.poison_build_up_bar_animation_interval,
-						poisonClientConfig.show_poison_build_up_bar_number,
-						buildUpBarNumberString,
-						buildUpBarNumberX,
-						buildUpBarNumberY,
-						poisonClientConfig.poison_build_up_bar_number_color
+						poisonClientConfig.poison_build_up_bar_animation_interval
 				);
+
+				if (poisonClientConfig.show_poison_build_up_bar_number) {
+					this.client.getProfiler().swap("poison_build_up_number");
+					this.drawEffectBuildUpNumber(
+							context,
+							buildUpBarNumberString,
+							buildUpBarNumberX,
+							buildUpBarNumberY,
+							poisonClientConfig.poison_build_up_bar_number_color
+					);
+				}
 
 				dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
 				dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
@@ -320,8 +344,8 @@ public abstract class InGameHudMixin {
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
 			buildUpBarNumberString = String.valueOf(currentBuildUp);
-			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + shockClientConfig.shock_build_up_bar_number_x_offset;
-			buildUpBarNumberY = context.getScaledWindowHeight() + shockClientConfig.shock_build_up_bar_number_y_offset;
+			buildUpBarNumberX = ((context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + shockClientConfig.shock_build_up_bar_number_x_offset) + dynamic_x_offset;
+			buildUpBarNumberY = (context.getScaledWindowHeight() / 2 + shockClientConfig.shock_build_up_bar_number_y_offset) + dynamic_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("shock_build_up_element");
@@ -347,13 +371,19 @@ public abstract class InGameHudMixin {
 						shockClientConfig.enable_shock_build_up_bar_animation,
 						shockClientConfig.show_current_shock_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUpReduction()),
-						shockClientConfig.shock_build_up_bar_animation_interval,
-						shockClientConfig.show_shock_build_up_bar_number,
-						buildUpBarNumberString,
-						buildUpBarNumberX,
-						buildUpBarNumberY,
-						shockClientConfig.shock_build_up_bar_number_color
+						shockClientConfig.shock_build_up_bar_animation_interval
 				);
+
+				if (shockClientConfig.show_shock_build_up_bar_number) {
+					this.client.getProfiler().swap("shock_build_up_number");
+					this.drawEffectBuildUpNumber(
+							context,
+							buildUpBarNumberString,
+							buildUpBarNumberX,
+							buildUpBarNumberY,
+							shockClientConfig.shock_build_up_bar_number_color
+					);
+				}
 
 				dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
 				dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
@@ -368,8 +398,8 @@ public abstract class InGameHudMixin {
 			currentBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
 			maxBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
 			buildUpBarNumberString = String.valueOf(currentBuildUp);
-			buildUpBarNumberX = (context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + staggerClientConfig.stagger_build_up_bar_number_x_offset;
-			buildUpBarNumberY = context.getScaledWindowHeight() + staggerClientConfig.stagger_build_up_bar_number_y_offset;
+			buildUpBarNumberX = ((context.getScaledWindowWidth() - this.getTextRenderer().getWidth(buildUpBarNumberString)) / 2 + staggerClientConfig.stagger_build_up_bar_number_x_offset) + dynamic_x_offset;
+			buildUpBarNumberY = (context.getScaledWindowHeight() / 2 + staggerClientConfig.stagger_build_up_bar_number_y_offset) + dynamic_y_offset;
 
 			if (currentBuildUp > 0) {
 				this.client.getProfiler().push("stagger_build_up_element");
@@ -395,13 +425,19 @@ public abstract class InGameHudMixin {
 						staggerClientConfig.enable_stagger_build_up_bar_animation,
 						staggerClientConfig.show_current_stagger_value_overlay,
 						MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUpReduction()),
-						staggerClientConfig.stagger_build_up_bar_animation_interval,
-						staggerClientConfig.show_stagger_build_up_bar_number,
-						buildUpBarNumberString,
-						buildUpBarNumberX,
-						buildUpBarNumberY,
-						staggerClientConfig.stagger_build_up_bar_number_color
+						staggerClientConfig.stagger_build_up_bar_animation_interval
 				);
+
+				if (staggerClientConfig.show_stagger_build_up_bar_number) {
+					this.client.getProfiler().swap("stagger_build_up_number");
+					this.drawEffectBuildUpNumber(
+							context,
+							buildUpBarNumberString,
+							buildUpBarNumberX,
+							buildUpBarNumberY,
+							staggerClientConfig.stagger_build_up_bar_number_color
+					);
+				}
 
 //					dynamic_x_offset = dynamic_x_offset + generalClientConfig.dynamic_x_offset_increase;
 //					dynamic_y_offset = dynamic_y_offset + generalClientConfig.dynamic_y_offset_increase;
@@ -434,12 +470,7 @@ public abstract class InGameHudMixin {
 			boolean enable_smooth_animation,
 			boolean show_current_value_overlay,
 			int build_up_reduction,
-			int build_up_bar_animation_interval,
-			boolean show_build_up_bar_number,
-			String buildUpBarNumberString,
-			int build_up_bar_number_x,
-			int build_up_bar_number_y,
-			int build_up_bar_number_color
+			int build_up_bar_animation_interval
 	) {
 
 		int barEndsLength; // TODO find better name
@@ -560,14 +591,20 @@ public abstract class InGameHudMixin {
 				}
 			}
 		}
-
-		// number
-		if (show_build_up_bar_number) {
+	}
+	
+	@Unique
+	private void drawEffectBuildUpNumber(
+			DrawContext context,
+			String buildUpBarNumberString,
+			int build_up_bar_number_x,
+			int build_up_bar_number_y,
+			int build_up_bar_number_color
+	) {
 			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x + 1, build_up_bar_number_y, 0, false);
 			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x - 1, build_up_bar_number_y, 0, false);
 			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y + 1, 0, false);
 			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y - 1, 0, false);
 			context.drawText(this.getTextRenderer(), buildUpBarNumberString, build_up_bar_number_x, build_up_bar_number_y, build_up_bar_number_color, false);
-		}
 	}
 }
