@@ -57,46 +57,74 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 	)
 	public static class BleedingClientConfig implements ConfigData {
 		@ConfigEntry.Gui.PrefixText
-		public int bleeding_build_up_element_x_offset = -31;
-		public int bleeding_build_up_element_y_offset = 18;
+		public int x_offset = -31;
+		public int y_offset = 18;
 		@EnumHandler(
 				option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
 		)
-		public FillDirection bleeding_element_fill_direction = FillDirection.LEFT_TO_RIGHT;
-		public boolean enable_bleeding_build_up_bar_animation = true;
-		public int bleeding_build_up_bar_animation_interval = 1;
+		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int bleeding_build_up_bar_additional_length = 52;
+		public int background_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_bleeding_build_up_bar_texture_width = 11;
-		public int horizontal_bleeding_build_up_bar_texture_height = 5;
+		public int horizontal_background_left_end_width = 5;
+		public int horizontal_background_middle_segment_width = 1;
+		public int horizontal_background_right_end_width = 5;
+		public int horizontal_background_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_bleeding_build_up_bar_texture_width = 5;
-		public int vertical_bleeding_build_up_bar_texture_height = 11;
+		public int vertical_background_width = 5;
+		public int vertical_background_top_end_height = 5;
+		public int vertical_background_middle_segment_height = 1;
+		public int vertical_background_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_current_bleeding_value_overlay = false;
+		public int progress_offset_x = 0;
+		public int progress_offset_y = 0;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_bleeding_overlay_texture_width = 5;
-		public int horizontal_bleeding_overlay_texture_height = 5;
+		public int progress_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_bleeding_overlay_texture_width = 5;
-		public int vertical_bleeding_overlay_texture_height = 5;
+		public int horizontal_progress_left_end_width = 5;
+		public int horizontal_progress_middle_segment_width = 1;
+		public int horizontal_progress_right_end_width = 5;
+		public int horizontal_progress_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_bleeding_build_up_bar_number = false;
+		public int vertical_progress_width = 5;
+		public int vertical_progress_top_end_height = 5;
+		public int vertical_progress_middle_segment_height = 1;
+		public int vertical_progress_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int bleeding_build_up_bar_number_x_offset = 0;
-		public int bleeding_build_up_bar_number_y_offset = 16;
+		public boolean show_current_value_overlay = false;
 
 		@ConfigEntry.Gui.PrefixText
-		public int bleeding_build_up_bar_number_color = -6250336;
+		public int overlay_offset_x = -2;
+		public int overlay_offset_y = 0;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_overlay_width = 5;
+		public int horizontal_overlay_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_overlay_width = 5;
+		public int vertical_overlay_height = 5;
+
+		public boolean enable_smooth_animation = true;
+		public int animation_interval = 1;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_x_offset = 0;
+		public int number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_color = -6250336;
 
 		public BleedingClientConfig() {
 
@@ -108,46 +136,74 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 	)
 	public static class BurnClientConfig implements ConfigData {
 		@ConfigEntry.Gui.PrefixText
-		public int burn_build_up_element_x_offset = -31;
-		public int burn_build_up_element_y_offset = 18;
+		public int x_offset = -31;
+		public int y_offset = 18;
 		@EnumHandler(
 				option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
 		)
-		public FillDirection burn_element_fill_direction = FillDirection.LEFT_TO_RIGHT;
-		public boolean enable_burn_build_up_bar_animation = true;
-		public int burn_build_up_bar_animation_interval = 1;
+		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int burn_build_up_bar_additional_length = 52;
+		public int background_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_burn_build_up_bar_texture_width = 11;
-		public int horizontal_burn_build_up_bar_texture_height = 5;
+		public int horizontal_background_left_end_width = 5;
+		public int horizontal_background_middle_segment_width = 1;
+		public int horizontal_background_right_end_width = 5;
+		public int horizontal_background_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_burn_build_up_bar_texture_width = 5;
-		public int vertical_burn_build_up_bar_texture_height = 11;
+		public int vertical_background_width = 5;
+		public int vertical_background_top_end_height = 5;
+		public int vertical_background_middle_segment_height = 1;
+		public int vertical_background_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_current_burn_value_overlay = false;
+		public int progress_offset_x = 0;
+		public int progress_offset_y = 0;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_burn_overlay_texture_width = 5;
-		public int horizontal_burn_overlay_texture_height = 5;
+		public int progress_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_burn_overlay_texture_width = 5;
-		public int vertical_burn_overlay_texture_height = 5;
+		public int horizontal_progress_left_end_width = 5;
+		public int horizontal_progress_middle_segment_width = 1;
+		public int horizontal_progress_right_end_width = 5;
+		public int horizontal_progress_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_burn_build_up_bar_number = false;
+		public int vertical_progress_width = 5;
+		public int vertical_progress_top_end_height = 5;
+		public int vertical_progress_middle_segment_height = 1;
+		public int vertical_progress_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int burn_build_up_bar_number_x_offset = 0;
-		public int burn_build_up_bar_number_y_offset = 16;
+		public boolean show_current_value_overlay = false;
 
 		@ConfigEntry.Gui.PrefixText
-		public int burn_build_up_bar_number_color = -6250336;
+		public int overlay_offset_x = -2;
+		public int overlay_offset_y = 0;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_overlay_width = 5;
+		public int horizontal_overlay_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_overlay_width = 5;
+		public int vertical_overlay_height = 5;
+		
+		public boolean enable_smooth_animation = true;
+		public int animation_interval = 1;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_x_offset = 0;
+		public int number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_color = -6250336;
 
 		public BurnClientConfig() {
 
@@ -159,46 +215,74 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 	)
 	public static class FreezeClientConfig implements ConfigData {
 		@ConfigEntry.Gui.PrefixText
-		public int freeze_build_up_element_x_offset = -31;
-		public int freeze_build_up_element_y_offset = 18;
+		public int x_offset = -31;
+		public int y_offset = 18;
 		@EnumHandler(
 				option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
 		)
-		public FillDirection freeze_element_fill_direction = FillDirection.LEFT_TO_RIGHT;
-		public boolean enable_freeze_build_up_bar_animation = true;
-		public int freeze_build_up_bar_animation_interval = 1;
+		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int freeze_build_up_bar_additional_length = 52;
+		public int background_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_freeze_build_up_bar_texture_width = 11;
-		public int horizontal_freeze_build_up_bar_texture_height = 5;
+		public int horizontal_background_left_end_width = 5;
+		public int horizontal_background_middle_segment_width = 1;
+		public int horizontal_background_right_end_width = 5;
+		public int horizontal_background_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_freeze_build_up_bar_texture_width = 5;
-		public int vertical_freeze_build_up_bar_texture_height = 11;
+		public int vertical_background_width = 5;
+		public int vertical_background_top_end_height = 5;
+		public int vertical_background_middle_segment_height = 1;
+		public int vertical_background_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_current_freeze_value_overlay = false;
+		public int progress_offset_x = 0;
+		public int progress_offset_y = 0;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_freeze_overlay_texture_width = 5;
-		public int horizontal_freeze_overlay_texture_height = 5;
+		public int progress_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_freeze_overlay_texture_width = 5;
-		public int vertical_freeze_overlay_texture_height = 5;
+		public int horizontal_progress_left_end_width = 5;
+		public int horizontal_progress_middle_segment_width = 1;
+		public int horizontal_progress_right_end_width = 5;
+		public int horizontal_progress_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_freeze_build_up_bar_number = false;
+		public int vertical_progress_width = 5;
+		public int vertical_progress_top_end_height = 5;
+		public int vertical_progress_middle_segment_height = 1;
+		public int vertical_progress_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int freeze_build_up_bar_number_x_offset = 0;
-		public int freeze_build_up_bar_number_y_offset = 16;
+		public boolean show_current_value_overlay = false;
 
 		@ConfigEntry.Gui.PrefixText
-		public int freeze_build_up_bar_number_color = -6250336;
+		public int overlay_offset_x = -2;
+		public int overlay_offset_y = 0;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_overlay_width = 5;
+		public int horizontal_overlay_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_overlay_width = 5;
+		public int vertical_overlay_height = 5;
+
+		public boolean enable_smooth_animation = true;
+		public int animation_interval = 1;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_x_offset = 0;
+		public int number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_color = -6250336;
 
 		public FreezeClientConfig() {
 
@@ -210,46 +294,74 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 	)
 	public static class PoisonClientConfig implements ConfigData {
 		@ConfigEntry.Gui.PrefixText
-		public int poison_build_up_element_x_offset = -31;
-		public int poison_build_up_element_y_offset = 18;
+		public int x_offset = -31;
+		public int y_offset = 18;
 		@EnumHandler(
 				option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
 		)
-		public FillDirection poison_element_fill_direction = FillDirection.LEFT_TO_RIGHT;
-		public boolean enable_poison_build_up_bar_animation = true;
-		public int poison_build_up_bar_animation_interval = 1;
+		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int poison_build_up_bar_additional_length = 52;
+		public int background_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_poison_build_up_bar_texture_width = 11;
-		public int horizontal_poison_build_up_bar_texture_height = 5;
+		public int horizontal_background_left_end_width = 5;
+		public int horizontal_background_middle_segment_width = 1;
+		public int horizontal_background_right_end_width = 5;
+		public int horizontal_background_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_poison_build_up_bar_texture_width = 5;
-		public int vertical_poison_build_up_bar_texture_height = 11;
+		public int vertical_background_width = 5;
+		public int vertical_background_top_end_height = 5;
+		public int vertical_background_middle_segment_height = 1;
+		public int vertical_background_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_current_poison_value_overlay = false;
+		public int progress_offset_x = 0;
+		public int progress_offset_y = 0;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_poison_overlay_texture_width = 5;
-		public int horizontal_poison_overlay_texture_height = 5;
+		public int progress_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_poison_overlay_texture_width = 5;
-		public int vertical_poison_overlay_texture_height = 5;
+		public int horizontal_progress_left_end_width = 5;
+		public int horizontal_progress_middle_segment_width = 1;
+		public int horizontal_progress_right_end_width = 5;
+		public int horizontal_progress_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_poison_build_up_bar_number = false;
+		public int vertical_progress_width = 5;
+		public int vertical_progress_top_end_height = 5;
+		public int vertical_progress_middle_segment_height = 1;
+		public int vertical_progress_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int poison_build_up_bar_number_x_offset = 0;
-		public int poison_build_up_bar_number_y_offset = 16;
+		public boolean show_current_value_overlay = false;
 
 		@ConfigEntry.Gui.PrefixText
-		public int poison_build_up_bar_number_color = -6250336;
+		public int overlay_offset_x = -2;
+		public int overlay_offset_y = 0;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_overlay_width = 5;
+		public int horizontal_overlay_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_overlay_width = 5;
+		public int vertical_overlay_height = 5;
+
+		public boolean enable_smooth_animation = true;
+		public int animation_interval = 1;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_x_offset = 0;
+		public int number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_color = -6250336;
 
 		public PoisonClientConfig() {
 
@@ -261,46 +373,74 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 	)
 	public static class ShockClientConfig implements ConfigData {
 		@ConfigEntry.Gui.PrefixText
-		public int shock_build_up_element_x_offset = -31;
-		public int shock_build_up_element_y_offset = 18;
+		public int x_offset = -31;
+		public int y_offset = 18;
 		@EnumHandler(
 				option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
 		)
-		public FillDirection shock_element_fill_direction = FillDirection.LEFT_TO_RIGHT;
-		public boolean enable_shock_build_up_bar_animation = true;
-		public int shock_build_up_bar_animation_interval = 1;
+		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int shock_build_up_bar_additional_length = 52;
+		public int background_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_shock_build_up_bar_texture_width = 11;
-		public int horizontal_shock_build_up_bar_texture_height = 5;
+		public int horizontal_background_left_end_width = 5;
+		public int horizontal_background_middle_segment_width = 1;
+		public int horizontal_background_right_end_width = 5;
+		public int horizontal_background_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_shock_build_up_bar_texture_width = 5;
-		public int vertical_shock_build_up_bar_texture_height = 11;
+		public int vertical_background_width = 5;
+		public int vertical_background_top_end_height = 5;
+		public int vertical_background_middle_segment_height = 1;
+		public int vertical_background_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_current_shock_value_overlay = false;
+		public int progress_offset_x = 0;
+		public int progress_offset_y = 0;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_shock_overlay_texture_width = 5;
-		public int horizontal_shock_overlay_texture_height = 5;
+		public int progress_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_shock_overlay_texture_width = 5;
-		public int vertical_shock_overlay_texture_height = 5;
+		public int horizontal_progress_left_end_width = 5;
+		public int horizontal_progress_middle_segment_width = 1;
+		public int horizontal_progress_right_end_width = 5;
+		public int horizontal_progress_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_shock_build_up_bar_number = false;
+		public int vertical_progress_width = 5;
+		public int vertical_progress_top_end_height = 5;
+		public int vertical_progress_middle_segment_height = 1;
+		public int vertical_progress_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int shock_build_up_bar_number_x_offset = 0;
-		public int shock_build_up_bar_number_y_offset = 16;
+		public boolean show_current_value_overlay = false;
 
 		@ConfigEntry.Gui.PrefixText
-		public int shock_build_up_bar_number_color = -6250336;
+		public int overlay_offset_x = -2;
+		public int overlay_offset_y = 0;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_overlay_width = 5;
+		public int horizontal_overlay_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_overlay_width = 5;
+		public int vertical_overlay_height = 5;
+
+		public boolean enable_smooth_animation = true;
+		public int animation_interval = 1;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_x_offset = 0;
+		public int number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_color = -6250336;
 
 		public ShockClientConfig() {
 
@@ -312,46 +452,74 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 	)
 	public static class StaggerClientConfig implements ConfigData {
 		@ConfigEntry.Gui.PrefixText
-		public int stagger_build_up_element_x_offset = -31;
-		public int stagger_build_up_element_y_offset = 18;
+		public int x_offset = -31;
+		public int y_offset = 18;
 		@EnumHandler(
-				option = EnumHandler.EnumDisplayOption.BUTTON
+				option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
 		)
-		public FillDirection stagger_element_fill_direction = FillDirection.LEFT_TO_RIGHT;
-		public boolean enable_stagger_build_up_bar_animation = true;
-		public int stagger_build_up_bar_animation_interval = 1;
+		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int stagger_build_up_bar_additional_length = 52;
+		public int background_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_stagger_build_up_bar_texture_width = 11;
-		public int horizontal_stagger_build_up_bar_texture_height = 5;
+		public int horizontal_background_left_end_width = 5;
+		public int horizontal_background_middle_segment_width = 1;
+		public int horizontal_background_right_end_width = 5;
+		public int horizontal_background_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_stagger_build_up_bar_texture_width = 5;
-		public int vertical_stagger_build_up_bar_texture_height = 11;
+		public int vertical_background_width = 5;
+		public int vertical_background_top_end_height = 5;
+		public int vertical_background_middle_segment_height = 1;
+		public int vertical_background_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_current_stagger_value_overlay = false;
+		public int progress_offset_x = 0;
+		public int progress_offset_y = 0;
 
 		@ConfigEntry.Gui.PrefixText
-		public int horizontal_stagger_overlay_texture_width = 5;
-		public int horizontal_stagger_overlay_texture_height = 5;
+		public int progress_additional_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
-		public int vertical_stagger_overlay_texture_width = 5;
-		public int vertical_stagger_overlay_texture_height = 5;
+		public int horizontal_progress_left_end_width = 5;
+		public int horizontal_progress_middle_segment_width = 1;
+		public int horizontal_progress_right_end_width = 5;
+		public int horizontal_progress_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public boolean show_stagger_build_up_bar_number = false;
+		public int vertical_progress_width = 5;
+		public int vertical_progress_top_end_height = 5;
+		public int vertical_progress_middle_segment_height = 1;
+		public int vertical_progress_bottom_end_height = 5;
 
 		@ConfigEntry.Gui.PrefixText
-		public int stagger_build_up_bar_number_x_offset = 0;
-		public int stagger_build_up_bar_number_y_offset = 16;
+		public boolean show_current_value_overlay = false;
 
 		@ConfigEntry.Gui.PrefixText
-		public int stagger_build_up_bar_number_color = -6250336;
+		public int overlay_offset_x = -2;
+		public int overlay_offset_y = 0;
+
+		@ConfigEntry.Gui.PrefixText
+		public int horizontal_overlay_width = 5;
+		public int horizontal_overlay_height = 5;
+
+		@ConfigEntry.Gui.PrefixText
+		public int vertical_overlay_width = 5;
+		public int vertical_overlay_height = 5;
+
+		public boolean enable_smooth_animation = true;
+		public int animation_interval = 1;
+
+		@ConfigEntry.Gui.PrefixText
+		public boolean show_number = false;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_x_offset = 0;
+		public int number_y_offset = 16;
+
+		@ConfigEntry.Gui.PrefixText
+		public int number_color = -6250336;
 
 		public StaggerClientConfig() {
 
