@@ -76,130 +76,409 @@
 	"text.autoconfig.overhauleddamage.option.generalClientConfig.show_effect_build_up_elements.@PrefixText": "When an effect build-up is greater 0, a HUD element shows the progress until the effect is applied.",
 	"text.autoconfig.overhauleddamage.option.generalClientConfig.show_effect_build_up_elements": "Effect build-ups are displayed in the HUD",
 
-	"text.autoconfig.overhauleddamage.option.generalClientConfig.use_custom_textures.@PrefixText": "\n\nThe textures have to be provided by a resource pack.\nIt is recommended to use textures of equal dimensions.\nWhen the dynamic offsets are used as well, they should be at least equal to the texture dimensions.",
-	"text.autoconfig.overhauleddamage.option.generalClientConfig.use_custom_textures": "Enable custom textures.",
-
-	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_x_offset_increase.@PrefixText": "\n\nWhen multiple effect build-ups are displayed at the same time, these values are added to every elements position offset, multiplied by the amount off elements already on screen.\nThe order is: bleeding, burn, freeze, poison, shock, stagger\n\nExample: The burn, poison and stagger elements are currently displayed\nThe burn element is at its normal position\nThe poison element is offset by 'dynamic_x_offset_increase' on the x axis and by 'dynamic_y_offset_increase' on the y axis\nThe stagger element is offset by 'dynamic_x_offset_increase' times 2 on the x axis and by 'dynamic_y_offset_increase' times 2 on the y axis",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_x_offset_increase.@PrefixText": "\n\nWhen multiple effect build-ups are displayed at the same time, these values are added to every elements position offset, multiplied by the amount of elements already on screen.\nThe order is: bleeding, burn, freeze, poison, shock, stagger\n\nExample: The burn, poison and stagger elements are currently displayed\nThe burn element is at its normal position\nThe poison element is offset by 'dynamic_x_offset_increase' on the x axis and by 'dynamic_y_offset_increase' on the y axis\nThe stagger element is offset by 'dynamic_x_offset_increase' times 2 on the x axis and by 'dynamic_y_offset_increase' times 2 on the y axis",
 	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_x_offset_increase": "Dynamic X offset increase",
 	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_y_offset_increase": "Dynamic Y offset increase",
 
 
 	"text.autoconfig.overhauleddamage.category.bleedingClientConfig": "Bleeding Build Up Bar",
-	
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_element_x_offset": "Bleeding element X offset",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_element_y_offset": "Bleeding element Y offset",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_element_fill_direction": "Bleeding element fill direction",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.enable_bleeding_build_up_bar_animation": "Enable bleeding element animation",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_bar_animation_interval": "Bleeding element animation interval",
-	
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.bleeding_build_up_bar_additional_length": "Bleeding element additional length",
 
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_background_texture_id": "Bleeding element background texture id",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_foreground_texture_id": "Bleeding element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_texture_width": "Bleeding element texture width",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.custom_bleeding_element_texture_height": "Bleeding element texture height",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.fill_direction": "Fill direction",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.background_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_background_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_background_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_background_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_background_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_background_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_background_width": "Width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_background_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_background_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_background_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_background_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.progress_offset_x.@PrefixText": "\nProgress Texture",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.progress_offset_x": "X offset from background",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.progress_offset_y": "Y offset from background",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.progress_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_progress_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_progress_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_progress_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_progress_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_progress_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_progress_width": "Width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_progress_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_progress_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_progress_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_progress_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_current_value_overlay.@PrefixText": "\nCurrent value overlay",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_current_value_overlay": "Show overlay",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.overlay_offset_x": "X offset from progress",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.overlay_offset_y": "Y offset from progress",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.horizontal_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.vertical_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.enable_smooth_animation.@PrefixText": "\nAnimation",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.enable_smooth_animation": "Enable smooth animation",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.animation_interval": "Animation interval",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_number.@PrefixText": "\nNumber",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_number": "Show number",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_y_offset": "Y offset from screen center",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.burnClientConfig": "Burn Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_element_x_offset": "Burn element X offset",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_element_y_offset": "Burn element Y offset",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_element_fill_direction": "Burn element fill direction",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.enable_burn_build_up_bar_animation": "Enable burn element animation",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_bar_animation_interval": "Burn element animation interval",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.fill_direction": "Fill direction",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.background_middle_segment_amount": "Middle segment amount",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_height": "Height",
 
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.burn_build_up_bar_additional_length": "Burn element additional length",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_background_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_background_width": "Width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_background_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_background_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_background_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_background_bottom_end_height": "Bottom end height",
 
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_background_texture_id": "Burn element background texture id",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_foreground_texture_id": "Burn element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_texture_width": "Burn element texture width",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.custom_burn_element_texture_height": "Burn element texture height",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.progress_offset_x.@PrefixText": "\nProgress Texture",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.progress_offset_x": "X offset from background",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.progress_offset_y": "Y offset from background",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.progress_middle_segment_amount": "Middle segment amount",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_progress_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_progress_width": "Width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_progress_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_progress_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_progress_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_progress_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_current_value_overlay.@PrefixText": "\nCurrent value overlay",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_current_value_overlay": "Show overlay",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.overlay_offset_x": "X offset from progress",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.overlay_offset_y": "Y offset from progress",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_overlay_height": "Height",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_overlay_height": "Height",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.enable_smooth_animation.@PrefixText": "\nAnimation",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.enable_smooth_animation": "Enable smooth animation",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.animation_interval": "Animation interval",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_number.@PrefixText": "\nNumber",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_number": "Show number",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_y_offset": "Y offset from screen center",
+	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.freezeClientConfig": "Freeze Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_element_x_offset": "Freeze element X offset",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_element_y_offset": "Freeze element Y offset",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_element_fill_direction": "Freeze element fill direction",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.enable_freeze_build_up_bar_animation": "Enable freeze element animation",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_bar_animation_interval": "Freeze element animation interval",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.fill_direction": "Fill direction",
 
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.freeze_build_up_bar_additional_length": "Freeze element additional length",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.background_middle_segment_amount": "Middle segment amount",
 
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_background_texture_id": "Freeze element background texture id",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_foreground_texture_id": "Freeze element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_texture_width": "Freeze element texture width",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.custom_freeze_element_texture_height": "Freeze element texture height",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_background_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_background_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_background_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_background_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_background_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_background_width": "Width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_background_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_background_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_background_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_background_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.progress_offset_x.@PrefixText": "\nProgress Texture",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.progress_offset_x": "X offset from background",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.progress_offset_y": "Y offset from background",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.progress_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_progress_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_progress_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_progress_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_progress_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_progress_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_progress_width": "Width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_progress_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_progress_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_progress_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_progress_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_current_value_overlay.@PrefixText": "\nCurrent value overlay",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_current_value_overlay": "Show overlay",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.overlay_offset_x": "X offset from progress",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.overlay_offset_y": "Y offset from progress",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.horizontal_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.vertical_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.enable_smooth_animation.@PrefixText": "\nAnimation",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.enable_smooth_animation": "Enable smooth animation",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.animation_interval": "Animation interval",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_number.@PrefixText": "\nNumber",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_number": "Show number",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_y_offset": "Y offset from screen center",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.poisonClientConfig": "Poison Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_element_x_offset": "Poison element X offset",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_element_y_offset": "Poison element Y offset",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_element_fill_direction": "Poison element fill direction",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.enable_poison_build_up_bar_animation": "Enable poison element animation",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_bar_animation_interval": "Poison element animation interval",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.fill_direction": "Fill direction",
 
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.poison_build_up_bar_additional_length": "Poison element additional length",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.background_middle_segment_amount": "Middle segment amount",
 
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_background_texture_id": "Poison element background texture id",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_foreground_texture_id": "Poison element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_texture_width": "Poison element texture width",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.custom_poison_element_texture_height": "Poison element texture height",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_background_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_background_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_background_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_background_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_background_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_background_width": "Width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_background_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_background_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_background_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_background_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.progress_offset_x.@PrefixText": "\nProgress Texture",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.progress_offset_x": "X offset from background",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.progress_offset_y": "Y offset from background",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.progress_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_progress_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_progress_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_progress_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_progress_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_progress_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_progress_width": "Width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_progress_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_progress_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_progress_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_progress_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_current_value_overlay.@PrefixText": "\nCurrent value overlay",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_current_value_overlay": "Show overlay",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.overlay_offset_x": "X offset from progress",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.overlay_offset_y": "Y offset from progress",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.horizontal_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.vertical_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.enable_smooth_animation.@PrefixText": "\nAnimation",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.enable_smooth_animation": "Enable smooth animation",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.animation_interval": "Animation interval",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_number.@PrefixText": "\nNumber",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_number": "Show number",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_y_offset": "Y offset from screen center",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.shockClientConfig": "Shock Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_element_x_offset": "Shock element X offset",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_element_y_offset": "Shock element Y offset",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_element_fill_direction": "Shock element fill direction",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.enable_shock_build_up_bar_animation": "Enable shock element animation",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_bar_animation_interval": "Shock element animation interval",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.fill_direction": "Fill direction",
 
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.shock_build_up_bar_additional_length": "Shock element additional length",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.background_middle_segment_amount": "Middle segment amount",
 
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_background_texture_id": "Shock element background texture id",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_foreground_texture_id": "Shock element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_texture_width": "Shock element texture width",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.custom_shock_element_texture_height": "Shock element texture height",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_background_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_background_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_background_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_background_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_background_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_background_width": "Width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_background_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_background_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_background_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_background_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.progress_offset_x.@PrefixText": "\nProgress Texture",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.progress_offset_x": "X offset from background",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.progress_offset_y": "Y offset from background",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.progress_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_progress_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_progress_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_progress_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_progress_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_progress_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_progress_width": "Width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_progress_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_progress_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_progress_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_progress_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_current_value_overlay.@PrefixText": "\nCurrent value overlay",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_current_value_overlay": "Show overlay",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.overlay_offset_x": "X offset from progress",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.overlay_offset_y": "Y offset from progress",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.horizontal_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.vertical_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.enable_smooth_animation.@PrefixText": "\nAnimation",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.enable_smooth_animation": "Enable smooth animation",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.animation_interval": "Animation interval",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_number.@PrefixText": "\nNumber",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_number": "Show number",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_y_offset": "Y offset from screen center",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.staggerClientConfig": "Stagger Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_element_x_offset.@PrefixText": "The 'element offset' values offset the elements upper left corner from the middle of the screen.",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_element_x_offset": "Stagger element X offset",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_element_y_offset": "Stagger element Y offset",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_element_fill_direction": "Stagger element fill direction",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.enable_stagger_build_up_bar_animation": "Enable stagger element animation",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_bar_animation_interval": "Stagger element animation interval",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.fill_direction": "Fill direction",
 
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_bar_additional_length.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'No' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.stagger_build_up_bar_additional_length": "Stagger element additional length",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.background_middle_segment_amount": "Middle segment amount",
 
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_background_texture_id.@PrefixText": "\n\nThese settings are active when 'Use custom textures.' is set to 'Yes' in the 'General' tab.",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_background_texture_id": "Stagger element background texture id",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_foreground_texture_id": "Stagger element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_texture_width.@PrefixText": "\nBoth background and foreground texture should have these dimensions",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_texture_width": "Stagger element texture width",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.custom_stagger_element_texture_height": "Stagger element texture height"
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_background_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_background_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_background_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_background_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_background_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_background_width": "Width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_background_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_background_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_background_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_background_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.progress_offset_x.@PrefixText": "\nProgress Texture",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.progress_offset_x": "X offset from background",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.progress_offset_y": "Y offset from background",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.progress_middle_segment_amount": "Middle segment amount",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_progress_left_end_width": "Left end width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_progress_middle_segment_width": "Middle segment width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_progress_right_end_width": "Right end width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_progress_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_progress_width.@PrefixText": "\nVertical texture",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_progress_width": "Width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_progress_top_end_height.@PrefixText": "\nThe texture height should be the sum of the 3 following values",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_progress_top_end_height": "Top end height",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_progress_middle_segment_height": "Middle segment height",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_progress_bottom_end_height": "Bottom end height",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_current_value_overlay.@PrefixText": "\nCurrent value overlay",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_current_value_overlay": "Show overlay",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.overlay_offset_x": "X offset from progress",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.overlay_offset_y": "Y offset from progress",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.horizontal_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_overlay_width": "Width",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.vertical_overlay_height": "Height",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.enable_smooth_animation.@PrefixText": "\nAnimation",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.enable_smooth_animation": "Enable smooth animation",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.animation_interval": "Animation interval",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_number.@PrefixText": "\nNumber",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_number": "Show number",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_x_offset": "X offset from screen center",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_y_offset": "Y offset from screen center",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_color": "Number color"
 }

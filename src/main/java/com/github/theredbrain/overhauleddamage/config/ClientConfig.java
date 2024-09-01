@@ -56,7 +56,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 			name = "bleedingClientConfig"
 	)
 	public static class BleedingClientConfig implements ConfigData {
-		@ConfigEntry.Gui.PrefixText
 		public int x_offset = -31;
 		public int y_offset = 18;
 		@EnumHandler(
@@ -65,7 +64,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int background_additional_middle_segment_amount = 52;
+		public int background_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_background_left_end_width = 5;
@@ -75,6 +74,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_background_width = 5;
+		@ConfigEntry.Gui.PrefixText
 		public int vertical_background_top_end_height = 5;
 		public int vertical_background_middle_segment_height = 1;
 		public int vertical_background_bottom_end_height = 5;
@@ -82,9 +82,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int progress_offset_x = 0;
 		public int progress_offset_y = 0;
-
-		@ConfigEntry.Gui.PrefixText
-		public int progress_additional_middle_segment_amount = 52;
+		public int progress_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_progress_left_end_width = 5;
@@ -94,6 +92,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_width = 5;
+		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_top_end_height = 5;
 		public int vertical_progress_middle_segment_height = 1;
 		public int vertical_progress_bottom_end_height = 5;
@@ -101,7 +100,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_current_value_overlay = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int overlay_offset_x = -2;
 		public int overlay_offset_y = 0;
 
@@ -113,17 +111,16 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_overlay_width = 5;
 		public int vertical_overlay_height = 5;
 
+		@ConfigEntry.Gui.PrefixText
 		public boolean enable_smooth_animation = true;
 		public int animation_interval = 1;
 
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_number = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_x_offset = 0;
 		public int number_y_offset = 16;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_color = -6250336;
 
 		public BleedingClientConfig() {
@@ -135,7 +132,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 			name = "burnClientConfig"
 	)
 	public static class BurnClientConfig implements ConfigData {
-		@ConfigEntry.Gui.PrefixText
 		public int x_offset = -31;
 		public int y_offset = 18;
 		@EnumHandler(
@@ -144,7 +140,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int background_additional_middle_segment_amount = 52;
+		public int background_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_background_left_end_width = 5;
@@ -161,9 +157,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int progress_offset_x = 0;
 		public int progress_offset_y = 0;
-
-		@ConfigEntry.Gui.PrefixText
-		public int progress_additional_middle_segment_amount = 52;
+		public int progress_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_progress_left_end_width = 5;
@@ -173,6 +167,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_width = 5;
+		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_top_end_height = 5;
 		public int vertical_progress_middle_segment_height = 1;
 		public int vertical_progress_bottom_end_height = 5;
@@ -180,7 +175,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_current_value_overlay = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int overlay_offset_x = -2;
 		public int overlay_offset_y = 0;
 
@@ -191,18 +185,17 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_overlay_width = 5;
 		public int vertical_overlay_height = 5;
-		
+
+		@ConfigEntry.Gui.PrefixText
 		public boolean enable_smooth_animation = true;
 		public int animation_interval = 1;
 
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_number = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_x_offset = 0;
 		public int number_y_offset = 16;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_color = -6250336;
 
 		public BurnClientConfig() {
@@ -214,7 +207,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 			name = "freezeClientConfig"
 	)
 	public static class FreezeClientConfig implements ConfigData {
-		@ConfigEntry.Gui.PrefixText
 		public int x_offset = -31;
 		public int y_offset = 18;
 		@EnumHandler(
@@ -223,7 +215,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int background_additional_middle_segment_amount = 52;
+		public int background_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_background_left_end_width = 5;
@@ -240,9 +232,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int progress_offset_x = 0;
 		public int progress_offset_y = 0;
-
-		@ConfigEntry.Gui.PrefixText
-		public int progress_additional_middle_segment_amount = 52;
+		public int progress_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_progress_left_end_width = 5;
@@ -252,6 +242,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_width = 5;
+		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_top_end_height = 5;
 		public int vertical_progress_middle_segment_height = 1;
 		public int vertical_progress_bottom_end_height = 5;
@@ -259,7 +250,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_current_value_overlay = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int overlay_offset_x = -2;
 		public int overlay_offset_y = 0;
 
@@ -271,17 +261,16 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_overlay_width = 5;
 		public int vertical_overlay_height = 5;
 
+		@ConfigEntry.Gui.PrefixText
 		public boolean enable_smooth_animation = true;
 		public int animation_interval = 1;
 
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_number = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_x_offset = 0;
 		public int number_y_offset = 16;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_color = -6250336;
 
 		public FreezeClientConfig() {
@@ -293,7 +282,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 			name = "poisonClientConfig"
 	)
 	public static class PoisonClientConfig implements ConfigData {
-		@ConfigEntry.Gui.PrefixText
 		public int x_offset = -31;
 		public int y_offset = 18;
 		@EnumHandler(
@@ -302,7 +290,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int background_additional_middle_segment_amount = 52;
+		public int background_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_background_left_end_width = 5;
@@ -319,9 +307,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int progress_offset_x = 0;
 		public int progress_offset_y = 0;
-
-		@ConfigEntry.Gui.PrefixText
-		public int progress_additional_middle_segment_amount = 52;
+		public int progress_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_progress_left_end_width = 5;
@@ -331,6 +317,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_width = 5;
+		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_top_end_height = 5;
 		public int vertical_progress_middle_segment_height = 1;
 		public int vertical_progress_bottom_end_height = 5;
@@ -338,7 +325,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_current_value_overlay = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int overlay_offset_x = -2;
 		public int overlay_offset_y = 0;
 
@@ -350,17 +336,16 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_overlay_width = 5;
 		public int vertical_overlay_height = 5;
 
+		@ConfigEntry.Gui.PrefixText
 		public boolean enable_smooth_animation = true;
 		public int animation_interval = 1;
 
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_number = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_x_offset = 0;
 		public int number_y_offset = 16;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_color = -6250336;
 
 		public PoisonClientConfig() {
@@ -372,7 +357,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 			name = "shockClientConfig"
 	)
 	public static class ShockClientConfig implements ConfigData {
-		@ConfigEntry.Gui.PrefixText
 		public int x_offset = -31;
 		public int y_offset = 18;
 		@EnumHandler(
@@ -381,7 +365,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int background_additional_middle_segment_amount = 52;
+		public int background_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_background_left_end_width = 5;
@@ -398,9 +382,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int progress_offset_x = 0;
 		public int progress_offset_y = 0;
-
-		@ConfigEntry.Gui.PrefixText
-		public int progress_additional_middle_segment_amount = 52;
+		public int progress_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_progress_left_end_width = 5;
@@ -410,6 +392,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_width = 5;
+		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_top_end_height = 5;
 		public int vertical_progress_middle_segment_height = 1;
 		public int vertical_progress_bottom_end_height = 5;
@@ -417,7 +400,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_current_value_overlay = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int overlay_offset_x = -2;
 		public int overlay_offset_y = 0;
 
@@ -429,17 +411,16 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_overlay_width = 5;
 		public int vertical_overlay_height = 5;
 
+		@ConfigEntry.Gui.PrefixText
 		public boolean enable_smooth_animation = true;
 		public int animation_interval = 1;
 
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_number = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_x_offset = 0;
 		public int number_y_offset = 16;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_color = -6250336;
 
 		public ShockClientConfig() {
@@ -451,7 +432,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 			name = "staggerClientConfig"
 	)
 	public static class StaggerClientConfig implements ConfigData {
-		@ConfigEntry.Gui.PrefixText
 		public int x_offset = -31;
 		public int y_offset = 18;
 		@EnumHandler(
@@ -460,7 +440,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public FillDirection fill_direction = FillDirection.LEFT_TO_RIGHT;
 
 		@ConfigEntry.Gui.PrefixText
-		public int background_additional_middle_segment_amount = 52;
+		public int background_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_background_left_end_width = 5;
@@ -477,9 +457,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public int progress_offset_x = 0;
 		public int progress_offset_y = 0;
-
-		@ConfigEntry.Gui.PrefixText
-		public int progress_additional_middle_segment_amount = 52;
+		public int progress_middle_segment_amount = 52;
 
 		@ConfigEntry.Gui.PrefixText
 		public int horizontal_progress_left_end_width = 5;
@@ -489,6 +467,7 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 
 		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_width = 5;
+		@ConfigEntry.Gui.PrefixText
 		public int vertical_progress_top_end_height = 5;
 		public int vertical_progress_middle_segment_height = 1;
 		public int vertical_progress_bottom_end_height = 5;
@@ -496,7 +475,6 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_current_value_overlay = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int overlay_offset_x = -2;
 		public int overlay_offset_y = 0;
 
@@ -508,17 +486,16 @@ public class ClientConfig extends PartitioningSerializer.GlobalData {
 		public int vertical_overlay_width = 5;
 		public int vertical_overlay_height = 5;
 
+		@ConfigEntry.Gui.PrefixText
 		public boolean enable_smooth_animation = true;
 		public int animation_interval = 1;
 
 		@ConfigEntry.Gui.PrefixText
 		public boolean show_number = false;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_x_offset = 0;
 		public int number_y_offset = 16;
 
-		@ConfigEntry.Gui.PrefixText
 		public int number_color = -6250336;
 
 		public StaggerClientConfig() {
