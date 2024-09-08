@@ -76,16 +76,17 @@
 	"text.autoconfig.overhauleddamage.option.generalClientConfig.show_effect_build_up_elements.@PrefixText": "When an effect build-up is greater 0, a HUD element shows the progress until the effect is applied.",
 	"text.autoconfig.overhauleddamage.option.generalClientConfig.show_effect_build_up_elements": "Effect build-ups are displayed in the HUD",
 
-	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_x_offset_increase.@PrefixText": "\n\nWhen multiple effect build-ups are displayed at the same time, these values are added to every elements position offset, multiplied by the amount of elements already on screen.\nThe order is: bleeding, burn, freeze, poison, shock, stagger\n\nExample: The burn, poison and stagger elements are currently displayed\nThe burn element is at its normal position\nThe poison element is offset by 'dynamic_x_offset_increase' on the x axis and by 'dynamic_y_offset_increase' on the y axis\nThe stagger element is offset by 'dynamic_x_offset_increase' times 2 on the x axis and by 'dynamic_y_offset_increase' times 2 on the y axis",
-	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_x_offset_increase": "Dynamic X offset increase",
-	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_y_offset_increase": "Dynamic Y offset increase",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_offset_increase_x.@PrefixText": "\n\nWhen multiple effect build-ups are displayed at the same time, these values are added to every elements position offset, multiplied by the amount of elements already on screen.\nThe order is: bleeding, burn, freeze, poison, shock, stagger\n\nExample: The burn, poison and stagger elements are currently displayed\nThe burn element is at its normal position\nThe poison element is offset by 'dynamic_x_offset_increase' on the x axis and by 'dynamic_y_offset_increase' on the y axis\nThe stagger element is offset by 'dynamic_x_offset_increase' times 2 on the x axis and by 'dynamic_y_offset_increase' times 2 on the y axis",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_offset_increase_x": "Dynamic X offset increase",
+	"text.autoconfig.overhauleddamage.option.generalClientConfig.dynamic_offset_increase_y": "Dynamic Y offset increase",
 
 
 	"text.autoconfig.overhauleddamage.category.bleedingClientConfig": "Bleeding Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.offset_y": "Y offset from origin",
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.fill_direction": "Fill direction",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.origin": "Origin",
 
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.background_middle_segment_amount": "Middle segment amount",
@@ -139,24 +140,30 @@
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.enable_smooth_animation": "Enable smooth animation",
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.animation_interval": "Animation interval",
 
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.max_value_change_is_animated": "Animate changes to the max value",
+
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_number.@PrefixText": "\nNumber",
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_number": "Show number",
 
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_max_value.@PrefixText": "Show the max value in addition to the current value",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.show_max_value": "Show maximum value",
+
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_offset_y": "Y offset from origin",
 
 	"text.autoconfig.overhauleddamage.option.bleedingClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.burnClientConfig": "Burn Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.offset_y": "Y offset from origin",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.fill_direction": "Fill direction",
-	
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.origin": "Origin",
+
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.background_middle_segment_amount": "Middle segment amount",
-	
+
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_left_end_width": "Left end width",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_background_middle_segment_width": "Middle segment width",
@@ -174,7 +181,7 @@
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.progress_offset_x": "X offset from background",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.progress_offset_y": "Y offset from background",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.progress_middle_segment_amount": "Middle segment amount",
-	
+
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_left_end_width.@PrefixText": "\nHorizontal texture\nThe texture width should be the sum of the 3 following values",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_left_end_width": "Left end width",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_progress_middle_segment_width": "Middle segment width",
@@ -197,29 +204,35 @@
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_overlay_width.@PrefixText": "\nHorizontal Overlay Texture",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_overlay_width": "Width",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.horizontal_overlay_height": "Height",
-	
+
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_overlay_width.@PrefixText": "\nVertical Overlay Texture",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_overlay_width": "Width",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.vertical_overlay_height": "Height",
-	
+
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.enable_smooth_animation.@PrefixText": "\nAnimation",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.enable_smooth_animation": "Enable smooth animation",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.animation_interval": "Animation interval",
-	
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.max_value_change_is_animated": "Animate changes to the max value",
+
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_number.@PrefixText": "\nNumber",
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_number": "Show number",
-	
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_y_offset": "Y offset from screen center",
-	
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_max_value.@PrefixText": "Show the max value in addition to the current value",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.show_max_value": "Show maximum value",
+
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_offset_y": "Y offset from origin",
+
 	"text.autoconfig.overhauleddamage.option.burnClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.freezeClientConfig": "Freeze Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.offset_y": "Y offset from origin",
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.fill_direction": "Fill direction",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.origin": "Origin",
 
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.background_middle_segment_amount": "Middle segment amount",
@@ -273,20 +286,26 @@
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.enable_smooth_animation": "Enable smooth animation",
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.animation_interval": "Animation interval",
 
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.max_value_change_is_animated": "Animate changes to the max value",
+
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_number.@PrefixText": "\nNumber",
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_number": "Show number",
 
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_max_value.@PrefixText": "Show the max value in addition to the current value",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.show_max_value": "Show maximum value",
+
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_offset_y": "Y offset from origin",
 
 	"text.autoconfig.overhauleddamage.option.freezeClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.poisonClientConfig": "Poison Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.offset_y": "Y offset from origin",
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.fill_direction": "Fill direction",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.origin": "Origin",
 
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.background_middle_segment_amount": "Middle segment amount",
@@ -340,20 +359,26 @@
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.enable_smooth_animation": "Enable smooth animation",
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.animation_interval": "Animation interval",
 
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.max_value_change_is_animated": "Animate changes to the max value",
+
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_number.@PrefixText": "\nNumber",
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_number": "Show number",
 
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_max_value.@PrefixText": "Show the max value in addition to the current value",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.show_max_value": "Show maximum value",
+
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_offset_y": "Y offset from origin",
 
 	"text.autoconfig.overhauleddamage.option.poisonClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.shockClientConfig": "Shock Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.offset_y": "Y offset from origin",
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.fill_direction": "Fill direction",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.origin": "Origin",
 
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.background_middle_segment_amount": "Middle segment amount",
@@ -407,20 +432,26 @@
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.enable_smooth_animation": "Enable smooth animation",
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.animation_interval": "Animation interval",
 
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.max_value_change_is_animated": "Animate changes to the max value",
+
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_number.@PrefixText": "\nNumber",
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_number": "Show number",
 
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_max_value.@PrefixText": "Show the max value in addition to the current value",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.show_max_value": "Show maximum value",
+
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_offset_y": "Y offset from origin",
 
 	"text.autoconfig.overhauleddamage.option.shockClientConfig.number_color": "Number color",
 
 
 	"text.autoconfig.overhauleddamage.category.staggerClientConfig": "Stagger Build Up Bar",
 
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.offset_y": "Y offset from origin",
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.fill_direction": "Fill direction",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.origin": "Origin",
 
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.background_middle_segment_amount.@PrefixText": "\nBackground Texture",
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.background_middle_segment_amount": "Middle segment amount",
@@ -474,11 +505,16 @@
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.enable_smooth_animation": "Enable smooth animation",
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.animation_interval": "Animation interval",
 
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.max_value_change_is_animated": "Animate changes to the max value",
+
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_number.@PrefixText": "\nNumber",
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_number": "Show number",
 
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_x_offset": "X offset from screen center",
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_y_offset": "Y offset from screen center",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_max_value.@PrefixText": "Show the max value in addition to the current value",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.show_max_value": "Show maximum value",
+
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_offset_x": "X offset from origin",
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_offset_y": "Y offset from origin",
 
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_color": "Number color"
 }
