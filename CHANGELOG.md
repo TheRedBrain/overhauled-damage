@@ -1,3 +1,7 @@
+# 2.2.0
+
+- further improvements to effect build up bar customization
+
 # 2.1.0
 
 - update to 1.21.1
