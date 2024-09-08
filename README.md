@@ -45,10 +45,8 @@ Optional features enabled in the server config:
 - blocking requires at least 1 stamina
 
 ## Customization
-The HUD elements which display the different effect build-ups can be customized via the client config or in game, if Mod Menu is installed.\
-The default elements are simple bars in different colors, similar to the experience bar.
 
-There is an option to use custom textures, which have to be provided by a resource pack.
+[The customization is explained in this wiki article](https://github.com/TheRedBrain/overhauled-damage/wiki/Resource-Bar-Customization)
 
 ## How does it work?
 
