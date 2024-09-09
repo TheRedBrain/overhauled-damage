@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "overhauleddamage",
-	"version": "2.0.1",
+	"version": "${version}",
 	"name": "Overhauled Damage",
 	"description": "Overhauls the damage calculations and adds elemental damage.",
 	"authors": [
@@ -32,10 +32,10 @@
 		}
 	],
 	"depends": {
-		"minecraft": "1.21.1",
-		"fabricloader": ">=0.16.3",
+		"minecraft": "${minecraft_version}",
+		"fabricloader": ">=${loader_version}",
 		"fabric-api": "*",
-		"cloth-config": ">=15.0.130"
+		"cloth-config": ">=${cloth_config_version}"
 	},
 	"suggests": {
 		"variousstatuseffects": "*",
