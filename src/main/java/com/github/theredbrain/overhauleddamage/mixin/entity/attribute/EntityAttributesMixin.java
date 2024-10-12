@@ -76,5 +76,8 @@ public class EntityAttributesMixin {
 
 		OverhauledDamage.BLOCK_STAMINA_COST = Registry.registerReference(Registries.ATTRIBUTE, OverhauledDamage.identifier("generic.block_stamina_cost"), new ClampedEntityAttribute("attribute.name.generic.block_stamina_cost", 0.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.PARRY_STAMINA_COST = Registry.registerReference(Registries.ATTRIBUTE, OverhauledDamage.identifier("generic.parry_stamina_cost"), new ClampedEntityAttribute("attribute.name.generic.parry_stamina_cost", 0.0, 0.0, 1024.0).setTracked(true));
+
+		OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER = Registry.registerReference(Registries.ATTRIBUTE, OverhauledDamage.identifier("generic.damage_taken_from_mana_multiplier"), new ClampedEntityAttribute("attribute.name.generic.damage_taken_from_mana_multiplier", 0.0, 0.0, 1024.0).setTracked(true));
+		OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER = Registry.registerReference(Registries.ATTRIBUTE, OverhauledDamage.identifier("generic.damage_taken_from_stamina_multiplier"), new ClampedEntityAttribute("attribute.name.generic.damage_taken_from_stamina_multiplier", 0.0, 0.0, 1024.0).setTracked(true));
 	}
 }

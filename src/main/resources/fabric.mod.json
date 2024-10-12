@@ -39,6 +39,7 @@
 	},
 	"suggests": {
 		"variousstatuseffects": "*",
-		"staminaattributes": "*"
+		"staminaattributes": "*",
+		"manaattributes": "*"
 	}
 }

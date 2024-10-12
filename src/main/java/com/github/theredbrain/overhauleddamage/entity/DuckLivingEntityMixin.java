@@ -155,4 +155,8 @@ public interface DuckLivingEntityMixin {
 	boolean overhauleddamage$canParry();
 
 	int overhauleddamage$getBlockingTime();
+
+	float overhauleddamage$getDamageTakenFromManaMultiplier();
+
+	float overhauleddamage$getDamageTakenFromStaminaMultiplier();
 }

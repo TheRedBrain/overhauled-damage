@@ -17,6 +17,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -28,10 +29,12 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -43,6 +46,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.LinkedHashMap;
 import java.util.Optional;
+import java.util.jar.Attributes;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements DuckLivingEntityMixin {
@@ -70,9 +74,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Shadow
 	public abstract boolean blockedByShield(DamageSource source);
-
-	@Shadow
-	public abstract boolean isBlocking();
+//
+//	@Shadow
+//	public abstract boolean isBlocking();
 
 	@Shadow
 	public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
@@ -83,6 +87,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Shadow
 	public abstract @Nullable StatusEffectInstance getStatusEffect(RegistryEntry<StatusEffect> effect);
 
+	@Shadow public abstract boolean isUsingItem();
+
+	@Shadow protected ItemStack activeItemStack;
+	@Shadow protected int itemUseTimeLeft;
 	@Unique
 	private int bleedingTickTimer = 0;
 	@Unique
@@ -200,6 +208,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 				.add(OverhauledDamage.BLOCK_STAMINA_COST)
 				.add(OverhauledDamage.PARRY_STAMINA_COST)
+
+				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER)
+				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER)
 		;
 	}
 
@@ -373,7 +384,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 			// region shield blocks
 			ItemStack shieldItemStack = this.getOffHandStack();
-			if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded)) {
+			if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0)) {
 				// try to parry the attack
 				boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
 				double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
@@ -536,7 +547,21 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 		}
 
-		return applied_damage + true_amount;
+		float health_damage = applied_damage + true_amount;
+
+		float damageTakenFromMana = this.overhauleddamage$getDamageTakenFromManaMultiplier();
+		float damageTakenFromStamina = this.overhauleddamage$getDamageTakenFromStaminaMultiplier();
+		float manaDamage = 0.0F;
+		float staminaDamage = 0.0F;
+		if (damageTakenFromMana > 0 && OverhauledDamage.isManaAttributesLoaded) {
+			manaDamage = health_damage * damageTakenFromMana;
+			OverhauledDamage.addMana(((LivingEntity) (Object) this), manaDamage);
+		}
+		if (damageTakenFromStamina > 0 && OverhauledDamage.isStaminaAttributesLoaded) {
+			staminaDamage = health_damage * damageTakenFromStamina;
+			OverhauledDamage.addStamina(((LivingEntity) (Object) this), staminaDamage);
+		}
+		return health_damage - manaDamage - staminaDamage;
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
@@ -659,9 +684,23 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	}
 
 	// blocking is now active instantly
-	@Inject(method = "isBlocking", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-	public void overhauleddamage$isBlocking(CallbackInfoReturnable<Boolean> cir) {
-		cir.setReturnValue(true);
+//	@Inject(method = "isBlocking", at = @At(value = "RETURN", ordinal = 0), cancellable = true)
+//	public void overhauleddamage$isBlocking(CallbackInfoReturnable<Boolean> cir) {
+//		cir.setReturnValue(true);
+//	}
+
+	/**
+	 * @author TheRedBrain
+	 * @reason TODO
+	 */
+	@Overwrite
+	public boolean isBlocking() {
+		if (this.isUsingItem() && !this.activeItemStack.isEmpty()) {
+			Item item = this.activeItemStack.getItem();
+			return item.getUseAction(this.activeItemStack) != UseAction.BLOCK ? false : item.getMaxUseTime(this.activeItemStack, ((LivingEntity) (Object) this)) - this.itemUseTimeLeft >= 5;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -1109,5 +1148,15 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public int overhauleddamage$getBlockingTime() {
 		return this.blockingTime;
+	}
+
+	@Override
+	public float overhauleddamage$getDamageTakenFromManaMultiplier() {
+		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER);
+	}
+
+	@Override
+	public float overhauleddamage$getDamageTakenFromStaminaMultiplier() {
+		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER);
 	}
 }

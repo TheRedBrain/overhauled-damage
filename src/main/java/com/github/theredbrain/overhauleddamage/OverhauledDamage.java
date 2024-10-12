@@ -1,5 +1,6 @@
 package com.github.theredbrain.overhauleddamage;
 
+import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.config.ServerConfigWrapper;
 import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
@@ -94,7 +95,25 @@ public class OverhauledDamage implements ModInitializer {
 	public static RegistryEntry<EntityAttribute> BLOCK_STAMINA_COST;
 	public static RegistryEntry<EntityAttribute> PARRY_STAMINA_COST;
 
+	public static RegistryEntry<EntityAttribute> DAMAGE_TAKEN_FROM_MANA_MULTIPLIER;
+	public static RegistryEntry<EntityAttribute> DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER;
+
+	public static final boolean isManaAttributesLoaded = FabricLoader.getInstance().isModLoaded("manaattributes");
 	public static final boolean isStaminaAttributesLoaded = FabricLoader.getInstance().isModLoaded("staminaattributes");
+
+	public static float getCurrentMana(LivingEntity livingEntity) {
+		float currentMana = 0.0F;
+		if (isManaAttributesLoaded) {
+			currentMana = ((ManaUsingEntity) livingEntity).manaattributes$getMana();
+		}
+		return currentMana;
+	}
+
+	public static void addMana(LivingEntity livingEntity, float amount) {
+		if (isManaAttributesLoaded) {
+			((ManaUsingEntity) livingEntity).manaattributes$addMana(amount);
+		}
+	}
 
 	public static float getCurrentStamina(LivingEntity livingEntity) {
 		float currentStamina = 0.0F;
