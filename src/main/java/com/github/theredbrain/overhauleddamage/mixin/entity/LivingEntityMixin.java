@@ -45,6 +45,7 @@ import java.util.LinkedHashMap;
 import java.util.Optional;
 
 @Mixin(LivingEntity.class)
+@SuppressWarnings("UnreachableCode")
 public abstract class LivingEntityMixin extends Entity implements DuckLivingEntityMixin {
 
 	@Shadow
@@ -200,6 +201,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 				.add(OverhauledDamage.BLOCK_STAMINA_COST)
 				.add(OverhauledDamage.PARRY_STAMINA_COST)
+
+				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER)
+				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER)
 		;
 	}
 
@@ -373,7 +377,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 			// region shield blocks
 			ItemStack shieldItemStack = this.getOffHandStack();
-			if (this.isBlocking() && this.blockedByShield(source) && (((StaminaUsingEntity) this).staminaattributes$getStamina() > 0 || serverConfig.blocking_requires_stamina)) {
+			if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded)) {
 				// try to parry the attack
 				boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
 				double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
@@ -385,9 +389,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				float blockedLightningDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedLightningDamage() * parryBonus);
 				float blockedPoisonDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPoisonDamage() * parryBonus);
 
-				((StaminaUsingEntity) this).staminaattributes$addStamina(tryParry ? -((DuckLivingEntityMixin) this).overhauleddamage$getParryStaminaCost() : -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
+				OverhauledDamage.addStamina(((LivingEntity) (Object) this), tryParry ? -((DuckLivingEntityMixin) this).overhauleddamage$getParryStaminaCost() : -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
 
-				if (((StaminaUsingEntity) this).staminaattributes$getStamina() >= 0) {
+				if (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) >= 0 || !OverhauledDamage.isStaminaAttributesLoaded) {
 
 					boolean isStaggered = false;
 					// apply stagger based on left over damage
@@ -536,7 +540,20 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 		}
 
-		return applied_damage + true_amount;
+		float health_damage = applied_damage + true_amount;
+		float damageTakenFromMana = this.overhauleddamage$getDamageTakenFromManaMultiplier();
+		float damageTakenFromStamina = this.overhauleddamage$getDamageTakenFromStaminaMultiplier();
+		float manaDamage = 0.0F;
+		float staminaDamage = 0.0F;
+		if (damageTakenFromMana > 0 && OverhauledDamage.isManaAttributesLoaded) {
+			manaDamage = health_damage * damageTakenFromMana;
+			OverhauledDamage.addMana(((LivingEntity) (Object) this), manaDamage);
+		}
+		if (damageTakenFromStamina > 0 && OverhauledDamage.isStaminaAttributesLoaded) {
+			staminaDamage = health_damage * damageTakenFromStamina;
+			OverhauledDamage.addStamina(((LivingEntity) (Object) this), staminaDamage);
+		}
+		return health_damage - manaDamage - staminaDamage;
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
@@ -1109,5 +1126,14 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public int overhauleddamage$getBlockingTime() {
 		return this.blockingTime;
+	}
+
+	@Override
+	public float overhauleddamage$getDamageTakenFromManaMultiplier() {
+		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER);
+	}
+	@Override
+	public float overhauleddamage$getDamageTakenFromStaminaMultiplier() {
+		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER);
 	}
 }

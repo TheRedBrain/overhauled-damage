@@ -18,7 +18,7 @@ public class ServerConfig implements ConfigData {
 	public boolean damage_interrupts_item_usage = true;
 	@Comment("Set to 'true' for the vanilla behaviour")
 	public boolean disable_jump_crit_mechanic = true;
-	@Comment("When set to 'true', blocking requires the player to have at least 1 stamina.")
+	@Comment("When set to 'true', blocking requires the player to have at least 1 stamina. Has no effect when 'Stamina Attributes' is not installed.")
 	public boolean blocking_requires_stamina = true;
 	@Comment("This status effect is applied when the bleeding build-up reaches the threshold")
 	public String bleeding_status_effect_identifier = "variousstatuseffects:bleeding";
