@@ -1,5 +1,6 @@
 # 1.6.0
 
+- added generic attack type. It does not add any effect build-up, it just deals damage and is affected by armor.
 - added "damage taken from mana/stamina" attributes
 - Stamina Attributes is now an optional dependency
 - Mana Attributes is now an optional dependency

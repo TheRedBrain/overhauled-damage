@@ -20,6 +20,10 @@ public class ServerConfig implements ConfigData {
 	public boolean disable_jump_crit_mechanic = true;
 	@Comment("When set to 'true', blocking requires the player to have at least 1 stamina. Has no effect when 'Stamina Attributes' is not installed.")
 	public boolean blocking_requires_stamina = true;
+	@Comment("When set to 'true', blocking requires the player to have at least 1 stamina. Has no effect when 'Stamina Attributes' is not installed.")
+	public boolean armor_calculation_works_with_flat_values = true;
+	@Comment("When set to 'true', blocking requires the player to have at least 1 stamina. Has no effect when 'Stamina Attributes' is not installed.")
+	public boolean blocking_calculation_works_with_flat_values = true;
 	@Comment("This status effect is applied when the bleeding build-up reaches the threshold")
 	public String bleeding_status_effect_identifier = "variousstatuseffects:bleeding";
 	@Comment("This status effect is applied when the burning build-up reaches the threshold")
@@ -42,41 +46,27 @@ public class ServerConfig implements ConfigData {
 	@Comment("""
 			Damage types in this map use the corresponding multipliers when calculating the different elemental and physical damage amounts inflicted by that damage type.
 			            
-			The array must contain exactly seven (7) values.
+			The array must contain exactly eight (8) values.
 			They correspond to the physical/elemental damages like so:
-			{bashing, piercing, slashing, poison, fire, frost, lightning}
+			{generic, bashing, piercing, slashing, poison, fire, frost, lightning}
 			""")
 	public LinkedHashMap<String, Float[]> damage_type_multipliers = new LinkedHashMap<>() {{
-		put("minecraft:arrow", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:bad_respawn_point", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:cactus", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:explosion", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:falling_anvil", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:falling_block", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:falling_stalactite", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:fireball", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
-		put("minecraft:fireworks", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:fly_into_wall", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:hot_floor", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
-		put("minecraft:in_fire", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
-		put("minecraft:lightning_bolt", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F});
-		put("minecraft:mob_attack", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:mob_attack_no_aggro", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:mob_projectile", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:player_attack", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:player_explosion", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:spit", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:stalagmite", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:sting", new Float[]{0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:sweet_berry_bush", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:thorns", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:thrown", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:trident", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:unattributed_fireball", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("minecraft:wither_skull", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("overhauleddamage:mob_bashing_damage_type", new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("overhauleddamage:mob_piercing_damage_type", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		put("overhauleddamage:mob_slashing_damage_type", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:arrow", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:cactus", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:falling_stalactite", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:fireball", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
+		put("minecraft:hot_floor", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
+		put("minecraft:in_fire", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
+		put("minecraft:lightning_bolt", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F});
+		put("minecraft:mob_attack", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:stalagmite", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:sting", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:sweet_berry_bush", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:thorns", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("minecraft:trident", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("overhauleddamage:mob_bashing_damage_type", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("overhauleddamage:mob_piercing_damage_type", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
+		put("overhauleddamage:mob_slashing_damage_type", new Float[]{0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F});
 	}};
 
 	public ServerConfig() {
