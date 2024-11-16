@@ -1,6 +1,12 @@
 # 1.6.0
 
-- added generic attack type. It does not add any effect build-up, it just deals damage and is affected by armor.
+- added generic attack type
+- changed default attack type multipliers to 1.0 for generic and 0.0 for all others
+- added alternative armor calculation. The existing formula expects very high amounts of damage. This is not realistic in a vanilla/modded environment. The alternative calculation is based on a percentage reduction instead of flat values.
+- added alternative blocked damage calculation. The existing formula expects very high amounts of damage. This is not realistic in a vanilla/modded environment. The alternative calculation is based on a percentage reduction instead of flat values.
+- made many values in the damage calculation configurable
+- changed how protection enchantments work. Feather Falling works like normal. 'Normal' protection now works with a (configurable) percentage reduction. All other protection enchantments are disabled.
+- added new sound for a successful parry
 - added "damage taken from mana/stamina" attributes
 - Stamina Attributes is now an optional dependency
 - Mana Attributes is now an optional dependency
