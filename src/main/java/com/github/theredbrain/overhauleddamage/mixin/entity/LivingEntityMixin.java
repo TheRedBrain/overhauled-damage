@@ -335,19 +335,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 		}
 
-		if (serverConfig.enable_damage_taken_multiplier_attribute) {
-			float damage_taken_multiplier = ((DuckLivingEntityMixin) (Object) this).overhauleddamage$getDamageTakenMultiplier();
-			amount *= damage_taken_multiplier;
-			if (enable_debug_log) {
-				OverhauledDamage.info("damage taken multiplier attribute is enabled");
-				OverhauledDamage.info("damage taken multiplier: " + damage_taken_multiplier);
-				OverhauledDamage.info("damage amount after damage taken multiplier: " + amount);
-			}
-		}
-
-		if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
-			this.damageArmor(source, amount);
-		}
+		// TODO should this be done here??
+		//  or maybe before resistance is applied?
+		//  or maybe after the additional/increased damage is applied?
+//		if (serverConfig.enable_damage_taken_multiplier_attribute) {
+//			float damage_taken_multiplier = ((DuckLivingEntityMixin) (Object) this).overhauleddamage$getDamageTakenMultiplier();
+//			amount *= damage_taken_multiplier;
+//			if (enable_debug_log) {
+//				OverhauledDamage.info("damage taken multiplier attribute is enabled");
+//				OverhauledDamage.info("damage taken multiplier: " + damage_taken_multiplier);
+//				OverhauledDamage.info("damage amount after damage taken multiplier: " + amount);
+//			}
+//		}
 
 		float applied_damage = 0;
 		float true_amount = 0;
@@ -547,7 +546,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 			// region apply armor
 			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
+				float armorDamage;
 				if (serverConfig.armor_calculation_works_with_flat_values) {
+					// TODO this calculation needs a serious overhaul
 					// armorToughness now directly determines how effective armor is
 					// effective armor reduces damage by its amount
 					// armor is more or less effective against different attack types
@@ -565,7 +566,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 						OverhauledDamage.info("effective_armor : " + effectiveArmor);
 					}
 
-					// TODO think about this more
 					if (piercing_amount * 1.25 <= effectiveArmor) {
 						effectiveArmor -= (float) (piercing_amount * 1.25);
 						piercing_amount = 0;
@@ -598,6 +598,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 						slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
 						effectiveArmor = 0;
 					}
+					armorDamage = this.getArmor() - effectiveArmor;
 				} else {
 					// this is the alternative armor calculation
 					// armor reduces damage on a percentage base
@@ -638,22 +639,37 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					// the different attack types also have a protection_multiplier
 					Float[] protection_multipliers = serverConfig.protection_multipliers;
 
-					generic_amount = generic_amount - ((generic_amount * effective_armor * armor_multipliers[0]) + (generic_amount * protection * protection_multipliers[0])) / 100;
+					float generic_armor_damage = (generic_amount * effective_armor * armor_multipliers[0]);
+					generic_amount = generic_amount - (generic_armor_damage + (generic_amount * protection * protection_multipliers[0])) / 100;
 
-					bashing_amount = bashing_amount - ((bashing_amount * effective_armor * armor_multipliers[1]) + (bashing_amount * protection * protection_multipliers[1])) / 100;
+					float bashing_armor_damage = (bashing_amount * effective_armor * armor_multipliers[1]);
+					bashing_amount = bashing_amount - (bashing_armor_damage + (bashing_amount * protection * protection_multipliers[1])) / 100;
 
-					piercing_amount = piercing_amount - ((piercing_amount * effective_armor * armor_multipliers[2]) + (piercing_amount * protection * protection_multipliers[2])) / 100;
+					float piercing_armor_damage = (piercing_amount * effective_armor * armor_multipliers[2]);
+					piercing_amount = piercing_amount - (piercing_armor_damage + (piercing_amount * protection * protection_multipliers[2])) / 100;
 
-					slashing_amount = slashing_amount - ((slashing_amount * effective_armor * armor_multipliers[3]) + (slashing_amount * protection * protection_multipliers[3])) / 100;
+					float slashing_armor_damage = (slashing_amount * effective_armor * armor_multipliers[3]);
+					slashing_amount = slashing_amount - (slashing_armor_damage + (slashing_amount * protection * protection_multipliers[3])) / 100;
 
-					poison_amount = poison_amount - ((poison_amount * effective_armor * armor_multipliers[4]) + (poison_amount * protection * protection_multipliers[4])) / 100;
+					float poison_armor_damage = (poison_amount * effective_armor * armor_multipliers[0]);
+					poison_amount = poison_amount - (poison_armor_damage + (poison_amount * protection * protection_multipliers[4])) / 100;
 
-					fire_amount = fire_amount - ((fire_amount * effective_armor * armor_multipliers[5]) + (fire_amount * protection * protection_multipliers[5])) / 100;
+					float fire_armor_damage = (fire_amount * effective_armor * armor_multipliers[5]);
+					fire_amount = fire_amount - (fire_armor_damage + (fire_amount * protection * protection_multipliers[5])) / 100;
 
-					frost_amount = frost_amount - ((frost_amount * effective_armor * armor_multipliers[6]) + (frost_amount * protection * protection_multipliers[6])) / 100;
+					float frost_armor_damage = (frost_amount * effective_armor * armor_multipliers[6]);
+					frost_amount = frost_amount - (frost_armor_damage + (frost_amount * protection * protection_multipliers[6])) / 100;
 
-					lightning_amount = lightning_amount - ((lightning_amount * effective_armor * armor_multipliers[7]) + (lightning_amount * protection * protection_multipliers[7])) / 100;
+					float lightning_armor_damage = (lightning_amount * effective_armor * armor_multipliers[7]);
+					lightning_amount = lightning_amount - (lightning_armor_damage + (lightning_amount * protection * protection_multipliers[7])) / 100;
+
+					armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
 				}
+
+				if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
+					this.damageArmor(source, armorDamage);
+				}
+
 			} else if (enable_debug_log) {
 				OverhauledDamage.info("damage bypasses armor");
 			}
