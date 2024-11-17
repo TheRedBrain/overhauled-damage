@@ -168,6 +168,8 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getBlockingTime();
 
+	float overhauleddamage$getDamageTakenMultiplier();
+
 	float overhauleddamage$getDamageTakenFromManaMultiplier();
 
 	float overhauleddamage$getDamageTakenFromStaminaMultiplier();

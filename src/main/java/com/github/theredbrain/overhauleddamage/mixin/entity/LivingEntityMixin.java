@@ -227,6 +227,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.BLOCK_STAMINA_COST)
 				.add(OverhauledDamage.PARRY_STAMINA_COST)
 
+				.add(OverhauledDamage.DAMAGE_TAKEN_MULTIPLIER)
 				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER)
 				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER)
 		;
@@ -334,16 +335,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 		}
 
-		StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.staggered_status_effect_identifier));
-		if (staggered_status_effect != null && this.hasStatusEffect(staggered_status_effect)) {
-			amount = amount * 2;
-		}
-
-		StatusEffect calamity_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.calamity_status_effect_identifier));
-		if (calamity_status_effect != null) {
-			StatusEffectInstance calamityEffectInstance = this.getStatusEffect(calamity_status_effect);
-			if (calamityEffectInstance != null) {
-				amount = amount * 2 + calamityEffectInstance.getAmplifier();
+		if (serverConfig.enable_damage_taken_multiplier_attribute) {
+			float damage_taken_multiplier = ((DuckLivingEntityMixin) (Object) this).overhauleddamage$getDamageTakenMultiplier();
+			amount *= damage_taken_multiplier;
+			if (enable_debug_log) {
+				OverhauledDamage.info("damage taken multiplier attribute is enabled");
+				OverhauledDamage.info("damage taken multiplier: " + damage_taken_multiplier);
+				OverhauledDamage.info("damage amount after damage taken multiplier: " + amount);
 			}
 		}
 
@@ -1437,9 +1435,15 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	}
 
 	@Override
+	public float overhauleddamage$getDamageTakenMultiplier() {
+		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_MULTIPLIER);
+	}
+
+	@Override
 	public float overhauleddamage$getDamageTakenFromManaMultiplier() {
 		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER);
 	}
+
 	@Override
 	public float overhauleddamage$getDamageTakenFromStaminaMultiplier() {
 		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER);

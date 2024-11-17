@@ -99,6 +99,7 @@ public class OverhauledDamage implements ModInitializer {
 	public static EntityAttribute BLOCK_STAMINA_COST;
 	public static EntityAttribute PARRY_STAMINA_COST;
 
+	public static EntityAttribute DAMAGE_TAKEN_MULTIPLIER;
 	public static EntityAttribute DAMAGE_TAKEN_FROM_MANA_MULTIPLIER;
 	public static EntityAttribute DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER;
 

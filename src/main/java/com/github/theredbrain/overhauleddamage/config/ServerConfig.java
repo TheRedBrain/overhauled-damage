@@ -83,6 +83,14 @@ public class ServerConfig implements ConfigData {
 			""")
 	public boolean enable_armor_toughness_attribute = false;
 	@Comment("""
+			When set to 'true', "overhauleddamage:generic.damage_taken_multiplier" is multiplying every damage taken.
+			
+			When set to 'false', "overhauleddamage:generic.damage_taken_multiplier" is ignored.
+			
+			Default: true
+			""")
+	public boolean enable_damage_taken_multiplier_attribute = true;
+	@Comment("""
 			Damage reduction by armor is modified based on the attack type.
 			Each fraction of damage is reduced individually.
 						
