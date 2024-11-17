@@ -44,6 +44,7 @@ public class OverhauledDamage implements ModInitializer {
 	public static EntityAttribute BLEEDING_DURATION;
 	public static EntityAttribute BLEEDING_TICK_THRESHOLD;
 	public static EntityAttribute BLEEDING_BUILD_UP_REDUCTION;
+	public static EntityAttribute BLEEDING_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
 	public static EntityAttribute ADDITIONAL_FROST_DAMAGE;
 	public static EntityAttribute INCREASED_FROST_DAMAGE;
@@ -53,6 +54,7 @@ public class OverhauledDamage implements ModInitializer {
 	public static EntityAttribute FREEZE_DURATION;
 	public static EntityAttribute FREEZE_TICK_THRESHOLD;
 	public static EntityAttribute FREEZE_BUILD_UP_REDUCTION;
+	public static EntityAttribute FREEZE_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
 	public static EntityAttribute ADDITIONAL_FIRE_DAMAGE;
 	public static EntityAttribute INCREASED_FIRE_DAMAGE;
@@ -62,6 +64,7 @@ public class OverhauledDamage implements ModInitializer {
 	public static EntityAttribute BURN_DURATION;
 	public static EntityAttribute BURN_TICK_THRESHOLD;
 	public static EntityAttribute BURN_BUILD_UP_REDUCTION;
+	public static EntityAttribute BURN_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
 	public static EntityAttribute ADDITIONAL_LIGHTNING_DAMAGE;
 	public static EntityAttribute INCREASED_LIGHTNING_DAMAGE;
@@ -71,6 +74,7 @@ public class OverhauledDamage implements ModInitializer {
 	public static EntityAttribute SHOCK_DURATION;
 	public static EntityAttribute SHOCK_TICK_THRESHOLD;
 	public static EntityAttribute SHOCK_BUILD_UP_REDUCTION;
+	public static EntityAttribute SHOCK_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
 	public static EntityAttribute ADDITIONAL_POISON_DAMAGE;
 	public static EntityAttribute INCREASED_POISON_DAMAGE;
@@ -80,11 +84,13 @@ public class OverhauledDamage implements ModInitializer {
 	public static EntityAttribute POISON_DURATION;
 	public static EntityAttribute POISON_TICK_THRESHOLD;
 	public static EntityAttribute POISON_BUILD_UP_REDUCTION;
+	public static EntityAttribute POISON_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
 	public static EntityAttribute MAX_STAGGER_BUILD_UP;
 	public static EntityAttribute STAGGER_DURATION;
 	public static EntityAttribute STAGGER_TICK_THRESHOLD;
 	public static EntityAttribute STAGGER_BUILD_UP_REDUCTION;
+	public static EntityAttribute STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
 	public static EntityAttribute BLOCK_FORCE;
 	public static EntityAttribute PARRY_BONUS;
@@ -127,7 +133,7 @@ public class OverhauledDamage implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Hello Fabric world!");
+		LOGGER.info("Dealing overhauled damage!");
 
 		// Config
 		AutoConfig.register(ServerConfigWrapper.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));

@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(EntityAttributes.class)
+@SuppressWarnings("UnreachableCode")
 public class EntityAttributesMixin {
 	@Shadow
 	private static EntityAttribute register(String id, EntityAttribute attribute) {
@@ -33,6 +34,7 @@ public class EntityAttributesMixin {
 		OverhauledDamage.BLEEDING_DURATION = register(OverhauledDamage.MOD_ID + ":generic.bleeding_duration", new ClampedEntityAttribute("attribute.name.generic.bleeding_duration", 201.0, 1.0, 1000000.0).setTracked(true));
 		OverhauledDamage.BLEEDING_TICK_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.bleeding_tick_threshold", new ClampedEntityAttribute("attribute.name.generic.bleeding_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.BLEEDING_BUILD_UP_REDUCTION = register(OverhauledDamage.MOD_ID + ":generic.bleeding_build_up_reduction", new ClampedEntityAttribute("attribute.name.generic.bleeding_build_up_reduction", 1.0, 0.0, 1024.0).setTracked(true));
+		OverhauledDamage.BLEEDING_BUILD_UP_REDUCTION_DELAY_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.bleeding_build_up_reduction_delay_threshold", new ClampedEntityAttribute("attribute.name.generic.bleeding_build_up_reduction_delay_threshold", 40.0, 0.0, 1024.0).setTracked(true));
 
 		OverhauledDamage.ADDITIONAL_FROST_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.additional_frost_damage", new ClampedEntityAttribute("attribute.name.generic.additional_frost_damage", 0.0, -1024.0, 1024.0).setTracked(true));
 		OverhauledDamage.INCREASED_FROST_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.increased_frost_damage", new ClampedEntityAttribute("attribute.name.generic.increased_frost_damage", 1.0, -1024.0, 1024.0).setTracked(true));
@@ -42,6 +44,7 @@ public class EntityAttributesMixin {
 		OverhauledDamage.FREEZE_DURATION = register(OverhauledDamage.MOD_ID + ":generic.freeze_duration", new ClampedEntityAttribute("attribute.name.generic.freeze_duration", 200.0, 1.0, 1000000.0).setTracked(true));
 		OverhauledDamage.FREEZE_TICK_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.freeze_tick_threshold", new ClampedEntityAttribute("attribute.name.generic.freeze_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.FREEZE_BUILD_UP_REDUCTION = register(OverhauledDamage.MOD_ID + ":generic.freeze_build_up_reduction", new ClampedEntityAttribute("attribute.name.generic.freeze_build_up_reduction", 1.0, 0.0, 1024.0).setTracked(true));
+		OverhauledDamage.FREEZE_BUILD_UP_REDUCTION_DELAY_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.freeze_build_up_reduction_delay_threshold", new ClampedEntityAttribute("attribute.name.generic.freeze_build_up_reduction_delay_threshold", 40.0, 0.0, 1024.0).setTracked(true));
 
 		OverhauledDamage.ADDITIONAL_FIRE_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.additional_fire_damage", new ClampedEntityAttribute("attribute.name.generic.additional_fire_damage", 0.0, -1024.0, 1024.0).setTracked(true));
 		OverhauledDamage.INCREASED_FIRE_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.increased_fire_damage", new ClampedEntityAttribute("attribute.name.generic.increased_fire_damage", 1.0, -1024.0, 1024.0).setTracked(true));
@@ -51,6 +54,7 @@ public class EntityAttributesMixin {
 		OverhauledDamage.BURN_DURATION = register(OverhauledDamage.MOD_ID + ":generic.burn_duration", new ClampedEntityAttribute("attribute.name.generic.burn_duration", 351.0, 1.0, 1000000.0).setTracked(true));
 		OverhauledDamage.BURN_TICK_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.burn_tick_threshold", new ClampedEntityAttribute("attribute.name.generic.burn_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.BURN_BUILD_UP_REDUCTION = register(OverhauledDamage.MOD_ID + ":generic.burn_build_up_reduction", new ClampedEntityAttribute("attribute.name.generic.burn_build_up_reduction", 1.0, 0.0, 1024.0).setTracked(true));
+		OverhauledDamage.BURN_BUILD_UP_REDUCTION_DELAY_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.burn_build_up_reduction_delay_threshold", new ClampedEntityAttribute("attribute.name.generic.burn_build_up_reduction_delay_threshold", 40.0, 0.0, 1024.0).setTracked(true));
 
 		OverhauledDamage.ADDITIONAL_LIGHTNING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.additional_lightning_damage", new ClampedEntityAttribute("attribute.name.generic.additional_lightning_damage", 0.0, -1024.0, 1024.0).setTracked(true));
 		OverhauledDamage.INCREASED_LIGHTNING_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.increased_lightning_damage", new ClampedEntityAttribute("attribute.name.generic.increased_lightning_damage", 1.0, -1024.0, 1024.0).setTracked(true));
@@ -60,6 +64,7 @@ public class EntityAttributesMixin {
 		OverhauledDamage.SHOCK_DURATION = register(OverhauledDamage.MOD_ID + ":generic.shock_duration", new ClampedEntityAttribute("attribute.name.generic.shock_duration", 1.0, 1.0, 1000000.0).setTracked(true));
 		OverhauledDamage.SHOCK_TICK_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.shock_tick_threshold", new ClampedEntityAttribute("attribute.name.generic.shock_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.SHOCK_BUILD_UP_REDUCTION = register(OverhauledDamage.MOD_ID + ":generic.shock_build_up_reduction", new ClampedEntityAttribute("attribute.name.generic.shock_build_up_reduction", 1.0, 0.0, 1024.0).setTracked(true));
+		OverhauledDamage.SHOCK_BUILD_UP_REDUCTION_DELAY_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.shock_build_up_reduction_delay_threshold", new ClampedEntityAttribute("attribute.name.generic.shock_build_up_reduction_delay_threshold", 40.0, 0.0, 1024.0).setTracked(true));
 
 		OverhauledDamage.ADDITIONAL_POISON_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.additional_poison_damage", new ClampedEntityAttribute("attribute.name.generic.additional_poison_damage", 0.0, -1024.0, 1024.0).setTracked(true));
 		OverhauledDamage.INCREASED_POISON_DAMAGE = register(OverhauledDamage.MOD_ID + ":generic.increased_poison_damage", new ClampedEntityAttribute("attribute.name.generic.increased_poison_damage", 1.0, -1024.0, 1024.0).setTracked(true));
@@ -69,11 +74,13 @@ public class EntityAttributesMixin {
 		OverhauledDamage.POISON_DURATION = register(OverhauledDamage.MOD_ID + ":generic.poison_duration", new ClampedEntityAttribute("attribute.name.generic.poison_duration", 201.0, 1.0, 1000000.0).setTracked(true));
 		OverhauledDamage.POISON_TICK_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.poison_tick_threshold", new ClampedEntityAttribute("attribute.name.generic.poison_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.POISON_BUILD_UP_REDUCTION = register(OverhauledDamage.MOD_ID + ":generic.poison_build_up_reduction", new ClampedEntityAttribute("attribute.name.generic.poison_build_up_reduction", 1.0, 0.0, 1024.0).setTracked(true));
+		OverhauledDamage.POISON_BUILD_UP_REDUCTION_DELAY_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.poison_build_up_reduction_delay_threshold", new ClampedEntityAttribute("attribute.name.generic.poison_build_up_reduction_delay_threshold", 40.0, 0.0, 1024.0).setTracked(true));
 
 		OverhauledDamage.MAX_STAGGER_BUILD_UP = register(OverhauledDamage.MOD_ID + ":generic.max_stagger_build_up", new ClampedEntityAttribute("attribute.name.generic.max_stagger_build_up", 20.0, -1.0, 1024.0).setTracked(true));
 		OverhauledDamage.STAGGER_DURATION = register(OverhauledDamage.MOD_ID + ":generic.stagger_duration", new ClampedEntityAttribute("attribute.name.generic.stagger_duration", 200.0, 1.0, 1000000.0).setTracked(true));
 		OverhauledDamage.STAGGER_TICK_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.stagger_tick_threshold", new ClampedEntityAttribute("attribute.name.generic.stagger_tick_threshold", 20.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.STAGGER_BUILD_UP_REDUCTION = register(OverhauledDamage.MOD_ID + ":generic.stagger_build_up_reduction", new ClampedEntityAttribute("attribute.name.generic.stagger_build_up_reduction", 1.0, 0.0, 1024.0).setTracked(true));
+		OverhauledDamage.STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD = register(OverhauledDamage.MOD_ID + ":generic.stagger_build_up_reduction_delay_threshold", new ClampedEntityAttribute("attribute.name.generic.stagger_build_up_reduction_delay_threshold", 40.0, 0.0, 1024.0).setTracked(true));
 
 		OverhauledDamage.BLOCK_FORCE = register(OverhauledDamage.MOD_ID + ":generic.block_force", new ClampedEntityAttribute("attribute.name.generic.block_force", 0.0, 0.0, 1024.0).setTracked(true));
 		OverhauledDamage.PARRY_BONUS = register(OverhauledDamage.MOD_ID + ":generic.parry_bonus", new ClampedEntityAttribute("attribute.name.generic.parry_bonus", 1.0, 0.0, 1024.0).setTracked(true));

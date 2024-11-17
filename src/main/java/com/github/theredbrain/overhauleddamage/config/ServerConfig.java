@@ -71,12 +71,17 @@ public class ServerConfig implements ConfigData {
 			
 			When set to false, this is changed to 1 percent per armor point.
 			
-			In both cases armor toughness is a multiplier, with a suggested default of 1.0 (which would have no effect).
-			(Overhauled Damage does not change the base value of the armor toughness attribute, this has to be done via other methods/mods)
-			
 			Default: false
 			""")
 	public boolean armor_calculation_works_with_flat_values = false;
+	@Comment("""
+			When set to 'true', armor toughness is multiplying armor.
+			
+			When set to 'false', armor toughness is ignored.
+			
+			Default: false
+			""")
+	public boolean enable_armor_toughness_attribute = false;
 	@Comment("""
 			Damage reduction by armor is modified based on the attack type.
 			Each fraction of damage is reduced individually.
@@ -125,14 +130,19 @@ public class ServerConfig implements ConfigData {
 			""")
 	public Float[] applied_damage_multipliers = new Float[]{1.0F, 1.0F, 1.0F, 1.25F, 0.0F, 0.0F, 0.0F, 0.0F};
 	@Comment("""
+			Damage types not present in the map below, use these multipliers
+						
+			The array must contain exactly eight (8) values.
+			They correspond to the attack types like so:
+			{generic, bashing, piercing, slashing, poison, fire, frost, lightning}
+			""")
+	public Float[] default_damage_type_multipliers = new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F};
+	@Comment("""
 			Damage types in this map use the corresponding multipliers when calculating the different elemental and physical damage amounts inflicted by that damage type.
 						
 			The array must contain exactly eight (8) values.
 			They correspond to the attack types like so:
 			{generic, bashing, piercing, slashing, poison, fire, frost, lightning}
-						
-			Damage types not present here use the default of
-			[1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 			""")
 	public LinkedHashMap<String, Float[]> damage_type_multipliers = new LinkedHashMap<>() {{
 		put("minecraft:arrow", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
@@ -152,6 +162,11 @@ public class ServerConfig implements ConfigData {
 		put("overhauleddamage:mob_piercing_damage_type", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
 		put("overhauleddamage:mob_slashing_damage_type", new Float[]{0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F});
 	}};
+	@Comment("""
+			Enables the debug lines for the damage calculation. This can be helpful when testing / balancing.
+			It will log calculation details EVERYTIME ANY ENTITY GETS HIT, so use this with care. 
+			""")
+	public boolean enable_debug_log = false;
 
 	public ServerConfig() {
 
