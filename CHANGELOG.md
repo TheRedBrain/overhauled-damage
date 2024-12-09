@@ -1,3 +1,11 @@
+# 1.7.0
+
+- HUD element overhaul, improves mod compatibility, increases customization options
+- generally improved config layout
+- removed dependency on Cloth Config
+- added dependency on Fzzy Config
+- added dependency on Resource Bar API
+
 # 1.6.0
 
 - added generic attack type

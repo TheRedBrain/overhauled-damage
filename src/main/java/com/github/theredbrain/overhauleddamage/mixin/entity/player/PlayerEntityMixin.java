@@ -40,7 +40,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DuckLivi
 			)
 	)
 	public boolean overhauleddamage$redirect_hasVehicle(PlayerEntity instance) {
-		return OverhauledDamage.serverConfig.disable_jump_crit_mechanic;
+		return OverhauledDamage.SERVER_CONFIG.disable_jump_crit_mechanic;
 	}
 
 	@Override

@@ -313,7 +313,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public float overhauleddamage$calculateOverhauledDamage(DamageSource source, float amount) {
-		var serverConfig = OverhauledDamage.serverConfig;
+		var serverConfig = OverhauledDamage.SERVER_CONFIG;
 		boolean enable_debug_log = serverConfig.enable_debug_log;
 		if (enable_debug_log) {
 			OverhauledDamage.info("----- start of new damage calculation log -----");
@@ -327,10 +327,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		}
 
 		// TODO remove in 1.21.1 as vanilla has an attribute doing this
-		StatusEffect fall_immune_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.fall_immune_status_effect_identifier));
-		if (source.isIn(DamageTypeTags.IS_FALL) && fall_immune_status_effect != null && this.hasStatusEffect(fall_immune_status_effect)) {
-			return 0.0F;
-		}
+//		StatusEffect fall_immune_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.fall_immune_status_effect_identifier));
+//		if (source.isIn(DamageTypeTags.IS_FALL) && fall_immune_status_effect != null && this.hasStatusEffect(fall_immune_status_effect)) {
+//			return 0.0F;
+//		}
 
 		LivingEntity attacker = null;
 		if (source.getAttacker() instanceof LivingEntity) {
@@ -861,7 +861,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 			// apply chilled and frozen
 			if (frost_amount > 0) {
-				StatusEffect chilled_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.chilled_status_effect_identifier));
+				StatusEffect chilled_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.buildUpEffects.chilled_status_effect_identifier));
 				if (chilled_status_effect != null) {
 					int chilledDuration = (int) Math.ceil(frost_amount);
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(chilled_status_effect);
@@ -956,7 +956,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				if (this.bleedingTickTimer >= this.overhauleddamage$getBleedingTickThreshold()
 						&& this.bleedingReductionDelayTimer >= this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
 					if (this.overhauleddamage$getBleedingBuildUp() >= this.overhauleddamage$getMaxBleedingBuildUp()) {
-						StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.bleeding_status_effect_identifier));
+						StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 						if (bleeding_status_effect != null) {
 							this.addStatusEffect(new StatusEffectInstance(bleeding_status_effect, this.overhauleddamage$getBleedingDuration(), 0, false, false, true));
 						}
@@ -978,7 +978,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				if (this.burnTickTimer >= this.overhauleddamage$getBurnTickThreshold()
 						&& this.burnReductionDelayTimer >= this.overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
 					if (this.overhauleddamage$getBurnBuildUp() >= this.overhauleddamage$getMaxBurnBuildUp()) {
-						StatusEffect burning_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.burning_status_effect_identifier));
+						StatusEffect burning_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burning_status_effect_identifier));
 						if (burning_status_effect != null) {
 							int burnDuration = this.overhauleddamage$getBurnDuration();
 							StatusEffectInstance statusEffectInstance = this.getStatusEffect(burning_status_effect);
@@ -1004,7 +1004,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				if (this.freezeTickTimer >= this.overhauleddamage$getFreezeTickThreshold()
 						&& this.freezeReductionDelayTimer >= this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
 					if (this.overhauleddamage$getFreezeBuildUp() >= this.overhauleddamage$getMaxFreezeBuildUp()) {
-						StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.frozen_status_effect_identifier));
+						StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.frozen_status_effect_identifier));
 						if (freeze_status_effect != null) {
 							this.addStatusEffect(new StatusEffectInstance(freeze_status_effect, this.overhauleddamage$getFreezeDuration(), 0, false, false, true));
 						}
@@ -1025,7 +1025,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				if (this.staggerTickTimer >= this.overhauleddamage$getStaggerTickThreshold()
 						&& this.staggerReductionDelayTimer >= this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
 					if (this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp()) {
-						StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
+						StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.staggered_status_effect_identifier));
 						if (staggered_status_effect != null) {
 							this.addStatusEffect(new StatusEffectInstance(staggered_status_effect, this.overhauleddamage$getStaggerDuration(), 0, false, false, true));
 						}
@@ -1047,7 +1047,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 						&& this.poisonReductionDelayTimer >= this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
 					if (this.overhauleddamage$getPoisonBuildUp() >= this.overhauleddamage$getMaxPoisonBuildUp()) {
 						int poisonAmplifier = 0;
-						StatusEffect poison_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.poison_status_effect_identifier));
+						StatusEffect poison_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
 						if (poison_status_effect != null) {
 							StatusEffectInstance statusEffectInstance = this.getStatusEffect(poison_status_effect);
 							if (statusEffectInstance != null) {
@@ -1072,7 +1072,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				if (this.shockTickTimer >= this.overhauleddamage$getShockTickThreshold()
 						&& this.shockReductionDelayTimer >= this.overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
 					if (this.overhauleddamage$getShockBuildUp() >= this.overhauleddamage$getMaxShockBuildUp()) {
-						StatusEffect shocked_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.shocked_status_effect_identifier));
+						StatusEffect shocked_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shocked_status_effect_identifier));
 						if (shocked_status_effect != null) {
 							this.addStatusEffect(new StatusEffectInstance(shocked_status_effect, this.overhauleddamage$getShockDuration(), 0, false, false, false));
 						}
@@ -1145,7 +1145,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// region bleeding build up
 	@Override
 	public void overhauleddamage$addBleedingBuildUp(float amount) {
-		StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.bleeding_status_effect_identifier));
+		StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 		if (bleeding_status_effect == null) {
 			if (this.overhauleddamage$getBleedingBuildUp() > 0) {
 				this.overhauleddamage$setBleedingBuildUp(0);
@@ -1295,7 +1295,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public void overhauleddamage$addFreezeBuildUp(float amount) {
-		StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.frozen_status_effect_identifier));
+		StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.frozen_status_effect_identifier));
 		if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect != null && !this.hasStatusEffect(freeze_status_effect)) {
 			float f = this.overhauleddamage$getFreezeBuildUp();
 			this.overhauleddamage$setFreezeBuildUp(f + amount);
@@ -1347,7 +1347,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// region stagger build up
 	@Override
 	public void overhauleddamage$addStaggerBuildUp(float amount) {
-		StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
+		StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.staggered_status_effect_identifier));
 		if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect != null && !this.hasStatusEffect(staggered_status_effect)) {
 			float f = this.overhauleddamage$getStaggerBuildUp();
 			this.overhauleddamage$setStaggerBuildUp(f + amount);

@@ -1,114 +1,959 @@
 package com.github.theredbrain.overhauleddamage.config;
 
-import me.shedaniel.autoconfig.ConfigData;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import com.github.theredbrain.overhauleddamage.OverhauledDamage;
+import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
+import me.fzzyhmstrs.fzzy_config.annotations.ConvertFrom;
+import me.fzzyhmstrs.fzzy_config.annotations.Translation;
+import me.fzzyhmstrs.fzzy_config.config.Config;
+import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
+import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
+import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
+import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedColor;
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
+import net.minecraft.util.Identifier;
 
-@Config(
-		name = "client"
-)
-public class ClientConfig implements ConfigData {
-	@Comment("When an effect build-up is greater 0, a HUD element shows the progress until the effect is applied.")
-	public boolean show_effect_build_up_elements = true;
+import java.util.HashMap;
 
-	@Comment("""
-			The textures have to be provided by a resource pack.
-			It is recommended to use textures of equal dimensions.
-			When the dynamic offsets are used as well, they should be at least equal to the texture dimensions
-			""")
-	public boolean use_custom_textures = false;
-
-	@Comment("""
-			When multiple effect build-ups are displayed at the same time, these values are added to every elements position offset, multiplied by the amount off elements already on screen.
-			The order is: bleeding, burn, freeze, poison, shock, stagger
-			            
-			Example: The burn, poison and stagger elements are currently displayed
-			The burn element is at its normal position
-			The poison element is offset by "dynamic_x_offset_increase" on the x axis and by "dynamic_y_offset_increase" on the y axis
-			The stagger element is offset by "dynamic_x_offset_increase" times 2 on the x axis and by "dynamic_y_offset_increase" times 2 on the y axis
-			""")
-	public int dynamic_x_offset_increase = 0;
-	public int dynamic_y_offset_increase = 6;
-
-	@Comment("""
-			Each HUD element can be individually customized
-			The "element offset" values offset the elements upper left corner from the middle of the screen
-			            
-			When using the default textures, the "additional length" value increases the width of the bar.
-			            
-			The remaining values only have an effect when using custom textures.
-			"background texture id" and "foreground texture id" are the paths to the custom textures.
-			"texture width" and "texture height" should be the dimensions of the custom textures.
-			"fill direction" indicates in which direction the foreground texture is drawn.
-			0: left to right, 1: bottom to top, 2: right to left, 3: top to bottom
-			""")
-	public int bleeding_build_up_element_x_offset = -31;
-	public int bleeding_build_up_element_y_offset = 18;
-
-	public int bleeding_build_up_bar_additional_length = 52;
-
-	public String custom_bleeding_element_background_texture_id = "";
-	public String custom_bleeding_element_foreground_texture_id = "";
-	public int custom_bleeding_element_texture_width = 0;
-	public int custom_bleeding_element_texture_height = 0;
-	public int custom_bleeding_element_fill_direction = 0;
-
-	public int burn_build_up_element_x_offset = -31;
-	public int burn_build_up_element_y_offset = 18;
-
-	public int burn_build_up_bar_additional_length = 52;
-
-	public String custom_burn_element_background_texture_id = "";
-	public String custom_burn_element_foreground_texture_id = "";
-	public int custom_burn_element_texture_width = 0;
-	public int custom_burn_element_texture_height = 0;
-	public int custom_burn_element_fill_direction = 0;
-
-	public int freeze_build_up_element_x_offset = -31;
-	public int freeze_build_up_element_y_offset = 18;
-
-	public int freeze_build_up_bar_additional_length = 52;
-
-	public String custom_freeze_element_background_texture_id = "";
-	public String custom_freeze_element_foreground_texture_id = "";
-	public int custom_freeze_element_texture_width = 0;
-	public int custom_freeze_element_texture_height = 0;
-	public int custom_freeze_element_fill_direction = 0;
-
-	public int poison_build_up_element_x_offset = -31;
-	public int poison_build_up_element_y_offset = 18;
-
-	public int poison_build_up_bar_additional_length = 52;
-
-	public String custom_poison_element_background_texture_id = "";
-	public String custom_poison_element_foreground_texture_id = "";
-	public int custom_poison_element_texture_width = 0;
-	public int custom_poison_element_texture_height = 0;
-	public int custom_poison_element_fill_direction = 0;
-
-	public int shock_build_up_element_x_offset = -31;
-	public int shock_build_up_element_y_offset = 18;
-
-	public int shock_build_up_bar_additional_length = 52;
-
-	public String custom_shock_element_background_texture_id = "";
-	public String custom_shock_element_foreground_texture_id = "";
-	public int custom_shock_element_texture_width = 0;
-	public int custom_shock_element_texture_height = 0;
-	public int custom_shock_element_fill_direction = 0;
-
-	public int stagger_build_up_element_x_offset = -31;
-	public int stagger_build_up_element_y_offset = 18;
-
-	public int stagger_build_up_bar_additional_length = 52;
-
-	public String custom_stagger_element_background_texture_id = "";
-	public String custom_stagger_element_foreground_texture_id = "";
-	public int custom_stagger_element_texture_width = 0;
-	public int custom_stagger_element_texture_height = 0;
-	public int custom_stagger_element_fill_direction = 0;
+@ConvertFrom(fileName = "client.json5", folder = "overhauleddamage")
+public class ClientConfig extends Config {
 
 	public ClientConfig() {
+		super(OverhauledDamage.identifier("client"));
+	}
 
+	public BleedingBuildUpSettings bleedingBuildUpSettings = new BleedingBuildUpSettings();
+
+	@Translation(prefix = "overhauleddamage.client.resource_bar")
+	public static class BleedingBuildUpSettings extends ConfigSection {
+
+		public boolean show_bar = true;
+		public boolean show_full_bar = true;
+
+		public int dynamic_offset_increase_x = 0;
+		public int dynamic_offset_increase_y = 6;
+
+		public PositionSettings positionSettings = new PositionSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class PositionSettings extends ConfigSection {
+			public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
+			public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
+				put(0, -31);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> offsets_y = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 18);
+			}}, new ValidatedInt(), new ValidatedInt());
+		}
+
+		public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
+
+		public boolean show_current_value_overlay = false;
+
+		public TextureSettings textureSettings = new TextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class TextureSettings extends ConfigSection {
+			public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class BackgroundTextureSettings extends ConfigSection {
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_background.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class ProgressTextureSettings extends ConfigSection {
+				public int offset_x = 0;
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_decrease_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_value.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class OverlayTextureSettings extends ConfigSection {
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_x = -2;
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_overlay.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+		}
+
+		public boolean show_icon = false;
+
+		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.texture_layer")
+		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_x = 0;
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+			}, new ValidatedInt(), new ValidatedIdentifier());
+
+		}
+
+		public boolean enable_smooth_animation = true;
+
+		public AnimationsSettings animationSettings = new AnimationsSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class AnimationsSettings extends ConfigSection {
+			public int animation_interval = 1;
+			public boolean max_value_change_is_animated = false;
+		}
+
+		public boolean show_number = false;
+
+		public NumberSettings numberSettings = new NumberSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_number")
+		public static class NumberSettings extends ConfigSection {
+			public boolean show_max_value = false;
+			public boolean show_when_bar_full = true;
+			public int offset_x = 0;
+			public int offset_y = 17;
+			public ValidatedColor color = new ValidatedColor(150, 150, 150);
+		}
+	}
+
+	public BurnBuildUpSettings burnBuildUpSettings = new BurnBuildUpSettings();
+
+	@Translation(prefix = "overhauleddamage.client.resource_bar")
+	public static class BurnBuildUpSettings extends ConfigSection {
+
+		public boolean show_bar = true;
+		public boolean show_full_bar = true;
+
+		public int dynamic_offset_increase_x = 0;
+		public int dynamic_offset_increase_y = 6;
+
+		public PositionSettings positionSettings = new PositionSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class PositionSettings extends ConfigSection {
+			public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
+			public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
+				put(0, -31);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> offsets_y = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 18);
+			}}, new ValidatedInt(), new ValidatedInt());
+		}
+
+		public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
+
+		public boolean show_current_value_overlay = false;
+
+		public TextureSettings textureSettings = new TextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class TextureSettings extends ConfigSection {
+			public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class BackgroundTextureSettings extends ConfigSection {
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_background.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class ProgressTextureSettings extends ConfigSection {
+				public int offset_x = 0;
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_decrease_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_value.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class OverlayTextureSettings extends ConfigSection {
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_x = -2;
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_overlay.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+		}
+
+		public boolean show_icon = false;
+
+		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.texture_layer")
+		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_x = 0;
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+			}, new ValidatedInt(), new ValidatedIdentifier());
+
+		}
+
+		public boolean enable_smooth_animation = true;
+
+		public AnimationsSettings animationSettings = new AnimationsSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class AnimationsSettings extends ConfigSection {
+			public int animation_interval = 1;
+			public boolean max_value_change_is_animated = false;
+		}
+
+		public boolean show_number = false;
+
+		public NumberSettings numberSettings = new NumberSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_number")
+		public static class NumberSettings extends ConfigSection {
+			public boolean show_max_value = false;
+			public boolean show_when_bar_full = true;
+			public int offset_x = 0;
+			public int offset_y = 17;
+			public ValidatedColor color = new ValidatedColor(150, 150, 150);
+		}
+	}
+
+	public FreezeBuildUpSettings freezeBuildUpSettings = new FreezeBuildUpSettings();
+
+	@Translation(prefix = "overhauleddamage.client.resource_bar")
+	public static class FreezeBuildUpSettings extends ConfigSection {
+
+		public boolean show_bar = true;
+		public boolean show_full_bar = true;
+
+		public int dynamic_offset_increase_x = 0;
+		public int dynamic_offset_increase_y = 6;
+
+		public PositionSettings positionSettings = new PositionSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class PositionSettings extends ConfigSection {
+			public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
+			public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
+				put(0, -31);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> offsets_y = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 18);
+			}}, new ValidatedInt(), new ValidatedInt());
+		}
+
+		public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
+
+		public boolean show_current_value_overlay = false;
+
+		public TextureSettings textureSettings = new TextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class TextureSettings extends ConfigSection {
+			public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class BackgroundTextureSettings extends ConfigSection {
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_background.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class ProgressTextureSettings extends ConfigSection {
+				public int offset_x = 0;
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_decrease_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_value.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class OverlayTextureSettings extends ConfigSection {
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_x = -2;
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_overlay.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+		}
+
+		public boolean show_icon = false;
+
+		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.texture_layer")
+		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_x = 0;
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+			}, new ValidatedInt(), new ValidatedIdentifier());
+
+		}
+
+		public boolean enable_smooth_animation = true;
+
+		public AnimationsSettings animationSettings = new AnimationsSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class AnimationsSettings extends ConfigSection {
+			public int animation_interval = 1;
+			public boolean max_value_change_is_animated = false;
+		}
+
+		public boolean show_number = false;
+
+		public NumberSettings numberSettings = new NumberSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_number")
+		public static class NumberSettings extends ConfigSection {
+			public boolean show_max_value = false;
+			public boolean show_when_bar_full = true;
+			public int offset_x = 0;
+			public int offset_y = 17;
+			public ValidatedColor color = new ValidatedColor(150, 150, 150);
+		}
+	}
+
+	public PoisonBuildUpSettings poisonBuildUpSettings = new PoisonBuildUpSettings();
+
+	@Translation(prefix = "overhauleddamage.client.resource_bar")
+	public static class PoisonBuildUpSettings extends ConfigSection {
+
+		public boolean show_bar = true;
+		public boolean show_full_bar = true;
+
+		public int dynamic_offset_increase_x = 0;
+		public int dynamic_offset_increase_y = 6;
+
+		public PositionSettings positionSettings = new PositionSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class PositionSettings extends ConfigSection {
+			public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
+			public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
+				put(0, -31);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> offsets_y = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 18);
+			}}, new ValidatedInt(), new ValidatedInt());
+		}
+
+		public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
+
+		public boolean show_current_value_overlay = false;
+
+		public TextureSettings textureSettings = new TextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class TextureSettings extends ConfigSection {
+			public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class BackgroundTextureSettings extends ConfigSection {
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_background.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class ProgressTextureSettings extends ConfigSection {
+				public int offset_x = 0;
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_decrease_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_value.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class OverlayTextureSettings extends ConfigSection {
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_x = -2;
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_overlay.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+		}
+
+		public boolean show_icon = false;
+
+		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.texture_layer")
+		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_x = 0;
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+			}, new ValidatedInt(), new ValidatedIdentifier());
+
+		}
+
+		public boolean enable_smooth_animation = true;
+
+		public AnimationsSettings animationSettings = new AnimationsSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class AnimationsSettings extends ConfigSection {
+			public int animation_interval = 1;
+			public boolean max_value_change_is_animated = false;
+		}
+
+		public boolean show_number = false;
+
+		public NumberSettings numberSettings = new NumberSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_number")
+		public static class NumberSettings extends ConfigSection {
+			public boolean show_max_value = false;
+			public boolean show_when_bar_full = true;
+			public int offset_x = 0;
+			public int offset_y = 17;
+			public ValidatedColor color = new ValidatedColor(150, 150, 150);
+		}
+	}
+
+	public ShockBuildUpSettings shockBuildUpSettings = new ShockBuildUpSettings();
+
+	@Translation(prefix = "overhauleddamage.client.resource_bar")
+	public static class ShockBuildUpSettings extends ConfigSection {
+
+		public boolean show_bar = true;
+		public boolean show_full_bar = true;
+
+		public int dynamic_offset_increase_x = 0;
+		public int dynamic_offset_increase_y = 6;
+
+		public PositionSettings positionSettings = new PositionSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class PositionSettings extends ConfigSection {
+			public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
+			public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
+				put(0, -31);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> offsets_y = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 18);
+			}}, new ValidatedInt(), new ValidatedInt());
+		}
+
+		public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
+
+		public boolean show_current_value_overlay = false;
+
+		public TextureSettings textureSettings = new TextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class TextureSettings extends ConfigSection {
+			public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class BackgroundTextureSettings extends ConfigSection {
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_background.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class ProgressTextureSettings extends ConfigSection {
+				public int offset_x = 0;
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_decrease_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_value.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class OverlayTextureSettings extends ConfigSection {
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_x = -2;
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_overlay.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+		}
+
+		public boolean show_icon = false;
+
+		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.texture_layer")
+		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_x = 0;
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+			}, new ValidatedInt(), new ValidatedIdentifier());
+
+		}
+
+		public boolean enable_smooth_animation = true;
+
+		public AnimationsSettings animationSettings = new AnimationsSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class AnimationsSettings extends ConfigSection {
+			public int animation_interval = 1;
+			public boolean max_value_change_is_animated = false;
+		}
+
+		public boolean show_number = false;
+
+		public NumberSettings numberSettings = new NumberSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_number")
+		public static class NumberSettings extends ConfigSection {
+			public boolean show_max_value = false;
+			public boolean show_when_bar_full = true;
+			public int offset_x = 0;
+			public int offset_y = 17;
+			public ValidatedColor color = new ValidatedColor(150, 150, 150);
+		}
+	}
+
+	public StaggerBuildUpSettings staggerBuildUpSettings = new StaggerBuildUpSettings();
+
+	@Translation(prefix = "overhauleddamage.client.resource_bar")
+	public static class StaggerBuildUpSettings extends ConfigSection {
+
+		public boolean show_bar = true;
+		public boolean show_full_bar = true;
+
+		public int dynamic_offset_increase_x = 0;
+		public int dynamic_offset_increase_y = 6;
+
+		public PositionSettings positionSettings = new PositionSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class PositionSettings extends ConfigSection {
+			public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
+			public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
+				put(0, -31);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> offsets_y = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 18);
+			}}, new ValidatedInt(), new ValidatedInt());
+		}
+
+		public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
+
+		public boolean show_current_value_overlay = false;
+
+		public TextureSettings textureSettings = new TextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class TextureSettings extends ConfigSection {
+			public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class BackgroundTextureSettings extends ConfigSection {
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_background.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class ProgressTextureSettings extends ConfigSection {
+				public int offset_x = 0;
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 62);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_decrease_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_animation.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_value.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+
+			public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class OverlayTextureSettings extends ConfigSection {
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_x = -2;
+				@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+				public int offset_y = 0;
+
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 5);
+				}}, new ValidatedInt(), new ValidatedInt());
+
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
+					put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_overlay.png"));
+				}}, new ValidatedInt(), new ValidatedIdentifier());
+
+			}
+		}
+
+		public boolean show_icon = false;
+
+		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+
+		@Translation(prefix = "overhauleddamage.client.texture_layer")
+		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_x = 0;
+			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
+			public int offset_y = 0;
+
+			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+				put(0, 0);
+			}}, new ValidatedInt(), new ValidatedInt());
+
+			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+			}, new ValidatedInt(), new ValidatedIdentifier());
+
+		}
+
+		public boolean enable_smooth_animation = true;
+
+		public AnimationsSettings animationSettings = new AnimationsSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
+		public static class AnimationsSettings extends ConfigSection {
+			public int animation_interval = 1;
+			public boolean max_value_change_is_animated = false;
+		}
+
+		public boolean show_number = false;
+
+		public NumberSettings numberSettings = new NumberSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_number")
+		public static class NumberSettings extends ConfigSection {
+			public boolean show_max_value = false;
+			public boolean show_when_bar_full = true;
+			public int offset_x = 0;
+			public int offset_y = 17;
+			public ValidatedColor color = new ValidatedColor(150, 150, 150);
+		}
 	}
 }

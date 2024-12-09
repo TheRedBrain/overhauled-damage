@@ -22,11 +22,7 @@
 		]
 	},
 	"mixins": [
-		"overhauleddamage.mixins.json",
-		{
-			"config": "overhauleddamage.client.mixins.json",
-			"environment": "client"
-		}
+		"overhauleddamage.mixins.json"
 	],
 	"custom": {
 		"fzzy_config": [
