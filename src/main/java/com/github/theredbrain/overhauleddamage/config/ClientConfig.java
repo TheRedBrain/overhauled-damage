@@ -27,7 +27,7 @@ public class ClientConfig extends Config {
 	public static class BleedingBuildUpSettings extends ConfigSection {
 
 		public boolean show_bar = true;
-		public boolean show_full_bar = true;
+		public boolean show_empty_bar = false;
 
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
@@ -141,6 +141,8 @@ public class ClientConfig extends Config {
 			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
 			public int offset_y = 0;
 
+			public boolean show_when_bar_empty = false;
+
 			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
 				put(0, 0);
 			}}, new ValidatedInt(), new ValidatedInt());
@@ -170,7 +172,7 @@ public class ClientConfig extends Config {
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
 			public boolean show_max_value = false;
-			public boolean show_when_bar_full = true;
+			public boolean show_when_bar_empty = false;
 			public int offset_x = 0;
 			public int offset_y = 17;
 			public ValidatedColor color = new ValidatedColor(150, 150, 150);
@@ -183,7 +185,7 @@ public class ClientConfig extends Config {
 	public static class BurnBuildUpSettings extends ConfigSection {
 
 		public boolean show_bar = true;
-		public boolean show_full_bar = true;
+		public boolean show_empty_bar = false;
 
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
@@ -297,6 +299,8 @@ public class ClientConfig extends Config {
 			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
 			public int offset_y = 0;
 
+			public boolean show_when_bar_empty = false;
+
 			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
 				put(0, 0);
 			}}, new ValidatedInt(), new ValidatedInt());
@@ -326,7 +330,7 @@ public class ClientConfig extends Config {
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
 			public boolean show_max_value = false;
-			public boolean show_when_bar_full = true;
+			public boolean show_when_bar_empty = false;
 			public int offset_x = 0;
 			public int offset_y = 17;
 			public ValidatedColor color = new ValidatedColor(150, 150, 150);
@@ -339,7 +343,7 @@ public class ClientConfig extends Config {
 	public static class FreezeBuildUpSettings extends ConfigSection {
 
 		public boolean show_bar = true;
-		public boolean show_full_bar = true;
+		public boolean show_empty_bar = false;
 
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
@@ -453,6 +457,8 @@ public class ClientConfig extends Config {
 			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
 			public int offset_y = 0;
 
+			public boolean show_when_bar_empty = false;
+
 			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
 				put(0, 0);
 			}}, new ValidatedInt(), new ValidatedInt());
@@ -482,7 +488,7 @@ public class ClientConfig extends Config {
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
 			public boolean show_max_value = false;
-			public boolean show_when_bar_full = true;
+			public boolean show_when_bar_empty = false;
 			public int offset_x = 0;
 			public int offset_y = 17;
 			public ValidatedColor color = new ValidatedColor(150, 150, 150);
@@ -495,7 +501,7 @@ public class ClientConfig extends Config {
 	public static class PoisonBuildUpSettings extends ConfigSection {
 
 		public boolean show_bar = true;
-		public boolean show_full_bar = true;
+		public boolean show_empty_bar = false;
 
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
@@ -609,6 +615,8 @@ public class ClientConfig extends Config {
 			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
 			public int offset_y = 0;
 
+			public boolean show_when_bar_empty = false;
+
 			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
 				put(0, 0);
 			}}, new ValidatedInt(), new ValidatedInt());
@@ -638,7 +646,7 @@ public class ClientConfig extends Config {
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
 			public boolean show_max_value = false;
-			public boolean show_when_bar_full = true;
+			public boolean show_when_bar_empty = false;
 			public int offset_x = 0;
 			public int offset_y = 17;
 			public ValidatedColor color = new ValidatedColor(150, 150, 150);
@@ -651,7 +659,7 @@ public class ClientConfig extends Config {
 	public static class ShockBuildUpSettings extends ConfigSection {
 
 		public boolean show_bar = true;
-		public boolean show_full_bar = true;
+		public boolean show_empty_bar = false;
 
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
@@ -764,6 +772,8 @@ public class ClientConfig extends Config {
 			public int offset_x = 0;
 			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
 			public int offset_y = 0;
+			
+			public boolean show_when_bar_empty = false;
 
 			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
 				put(0, 0);
@@ -794,7 +804,7 @@ public class ClientConfig extends Config {
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
 			public boolean show_max_value = false;
-			public boolean show_when_bar_full = true;
+			public boolean show_when_bar_empty = false;
 			public int offset_x = 0;
 			public int offset_y = 17;
 			public ValidatedColor color = new ValidatedColor(150, 150, 150);
@@ -807,7 +817,7 @@ public class ClientConfig extends Config {
 	public static class StaggerBuildUpSettings extends ConfigSection {
 
 		public boolean show_bar = true;
-		public boolean show_full_bar = true;
+		public boolean show_empty_bar = false;
 
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
@@ -921,6 +931,8 @@ public class ClientConfig extends Config {
 			@Translation(prefix = "overhauleddamage.client.texture_layer", negate = true)
 			public int offset_y = 0;
 
+			public boolean show_when_bar_empty = false;
+
 			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
 				put(0, 0);
 			}}, new ValidatedInt(), new ValidatedInt());
@@ -950,7 +962,7 @@ public class ClientConfig extends Config {
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
 			public boolean show_max_value = false;
-			public boolean show_when_bar_full = true;
+			public boolean show_when_bar_empty = false;
 			public int offset_x = 0;
 			public int offset_y = 17;
 			public ValidatedColor color = new ValidatedColor(150, 150, 150);

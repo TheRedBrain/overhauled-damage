@@ -40,9 +40,9 @@ public class ClientEventsRegistry {
 				double bleedingBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
 				double maxBleedingBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
 
-				boolean should_bleeding_bar_be_rendered = clientConfig.bleedingBuildUpSettings.show_bar && maxBleedingBuildUp > 0 && (bleedingBuildUp < maxBleedingBuildUp || clientConfig.bleedingBuildUpSettings.show_full_bar);
-				boolean should_bleeding_icon_be_rendered = clientConfig.bleedingBuildUpSettings.show_icon && maxBleedingBuildUp > 0;
-				boolean should_bleeding_number_be_rendered = clientConfig.bleedingBuildUpSettings.show_number && maxBleedingBuildUp > 0 && (bleedingBuildUp < maxBleedingBuildUp || clientConfig.bleedingBuildUpSettings.numberSettings.show_when_bar_full);
+				boolean should_bleeding_bar_be_rendered = clientConfig.bleedingBuildUpSettings.show_bar && maxBleedingBuildUp > 0 && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.show_empty_bar);
+				boolean should_bleeding_icon_be_rendered = clientConfig.bleedingBuildUpSettings.show_icon && maxBleedingBuildUp > 0 && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.iconTextureSettings.show_when_bar_empty);
+				boolean should_bleeding_number_be_rendered = clientConfig.bleedingBuildUpSettings.show_number && maxBleedingBuildUp > 0 && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.numberSettings.show_when_bar_empty);
 
 				ResourceBarAPIClient.drawResourceBar(
 						minecraftClient,
@@ -134,9 +134,9 @@ public class ClientEventsRegistry {
 				double burnBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
 				double maxBurnBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
 
-				boolean should_burn_bar_be_rendered = clientConfig.burnBuildUpSettings.show_bar && maxBurnBuildUp > 0 && (burnBuildUp < maxBurnBuildUp || clientConfig.burnBuildUpSettings.show_full_bar);
-				boolean should_burn_icon_be_rendered = clientConfig.burnBuildUpSettings.show_icon && maxBurnBuildUp > 0;
-				boolean should_burn_number_be_rendered = clientConfig.burnBuildUpSettings.show_number && maxBurnBuildUp > 0 && (burnBuildUp < maxBurnBuildUp || clientConfig.burnBuildUpSettings.numberSettings.show_when_bar_full);
+				boolean should_burn_bar_be_rendered = clientConfig.burnBuildUpSettings.show_bar && maxBurnBuildUp > 0 && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.show_empty_bar);
+				boolean should_burn_icon_be_rendered = clientConfig.burnBuildUpSettings.show_icon && maxBurnBuildUp > 0 && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.iconTextureSettings.show_when_bar_empty);
+				boolean should_burn_number_be_rendered = clientConfig.burnBuildUpSettings.show_number && maxBurnBuildUp > 0 && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.numberSettings.show_when_bar_empty);
 
 				ResourceBarAPIClient.drawResourceBar(
 						minecraftClient,
@@ -228,9 +228,9 @@ public class ClientEventsRegistry {
 				double freezeBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
 				double maxFreezeBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
 
-				boolean should_freeze_bar_be_rendered = clientConfig.freezeBuildUpSettings.show_bar && maxFreezeBuildUp > 0 && (freezeBuildUp < maxFreezeBuildUp || clientConfig.freezeBuildUpSettings.show_full_bar);
-				boolean should_freeze_icon_be_rendered = clientConfig.freezeBuildUpSettings.show_icon && maxFreezeBuildUp > 0;
-				boolean should_freeze_number_be_rendered = clientConfig.freezeBuildUpSettings.show_number && maxFreezeBuildUp > 0 && (freezeBuildUp < maxFreezeBuildUp || clientConfig.freezeBuildUpSettings.numberSettings.show_when_bar_full);
+				boolean should_freeze_bar_be_rendered = clientConfig.freezeBuildUpSettings.show_bar && maxFreezeBuildUp > 0 && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.show_empty_bar);
+				boolean should_freeze_icon_be_rendered = clientConfig.freezeBuildUpSettings.show_icon && maxFreezeBuildUp > 0 && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.iconTextureSettings.show_when_bar_empty);
+				boolean should_freeze_number_be_rendered = clientConfig.freezeBuildUpSettings.show_number && maxFreezeBuildUp > 0 && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.numberSettings.show_when_bar_empty);
 
 				ResourceBarAPIClient.drawResourceBar(
 						minecraftClient,
@@ -322,9 +322,9 @@ public class ClientEventsRegistry {
 				double poisonBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
 				double maxPoisonBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
 
-				boolean should_poison_bar_be_rendered = clientConfig.poisonBuildUpSettings.show_bar && maxPoisonBuildUp > 0 && (poisonBuildUp < maxPoisonBuildUp || clientConfig.poisonBuildUpSettings.show_full_bar);
-				boolean should_poison_icon_be_rendered = clientConfig.poisonBuildUpSettings.show_icon && maxPoisonBuildUp > 0;
-				boolean should_poison_number_be_rendered = clientConfig.poisonBuildUpSettings.show_number && maxPoisonBuildUp > 0 && (poisonBuildUp < maxPoisonBuildUp || clientConfig.poisonBuildUpSettings.numberSettings.show_when_bar_full);
+				boolean should_poison_bar_be_rendered = clientConfig.poisonBuildUpSettings.show_bar && maxPoisonBuildUp > 0 && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.show_empty_bar);
+				boolean should_poison_icon_be_rendered = clientConfig.poisonBuildUpSettings.show_icon && maxPoisonBuildUp > 0 && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.iconTextureSettings.show_when_bar_empty);
+				boolean should_poison_number_be_rendered = clientConfig.poisonBuildUpSettings.show_number && maxPoisonBuildUp > 0 && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.numberSettings.show_when_bar_empty);
 
 				ResourceBarAPIClient.drawResourceBar(
 						minecraftClient,
@@ -416,9 +416,9 @@ public class ClientEventsRegistry {
 				double shockBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
 				double maxShockBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
 
-				boolean should_shock_bar_be_rendered = clientConfig.shockBuildUpSettings.show_bar && maxShockBuildUp > 0 && (shockBuildUp < maxShockBuildUp || clientConfig.shockBuildUpSettings.show_full_bar);
-				boolean should_shock_icon_be_rendered = clientConfig.shockBuildUpSettings.show_icon && maxShockBuildUp > 0;
-				boolean should_shock_number_be_rendered = clientConfig.shockBuildUpSettings.show_number && maxShockBuildUp > 0 && (shockBuildUp < maxShockBuildUp || clientConfig.shockBuildUpSettings.numberSettings.show_when_bar_full);
+				boolean should_shock_bar_be_rendered = clientConfig.shockBuildUpSettings.show_bar && maxShockBuildUp > 0 && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.show_empty_bar);
+				boolean should_shock_icon_be_rendered = clientConfig.shockBuildUpSettings.show_icon && maxShockBuildUp > 0 && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.iconTextureSettings.show_when_bar_empty);
+				boolean should_shock_number_be_rendered = clientConfig.shockBuildUpSettings.show_number && maxShockBuildUp > 0 && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.numberSettings.show_when_bar_empty);
 
 				ResourceBarAPIClient.drawResourceBar(
 						minecraftClient,
@@ -510,9 +510,9 @@ public class ClientEventsRegistry {
 				double staggerBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
 				double maxStaggerBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
 
-				boolean should_stagger_bar_be_rendered = clientConfig.staggerBuildUpSettings.show_bar && maxStaggerBuildUp > 0 && (staggerBuildUp < maxStaggerBuildUp || clientConfig.staggerBuildUpSettings.show_full_bar);
-				boolean should_stagger_icon_be_rendered = clientConfig.staggerBuildUpSettings.show_icon && maxStaggerBuildUp > 0;
-				boolean should_stagger_number_be_rendered = clientConfig.staggerBuildUpSettings.show_number && maxStaggerBuildUp > 0 && (staggerBuildUp < maxStaggerBuildUp || clientConfig.staggerBuildUpSettings.numberSettings.show_when_bar_full);
+				boolean should_stagger_bar_be_rendered = clientConfig.staggerBuildUpSettings.show_bar && maxStaggerBuildUp > 0 && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.show_empty_bar);
+				boolean should_stagger_icon_be_rendered = clientConfig.staggerBuildUpSettings.show_icon && maxStaggerBuildUp > 0 && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.iconTextureSettings.show_when_bar_empty);
+				boolean should_stagger_number_be_rendered = clientConfig.staggerBuildUpSettings.show_number && maxStaggerBuildUp > 0 && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.numberSettings.show_when_bar_empty);
 
 				ResourceBarAPIClient.drawResourceBar(
 						minecraftClient,
