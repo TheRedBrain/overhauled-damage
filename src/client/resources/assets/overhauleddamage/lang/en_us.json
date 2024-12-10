@@ -178,17 +178,17 @@
 	"overhauleddamage.server.damageTypes": "Damage Types",
 
 	"overhauleddamage.server.damageTypes.default_damage_type_multipliers": "Default damage type multipliers",
-	"overhauleddamage.server.damageTypes.default_damage_type_multipliers.desc": "Damage types not present in the map below, use these multipliers\n//\nThe array must contain exactly eight (8) values.\nThey correspond to the attack types like so:\n{generic, bashing, piercing, slashing, poison, fire, frost, lightning}",
+	"overhauleddamage.server.damageTypes.default_damage_type_multipliers.desc": "Damage types not present in the map below, use these multipliers",
 
 	"overhauleddamage.server.damageTypes.damage_type_multipliers": "Damage type multipliers",
-	"overhauleddamage.server.damageTypes.damage_type_multipliers.desc": "Damage types in this map use the corresponding multipliers when calculating the different elemental and physical damage amounts inflicted by that damage type.\n//\nThe array must contain exactly eight (8) values.\nThey correspond to the attack types like so:\n{generic, bashing, piercing, slashing, poison, fire, frost, lightning}",
+	"overhauleddamage.server.damageTypes.damage_type_multipliers.desc": "Damage types in this map use the corresponding multipliers when calculating the different elemental and physical damage amounts inflicted by that damage type.",
 
 
 	"overhauleddamage.server.damageCalculation": "Damage Calculation",
 
 	"overhauleddamage.server.damageCalculation.blocking_requires_stamina": "Blocking requires stamina",
 	"overhauleddamage.server.damageCalculation.blocking_requires_stamina.desc": "When set to 'true', blocking requires the player to have at least 1 stamina.\nHas no effect when 'Stamina Attributes' is not installed.",
-	
+
 	"overhauleddamage.server.damageCalculation.bleeding_multipliers": "Bleeding multipliers",
 	"overhauleddamage.server.damageCalculation.bleeding_multipliers.desc": "When damage is in the 'overhauleddamage:applies_bleeding' damage_type tag, the bleeding amount is calculated as the sum of the attack_type_amounts * their_respective_bleeding_multiplier.",
 
@@ -223,6 +223,16 @@
 
 	"overhauleddamage.server.damageCalculation.enable_debug_log": "Enable debug log",
 	"overhauleddamage.server.damageCalculation.enable_debug_log.desc": "Enables the debug lines for the damage calculation. This can be helpful when testing / balancing.\nIt will log calculation details EVERYTIME ANY ENTITY GETS HIT, so use this with care.",
+
+	"overhauleddamage.server.attack_type_multipliers": "Attack Type Multipliers",
+	"overhauleddamage.server.attack_type_multipliers.generic": "Generic",
+	"overhauleddamage.server.attack_type_multipliers.bashing": "Bashing",
+	"overhauleddamage.server.attack_type_multipliers.piercing": "Piercing",
+	"overhauleddamage.server.attack_type_multipliers.slashing": "Slashing",
+	"overhauleddamage.server.attack_type_multipliers.poison": "Poison",
+	"overhauleddamage.server.attack_type_multipliers.fire": "Fire",
+	"overhauleddamage.server.attack_type_multipliers.frost": "Frost",
+	"overhauleddamage.server.attack_type_multipliers.lightning": "Lightning",
 
 	"overhauleddamage.server.buildUpEffects": "Build Up Effects",
 

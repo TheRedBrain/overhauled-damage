@@ -2,10 +2,15 @@ package com.github.theredbrain.overhauleddamage.config;
 
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import me.fzzyhmstrs.fzzy_config.annotations.ConvertFrom;
+import me.fzzyhmstrs.fzzy_config.annotations.Translation;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
+import me.fzzyhmstrs.fzzy_config.util.Walkable;
+import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
+import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedAny;
+import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedString;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 @ConvertFrom(fileName = "server.json5", folder = "overhauleddamage")
 public class ServerConfig extends Config {
@@ -33,7 +38,7 @@ public class ServerConfig extends Config {
 //			They correspond to the attack types like so:
 //			{generic, bashing, piercing, slashing, poison, fire, frost, lightning}
 //			""")
-		public Float[] default_damage_type_multipliers = new Float[]{1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F};
+		public AttackTypeMultipliers default_damage_type_multipliers = new AttackTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
 		//	@Comment("""
 //			Damage types in this map use the corresponding multipliers when calculating the different elemental and physical damage amounts inflicted by that damage type.
 //
@@ -41,32 +46,39 @@ public class ServerConfig extends Config {
 //			They correspond to the attack types like so:
 //			{generic, bashing, piercing, slashing, poison, fire, frost, lightning}
 //			""")
-		public LinkedHashMap<String, Float[]> damage_type_multipliers = new LinkedHashMap<>() {{
-			put("minecraft:arrow", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:cactus", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:falling_stalactite", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:fireball", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
-			put("minecraft:hot_floor", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
-			put("minecraft:in_fire", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F});
-			put("minecraft:lightning_bolt", new Float[]{0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F});
-			put("minecraft:mob_attack", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:stalagmite", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:sting", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:sweet_berry_bush", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:thorns", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("minecraft:trident", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("overhauleddamage:mob_bashing_damage_type", new Float[]{0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("overhauleddamage:mob_piercing_damage_type", new Float[]{0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-			put("overhauleddamage:mob_slashing_damage_type", new Float[]{0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F});
-		}};
+		public ValidatedMap<String, AttackTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(new HashMap<>() {{
+			put("minecraft:arrow", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:cactus", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:falling_stalactite", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:fireball", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:hot_floor", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:in_fire", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:lightning_bolt", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
+			put("minecraft:mob_attack", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:stalagmite", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:sting", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:sweet_berry_bush", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:thorns", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:trident", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("overhauleddamage:mob_bashing_damage_type", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("overhauleddamage:mob_piercing_damage_type", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("overhauleddamage:mob_slashing_damage_type", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+		}}, new ValidatedString(), new ValidatedAny<>(new AttackTypeMultipliers()));
 	}
 
 	public DamageCalculation damageCalculation = new DamageCalculation();
 
 	public static class DamageCalculation extends ConfigSection {
 
+		public boolean enable_blocking_overhaul = false;
+		public BlockingOverhaul blockingOverhaul = new BlockingOverhaul();
+
+		public static class BlockingOverhaul extends ConfigSection {
+
+			public boolean blocking_requires_stamina = true;
+			public boolean blocked_damage_calculation_works_with_flat_values = false;
+		}
 		//	@Comment("When set to 'true', blocking requires the player to have at least 1 stamina. Has no effect when 'Stamina Attributes' is not installed.")
-		public boolean blocking_requires_stamina = true;
 		//	@Comment("""
 //			When damage is in the 'overhauleddamage:applies_bleeding' damage_type tag, the bleeding amount is calculated as the sum of the attack_type_amounts * their_respective_bleeding_multiplier.
 //
@@ -76,7 +88,7 @@ public class ServerConfig extends Config {
 //
 //			Default: [0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0, 0.0]
 //			""")
-		public Float[] bleeding_multipliers = new Float[]{0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F};
+		public AttackTypeMultipliers bleeding_multipliers = new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F);
 		//	@Comment("""
 //			The applied stagger is calculated as the sum of the attack_type_amounts * their_respective_stagger_multiplier.
 //
@@ -86,7 +98,7 @@ public class ServerConfig extends Config {
 //
 //			Default: [0.0, 0.75, 0.5, 0.5, 0.0, 0.0, 0.0, 0.5]
 //			""")
-		public Float[] stagger_multipliers = new Float[]{0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F};
+		public AttackTypeMultipliers stagger_multipliers = new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F);
 		//	@Comment("""
 //			When set to 'true', blocking reduces damage by 1 point per blocked_damage attribute point.
 //
@@ -94,7 +106,6 @@ public class ServerConfig extends Config {
 //
 //			Default: false
 //			""")
-		public boolean blocked_damage_calculation_works_with_flat_values = false;
 		//	@Comment("""
 //			When set to 'true', armor reduces damage by 1 point per armor point.
 //
@@ -129,7 +140,7 @@ public class ServerConfig extends Config {
 //
 //			Default: [1.0, 1.0, 0.5, 1.5, 0.0, 1.0, 0.0, 0.0]
 //			""")
-		public Float[] armor_multipliers = new Float[]{1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F};
+		public AttackTypeMultipliers armor_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F);
 		//	@Comment("""
 //			When set to 'true', all protection enchantments except feather falling are disabled.
 //
@@ -155,7 +166,7 @@ public class ServerConfig extends Config {
 //			Default: [1.0, 1.0, 0.5, 0.6, 0.0, 1.0, 0.0, 0.0]
 //			Example: By default the slashing part of each attack is reduced by 1.2 % per enchantment level. (0.6 * 2%)
 //			""")
-		public Float[] protection_multipliers = new Float[]{1.0F, 1.0F, 0.5F, 0.6F, 0.0F, 1.0F, 0.0F, 0.0F};
+		public AttackTypeMultipliers protection_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 0.6F, 0.0F, 1.0F, 0.0F, 0.0F);
 		//	@Comment("""
 //			Damage dealt to health is modified based on the attack type.
 //
@@ -165,7 +176,7 @@ public class ServerConfig extends Config {
 //
 //			Default: [1.0, 1.0, 1.0, 1.25, 0.0, 0.0, 0.0, 0.0]
 //			""")
-		public Float[] applied_damage_multipliers = new Float[]{1.0F, 1.0F, 1.0F, 1.25F, 0.0F, 0.0F, 0.0F, 0.0F};
+		public AttackTypeMultipliers applied_damage_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 1.0F, 1.25F, 0.0F, 0.0F, 0.0F, 0.0F);
 		//	@Comment("""
 //			Enables the debug lines for the damage calculation. This can be helpful when testing / balancing.
 //			It will log calculation details EVERYTIME ANY ENTITY GETS HIT, so use this with care.
@@ -192,4 +203,29 @@ public class ServerConfig extends Config {
 		public String staggered_status_effect_identifier = "variousstatuseffects:staggered";
 	}
 
+	@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
+	public static class AttackTypeMultipliers implements Walkable {
+		
+		public AttackTypeMultipliers() {
+			new AttackTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+		}
+		public AttackTypeMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
+			this.generic = generic;
+			this.bashing = bashing;
+			this.piercing = piercing;
+			this.slashing = slashing;
+			this.poison = poison;
+			this.fire = fire;
+			this.frost = frost;
+			this.lightning = lightning;
+		}
+		public float generic;
+		public float bashing;
+		public float piercing;
+		public float slashing;
+		public float poison;
+		public float fire;
+		public float frost;
+		public float lightning;
+	}
 }
