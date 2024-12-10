@@ -2,6 +2,8 @@ package com.github.theredbrain.overhauleddamage.mixin.entity.player;
 
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements DuckLivingEntityMixin {
@@ -32,15 +33,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DuckLivi
 	}
 
 	// effectively disables the vanilla jump crit mechanic
-	@Redirect(
+	@WrapOperation(
 			method = "attack",
-			at = @At(
-					value = "INVOKE",
-					target = "Lnet/minecraft/entity/player/PlayerEntity;hasVehicle()Z"
-			)
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;hasVehicle()Z")
 	)
-	public boolean overhauleddamage$redirect_hasVehicle(PlayerEntity instance) {
-		return OverhauledDamage.SERVER_CONFIG.disable_jump_crit_mechanic;
+	public boolean overhauleddamage$wrap_hasVehicle(PlayerEntity instance, Operation<Boolean> original) {
+		return !OverhauledDamage.SERVER_CONFIG.disable_jump_crit_mechanic && original.call(instance);
 	}
 
 	@Override

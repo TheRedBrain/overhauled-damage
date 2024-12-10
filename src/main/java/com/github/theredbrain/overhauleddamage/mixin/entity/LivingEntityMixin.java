@@ -43,7 +43,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -270,16 +269,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	}
 
-	// disables the vanilla armor calculation // TODO armor_overhaul_toggle
-	@Redirect(
+	// disables the vanilla armor calculation
+	@WrapOperation(
 			method = "applyArmorToDamage",
-			at = @At(
-					value = "INVOKE",
-					target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
-			)
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
 	)
-	public boolean overhauleddamage$redirect_bypassesArmor(DamageSource instance, TagKey<DamageType> tag) {
-		return true;
+	public boolean overhauleddamage$wrap_bypassesArmor(DamageSource instance, TagKey<DamageType> tag, Operation<Boolean> original) {
+		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul || original.call(instance, tag);
 	}
 
 	// disables the vanilla shield blocking when blocking overhaul is enabled
@@ -287,7 +283,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			method = "damage",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z")
 	)
-	public boolean overhauleddamage$redirect_blockedByShield(LivingEntity instance, DamageSource source, Operation<Boolean> original) {
+	public boolean overhauleddamage$wrap_blockedByShield(LivingEntity instance, DamageSource source, Operation<Boolean> original) {
 		return !OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul && original.call(instance, source);
 	}
 
@@ -596,7 +592,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			// endregion shield blocks
 
 			// region apply armor
-			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)/* && serverConfig.damageCalculation.enable_armor_overhaul*/) { // TODO armor_overhaul_toggle
+			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.damageCalculation.enable_armor_overhaul) {
 				float armorDamage = 0.0F;
 				if (serverConfig.damageCalculation.armor_calculation_works_with_flat_values) {
 					// TODO this calculation needs a serious overhaul
@@ -750,11 +746,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					OverhauledDamage.info("");
 				}
 			} else if (enable_debug_log) {
-//				if (serverConfig.damageCalculation.enable_armor_overhaul) { // TODO armor_overhaul_toggle
-//					OverhauledDamage.info("armor overhaul not active");
-//				} else {
+				if (serverConfig.damageCalculation.enable_armor_overhaul) {
+					OverhauledDamage.info("armor overhaul not active");
+				} else {
 					OverhauledDamage.info("damage bypasses armor");
-//				}
+				}
 			}
 			// endregion apply armor
 
