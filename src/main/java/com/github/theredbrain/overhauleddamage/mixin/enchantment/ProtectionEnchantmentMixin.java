@@ -17,7 +17,7 @@ public class ProtectionEnchantmentMixin {
 
 	@Inject(method = "getProtectionAmount", at = @At("HEAD"), cancellable = true) // TODO use better mixin type
 	public void getProtectionAmount(int level, DamageSource source, CallbackInfoReturnable<Integer> cir) {
-		if (this.protectionType != ProtectionEnchantment.Type.FALL && OverhauledDamage.SERVER_CONFIG.enable_protection_enchantment_override) {
+		if (this.protectionType != ProtectionEnchantment.Type.FALL && OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_protection_enchantment_override) {
 			cir.setReturnValue(0);
 			cir.cancel();
 		}

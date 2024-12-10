@@ -69,63 +69,168 @@
 	"death.attack.mob_slashing": "%s was cut into pieces by %s",
 
 
-	"text.autoconfig.overhauleddamage.title": "Overhauled Damage",
-	"text.autoconfig.overhauleddamage.option.client.show_effect_build_up_elements": "Effect build-ups are displayed in the HUD",
-	"text.autoconfig.overhauleddamage.option.client.use_custom_textures": "Use custom textures.",
-	"text.autoconfig.overhauleddamage.option.client.dynamic_x_offset_increase": "Dynamic X offset increase",
-	"text.autoconfig.overhauleddamage.option.client.dynamic_y_offset_increase": "Dynamic Y offset increase",
+	"overhauleddamage.client": "Client Side Settings",
+
+	"overhauleddamage.client.bleedingBuildUpSettings": "Bleeding Build Up",
+	"overhauleddamage.client.burnBuildUpSettings": "Burn Build Up",
+	"overhauleddamage.client.freezeBuildUpSettings": "Freeze Build Up",
+	"overhauleddamage.client.poisonBuildUpSettings": "Poison Build Up",
+	"overhauleddamage.client.shockBuildUpSettings": "Shock Build Up",
+	"overhauleddamage.client.staggerBuildUpSettings": "Stagger Build Up",
+
+	"overhauleddamage.client.resource_bar.show_bar": "Enable this bar",
+	"overhauleddamage.client.resource_bar.show_empty_bar": "Show bar for empty build up",
+	"overhauleddamage.client.resource_bar.dynamic_offset_increase_x": "Dynamic X Offset Increase",
+	"overhauleddamage.client.resource_bar.dynamic_offset_increase_y": "Dynamic Y Offset Increase",
+
+	"overhauleddamage.client.resource_bar.positionSettings": "Position Settings",
+
+	"overhauleddamage.client.resource_bar.origin": "Origin",
+
+	"overhauleddamage.client.resource_bar.offsets_x": "Dynamic Y Offset Increase",
+	"overhauleddamage.client.resource_bar.offsets_x.desc": "Only the highest reached threshold is used.",
+	"overhauleddamage.client.resource_bar.offsets_y": "Dynamic Y Offset Increase",
+	"overhauleddamage.client.resource_bar.offsets_y.desc": "Only the highest reached threshold is used.",
+
+	"overhauleddamage.client.resource_bar.fill_direction": "Bar Fill Direction",
+
+	"overhauleddamage.client.resource_bar.show_current_value_overlay": "Show overlay",
+	"overhauleddamage.client.resource_bar.show_current_value_overlay.desc": "Indicates the current value",
+
+	"overhauleddamage.client.resource_bar.textureSettings": "Bar Textures",
+	"overhauleddamage.client.resource_bar.backgroundTextureSettings": "Background",
+	"overhauleddamage.client.resource_bar.progressTextureSettings": "Progress",
+	"overhauleddamage.client.resource_bar.overlayTextureSettings": "Overlay",
+
+	"overhauleddamage.client.texture_layer.offset_x": "X offset from background",
+	"overhauleddamage.client.texture_layer.offset_y": "Y offset from background",
+
+	"overhauleddamage.client.texture_layer.texture_heights": "Texture Heights",
+	"overhauleddamage.client.texture_layer.texture_heights.desc": "Only the highest reached threshold is used.",
+	"overhauleddamage.client.texture_layer.texture_widths": "Texture Widths",
+	"overhauleddamage.client.texture_layer.texture_widths.desc": "Only the highest reached threshold is used.",
+	"overhauleddamage.client.texture_layer.texture_ids": "Texture Identifiers",
+	"overhauleddamage.client.texture_layer.texture_ids.desc": "Only the highest reached threshold is used.",
+
+	"overhauleddamage.client.texture_layer.progress_decrease_animation_texture_ids": "Decrease Animation Textures",
+	"overhauleddamage.client.texture_layer.progress_decrease_animation_texture_ids.desc": "Only the highest reached threshold is used.",
+	"overhauleddamage.client.texture_layer.progress_increase_animation_texture_ids": "Increase Animation Textures",
+	"overhauleddamage.client.texture_layer.progress_increase_animation_texture_ids.desc": "Only the highest reached threshold is used.",
+	"overhauleddamage.client.texture_layer.progress_increase_value_texture_ids": "Increase Value Textures",
+	"overhauleddamage.client.texture_layer.progress_increase_value_texture_ids.desc": "Only the highest reached threshold is used.",
+	"overhauleddamage.client.texture_layer.progress_texture_ids": "Decrease Value / No Animation Textures",
+	"overhauleddamage.client.texture_layer.progress_texture_ids.desc": "Only the highest reached threshold is used.",
+
+
+	"overhauleddamage.client.overlay_texture_layer.offset_x": "X offset from current value",
+	"overhauleddamage.client.overlay_texture_layer.offset_y": "Y offset from current value",
+
+
+	"overhauleddamage.client.resource_bar.show_icon": "Enable Icon",
+	"overhauleddamage.client.resource_bar.show_icon.desc": "Enables the display of a  static texture",
+
+	"overhauleddamage.client.resource_bar.iconTextureSettings": "Icon Settings",
+
+	"overhauleddamage.client.resource_icon.offset_x": "X Offset from Origin",
+	"overhauleddamage.client.resource_icon.offset_y": "Y Offset from Origin",
+
+	"overhauleddamage.client.resource_icon.show_when_bar_empty": "Show when bar empty",
+	"overhauleddamage.client.resource_icon.show_when_bar_empty.desc": "Whether the icon is displayed when value is 0.",
+
+
+	"overhauleddamage.client.resource_bar.enable_smooth_animation": "Enable Animation",
+	"overhauleddamage.client.resource_bar.enable_smooth_animation.desc": "Changes to the value are animated",
+
+	"overhauleddamage.client.resource_bar.animationSettings": "Animation Settings",
+
+	"overhauleddamage.client.resource_bar.animation_interval": "Animation Interval",
+	"overhauleddamage.client.resource_bar.animation_interval.desc": "Amount of ticks between animation updates",
+
+	"overhauleddamage.client.resource_bar.max_value_change_is_animated": "Animate max value change",
+	"overhauleddamage.client.resource_bar.max_value_change_is_animated.desc": "Whether a max value change should be animated",
+
+
+	"overhauleddamage.client.resource_bar.show_number": "Enable Number",
+	"overhauleddamage.client.resource_bar.show_number.desc": "Enables a numerical display of the current value",
+
+	"overhauleddamage.client.resource_bar.numberSettings": "Number Settings",
+
+	"overhauleddamage.client.resource_number.show_max_value": "Show max value",
+	"overhauleddamage.client.resource_number.show_max_value.desc": "Additionally shows the maximum value.",
+
+	"overhauleddamage.client.resource_number.show_when_bar_empty": "Show when bar empty",
+	"overhauleddamage.client.resource_number.show_when_bar_empty.desc": "Whether the number is displayed when value is 0.",
+
+	"overhauleddamage.client.resource_number.offset_x": "X Offset from Origin",
+	"overhauleddamage.client.resource_number.offset_y": "Y Offset from Origin",
+
+	"overhauleddamage.client.resource_number.color": "Color",
+
+
+	"overhauleddamage.server": "Server Side Settings",
+
+	"overhauleddamage.server.damage_interrupts_item_usage": "Damage interrupts item usage",
+	"overhauleddamage.server.damage_interrupts_item_usage.desc": "Exceptions:\n- The player is currently blocking\n- The damage type is in the 'is_true' damage type tag",
+
+	"overhauleddamage.server.disable_jump_crit_mechanic": "Disable vanillas 'jump crit' mechanic",
+
+
+	"overhauleddamage.server.damageTypes": "Damage Types",
+
+	"overhauleddamage.server.damageTypes.default_damage_type_multipliers": "Default damage type multipliers",
+	"overhauleddamage.server.damageTypes.default_damage_type_multipliers.desc": "Damage types not present in the map below, use these multipliers\n//\nThe array must contain exactly eight (8) values.\nThey correspond to the attack types like so:\n{generic, bashing, piercing, slashing, poison, fire, frost, lightning}",
+
+	"overhauleddamage.server.damageTypes.damage_type_multipliers": "Damage type multipliers",
+	"overhauleddamage.server.damageTypes.damage_type_multipliers.desc": "Damage types in this map use the corresponding multipliers when calculating the different elemental and physical damage amounts inflicted by that damage type.\n//\nThe array must contain exactly eight (8) values.\nThey correspond to the attack types like so:\n{generic, bashing, piercing, slashing, poison, fire, frost, lightning}",
+
+
+	"overhauleddamage.server.damageCalculation": "Damage Calculation",
+
+	"overhauleddamage.server.damageCalculation.blocking_requires_stamina": "Blocking requires stamina",
+	"overhauleddamage.server.damageCalculation.blocking_requires_stamina.desc": "When set to 'true', blocking requires the player to have at least 1 stamina.\nHas no effect when 'Stamina Attributes' is not installed.",
 	
-	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_element_x_offset": "Bleeding element X offset",
-	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_element_y_offset": "Bleeding element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.bleeding_build_up_bar_additional_length": "Bleeding element additional length",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_background_texture_id": "Bleeding element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_foreground_texture_id": "Bleeding element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_texture_width": "Bleeding element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_texture_height": "Bleeding element texture height",
-	"text.autoconfig.overhauleddamage.option.client.custom_bleeding_element_fill_direction": "Bleeding element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.burn_build_up_element_x_offset": "Burn element X offset",
-	"text.autoconfig.overhauleddamage.option.client.burn_build_up_element_y_offset": "Burn element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.burn_build_up_bar_additional_length": "Burn element additional length",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_background_texture_id": "Burn element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_foreground_texture_id": "Burn element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_texture_width": "Burn element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_texture_height": "Burn element texture height",
-	"text.autoconfig.overhauleddamage.option.client.custom_burn_element_fill_direction": "Burn element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_element_x_offset": "Freeze element X offset",
-	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_element_y_offset": "Freeze element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.freeze_build_up_bar_additional_length": "Freeze element additional length",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_background_texture_id": "Freeze element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_foreground_texture_id": "Freeze element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_texture_width": "Freeze element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_texture_height": "Freeze element texture height",
-	"text.autoconfig.overhauleddamage.option.client.custom_freeze_element_fill_direction": "Freeze element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.poison_build_up_element_x_offset": "Poison element X offset",
-	"text.autoconfig.overhauleddamage.option.client.poison_build_up_element_y_offset": "Poison element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.poison_build_up_bar_additional_length": "Poison element additional length",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_background_texture_id": "Poison element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_foreground_texture_id": "Poison element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_texture_width": "Poison element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_texture_height": "Poison element texture height",
-	"text.autoconfig.overhauleddamage.option.client.custom_poison_element_fill_direction": "Poison element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.shock_build_up_element_x_offset": "Shock element X offset",
-	"text.autoconfig.overhauleddamage.option.client.shock_build_up_element_y_offset": "Shock element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.shock_build_up_bar_additional_length": "Shock element additional length",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_background_texture_id": "Shock element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_foreground_texture_id": "Shock element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_texture_width": "Shock element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_texture_height": "Shock element texture height",
-	"text.autoconfig.overhauleddamage.option.client.custom_shock_element_fill_direction": "Shock element fill direction",
-	
-	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_element_x_offset": "Stagger element X offset",
-	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_element_y_offset": "Stagger element Y offset",
-	"text.autoconfig.overhauleddamage.option.client.stagger_build_up_bar_additional_length": "Stagger element additional length",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_background_texture_id": "Stagger element background texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_foreground_texture_id": "Stagger element foreground texture id",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_texture_width": "Stagger element texture width",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_texture_height": "Stagger element texture height",
-	"text.autoconfig.overhauleddamage.option.client.custom_stagger_element_fill_direction": "Stagger element fill direction"
+	"overhauleddamage.server.damageCalculation.bleeding_multipliers": "Bleeding multipliers",
+	"overhauleddamage.server.damageCalculation.bleeding_multipliers.desc": "When damage is in the 'overhauleddamage:applies_bleeding' damage_type tag, the bleeding amount is calculated as the sum of the attack_type_amounts * their_respective_bleeding_multiplier.",
+
+	"overhauleddamage.server.damageCalculation.stagger_multipliers": "Stagger multipliers",
+	"overhauleddamage.server.damageCalculation.stagger_multipliers.desc": "The applied stagger is calculated as the sum of the attack_type_amounts * their_respective_stagger_multiplier.",
+
+	"overhauleddamage.server.damageCalculation.blocked_damage_calculation_works_with_flat_values": "Blocked damage calculation uses flat values",
+	"overhauleddamage.server.damageCalculation.blocked_damage_calculation_works_with_flat_values.desc": "When set to 'true', blocking reduces damage by 1 point per 'blocked_damage' attribute point.\n\nWhen set to false, this is changed to 1 percent per 'blocked_damage' attribute point.",
+
+	"overhauleddamage.server.damageCalculation.armor_calculation_works_with_flat_values": "Armor calculation uses flat values",
+	"overhauleddamage.server.damageCalculation.armor_calculation_works_with_flat_values.desc": "When set to 'true', armor reduces damage by 1 point per armor attribute point.\n\nWhen set to false, this is changed to 1 percent per armor attribute point.",
+
+	"overhauleddamage.server.damageCalculation.enable_armor_toughness_attribute": "Enable vanillas 'Armor Toughness' attribute",
+	"overhauleddamage.server.damageCalculation.enable_armor_toughness_attribute.desc": "In 'Overhauled Damage' 'Armor Toughness' multiplies the value of armor.\nUse with care!",
+
+	"overhauleddamage.server.damageCalculation.enable_damage_taken_multiplier_attribute": "WIP",
+
+	"overhauleddamage.server.damageCalculation.armor_multipliers": "Armor Multipliers",
+	"overhauleddamage.server.damageCalculation.armor_multipliers.desc": "Damage reduction by armor is modified based on the attack type.\nEach fraction of damage is reduced individually.",
+
+	"overhauleddamage.server.damageCalculation.enable_protection_enchantment_override": "Enable protection enchantment override",
+	"overhauleddamage.server.damageCalculation.enable_protection_enchantment_override.desc": "\nDisables ll protection enchantments except feather falling.\nNote that the 'normal' protection enchantment is still used by the damage calculation, but the specialised enchantments are disabled completely.",
+
+	"overhauleddamage.server.damageCalculation.protection_damage_reduction_per_level": "Protection damage reduction per level",
+	"overhauleddamage.server.damageCalculation.protection_damage_reduction_per_level.desc": "The protection enchantment was changed to reduce damage by x percent per enchantment level, where x is defined here.",
+
+	"overhauleddamage.server.damageCalculation.protection_multipliers": "Protection multipliers",
+	"overhauleddamage.server.damageCalculation.protection_multipliers.desc": "Damage reduction by the protection enchantment is modified based on the attack type.\nEach fraction of damage is reduced individually.",
+
+	"overhauleddamage.server.damageCalculation.applied_damage_multipliers": "Applied damage multipliers",
+	"overhauleddamage.server.damageCalculation.applied_damage_multipliers.desc": "Damage dealt to health is modified based on the attack type.",
+
+	"overhauleddamage.server.damageCalculation.enable_debug_log": "Enable debug log",
+	"overhauleddamage.server.damageCalculation.enable_debug_log.desc": "Enables the debug lines for the damage calculation. This can be helpful when testing / balancing.\nIt will log calculation details EVERYTIME ANY ENTITY GETS HIT, so use this with care.",
+
+	"overhauleddamage.server.buildUpEffects": "Build Up Effects",
+
+	"overhauleddamage.server.buildUpEffects.bleeding_status_effect_identifier": "Bleeding Effect",
+	"overhauleddamage.server.buildUpEffects.burning_status_effect_identifier": "Burning Effect",
+	"overhauleddamage.server.buildUpEffects.chilled_status_effect_identifier": "Chilled Effect",
+	"overhauleddamage.server.buildUpEffects.frozen_status_effect_identifier": "Frozen Effect",
+	"overhauleddamage.server.buildUpEffects.poison_status_effect_identifier": "Poison Effect",
+	"overhauleddamage.server.buildUpEffects.shocked_status_effect_identifier": "Shocked Effect",
+	"overhauleddamage.server.buildUpEffects.staggered_status_effect_identifier": "Stagger Effect"
 }
