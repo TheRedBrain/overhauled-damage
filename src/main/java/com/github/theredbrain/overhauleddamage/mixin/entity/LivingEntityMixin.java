@@ -381,7 +381,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				damage_type_multiplier = serverConfig.damageTypes.default_damage_type_multipliers;
 			}
 			if (enable_debug_log) {
-				OverhauledDamage.info("used damage_type_multipliers : " + damage_type_multiplier);
+				OverhauledDamage.info("used damage_type_multipliers : " + damage_type_multiplier.toString());
 				OverhauledDamage.info("");
 			}
 
@@ -508,7 +508,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 						if (enable_debug_log) {
 							OverhauledDamage.info("--- apply stagger based on left over damage ---");
 							OverhauledDamage.info("");
-							OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers);
+							OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
 							OverhauledDamage.info("");
 						}
 						float appliedStagger = (generic_amount * stagger_multipliers.generic) + ((bashing_amount - blockedBashingDamage) * stagger_multipliers.bashing) + ((piercing_amount - blockedPiercingDamage) * stagger_multipliers.piercing) + ((slashing_amount - blockedSlashingDamage) * stagger_multipliers.slashing) + ((poison_amount - blockedPoisonDamage) * stagger_multipliers.poison) + ((fire_amount - blockedFireDamage) * stagger_multipliers.fire) + ((frost_amount - blockedFrostDamage) * stagger_multipliers.frost) + ((lightning_amount - blockedLightningDamage) * stagger_multipliers.lightning);
@@ -611,7 +611,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				ServerConfig.AttackTypeMultipliers protection_multipliers = serverConfig.damageCalculation.protectionOverhaul.protection_multipliers;
 
 				if (enable_debug_log) {
-					OverhauledDamage.info("protection_multipliers : " + protection_multipliers);
+					OverhauledDamage.info("protection_multipliers : " + protection_multipliers.toString());
 					OverhauledDamage.info("");
 				}
 
@@ -744,7 +744,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					ServerConfig.AttackTypeMultipliers armor_multipliers = serverConfig.damageCalculation.armorOverhaul.armor_multipliers;
 
 					if (enable_debug_log) {
-						OverhauledDamage.info("armor_multipliers: " + armor_multipliers);
+						OverhauledDamage.info("armor_multipliers: " + armor_multipliers.toString());
 						OverhauledDamage.info("");
 					}
 					float generic_armor_damage = generic_amount * effective_armor * armor_multipliers.generic / 100;
@@ -832,7 +832,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 			if (enable_debug_log) {
 				OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
-				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
+				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers.toString());
 				OverhauledDamage.info("applied_damage : " + applied_damage);
 				OverhauledDamage.info("");
 			}
@@ -849,7 +849,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 				if (enable_debug_log) {
 					OverhauledDamage.info("--- apply bleeding ---");
-					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers);
+					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers.toString());
 				}
 
 				if (applied_bleeding > 0) {
@@ -888,7 +888,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				ServerConfig.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers;
 				if (enable_debug_log) {
 					OverhauledDamage.info("--- apply stagger when no blocking was tried ---");
-					OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers);
+					OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
 				}
 				float appliedStagger = (generic_amount * stagger_multipliers.generic) + (bashing_amount * stagger_multipliers.bashing) + (piercing_amount * stagger_multipliers.piercing) + (slashing_amount * stagger_multipliers.slashing) + (poison_amount * stagger_multipliers.poison) + (fire_amount * stagger_multipliers.fire) + (frost_amount * stagger_multipliers.frost) + (lightning_amount * stagger_multipliers.lightning);
 				if (appliedStagger > 0) {

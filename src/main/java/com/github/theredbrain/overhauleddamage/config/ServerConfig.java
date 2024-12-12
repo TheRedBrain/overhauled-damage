@@ -158,5 +158,9 @@ public class ServerConfig extends Config {
 		public float fire;
 		public float frost;
 		public float lightning;
+
+		public String toString() {
+			return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
+		}
 	}
 }
