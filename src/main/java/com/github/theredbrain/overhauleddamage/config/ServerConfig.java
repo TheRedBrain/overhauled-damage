@@ -52,7 +52,7 @@ public class ServerConfig extends Config {
 
 	public static class DamageCalculation extends ConfigSection {
 
-		public boolean enable_armor_overhaul = true;
+		public boolean blocking_requires_stamina = true;
 
 		public boolean enable_blocking_overhaul = true;
 
@@ -60,38 +60,22 @@ public class ServerConfig extends Config {
 
 		public static class BlockingOverhaul extends ConfigSection {
 
-			public boolean blocking_requires_stamina = true;
-
 			public boolean blocked_damage_calculation_works_with_flat_values = false;
 		}
 
-		public AttackTypeMultipliers bleeding_multipliers = new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F);
+		public boolean enable_protection_overhaul = true;
 
-		public AttackTypeMultipliers stagger_multipliers = new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F);
+		public ProtectionOverhaul protectionOverhaul = new ProtectionOverhaul();
 
-		public boolean armor_calculation_works_with_flat_values = false;
+		public static class ProtectionOverhaul extends ConfigSection {
 
-		public boolean enable_armor_toughness_attribute = false;
-
-		//	@Comment("""
-//			When set to 'true', "overhauleddamage:generic.damage_taken_multiplier" is multiplying every damage taken.
-//
-//			When set to 'false', "overhauleddamage:generic.damage_taken_multiplier" is ignored.
-//
-//			Default: true
-//			""")
-//		public boolean enable_damage_taken_multiplier_attribute = true; // TODO
-
-		public AttackTypeMultipliers armor_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F);
-
-		public boolean enable_protection_enchantment_override = true;
-		//	@Comment("""
+			//	@Comment("""
 //			The protection enchantment was changed to reduce damage by x percent per enchantment level, where x is defined here.
 //
 //			Default: 2.0, meaning 2% reduction per level
 //			""")
-		public double protection_damage_reduction_per_level = 2.0;
-		//	@Comment("""
+			public double protection_damage_reduction_per_level = 2.0;
+			//	@Comment("""
 //			Damage reduction by the protection enchantment is modified based on the attack type.
 //			Each fraction of damage is reduced individually.
 //
@@ -102,7 +86,36 @@ public class ServerConfig extends Config {
 //			Default: [1.0, 1.0, 0.5, 0.6, 0.0, 1.0, 0.0, 0.0]
 //			Example: By default the slashing part of each attack is reduced by 1.2 % per enchantment level. (0.6 * 2%)
 //			""")
-		public AttackTypeMultipliers protection_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 0.6F, 0.0F, 1.0F, 0.0F, 0.0F);
+			public AttackTypeMultipliers protection_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 0.6F, 0.0F, 1.0F, 0.0F, 0.0F);
+
+		}
+
+		public boolean enable_armor_overhaul = true;
+
+		public ArmorOverhaul armorOverhaul = new ArmorOverhaul();
+
+		public static class ArmorOverhaul extends ConfigSection {
+
+			public boolean armor_calculation_works_with_flat_values = false;
+
+			public boolean enable_armor_toughness_attribute = false;
+
+			public AttackTypeMultipliers armor_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F);
+
+		}
+
+		//	@Comment("""
+//			When set to 'true', "overhauleddamage:generic.damage_taken_multiplier" is multiplying every damage taken.
+//
+//			When set to 'false', "overhauleddamage:generic.damage_taken_multiplier" is ignored.
+//
+//			Default: true
+//			""")
+//		public boolean enable_damage_taken_multiplier_attribute = true; // TODO
+
+		public AttackTypeMultipliers bleeding_multipliers = new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F);
+
+		public AttackTypeMultipliers stagger_multipliers = new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F);
 
 		public AttackTypeMultipliers applied_damage_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 1.0F, 1.25F, 0.0F, 0.0F, 0.0F, 0.0F);
 

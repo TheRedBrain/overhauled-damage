@@ -187,19 +187,22 @@
 	"overhauleddamage.server.damageCalculation": "Damage Calculation",
 
 	"overhauleddamage.server.damageCalculation.blocking_requires_stamina": "Blocking requires stamina",
-	"overhauleddamage.server.damageCalculation.blocking_requires_stamina.desc": "When set to 'true', blocking requires the player to have at least 1 stamina.\nHas no effect when 'Stamina Attributes' is not installed.",
+	"overhauleddamage.server.damageCalculation.blocking_requires_stamina.desc": "When set to 'true', blocking requires the player to have at least 1 stamina.\nHas no effect when 'Stamina Attributes' is not installed.\nIs not part of the Blocking Overhaul.",
 
-	"overhauleddamage.server.damageCalculation.bleeding_multipliers": "Bleeding multipliers",
-	"overhauleddamage.server.damageCalculation.bleeding_multipliers.desc": "When damage is in the 'overhauleddamage:applies_bleeding' damage_type tag, the bleeding amount is calculated as the sum of the attack_type_amounts * their_respective_bleeding_multiplier.",
+	"overhauleddamage.server.damageCalculation.enable_blocking_overhaul": "Enable Blocking Overhaul",
+	"overhauleddamage.server.damageCalculation.enable_blocking_overhaul.desc": "- Blocked damage amount is dependent on 'blocked_damage' attributes\n- Parry system\n- Blocking can fail, if not enough stamina",
 
-	"overhauleddamage.server.damageCalculation.stagger_multipliers": "Stagger multipliers",
-	"overhauleddamage.server.damageCalculation.stagger_multipliers.desc": "The applied stagger is calculated as the sum of the attack_type_amounts * their_respective_stagger_multiplier.",
+	"overhauleddamage.server.damageCalculation.blockingOverhaul": "Blocking Overhaul Settings",
 
-	"overhauleddamage.server.damageCalculation.blocked_damage_calculation_works_with_flat_values": "Blocked damage calculation uses flat values",
-	"overhauleddamage.server.damageCalculation.blocked_damage_calculation_works_with_flat_values.desc": "When set to 'true', blocking reduces damage by 1 point per 'blocked_damage' attribute point.\n\nWhen set to false, this is changed to 1 percent per 'blocked_damage' attribute point.",
+	"overhauleddamage.server.damageCalculation.blockingOverhaul.blocked_damage_calculation_works_with_flat_values": "Blocked damage calculation uses flat values",
+	"overhauleddamage.server.damageCalculation.blockingOverhaul.blocked_damage_calculation_works_with_flat_values.desc": "When set to 'true', blocking reduces damage by 1 point per 'blocked_damage' attribute point.\n\nWhen set to false, this is changed to 1 percent per 'blocked_damage' attribute point.",
 
-	"overhauleddamage.server.damageCalculation.armor_calculation_works_with_flat_values": "Armor calculation uses flat values",
-	"overhauleddamage.server.damageCalculation.armor_calculation_works_with_flat_values.desc": "When set to 'true', armor reduces damage by 1 point per armor attribute point.\n\nWhen set to false, this is changed to 1 percent per armor attribute point.",
+	"overhauleddamage.server.damageCalculation.enable_armor_overhaul": "Enable Armor Overhaul",
+
+	"overhauleddamage.server.damageCalculation.armorOverhaul": "Armor Overhaul Settings",
+
+	"overhauleddamage.server.damageCalculation.armorOverhaul.armor_calculation_works_with_flat_values": "Armor calculation uses flat values",
+	"overhauleddamage.server.damageCalculation.armorOverhaul.armor_calculation_works_with_flat_values.desc": "When set to 'true', armor reduces damage by 1 point per armor attribute point.\n\nWhen set to false, this is changed to 1 percent per armor attribute point.",
 
 	"overhauleddamage.server.damageCalculation.enable_armor_toughness_attribute": "Enable vanillas 'Armor Toughness' attribute",
 	"overhauleddamage.server.damageCalculation.enable_armor_toughness_attribute.desc": "In 'Overhauled Damage' 'Armor Toughness' multiplies the value of armor.\nUse with care!",
@@ -209,14 +212,22 @@
 	"overhauleddamage.server.damageCalculation.armor_multipliers": "Armor Multipliers",
 	"overhauleddamage.server.damageCalculation.armor_multipliers.desc": "Damage reduction by armor is modified based on the attack type.\nEach fraction of damage is reduced individually.",
 
-	"overhauleddamage.server.damageCalculation.enable_protection_enchantment_override": "Enable protection enchantment override",
-	"overhauleddamage.server.damageCalculation.enable_protection_enchantment_override.desc": "\nDisables ll protection enchantments except feather falling.\nNote that the 'normal' protection enchantment is still used by the damage calculation, but the specialised enchantments are disabled completely.",
+	"overhauleddamage.server.damageCalculation.enable_protection_overhaul": "Enable Protection Overhaul",
+	"overhauleddamage.server.damageCalculation.enable_protection_overhaul.desc": "\nDisables all protection enchantments except feather falling.\nNote that the 'normal' protection enchantment is still used by the damage calculation, but the specialised enchantments are disabled completely.",
 
-	"overhauleddamage.server.damageCalculation.protection_damage_reduction_per_level": "Protection damage reduction per level",
-	"overhauleddamage.server.damageCalculation.protection_damage_reduction_per_level.desc": "The protection enchantment was changed to reduce damage by x percent per enchantment level, where x is defined here.",
+	"overhauleddamage.server.damageCalculation.protectionOverhaul": "Protection Overhaul Settings",
 
-	"overhauleddamage.server.damageCalculation.protection_multipliers": "Protection multipliers",
-	"overhauleddamage.server.damageCalculation.protection_multipliers.desc": "Damage reduction by the protection enchantment is modified based on the attack type.\nEach fraction of damage is reduced individually.",
+	"overhauleddamage.server.damageCalculation.protectionOverhaul.protection_damage_reduction_per_level": "Protection damage reduction per level",
+	"overhauleddamage.server.damageCalculation.protectionOverhaul.protection_damage_reduction_per_level.desc": "The protection enchantment was changed to reduce damage by x percent per enchantment level, where x is defined here.",
+
+	"overhauleddamage.server.damageCalculation.protectionOverhaul.protection_multipliers": "Protection multipliers",
+	"overhauleddamage.server.damageCalculation.protectionOverhaul.protection_multipliers.desc": "Damage reduction by the protection enchantment is modified based on the attack type.\nEach fraction of damage is reduced individually.",
+
+	"overhauleddamage.server.damageCalculation.bleeding_multipliers": "Bleeding multipliers",
+	"overhauleddamage.server.damageCalculation.bleeding_multipliers.desc": "When damage is in the 'overhauleddamage:applies_bleeding' damage_type tag, the bleeding amount is calculated as the sum of the attack_type_amounts * their_respective_bleeding_multiplier.",
+
+	"overhauleddamage.server.damageCalculation.stagger_multipliers": "Stagger multipliers",
+	"overhauleddamage.server.damageCalculation.stagger_multipliers.desc": "The applied stagger is calculated as the sum of the attack_type_amounts * their_respective_stagger_multiplier.",
 
 	"overhauleddamage.server.damageCalculation.applied_damage_multipliers": "Applied damage multipliers",
 	"overhauleddamage.server.damageCalculation.applied_damage_multipliers.desc": "Damage dealt to health is modified based on the attack type.",

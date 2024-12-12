@@ -278,13 +278,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul || original.call(instance, tag);
 	}
 
-	// disables the vanilla shield blocking when blocking overhaul is enabled
+	// disables the vanilla shield blocking when blocking overhaul is enabled, the "blocking_requires_stamina" option is excluded from this
 	@WrapOperation(
 			method = "damage",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z")
 	)
 	public boolean overhauleddamage$wrap_blockedByShield(LivingEntity instance, DamageSource source, Operation<Boolean> original) {
-		return !OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul && original.call(instance, source);
+		return !OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul && original.call(instance, source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !OverhauledDamage.SERVER_CONFIG.damageCalculation.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded);
 	}
 
 	@ModifyVariable(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), argsOnly = true)
@@ -299,11 +299,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		if (enable_debug_log) {
 			OverhauledDamage.info("----- start of new damage calculation log -----");
 			OverhauledDamage.info("");
-			OverhauledDamage.info("entity taken damage: " + this.getName().getString());
+			OverhauledDamage.info("entity taken damage : " + this.getName().getString());
 			OverhauledDamage.info("");
-			OverhauledDamage.info("damage source: " + source.toString());
+			OverhauledDamage.info("damage source : " + source.toString());
 			OverhauledDamage.info("");
-			OverhauledDamage.info("damage amount: " + amount);
+			OverhauledDamage.info("damage amount : " + amount);
 			OverhauledDamage.info("");
 		}
 
@@ -319,7 +319,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		}
 		if (enable_debug_log) {
 			if (attacker != null) {
-				OverhauledDamage.info("entity dealing damage: " + attacker.getName().getString());
+				OverhauledDamage.info("entity dealing damage : " + attacker.getName().getString());
 				OverhauledDamage.info("");
 			}
 		}
@@ -368,7 +368,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 			if (!damageTypeId.isEmpty()) {
 				if (enable_debug_log) {
-					OverhauledDamage.info("damage type: " + damageTypeId);
+					OverhauledDamage.info("damage type : " + damageTypeId);
 					OverhauledDamage.info("");
 				}
 				damage_type_multiplier = damage_type_multipliers.get(damageTypeId);
@@ -381,7 +381,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				damage_type_multiplier = serverConfig.damageTypes.default_damage_type_multipliers;
 			}
 			if (enable_debug_log) {
-				OverhauledDamage.info("used damage_type_multipliers: " + damage_type_multiplier);
+				OverhauledDamage.info("used damage_type_multipliers : " + damage_type_multiplier);
 				OverhauledDamage.info("");
 			}
 
@@ -435,7 +435,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			// region shield blocks
 			if (serverConfig.damageCalculation.enable_blocking_overhaul) {
 				ItemStack shieldItemStack = this.activeItemStack;
-				if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.damageCalculation.blockingOverhaul.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded)) {
+				if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.damageCalculation.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded)) {
 					// a parry is tried, if the blocking time < the parry window of the blocking entity, the blocking entity can parry at all and the blocking item is in the 'can_parry' item tag
 					boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
 					double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
@@ -508,13 +508,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 						if (enable_debug_log) {
 							OverhauledDamage.info("--- apply stagger based on left over damage ---");
 							OverhauledDamage.info("");
-							OverhauledDamage.info("stagger_multipliers: " + stagger_multipliers);
+							OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers);
 							OverhauledDamage.info("");
 						}
 						float appliedStagger = (generic_amount * stagger_multipliers.generic) + ((bashing_amount - blockedBashingDamage) * stagger_multipliers.bashing) + ((piercing_amount - blockedPiercingDamage) * stagger_multipliers.piercing) + ((slashing_amount - blockedSlashingDamage) * stagger_multipliers.slashing) + ((poison_amount - blockedPoisonDamage) * stagger_multipliers.poison) + ((fire_amount - blockedFireDamage) * stagger_multipliers.fire) + ((frost_amount - blockedFrostDamage) * stagger_multipliers.frost) + ((lightning_amount - blockedLightningDamage) * stagger_multipliers.lightning);
 						if (appliedStagger > 0) {
 							if (enable_debug_log) {
-								OverhauledDamage.info("appliedStagger: " + appliedStagger);
+								OverhauledDamage.info("appliedStagger : " + appliedStagger);
 								OverhauledDamage.info("");
 							}
 							this.overhauleddamage$addStaggerBuildUp(appliedStagger);
@@ -591,17 +591,79 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 			// endregion shield blocks
 
+			// region apply protection
+			if (!source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS) && serverConfig.damageCalculation.enable_protection_overhaul) {
+
+				// the protection enchantments reduce damage, with a default value of 2 percent reduction per enchantment level
+				float protection = (float) (EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source) * serverConfig.damageCalculation.protectionOverhaul.protection_damage_reduction_per_level);
+
+				// band-aid solution to prevent fall damage being reduced a second time by Feather Falling
+				if (source.isIn(DamageTypeTags.IS_FALL)) {
+					protection = 0.0F;
+				}
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("protection : " + protection);
+					OverhauledDamage.info("");
+				}
+
+				// the different attack types also have a protection_multiplier
+				ServerConfig.AttackTypeMultipliers protection_multipliers = serverConfig.damageCalculation.protectionOverhaul.protection_multipliers;
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("protection_multipliers : " + protection_multipliers);
+					OverhauledDamage.info("");
+				}
+
+				generic_amount = generic_amount - (generic_amount * protection * protection_multipliers.generic / 100);
+
+				bashing_amount = bashing_amount - (bashing_amount * protection * protection_multipliers.bashing / 100);
+
+				piercing_amount = piercing_amount - (piercing_amount * protection * protection_multipliers.piercing / 100);
+
+				slashing_amount = slashing_amount - (slashing_amount * protection * protection_multipliers.slashing / 100);
+
+				poison_amount = poison_amount - (poison_amount * protection * protection_multipliers.poison / 100);
+
+				fire_amount = fire_amount - (fire_amount * protection * protection_multipliers.fire / 100);
+
+				frost_amount = frost_amount - (frost_amount * protection * protection_multipliers.frost / 100);
+
+				lightning_amount = lightning_amount - (lightning_amount * protection * protection_multipliers.lightning / 100);
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("--- attack amounts after protection ---");
+					OverhauledDamage.info("generic_amount : " + generic_amount);
+					OverhauledDamage.info("bashing_amount : " + bashing_amount);
+					OverhauledDamage.info("piercing_amount : " + piercing_amount);
+					OverhauledDamage.info("slashing_amount : " + slashing_amount);
+					OverhauledDamage.info("poison_amount : " + poison_amount);
+					OverhauledDamage.info("fire_amount : " + fire_amount);
+					OverhauledDamage.info("frost_amount : " + frost_amount);
+					OverhauledDamage.info("lightning_amount : " + lightning_amount);
+					OverhauledDamage.info("");
+				}
+			} else if (enable_debug_log) {
+				if (!serverConfig.damageCalculation.enable_protection_overhaul) {
+					OverhauledDamage.info("protection overhaul not active");
+				}
+				if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
+					OverhauledDamage.info("damage bypasses protection");
+				}
+			}
+			// endregion apply protection
+
 			// region apply armor
 			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.damageCalculation.enable_armor_overhaul) {
 				float armorDamage = 0.0F;
-				if (serverConfig.damageCalculation.armor_calculation_works_with_flat_values) {
+				if (serverConfig.damageCalculation.armorOverhaul.armor_calculation_works_with_flat_values) {
 					// TODO this calculation needs a serious overhaul
 					// armorToughness now directly determines how effective armor is
 					// effective armor reduces damage by its amount
 					// armor is more or less effective against different attack types
 					float effectiveArmor = this.getArmor();
 
-					if (serverConfig.damageCalculation.enable_armor_toughness_attribute) {
+					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute) {
 						if (enable_debug_log) {
 							OverhauledDamage.info("armor toughness is enabled");
 							OverhauledDamage.info("");
@@ -658,7 +720,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					// armor toughness is a multiplier to this
 					float effective_armor = this.getArmor();
 
-					if (serverConfig.damageCalculation.enable_armor_toughness_attribute) {
+					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute) {
 						if (enable_debug_log) {
 							OverhauledDamage.info("armor toughness is enabled");
 							OverhauledDamage.info("");
@@ -678,54 +740,36 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					// notable difference to the first method:
 					// armor is not reduced when reducing the damage amount of one attack_type
 
-					// the protection enchantments also reduce damage, with a default value of 2 percent reduction per enchantment level // TODO split protection from armor calculation
-					float protection = (float) (EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source) * serverConfig.damageCalculation.protection_damage_reduction_per_level);
-
-					// band-aid solution to prevent fall damage being reduced a second time by Feather Falling, also a way to disable the protection enchantment override
-					if (source.isIn(DamageTypeTags.IS_FALL) || !serverConfig.damageCalculation.enable_protection_enchantment_override) {
-						protection = 0.0F;
-					}
-
-					if (enable_debug_log) {
-						OverhauledDamage.info("protection : " + protection);
-						OverhauledDamage.info("");
-					}
-
 					// the different attack types have an armor_multiplier on their own
-					ServerConfig.AttackTypeMultipliers armor_multipliers = serverConfig.damageCalculation.armor_multipliers;
-
-					// the different attack types also have a protection_multiplier
-					ServerConfig.AttackTypeMultipliers protection_multipliers = serverConfig.damageCalculation.protection_multipliers;
+					ServerConfig.AttackTypeMultipliers armor_multipliers = serverConfig.damageCalculation.armorOverhaul.armor_multipliers;
 
 					if (enable_debug_log) {
 						OverhauledDamage.info("armor_multipliers: " + armor_multipliers);
 						OverhauledDamage.info("");
-						OverhauledDamage.info("protection_multipliers: " + protection_multipliers);
-						OverhauledDamage.info("");
 					}
 					float generic_armor_damage = generic_amount * effective_armor * armor_multipliers.generic / 100;
-					generic_amount = generic_amount - (generic_armor_damage + (generic_amount * protection * protection_multipliers.generic / 100));
+					generic_amount = generic_amount - generic_armor_damage;
 
 					float bashing_armor_damage = bashing_amount * effective_armor * armor_multipliers.bashing / 100;
-					bashing_amount = bashing_amount - (bashing_armor_damage + (bashing_amount * protection * protection_multipliers.bashing / 100));
+					bashing_amount = bashing_amount - bashing_armor_damage;
 
 					float piercing_armor_damage = piercing_amount * effective_armor * armor_multipliers.piercing / 100;
-					piercing_amount = piercing_amount - (piercing_armor_damage + (piercing_amount * protection * protection_multipliers.piercing / 100));
+					piercing_amount = piercing_amount - piercing_armor_damage;
 
 					float slashing_armor_damage = slashing_amount * effective_armor * armor_multipliers.slashing / 100;
-					slashing_amount = slashing_amount - (slashing_armor_damage + (slashing_amount * protection * protection_multipliers.slashing / 100));
+					slashing_amount = slashing_amount - slashing_armor_damage;
 
 					float poison_armor_damage = poison_amount * effective_armor * armor_multipliers.poison / 100;
-					poison_amount = poison_amount - (poison_armor_damage + (poison_amount * protection * protection_multipliers.poison / 100));
+					poison_amount = poison_amount - poison_armor_damage;
 
 					float fire_armor_damage = fire_amount * effective_armor * armor_multipliers.fire / 100;
-					fire_amount = fire_amount - (fire_armor_damage + (fire_amount * protection * protection_multipliers.fire / 100));
+					fire_amount = fire_amount - fire_armor_damage;
 
 					float frost_armor_damage = frost_amount * effective_armor * armor_multipliers.frost / 100;
-					frost_amount = frost_amount - (frost_armor_damage + (frost_amount * protection * protection_multipliers.frost / 100));
+					frost_amount = frost_amount - frost_armor_damage;
 
 					float lightning_armor_damage = (lightning_amount * effective_armor * armor_multipliers.lightning / 100);
-					lightning_amount = lightning_amount - (lightning_armor_damage + (lightning_amount * protection * protection_multipliers.lightning / 100));
+					lightning_amount = lightning_amount - lightning_armor_damage;
 
 					armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
 
@@ -734,7 +778,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				if (enable_debug_log) {
 					OverhauledDamage.info("damage applied to equipped armor: " + armorDamage);
 					OverhauledDamage.info("");
-					OverhauledDamage.info("--- attack amounts after armor and protection enchant ---");
+					OverhauledDamage.info("--- attack amounts after armor ---");
 					OverhauledDamage.info("generic_amount : " + generic_amount);
 					OverhauledDamage.info("bashing_amount : " + bashing_amount);
 					OverhauledDamage.info("piercing_amount : " + piercing_amount);
@@ -788,7 +832,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 			if (enable_debug_log) {
 				OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
-				OverhauledDamage.info("applied_damage_multipliers: " + applied_damage_multipliers);
+				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
 				OverhauledDamage.info("applied_damage : " + applied_damage);
 				OverhauledDamage.info("");
 			}
@@ -805,12 +849,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 				if (enable_debug_log) {
 					OverhauledDamage.info("--- apply bleeding ---");
-					OverhauledDamage.info("bleeding_multipliers: " + bleeding_multipliers);
+					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers);
 				}
 
 				if (applied_bleeding > 0) {
 					if (enable_debug_log) {
-						OverhauledDamage.info("applied_bleeding: " + applied_bleeding);
+						OverhauledDamage.info("applied_bleeding : " + applied_bleeding);
 						OverhauledDamage.info("");
 					}
 					this.overhauleddamage$addBleedingBuildUp(applied_bleeding);
@@ -844,12 +888,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				ServerConfig.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers;
 				if (enable_debug_log) {
 					OverhauledDamage.info("--- apply stagger when no blocking was tried ---");
-					OverhauledDamage.info("stagger_multipliers: " + stagger_multipliers);
+					OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers);
 				}
 				float appliedStagger = (generic_amount * stagger_multipliers.generic) + (bashing_amount * stagger_multipliers.bashing) + (piercing_amount * stagger_multipliers.piercing) + (slashing_amount * stagger_multipliers.slashing) + (poison_amount * stagger_multipliers.poison) + (fire_amount * stagger_multipliers.fire) + (frost_amount * stagger_multipliers.frost) + (lightning_amount * stagger_multipliers.lightning);
 				if (appliedStagger > 0) {
 					if (enable_debug_log) {
-						OverhauledDamage.info("appliedStagger: " + appliedStagger);
+						OverhauledDamage.info("appliedStagger : " + appliedStagger);
 						OverhauledDamage.info("");
 					}
 					this.overhauleddamage$addStaggerBuildUp(appliedStagger);
@@ -872,12 +916,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 		float health_damage = applied_damage + true_amount;
 
-//		if (enable_debug_log) {
-//			OverhauledDamage.info("--- apply damage by reducing health ---");
-//			OverhauledDamage.info("health_damage : " + health_damage);
-//			OverhauledDamage.info("");
-//		}
-
 		float damageTakenFromMana = this.overhauleddamage$getDamageTakenFromManaMultiplier();
 		float damageTakenFromStamina = this.overhauleddamage$getDamageTakenFromStaminaMultiplier();
 		float mana_damage = 0.0F;
@@ -890,15 +928,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			stamina_damage = health_damage * damageTakenFromStamina;
 			OverhauledDamage.addStamina(((LivingEntity) (Object) this), stamina_damage);
 		}
+		health_damage = health_damage - mana_damage - stamina_damage;
 		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply damage by reducing health / mana / stamina ---");
+			OverhauledDamage.info("health_damage : " + health_damage);
+			OverhauledDamage.info("");
 			OverhauledDamage.info("mana_damage : " + mana_damage);
 			OverhauledDamage.info("");
-
 			OverhauledDamage.info("stamina_damage : " + stamina_damage);
 			OverhauledDamage.info("");
 		}
 
-		return health_damage - mana_damage - stamina_damage;
+		return health_damage;
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))

@@ -18,7 +18,7 @@ public class ProtectionEnchantmentMixin {
 			at = @At("RETURN")
 	)
 	public int overhauleddamage$modify_getProtectionAmount(int original) {
-		if (this.protectionType != ProtectionEnchantment.Type.FALL && OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_protection_enchantment_override) {
+		if (this.protectionType != ProtectionEnchantment.Type.FALL && OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_protection_overhaul) {
 			return 0;
 		}
 		return original;
