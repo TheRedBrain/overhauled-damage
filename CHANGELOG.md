@@ -1,5 +1,7 @@
 # 1.7.0
 
+- more parts of the damage calculation can now be customized
+- added config options that completely disable some features
 - HUD element overhaul, improves mod compatibility, increases customization options
 - generally improved config layout
 - removed dependency on Cloth Config

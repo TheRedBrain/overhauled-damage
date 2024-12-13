@@ -3,6 +3,8 @@
 A complete overhaul to several mechanics revolving around damage. It is inspired by games like Dark Souls and Valheim and aims to deepen Minecraft's combat.
 It is however not a content mod, more of an API for other mods.
 
+Consider joining the Discord, if you need help configuring Overhauled Damage.
+
 ## New Damage Calculation
 Generic, bashing, piercing, slashing, poison, fire, frost and lightning are from now on referred to as "attack types". (Not to be confused with the existing "damage types").
 
@@ -56,15 +58,20 @@ There is an option to use custom textures, which have to be provided by a resour
 
 Overhauled Damage uses damage type tags, entity attributes and its server config file for its damage calculation.
 
-Damage in Minecraft consists of an amount and a "damage source". The source includes the attacking entity, its position and a "damage type".
-The damage type determines the death message and is also used to check several things. This includes checking for immunities, damage reductions based on enchantments and damaging armor items.
-These checks don't look for each individual damage type, but for "tags", which are collections of damage types defined via a data pack.
-Overhauled Damage uses tags to determine if a damage_type can apply bleeding build-up and if it applies 'true damage'
+> Damage in Minecraft consists of an amount and a "damage source". The source includes the attacking entity, its position and a "damage type".
 
-"Entity attributes" control things like maximum health, armor and attack strength. Status effects, potions and commands can manipulate these attributes.
+> The damage type determines the death message and is also used to check several things. This includes checking for immunities, damage reductions based on enchantments and damaging armor items.
+
+> These checks don't look for each individual damage type, but for "tags", which are collections of damage types defined via a data pack.
+
+Overhauled Damage uses tags to determine if a damage_type can apply bleeding build-up and if it applies 'true damage'.
+
+> "Entity attributes" control things like maximum health, armor and attack strength. Status effects, potions and commands can manipulate these attributes.
+
 Most aspects of Overhauled Damage are controlled by attributes, like the thresholds for effect build-ups, blocked damage, elemental resistances, etc.
 
 In the server config damage types can be associated with an array of values, which determine the multipliers used when calculating the different elemental and physical damage amounts.
+The multipliers can also be configured.
 
 ## Examples
 
