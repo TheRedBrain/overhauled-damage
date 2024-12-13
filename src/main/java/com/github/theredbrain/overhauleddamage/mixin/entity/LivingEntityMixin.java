@@ -1280,9 +1280,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				this.overhauleddamage$setBleedingBuildUp(0);
 			}
 		} else {
-			if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !this.hasStatusEffect(bleeding_status_effect)) {
-				float f = this.overhauleddamage$getBleedingBuildUp();
-				this.overhauleddamage$setBleedingBuildUp(f + amount);
+			if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f) {
+				this.overhauleddamage$setBleedingBuildUp(this.overhauleddamage$getBleedingBuildUp() + amount);
 				if (amount > 0) {
 					this.bleedingTickTimer = 0;
 					this.bleedingReductionDelayTimer = 0;
@@ -1328,7 +1327,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// endregion bleeding
 
 	// region fire
-
 	@Override
 	public float overhauleddamage$getAdditionalFireDamage() {
 		return (float) this.getAttributeValue(OverhauledDamage.ADDITIONAL_FIRE_DAMAGE);
@@ -1351,11 +1349,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public void overhauleddamage$addBurnBuildUp(float amount) {
-		if (this.overhauleddamage$getMaxBurnBuildUp() != -1.0f) {
-			this.overhauleddamage$setBurnBuildUp(this.overhauleddamage$getBurnBuildUp() + amount);
-			if (amount > 0) {
-				this.burnTickTimer = 0;
-				this.burnReductionDelayTimer = 0;
+		StatusEffect burn_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
+		if (burn_status_effect == null) {
+			if (this.overhauleddamage$getBurnBuildUp() > 0) {
+				this.overhauleddamage$setBurnBuildUp(0);
+			}
+		} else {
+			if (this.overhauleddamage$getMaxBurnBuildUp() != -1.0f) {
+				this.overhauleddamage$setBurnBuildUp(this.overhauleddamage$getBurnBuildUp() + amount);
+				if (amount > 0) {
+					this.burnTickTimer = 0;
+					this.burnReductionDelayTimer = 0;
+				}
 			}
 		}
 	}
@@ -1397,7 +1402,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// endregion fire
 
 	// region frost
-
 	@Override
 	public float overhauleddamage$getAdditionalFrostDamage() {
 		return (float) this.getAttributeValue(OverhauledDamage.ADDITIONAL_FROST_DAMAGE);
@@ -1421,12 +1425,17 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public void overhauleddamage$addFreezeBuildUp(float amount) {
 		StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
-		if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect != null && !this.hasStatusEffect(freeze_status_effect)) {
-			float f = this.overhauleddamage$getFreezeBuildUp();
-			this.overhauleddamage$setFreezeBuildUp(f + amount);
-			if (amount > 0) {
-				this.freezeTickTimer = 0;
-				this.freezeReductionDelayTimer = 0;
+		if (freeze_status_effect == null) {
+			if (this.overhauleddamage$getFreezeBuildUp() > 0) {
+				this.overhauleddamage$setFreezeBuildUp(0);
+			}
+		} else {
+			if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f) {
+				this.overhauleddamage$setFreezeBuildUp(this.overhauleddamage$getFreezeBuildUp() + amount);
+				if (amount > 0) {
+					this.freezeTickTimer = 0;
+					this.freezeReductionDelayTimer = 0;
+				}
 			}
 		}
 	}
@@ -1470,13 +1479,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// region stagger
 	@Override
 	public void overhauleddamage$addStaggerBuildUp(float amount) {
-		StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
-		if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect != null && !this.hasStatusEffect(staggered_status_effect)) {
-			float f = this.overhauleddamage$getStaggerBuildUp();
-			this.overhauleddamage$setStaggerBuildUp(f + amount);
-			if (amount > 0) {
-				this.staggerTickTimer = 0;
-				this.staggerReductionDelayTimer = 0;
+		StatusEffect stagger_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
+		if (stagger_status_effect == null) {
+			if (this.overhauleddamage$getStaggerBuildUp() > 0) {
+				this.overhauleddamage$setStaggerBuildUp(0);
+			}
+		} else {
+			if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f) {
+				this.overhauleddamage$setStaggerBuildUp(this.overhauleddamage$getStaggerBuildUp() + amount);
+				if (amount > 0) {
+					this.staggerTickTimer = 0;
+					this.staggerReductionDelayTimer = 0;
+				}
 			}
 		}
 	}
@@ -1518,7 +1532,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// endregion stagger
 
 	// region poison
-
 	@Override
 	public float overhauleddamage$getAdditionalPoisonDamage() {
 		return (float) this.getAttributeValue(OverhauledDamage.ADDITIONAL_POISON_DAMAGE);
@@ -1541,12 +1554,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public void overhauleddamage$addPoisonBuildUp(float amount) {
-		if (this.overhauleddamage$getMaxPoisonBuildUp() != -1.0f) {
-			float f = this.overhauleddamage$getPoisonBuildUp();
-			this.overhauleddamage$setPoisonBuildUp(f + amount);
-			if (amount > 0) {
-				this.poisonTickTimer = 0;
-				this.poisonReductionDelayTimer = 0;
+		StatusEffect poison_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
+		if (poison_status_effect == null) {
+			if (this.overhauleddamage$getPoisonBuildUp() > 0) {
+				this.overhauleddamage$setPoisonBuildUp(0);
+			}
+		} else {
+			if (this.overhauleddamage$getMaxPoisonBuildUp() != -1.0f) {
+				this.overhauleddamage$setPoisonBuildUp(this.overhauleddamage$getPoisonBuildUp() + amount);
+				if (amount > 0) {
+					this.poisonTickTimer = 0;
+					this.poisonReductionDelayTimer = 0;
+				}
 			}
 		}
 	}
@@ -1588,7 +1607,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// endregion poison
 
 	// region lightning
-
 	@Override
 	public float overhauleddamage$getAdditionalLightningDamage() {
 		return (float) this.getAttributeValue(OverhauledDamage.ADDITIONAL_LIGHTNING_DAMAGE);
@@ -1611,12 +1629,18 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public void overhauleddamage$addShockBuildUp(float amount) {
-		if (this.overhauleddamage$getMaxShockBuildUp() != -1.0f) {
-			float f = this.overhauleddamage$getShockBuildUp();
-			this.overhauleddamage$setShockBuildUp(f + amount);
-			if (amount > 0) {
-				this.shockTickTimer = 0;
-				this.shockReductionDelayTimer = 0;
+		StatusEffect shock_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
+		if (shock_status_effect == null) {
+			if (this.overhauleddamage$getShockBuildUp() > 0) {
+				this.overhauleddamage$setShockBuildUp(0);
+			}
+		} else {
+			if (this.overhauleddamage$getMaxShockBuildUp() != -1.0f) {
+				this.overhauleddamage$setShockBuildUp(this.overhauleddamage$getShockBuildUp() + amount);
+				if (amount > 0) {
+					this.shockTickTimer = 0;
+					this.shockReductionDelayTimer = 0;
+				}
 			}
 		}
 	}
