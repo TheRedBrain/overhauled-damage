@@ -230,7 +230,7 @@
 	"overhauleddamage.server.damageCalculation.stagger_multipliers.desc": "The applied stagger is calculated as the sum of the attack_type_amounts * their_respective_stagger_multiplier.",
 
 	"overhauleddamage.server.damageCalculation.applied_damage_multipliers": "Applied damage multipliers",
-	"overhauleddamage.server.damageCalculation.applied_damage_multipliers.desc": "Damage dealt to health is modified based on the attack type.",
+	"overhauleddamage.server.damageCalculation.applied_damage_multipliers.desc": "Damage dealt to resources like health is modified based on the attack type.",
 
 	"overhauleddamage.server.damageCalculation.enable_debug_log": "Enable debug log",
 	"overhauleddamage.server.damageCalculation.enable_debug_log.desc": "Enables the debug lines for the damage calculation. This can be helpful when testing / balancing.\nIt will log calculation details EVERYTIME ANY ENTITY GETS HIT, so use this with care.",
@@ -248,10 +248,25 @@
 	"overhauleddamage.server.buildUpEffects": "Build Up Effects",
 
 	"overhauleddamage.server.buildUpEffects.bleeding_status_effect_identifier": "Bleeding Effect",
-	"overhauleddamage.server.buildUpEffects.burning_status_effect_identifier": "Burning Effect",
+	"overhauleddamage.server.buildUpEffects.should_bleeding_duration_be_additive": "Bleeding Duration Is Additive",
+	"overhauleddamage.server.buildUpEffects.should_bleeding_amplifier_be_additive": "Bleeding Level Is Additive",
+	"overhauleddamage.server.buildUpEffects.burn_status_effect_identifier": "Burning Effect",
+	"overhauleddamage.server.buildUpEffects.should_burn_duration_be_additive": "Bleeding Duration Is Additive",
+	"overhauleddamage.server.buildUpEffects.should_burn_amplifier_be_additive": "Burning Level Is Additive",
 	"overhauleddamage.server.buildUpEffects.chilled_status_effect_identifier": "Chilled Effect",
-	"overhauleddamage.server.buildUpEffects.frozen_status_effect_identifier": "Frozen Effect",
+	"overhauleddamage.server.buildUpEffects.chilled_duration_multiplier": "Chilled Duration Multiplier",
+	"overhauleddamage.server.buildUpEffects.should_chilled_duration_be_additive": "Chilled Duration Is Additive",
+	"overhauleddamage.server.buildUpEffects.should_chilled_amplifier_be_additive": "Chilled Level Is Additive",
+	"overhauleddamage.server.buildUpEffects.freeze_status_effect_identifier": "Frozen Effect",
+	"overhauleddamage.server.buildUpEffects.should_freeze_duration_be_additive": "Frozen Duration Is Additive",
+	"overhauleddamage.server.buildUpEffects.should_freeze_amplifier_be_additive": "Frozen Level Is Additive",
 	"overhauleddamage.server.buildUpEffects.poison_status_effect_identifier": "Poison Effect",
-	"overhauleddamage.server.buildUpEffects.shocked_status_effect_identifier": "Shocked Effect",
-	"overhauleddamage.server.buildUpEffects.staggered_status_effect_identifier": "Stagger Effect"
+	"overhauleddamage.server.buildUpEffects.should_poison_duration_be_additive": "Poison Duration Is Additive",
+	"overhauleddamage.server.buildUpEffects.should_poison_amplifier_be_additive": "Poison Level Is Additive",
+	"overhauleddamage.server.buildUpEffects.shock_status_effect_identifier": "Shocked Effect",
+	"overhauleddamage.server.buildUpEffects.should_shock_duration_be_additive": "Shocked Duration Is Additive",
+	"overhauleddamage.server.buildUpEffects.should_shock_amplifier_be_additive": "Shocked Level Is Additive",
+	"overhauleddamage.server.buildUpEffects.stagger_status_effect_identifier": "Stagger Effect",
+	"overhauleddamage.server.buildUpEffects.should_stagger_duration_be_additive": "Stagger Duration Is Additive",
+	"overhauleddamage.server.buildUpEffects.should_stagger_amplifier_be_additive": "Stagger Level Is Additive"
 }

@@ -831,15 +831,23 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			applied_damage = (generic_amount * applied_damage_multipliers.generic) + (bashing_amount * applied_damage_multipliers.bashing) + (piercing_amount * applied_damage_multipliers.piercing) + (slashing_amount * applied_damage_multipliers.slashing) + (poison_amount * applied_damage_multipliers.poison) + (fire_amount * applied_damage_multipliers.fire) + (frost_amount * applied_damage_multipliers.frost) + (lightning_amount * applied_damage_multipliers.lightning);
 
 			if (enable_debug_log) {
-				OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
-				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers.toString());
-				OverhauledDamage.info("applied_damage : " + applied_damage);
+				OverhauledDamage.info("--- damage applied to resources like health is multiplied ---");
+				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
 				OverhauledDamage.info("");
 			}
 
 			// taking damage interrupts eating food, drinking potions, etc
 			if (applied_damage > 0.0f && !this.isBlocking() && serverConfig.damage_interrupts_item_usage) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("item usage was stopped");
+					OverhauledDamage.info("");
+				}
 				this.stopUsingItem();
+			}
+
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
+				OverhauledDamage.info("");
 			}
 
 			// apply bleeding
@@ -848,39 +856,76 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
 
 				if (enable_debug_log) {
-					OverhauledDamage.info("--- apply bleeding ---");
-					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers.toString());
+					OverhauledDamage.info("--- apply bleeding build up ---");
+					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers);
 				}
 
 				if (applied_bleeding > 0) {
 					if (enable_debug_log) {
-						OverhauledDamage.info("applied_bleeding : " + applied_bleeding);
+						OverhauledDamage.info("applied bleeding build up : " + applied_bleeding);
 						OverhauledDamage.info("");
 					}
 					this.overhauleddamage$addBleedingBuildUp(applied_bleeding);
 				} else if (enable_debug_log) {
-					OverhauledDamage.info("no bleeding was applied");
+					OverhauledDamage.info("no bleeding build up was applied");
 					OverhauledDamage.info("");
 				}
 			}
 
-			// apply burning
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply burn build up ---");
+			}
+			// apply burn
 			if (fire_amount > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied burn build up : " + fire_amount);
+					OverhauledDamage.info("");
+				}
 				this.overhauleddamage$addBurnBuildUp(fire_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no burn build up was applied");
+				OverhauledDamage.info("");
 			}
 
-			// apply chilled and frozen
+			// apply chilled effect and freeze build up
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply chilled effect and freeze build up ---");
+			}
 			if (frost_amount > 0) {
 				StatusEffect chilled_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.buildUpEffects.chilled_status_effect_identifier));
 				if (chilled_status_effect != null) {
-					int chilledDuration = (int) Math.ceil(frost_amount);
+					int chilledDuration = (int) Math.ceil(frost_amount * serverConfig.buildUpEffects.chilled_duration_multiplier);
+					int existingChilledDuration = 0;
+					int chilledAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(chilled_status_effect);
 					if (statusEffectInstance != null) {
 						chilledDuration = chilledDuration + statusEffectInstance.getDuration();
+						if (serverConfig.buildUpEffects.should_chilled_duration_be_additive) {
+							existingChilledDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_chilled_amplifier_be_additive) {
+							chilledAmplifier = statusEffectInstance.getAmplifier();
+						}
 					}
-					this.addStatusEffect(new StatusEffectInstance(chilled_status_effect, chilledDuration, 0, false, false, true));
+					if (enable_debug_log) {
+						OverhauledDamage.info("applied chilled effect with duration of : " + chilledDuration + existingChilledDuration + " and amplifier of : " + chilledAmplifier);
+						OverhauledDamage.info("");
+					}
+					this.addStatusEffect(new StatusEffectInstance(chilled_status_effect, chilledDuration + existingChilledDuration, chilledAmplifier, false, false, true));
+				} else if (enable_debug_log) {
+					OverhauledDamage.info("no chilled effect was applied");
+					OverhauledDamage.info("");
+				}
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied freeze build up : " + frost_amount);
+					OverhauledDamage.info("");
 				}
 				this.overhauleddamage$addFreezeBuildUp(frost_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no chilled effect was applied");
+				OverhauledDamage.info("");
+				OverhauledDamage.info("no freeze build up was applied");
+				OverhauledDamage.info("");
 			}
 
 			if (!triedBlocking) {
@@ -903,14 +948,37 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				}
 			}
 
-			// apply poison
+			// apply poison build up
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply poison build up ---");
+			}
 			if (poison_amount > 0) {
 				this.overhauleddamage$addPoisonBuildUp(poison_amount);
 			}
+			if (poison_amount > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied poison build up : " + poison_amount);
+					OverhauledDamage.info("");
+				}
+				this.overhauleddamage$addPoisonBuildUp(poison_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no poison build up was applied");
+				OverhauledDamage.info("");
+			}
 
-			// apply shocked
+			// apply shock build up
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply shock build up ---");
+			}
 			if (lightning_amount > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied shock build up : " + lightning_amount);
+					OverhauledDamage.info("");
+				}
 				this.overhauleddamage$addShockBuildUp(lightning_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no shock build up was applied");
+				OverhauledDamage.info("");
 			}
 		}
 
@@ -932,6 +1000,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		if (enable_debug_log) {
 			OverhauledDamage.info("--- apply damage by reducing health / mana / stamina ---");
 			OverhauledDamage.info("health_damage : " + health_damage);
+			OverhauledDamage.info("this is further reduced by absorption");
 			OverhauledDamage.info("");
 			OverhauledDamage.info("mana_damage : " + mana_damage);
 			OverhauledDamage.info("");
@@ -946,145 +1015,200 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public void overhauleddamage$tick(CallbackInfo ci) {
 		if (!this.getWorld().isClient) {
 
+			ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
 			if (this.isBlocking()) {
 				this.blockingTime++;
 			} else if (this.blockingTime > 0) {
 				this.blockingTime = 0;
 			}
-
+			if (this.overhauleddamage$getBleedingBuildUp() >= this.overhauleddamage$getMaxBleedingBuildUp()) {
+				StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.buildUpEffects.bleeding_status_effect_identifier));
+				if (bleeding_status_effect != null) {
+					int existingBleedingDuration = 0;
+					int bleedingAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(bleeding_status_effect);
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_bleeding_duration_be_additive) {
+							existingBleedingDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_bleeding_amplifier_be_additive) {
+							bleedingAmplifier = statusEffectInstance.getAmplifier();
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(bleeding_status_effect, this.overhauleddamage$getBleedingDuration() + existingBleedingDuration, bleedingAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setBleedingBuildUp(0);
+				this.bleedingTickTimer = 0;
+				this.bleedingReductionDelayTimer = this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold();
+			}
 			if (this.overhauleddamage$getBleedingBuildUp() > 0) {
-				this.bleedingTickTimer++;
 				if (this.bleedingReductionDelayTimer < this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
 					this.bleedingReductionDelayTimer++;
 					this.bleedingTickTimer = 0;
+				} else {
+					this.bleedingTickTimer++;
 				}
-				if (this.bleedingTickTimer >= this.overhauleddamage$getBleedingTickThreshold()
-						&& this.bleedingReductionDelayTimer >= this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
-					if (this.overhauleddamage$getBleedingBuildUp() >= this.overhauleddamage$getMaxBleedingBuildUp()) {
-						StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
-						if (bleeding_status_effect != null) {
-							this.addStatusEffect(new StatusEffectInstance(bleeding_status_effect, this.overhauleddamage$getBleedingDuration(), 0, false, false, true));
-						}
-//                        this.overhauleddamage$setBleedingBuildUp(-this.overhauleddamage$getMaxBleedingBuildUp()); // TODO should bleeding be more difficult to apply after bleeding was applied?
-						this.overhauleddamage$setBleedingBuildUp(0);
-					} else {
-						this.overhauleddamage$addBleedingBuildUp(-this.overhauleddamage$getBleedingBuildUpReduction());
-					}
+				if (this.bleedingTickTimer >= this.overhauleddamage$getBleedingTickThreshold() && this.bleedingReductionDelayTimer >= this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addBleedingBuildUp(-this.overhauleddamage$getBleedingBuildUpReduction());
 					this.bleedingTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getBurnBuildUp() >= this.overhauleddamage$getMaxBurnBuildUp()) {
+				StatusEffect burn_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(serverConfig.buildUpEffects.burn_status_effect_identifier));
+				if (burn_status_effect != null) {
+					int existingBurnDuration = 0;
+					int burnAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(burn_status_effect);
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_burn_duration_be_additive) {
+							existingBurnDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_burn_amplifier_be_additive) {
+							burnAmplifier = statusEffectInstance.getAmplifier();
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(burn_status_effect, this.overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setBurnBuildUp(0);
+			}
 			if (this.overhauleddamage$getBurnBuildUp() > 0) {
-				this.burnTickTimer++;
 				if (this.burnReductionDelayTimer < this.overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
 					this.burnReductionDelayTimer++;
 					this.burnTickTimer = 0;
+				} else {
+					this.burnTickTimer++;
 				}
-				if (this.burnTickTimer >= this.overhauleddamage$getBurnTickThreshold()
-						&& this.burnReductionDelayTimer >= this.overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
-					if (this.overhauleddamage$getBurnBuildUp() >= this.overhauleddamage$getMaxBurnBuildUp()) {
-						StatusEffect burning_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burning_status_effect_identifier));
-						if (burning_status_effect != null) {
-							int burnDuration = this.overhauleddamage$getBurnDuration();
-							StatusEffectInstance statusEffectInstance = this.getStatusEffect(burning_status_effect);
-							if (statusEffectInstance != null) {
-								burnDuration = burnDuration + statusEffectInstance.getDuration();
-							}
-							this.addStatusEffect(new StatusEffectInstance(burning_status_effect, burnDuration, 0, false, false, true));
-						}
-						this.overhauleddamage$setBurnBuildUp(0);
-					} else {
-						this.overhauleddamage$addBurnBuildUp(-this.overhauleddamage$getBurnBuildUpReduction());
-					}
+				if (this.burnTickTimer >= this.overhauleddamage$getBurnTickThreshold() && this.burnReductionDelayTimer >= this.overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addBurnBuildUp(-this.overhauleddamage$getBurnBuildUpReduction());
 					this.burnTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getFreezeBuildUp() >= this.overhauleddamage$getMaxFreezeBuildUp()) {
+				StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
+				if (freeze_status_effect != null) {
+					int existingFreezeDuration = 0;
+					int freezeAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(freeze_status_effect);
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_freeze_duration_be_additive) {
+							existingFreezeDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_freeze_amplifier_be_additive) {
+							freezeAmplifier = statusEffectInstance.getAmplifier();
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(freeze_status_effect, this.overhauleddamage$getFreezeDuration() + existingFreezeDuration, freezeAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setFreezeBuildUp(0);
+			}
 			if (this.overhauleddamage$getFreezeBuildUp() > 0) {
 				this.freezeTickTimer++;
 				if (this.freezeReductionDelayTimer < this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
 					this.freezeReductionDelayTimer++;
 					this.freezeTickTimer = 0;
+				} else {
+					this.freezeTickTimer++;
 				}
-				if (this.freezeTickTimer >= this.overhauleddamage$getFreezeTickThreshold()
-						&& this.freezeReductionDelayTimer >= this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
-					if (this.overhauleddamage$getFreezeBuildUp() >= this.overhauleddamage$getMaxFreezeBuildUp()) {
-						StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.frozen_status_effect_identifier));
-						if (freeze_status_effect != null) {
-							this.addStatusEffect(new StatusEffectInstance(freeze_status_effect, this.overhauleddamage$getFreezeDuration(), 0, false, false, true));
-						}
-						this.overhauleddamage$setFreezeBuildUp(0);
-					} else {
-						this.overhauleddamage$addFreezeBuildUp(-this.overhauleddamage$getFreezeBuildUpReduction());
-					}
+				if (this.freezeTickTimer >= this.overhauleddamage$getFreezeTickThreshold() && this.freezeReductionDelayTimer >= this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addFreezeBuildUp(-this.overhauleddamage$getFreezeBuildUpReduction());
 					this.freezeTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp()) {
+				StatusEffect stagger_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
+				if (stagger_status_effect != null) {
+					int existingStaggerDuration = 0;
+					int staggerAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(stagger_status_effect);
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_stagger_duration_be_additive) {
+							existingStaggerDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_stagger_amplifier_be_additive) {
+							staggerAmplifier = statusEffectInstance.getAmplifier();
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(stagger_status_effect, this.overhauleddamage$getStaggerDuration() + existingStaggerDuration, staggerAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setStaggerBuildUp(0);
+			}
 			if (this.overhauleddamage$getStaggerBuildUp() > 0) {
 				this.staggerTickTimer++;
 				if (this.staggerReductionDelayTimer < this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
 					this.staggerReductionDelayTimer++;
 					this.staggerTickTimer = 0;
+				} else {
+					this.staggerTickTimer++;
 				}
-				if (this.staggerTickTimer >= this.overhauleddamage$getStaggerTickThreshold()
-						&& this.staggerReductionDelayTimer >= this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
-					if (this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp()) {
-						StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.staggered_status_effect_identifier));
-						if (staggered_status_effect != null) {
-							this.addStatusEffect(new StatusEffectInstance(staggered_status_effect, this.overhauleddamage$getStaggerDuration(), 0, false, false, true));
-						}
-						this.overhauleddamage$setStaggerBuildUp(0);
-					} else {
-						this.overhauleddamage$addStaggerBuildUp(-this.overhauleddamage$getStaggerBuildUpReduction());
-					}
+				if (this.staggerTickTimer >= this.overhauleddamage$getStaggerTickThreshold() && this.staggerReductionDelayTimer >= this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addStaggerBuildUp(-this.overhauleddamage$getStaggerBuildUpReduction());
 					this.staggerTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getPoisonBuildUp() >= this.overhauleddamage$getMaxPoisonBuildUp()) {
+				StatusEffect poison_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
+				if (poison_status_effect != null) {
+					int existingPoisonDuration = 0;
+					int poisonAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(poison_status_effect);
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_poison_duration_be_additive) {
+							existingPoisonDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_poison_amplifier_be_additive) {
+							poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(poison_status_effect, this.overhauleddamage$getPoisonDuration() + existingPoisonDuration, poisonAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setPoisonBuildUp(0);
+			}
 			if (this.overhauleddamage$getPoisonBuildUp() > 0) {
 				this.poisonTickTimer++;
 				if (this.poisonReductionDelayTimer < this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
 					this.poisonReductionDelayTimer++;
 					this.poisonTickTimer = 0;
+				} else {
+					this.poisonTickTimer++;
 				}
-				if (this.poisonTickTimer >= this.overhauleddamage$getPoisonTickThreshold()
-						&& this.poisonReductionDelayTimer >= this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
-					if (this.overhauleddamage$getPoisonBuildUp() >= this.overhauleddamage$getMaxPoisonBuildUp()) {
-						int poisonAmplifier = 0;
-						StatusEffect poison_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
-						if (poison_status_effect != null) {
-							StatusEffectInstance statusEffectInstance = this.getStatusEffect(poison_status_effect);
-							if (statusEffectInstance != null) {
-								poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
-							}
-							this.addStatusEffect(new StatusEffectInstance(poison_status_effect, this.overhauleddamage$getPoisonDuration(), poisonAmplifier, false, false, true));
-						}
-						this.overhauleddamage$setPoisonBuildUp(0);
-					} else {
-						this.overhauleddamage$addPoisonBuildUp(-this.overhauleddamage$getPoisonBuildUpReduction());
-					}
+				if (this.poisonTickTimer >= this.overhauleddamage$getPoisonTickThreshold() && this.poisonReductionDelayTimer >= this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addPoisonBuildUp(-this.overhauleddamage$getPoisonBuildUpReduction());
 					this.poisonTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getShockBuildUp() >= this.overhauleddamage$getMaxShockBuildUp()) {
+				StatusEffect shock_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
+				if (shock_status_effect != null) {
+					int existingShockDuration = 0;
+					int shockAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(shock_status_effect);
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_shock_duration_be_additive) {
+							existingShockDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_shock_amplifier_be_additive) {
+							shockAmplifier = statusEffectInstance.getAmplifier() + 1;
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(shock_status_effect, this.overhauleddamage$getShockDuration() + existingShockDuration, shockAmplifier, false, false, false));
+				}
+				this.overhauleddamage$setShockBuildUp(0);
+			}
 			if (this.overhauleddamage$getShockBuildUp() > 0) {
 				this.shockTickTimer++;
 				if (this.shockReductionDelayTimer < this.overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
 					this.shockReductionDelayTimer++;
 					this.shockTickTimer = 0;
+				} else {
+					this.shockTickTimer++;
 				}
-				if (this.shockTickTimer >= this.overhauleddamage$getShockTickThreshold()
-						&& this.shockReductionDelayTimer >= this.overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
-					if (this.overhauleddamage$getShockBuildUp() >= this.overhauleddamage$getMaxShockBuildUp()) {
-						StatusEffect shocked_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shocked_status_effect_identifier));
-						if (shocked_status_effect != null) {
-							this.addStatusEffect(new StatusEffectInstance(shocked_status_effect, this.overhauleddamage$getShockDuration(), 0, false, false, false));
-						}
-						this.overhauleddamage$setShockBuildUp(0);
-					} else {
-						this.overhauleddamage$addShockBuildUp(-this.overhauleddamage$getShockBuildUpReduction());
-					}
+				if (this.shockTickTimer >= this.overhauleddamage$getShockTickThreshold() && this.shockReductionDelayTimer >= this.overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addShockBuildUp(-this.overhauleddamage$getShockBuildUpReduction());
 					this.shockTickTimer = 0;
 				}
 			}
@@ -1147,7 +1271,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		return (float) this.getAttributeValue(OverhauledDamage.BLOCKED_PHYSICAL_DAMAGE);
 	}
 
-	// region bleeding build up
+	// region bleeding
 	@Override
 	public void overhauleddamage$addBleedingBuildUp(float amount) {
 		StatusEffect bleeding_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
@@ -1159,9 +1283,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			if (this.overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !this.hasStatusEffect(bleeding_status_effect)) {
 				float f = this.overhauleddamage$getBleedingBuildUp();
 				this.overhauleddamage$setBleedingBuildUp(f + amount);
-				if (this.overhauleddamage$getBleedingBuildUp() > this.overhauleddamage$getMaxBleedingBuildUp()) {
-					this.bleedingTickTimer = this.overhauleddamage$getBleedingTickThreshold();
-				} else if (amount > 0) {
+				if (amount > 0) {
 					this.bleedingTickTimer = 0;
 					this.bleedingReductionDelayTimer = 0;
 				}
@@ -1203,7 +1325,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public int overhauleddamage$getBleedingBuildUpReductionDelayThreshold() {
 		return (int) this.getAttributeValue(OverhauledDamage.BLEEDING_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
 	}
-	// endregion bleeding build up
+	// endregion bleeding
 
 	// region fire
 
@@ -1231,9 +1353,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public void overhauleddamage$addBurnBuildUp(float amount) {
 		if (this.overhauleddamage$getMaxBurnBuildUp() != -1.0f) {
 			this.overhauleddamage$setBurnBuildUp(this.overhauleddamage$getBurnBuildUp() + amount);
-			if (this.overhauleddamage$getBurnBuildUp() > this.overhauleddamage$getMaxBurnBuildUp()) {
-				this.burnTickTimer = this.overhauleddamage$getBurnTickThreshold();
-			} else if (amount > 0) {
+			if (amount > 0) {
 				this.burnTickTimer = 0;
 				this.burnReductionDelayTimer = 0;
 			}
@@ -1300,13 +1420,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public void overhauleddamage$addFreezeBuildUp(float amount) {
-		StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.frozen_status_effect_identifier));
+		StatusEffect freeze_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
 		if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect != null && !this.hasStatusEffect(freeze_status_effect)) {
 			float f = this.overhauleddamage$getFreezeBuildUp();
 			this.overhauleddamage$setFreezeBuildUp(f + amount);
-			if (this.overhauleddamage$getFreezeBuildUp() > this.overhauleddamage$getMaxFreezeBuildUp()) {
-				this.freezeTickTimer = this.overhauleddamage$getFreezeTickThreshold();
-			} else if (amount > 0) {
+			if (amount > 0) {
 				this.freezeTickTimer = 0;
 				this.freezeReductionDelayTimer = 0;
 			}
@@ -1349,16 +1467,14 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	}
 	// endregion frost
 
-	// region stagger build up
+	// region stagger
 	@Override
 	public void overhauleddamage$addStaggerBuildUp(float amount) {
-		StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.staggered_status_effect_identifier));
+		StatusEffect staggered_status_effect = Registries.STATUS_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
 		if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect != null && !this.hasStatusEffect(staggered_status_effect)) {
 			float f = this.overhauleddamage$getStaggerBuildUp();
 			this.overhauleddamage$setStaggerBuildUp(f + amount);
-			if (this.overhauleddamage$getStaggerBuildUp() > this.overhauleddamage$getMaxStaggerBuildUp()) {
-				this.staggerTickTimer = this.overhauleddamage$getStaggerTickThreshold();
-			} else if (amount > 0) {
+			if (amount > 0) {
 				this.staggerTickTimer = 0;
 				this.staggerReductionDelayTimer = 0;
 			}
@@ -1399,7 +1515,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public int overhauleddamage$getStaggerBuildUpReductionDelayThreshold() {
 		return (int) this.getAttributeValue(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
 	}
-	// endregion stagger build up
+	// endregion stagger
 
 	// region poison
 
@@ -1428,9 +1544,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		if (this.overhauleddamage$getMaxPoisonBuildUp() != -1.0f) {
 			float f = this.overhauleddamage$getPoisonBuildUp();
 			this.overhauleddamage$setPoisonBuildUp(f + amount);
-			if (this.overhauleddamage$getPoisonBuildUp() > this.overhauleddamage$getMaxPoisonBuildUp()) {
-				this.poisonTickTimer = this.overhauleddamage$getPoisonTickThreshold();
-			} else if (amount > 0) {
+			if (amount > 0) {
 				this.poisonTickTimer = 0;
 				this.poisonReductionDelayTimer = 0;
 			}
@@ -1500,9 +1614,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		if (this.overhauleddamage$getMaxShockBuildUp() != -1.0f) {
 			float f = this.overhauleddamage$getShockBuildUp();
 			this.overhauleddamage$setShockBuildUp(f + amount);
-			if (this.overhauleddamage$getShockBuildUp() > this.overhauleddamage$getMaxShockBuildUp()) {
-				this.shockTickTimer = this.overhauleddamage$getShockTickThreshold();
-			} else if (amount > 0) {
+			if (amount > 0) {
 				this.shockTickTimer = 0;
 				this.shockReductionDelayTimer = 0;
 			}

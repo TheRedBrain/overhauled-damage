@@ -126,12 +126,27 @@ public class ServerConfig extends Config {
 
 	public static class BuildUpEffects extends ConfigSection {
 		public String bleeding_status_effect_identifier = "variousstatuseffects:bleeding";
-		public String burning_status_effect_identifier = "variousstatuseffects:burning";
+		public boolean should_bleeding_duration_be_additive = false;
+		public boolean should_bleeding_amplifier_be_additive = false;
+		public String burn_status_effect_identifier = "variousstatuseffects:burning";
+		public boolean should_burn_duration_be_additive = true;
+		public boolean should_burn_amplifier_be_additive = false;
 		public String chilled_status_effect_identifier = "variousstatuseffects:chilled";
-		public String frozen_status_effect_identifier = "variousstatuseffects:frozen";
+		public double chilled_duration_multiplier = 1.0;
+		public boolean should_chilled_duration_be_additive = false;
+		public boolean should_chilled_amplifier_be_additive = false;
+		public String freeze_status_effect_identifier = "variousstatuseffects:frozen";
+		public boolean should_freeze_duration_be_additive = false;
+		public boolean should_freeze_amplifier_be_additive = false;
 		public String poison_status_effect_identifier = "variousstatuseffects:poison";
-		public String shocked_status_effect_identifier = "variousstatuseffects:shocked";
-		public String staggered_status_effect_identifier = "variousstatuseffects:staggered";
+		public boolean should_poison_duration_be_additive = false;
+		public boolean should_poison_amplifier_be_additive = true;
+		public String shock_status_effect_identifier = "variousstatuseffects:shocked";
+		public boolean should_shock_duration_be_additive = false;
+		public boolean should_shock_amplifier_be_additive = false;
+		public String stagger_status_effect_identifier = "variousstatuseffects:staggered";
+		public boolean should_stagger_duration_be_additive = false;
+		public boolean should_stagger_amplifier_be_additive = false;
 	}
 
 	@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
