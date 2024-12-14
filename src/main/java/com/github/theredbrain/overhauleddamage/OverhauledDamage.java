@@ -4,6 +4,7 @@ import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
+import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class OverhauledDamage implements ModInitializer {
 	public static final String MOD_ID = "overhauleddamage";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-	public static ServerConfig SERVER_CONFIG;
+	public static ServerConfig SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new, RegisterType.BOTH);
 
 	public static EntityAttribute ADDITIONAL_BASHING_DAMAGE;
 	public static EntityAttribute INCREASED_BASHING_DAMAGE;
@@ -128,7 +129,6 @@ public class OverhauledDamage implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Dealing overhauled damage!");
-		SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new);
 	}
 
 	public static Identifier identifier(String path) {
