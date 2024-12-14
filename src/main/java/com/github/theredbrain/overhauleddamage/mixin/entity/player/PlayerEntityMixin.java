@@ -38,7 +38,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DuckLivi
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;hasVehicle()Z")
 	)
 	public boolean overhauleddamage$wrap_hasVehicle(PlayerEntity instance, Operation<Boolean> original) {
-		return !OverhauledDamage.SERVER_CONFIG.disable_jump_crit_mechanic && original.call(instance);
+		return !OverhauledDamage.SERVER_CONFIG.disable_jump_crit_mechanic.get() && original.call(instance);
 	}
 
 	@Override

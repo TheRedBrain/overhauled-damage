@@ -275,7 +275,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
 	)
 	public boolean overhauleddamage$wrap_bypassesArmor(DamageSource instance, TagKey<DamageType> tag, Operation<Boolean> original) {
-		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul || original.call(instance, tag);
+		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul.get() || original.call(instance, tag);
 	}
 
 	// disables the vanilla shield blocking when blocking overhaul is enabled, the "blocking_requires_stamina" option is excluded from this
@@ -284,7 +284,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z")
 	)
 	public boolean overhauleddamage$wrap_blockedByShield(LivingEntity instance, DamageSource source, Operation<Boolean> original) {
-		return !OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul && original.call(instance, source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !OverhauledDamage.SERVER_CONFIG.damageCalculation.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded);
+		return !OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get() && original.call(instance, source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !OverhauledDamage.SERVER_CONFIG.damageCalculation.blocking_requires_stamina.get() || !OverhauledDamage.isStaminaAttributesLoaded);
 	}
 
 	@ModifyVariable(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), argsOnly = true)
@@ -295,7 +295,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public float overhauleddamage$calculateOverhauledDamage(DamageSource source, float amount) {
 		var serverConfig = OverhauledDamage.SERVER_CONFIG;
-		boolean enable_debug_log = serverConfig.damageCalculation.enable_debug_log;
+		boolean enable_debug_log = serverConfig.damageCalculation.enable_debug_log.get();
 		if (enable_debug_log) {
 			OverhauledDamage.info("----- start of new damage calculation log -----");
 			OverhauledDamage.info("");
@@ -433,9 +433,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			boolean triedBlocking = false;
 
 			// region shield blocks
-			if (serverConfig.damageCalculation.enable_blocking_overhaul) {
+			if (serverConfig.damageCalculation.enable_blocking_overhaul.get()) {
 				ItemStack shieldItemStack = this.activeItemStack;
-				if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.damageCalculation.blocking_requires_stamina || !OverhauledDamage.isStaminaAttributesLoaded)) {
+				if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.damageCalculation.blocking_requires_stamina.get() || !OverhauledDamage.isStaminaAttributesLoaded)) {
 					// a parry is tried, if the blocking time < the parry window of the blocking entity, the blocking entity can parry at all and the blocking item is in the 'can_parry' item tag
 					boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
 					double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
@@ -458,7 +458,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					float blockedLightningDamage;
 					float blockedPoisonDamage;
 
-					if (serverConfig.damageCalculation.blockingOverhaul.blocked_damage_calculation_works_with_flat_values) {
+					if (serverConfig.damageCalculation.blockingOverhaul.blocked_damage_calculation_works_with_flat_values.get()) {
 						if (enable_debug_log) {
 							OverhauledDamage.info("blocked damage calculation uses flat values");
 							OverhauledDamage.info("");
@@ -592,7 +592,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			// endregion shield blocks
 
 			// region apply protection
-			if (!source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS) && serverConfig.damageCalculation.enable_protection_overhaul) {
+			if (!source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS) && serverConfig.damageCalculation.enable_protection_overhaul.get()) {
 
 				// the protection enchantments reduce damage, with a default value of 2 percent reduction per enchantment level
 				float protection = (float) (EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source) * serverConfig.damageCalculation.protectionOverhaul.protection_damage_reduction_per_level);
@@ -644,7 +644,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					OverhauledDamage.info("");
 				}
 			} else if (enable_debug_log) {
-				if (!serverConfig.damageCalculation.enable_protection_overhaul) {
+				if (!serverConfig.damageCalculation.enable_protection_overhaul.get()) {
 					OverhauledDamage.info("protection overhaul not active");
 				}
 				if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
@@ -654,16 +654,16 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			// endregion apply protection
 
 			// region apply armor
-			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.damageCalculation.enable_armor_overhaul) {
+			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.damageCalculation.enable_armor_overhaul.get()) {
 				float armorDamage = 0.0F;
-				if (serverConfig.damageCalculation.armorOverhaul.armor_calculation_works_with_flat_values) {
+				if (serverConfig.damageCalculation.armorOverhaul.armor_calculation_works_with_flat_values.get()) {
 					// TODO this calculation needs a serious overhaul
 					// armorToughness now directly determines how effective armor is
 					// effective armor reduces damage by its amount
 					// armor is more or less effective against different attack types
 					float effectiveArmor = this.getArmor();
 
-					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute) {
+					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute.get()) {
 						if (enable_debug_log) {
 							OverhauledDamage.info("armor toughness is enabled");
 							OverhauledDamage.info("");
@@ -720,7 +720,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					// armor toughness is a multiplier to this
 					float effective_armor = this.getArmor();
 
-					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute) {
+					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute.get()) {
 						if (enable_debug_log) {
 							OverhauledDamage.info("armor toughness is enabled");
 							OverhauledDamage.info("");
@@ -790,7 +790,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					OverhauledDamage.info("");
 				}
 			} else if (enable_debug_log) {
-				if (serverConfig.damageCalculation.enable_armor_overhaul) {
+				if (serverConfig.damageCalculation.enable_armor_overhaul.get()) {
 					OverhauledDamage.info("armor overhaul not active");
 				} else {
 					OverhauledDamage.info("damage bypasses armor");
@@ -837,7 +837,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 
 			// taking damage interrupts eating food, drinking potions, etc
-			if (applied_damage > 0.0f && !this.isBlocking() && serverConfig.damage_interrupts_item_usage) {
+			if (applied_damage > 0.0f && !this.isBlocking() && serverConfig.damage_interrupts_item_usage.get()) {
 				if (enable_debug_log) {
 					OverhauledDamage.info("item usage was stopped");
 					OverhauledDamage.info("");
@@ -900,10 +900,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(chilled_status_effect);
 					if (statusEffectInstance != null) {
 						chilledDuration = chilledDuration + statusEffectInstance.getDuration();
-						if (serverConfig.buildUpEffects.should_chilled_duration_be_additive) {
+						if (serverConfig.buildUpEffects.should_chilled_duration_be_additive.get()) {
 							existingChilledDuration = statusEffectInstance.getDuration();
 						}
-						if (serverConfig.buildUpEffects.should_chilled_amplifier_be_additive) {
+						if (serverConfig.buildUpEffects.should_chilled_amplifier_be_additive.get()) {
 							chilledAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
@@ -1028,10 +1028,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					int bleedingAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(bleeding_status_effect);
 					if (statusEffectInstance != null) {
-						if (serverConfig.buildUpEffects.should_bleeding_duration_be_additive) {
+						if (serverConfig.buildUpEffects.should_bleeding_duration_be_additive.get()) {
 							existingBleedingDuration = statusEffectInstance.getDuration();
 						}
-						if (serverConfig.buildUpEffects.should_bleeding_amplifier_be_additive) {
+						if (serverConfig.buildUpEffects.should_bleeding_amplifier_be_additive.get()) {
 							bleedingAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
@@ -1061,10 +1061,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					int burnAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(burn_status_effect);
 					if (statusEffectInstance != null) {
-						if (serverConfig.buildUpEffects.should_burn_duration_be_additive) {
+						if (serverConfig.buildUpEffects.should_burn_duration_be_additive.get()) {
 							existingBurnDuration = statusEffectInstance.getDuration();
 						}
-						if (serverConfig.buildUpEffects.should_burn_amplifier_be_additive) {
+						if (serverConfig.buildUpEffects.should_burn_amplifier_be_additive.get()) {
 							burnAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
@@ -1092,10 +1092,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					int freezeAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(freeze_status_effect);
 					if (statusEffectInstance != null) {
-						if (serverConfig.buildUpEffects.should_freeze_duration_be_additive) {
+						if (serverConfig.buildUpEffects.should_freeze_duration_be_additive.get()) {
 							existingFreezeDuration = statusEffectInstance.getDuration();
 						}
-						if (serverConfig.buildUpEffects.should_freeze_amplifier_be_additive) {
+						if (serverConfig.buildUpEffects.should_freeze_amplifier_be_additive.get()) {
 							freezeAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
@@ -1124,10 +1124,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					int staggerAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(stagger_status_effect);
 					if (statusEffectInstance != null) {
-						if (serverConfig.buildUpEffects.should_stagger_duration_be_additive) {
+						if (serverConfig.buildUpEffects.should_stagger_duration_be_additive.get()) {
 							existingStaggerDuration = statusEffectInstance.getDuration();
 						}
-						if (serverConfig.buildUpEffects.should_stagger_amplifier_be_additive) {
+						if (serverConfig.buildUpEffects.should_stagger_amplifier_be_additive.get()) {
 							staggerAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
@@ -1156,10 +1156,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					int poisonAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(poison_status_effect);
 					if (statusEffectInstance != null) {
-						if (serverConfig.buildUpEffects.should_poison_duration_be_additive) {
+						if (serverConfig.buildUpEffects.should_poison_duration_be_additive.get()) {
 							existingPoisonDuration = statusEffectInstance.getDuration();
 						}
-						if (serverConfig.buildUpEffects.should_poison_amplifier_be_additive) {
+						if (serverConfig.buildUpEffects.should_poison_amplifier_be_additive.get()) {
 							poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
 						}
 					}
@@ -1188,10 +1188,10 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					int shockAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(shock_status_effect);
 					if (statusEffectInstance != null) {
-						if (serverConfig.buildUpEffects.should_shock_duration_be_additive) {
+						if (serverConfig.buildUpEffects.should_shock_duration_be_additive.get()) {
 							existingShockDuration = statusEffectInstance.getDuration();
 						}
-						if (serverConfig.buildUpEffects.should_shock_amplifier_be_additive) {
+						if (serverConfig.buildUpEffects.should_shock_amplifier_be_additive.get()) {
 							shockAmplifier = statusEffectInstance.getAmplifier() + 1;
 						}
 					}
@@ -1218,7 +1218,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// blocking is now active instantly
 	@Inject(method = "isBlocking", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
 	public void overhauleddamage$isBlocking(CallbackInfoReturnable<Boolean> cir) {
-		cir.setReturnValue(OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul);
+		cir.setReturnValue(OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get());
 	}
 
 	@Override
