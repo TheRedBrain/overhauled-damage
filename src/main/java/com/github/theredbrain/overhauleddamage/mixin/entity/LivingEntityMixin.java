@@ -6,7 +6,6 @@ import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
@@ -1071,6 +1070,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					this.addStatusEffect(new StatusEffectInstance(burn_status_effect, this.overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));
 				}
 				this.overhauleddamage$setBurnBuildUp(0);
+				this.burnTickTimer = 0;
+				this.burnReductionDelayTimer = this.overhauleddamage$getBurnBuildUpReduction();
 			}
 			if (this.overhauleddamage$getBurnBuildUp() > 0) {
 				if (this.burnReductionDelayTimer < this.overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
@@ -1102,6 +1103,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					this.addStatusEffect(new StatusEffectInstance(freeze_status_effect, this.overhauleddamage$getFreezeDuration() + existingFreezeDuration, freezeAmplifier, false, false, true));
 				}
 				this.overhauleddamage$setFreezeBuildUp(0);
+				this.freezeTickTimer = 0;
+				this.freezeReductionDelayTimer = this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold();
 			}
 			if (this.overhauleddamage$getFreezeBuildUp() > 0) {
 				this.freezeTickTimer++;
@@ -1134,6 +1137,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					this.addStatusEffect(new StatusEffectInstance(stagger_status_effect, this.overhauleddamage$getStaggerDuration() + existingStaggerDuration, staggerAmplifier, false, false, true));
 				}
 				this.overhauleddamage$setStaggerBuildUp(0);
+				this.staggerTickTimer = 0;
+				this.staggerReductionDelayTimer = this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold();
 			}
 			if (this.overhauleddamage$getStaggerBuildUp() > 0) {
 				this.staggerTickTimer++;
@@ -1166,6 +1171,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					this.addStatusEffect(new StatusEffectInstance(poison_status_effect, this.overhauleddamage$getPoisonDuration() + existingPoisonDuration, poisonAmplifier, false, false, true));
 				}
 				this.overhauleddamage$setPoisonBuildUp(0);
+				this.poisonTickTimer = 0;
+				this.poisonReductionDelayTimer = this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold();
 			}
 			if (this.overhauleddamage$getPoisonBuildUp() > 0) {
 				this.poisonTickTimer++;
@@ -1198,6 +1205,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					this.addStatusEffect(new StatusEffectInstance(shock_status_effect, this.overhauleddamage$getShockDuration() + existingShockDuration, shockAmplifier, false, false, false));
 				}
 				this.overhauleddamage$setShockBuildUp(0);
+				this.shockTickTimer = 0;
+				this.shockReductionDelayTimer = this.overhauleddamage$getShockBuildUpReductionDelayThreshold();
 			}
 			if (this.overhauleddamage$getShockBuildUp() > 0) {
 				this.shockTickTimer++;
