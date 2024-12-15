@@ -356,9 +356,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		if (amount > 0) {
 
 			// fallback
-			ServerConfig.AttackTypeMultipliers damage_type_multiplier = null;
+			ServerConfig.DamageTypes.DamageTypeMultipliers damage_type_multiplier = null;
 
-			ValidatedMap<String, ServerConfig.AttackTypeMultipliers> damage_type_multipliers = serverConfig.damageTypes.damage_type_multipliers;
+//			ValidatedMap<String, ServerConfig.DamageTypes.DamageTypeMultipliers> damage_type_multipliers = serverConfig.damageTypes.damage_type_multipliers; // TODO wait for Fzzy Config update
 
 			String damageTypeId = "";
 			Optional<RegistryKey<DamageType>> optional = source.getTypeRegistryEntry().getKey();
@@ -371,14 +371,14 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					OverhauledDamage.info("damage type : " + damageTypeId);
 					OverhauledDamage.info("");
 				}
-				damage_type_multiplier = damage_type_multipliers.get(damageTypeId);
+//				damage_type_multiplier = damage_type_multipliers.get(damageTypeId); // TODO wait for Fzzy Config update
 			}
 			if (damage_type_multiplier == null) {
 				if (enable_debug_log) {
 					OverhauledDamage.info("using default_damage_type_multipliers");
 					OverhauledDamage.info("");
 				}
-				damage_type_multiplier = serverConfig.damageTypes.default_damage_type_multipliers;
+				damage_type_multiplier = serverConfig.damageTypes.default_damage_type_multipliers.get();
 			}
 			if (enable_debug_log) {
 				OverhauledDamage.info("used damage_type_multipliers : " + damage_type_multiplier.toString());
@@ -504,7 +504,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 						boolean isStaggered = false;
 
 						// apply stagger based on left over damage
-						ServerConfig.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers;
+						ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers.get();
 						if (enable_debug_log) {
 							OverhauledDamage.info("--- apply stagger based on left over damage ---");
 							OverhauledDamage.info("");
@@ -608,7 +608,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				}
 
 				// the different attack types also have a protection_multiplier
-				ServerConfig.AttackTypeMultipliers protection_multipliers = serverConfig.damageCalculation.protectionOverhaul.protection_multipliers;
+				ServerConfig.DamageCalculation.ProtectionOverhaul.ProtectionMultipliers protection_multipliers = serverConfig.damageCalculation.protectionOverhaul.protection_multipliers.get();
 
 				if (enable_debug_log) {
 					OverhauledDamage.info("protection_multipliers : " + protection_multipliers.toString());
@@ -741,7 +741,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					// armor is not reduced when reducing the damage amount of one attack_type
 
 					// the different attack types have an armor_multiplier on their own
-					ServerConfig.AttackTypeMultipliers armor_multipliers = serverConfig.damageCalculation.armorOverhaul.armor_multipliers;
+					ServerConfig.DamageCalculation.ArmorOverhaul.ArmorMultipliers armor_multipliers = serverConfig.damageCalculation.armorOverhaul.armor_multipliers.get();
 
 					if (enable_debug_log) {
 						OverhauledDamage.info("armor_multipliers: " + armor_multipliers.toString());
@@ -827,7 +827,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				OverhauledDamage.info("");
 			}
 
-			ServerConfig.AttackTypeMultipliers applied_damage_multipliers = serverConfig.damageCalculation.applied_damage_multipliers;
+			ServerConfig.DamageCalculation.AttackTypeMultipliers applied_damage_multipliers = serverConfig.damageCalculation.applied_damage_multipliers.get();
 			applied_damage = (generic_amount * applied_damage_multipliers.generic) + (bashing_amount * applied_damage_multipliers.bashing) + (piercing_amount * applied_damage_multipliers.piercing) + (slashing_amount * applied_damage_multipliers.slashing) + (poison_amount * applied_damage_multipliers.poison) + (fire_amount * applied_damage_multipliers.fire) + (frost_amount * applied_damage_multipliers.frost) + (lightning_amount * applied_damage_multipliers.lightning);
 
 			if (enable_debug_log) {
@@ -851,7 +851,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			}
 
 			// apply bleeding
-			ServerConfig.AttackTypeMultipliers bleeding_multipliers = serverConfig.damageCalculation.bleeding_multipliers;
+			ServerConfig.DamageCalculation.AttackTypeMultipliers bleeding_multipliers = serverConfig.damageCalculation.bleeding_multipliers.get();
 			if (source.isIn(Tags.APPLIES_BLEEDING)) {
 				float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
 
@@ -930,7 +930,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 			if (!triedBlocking) {
 				// apply stagger
-				ServerConfig.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers;
+				ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers.get();
 				if (enable_debug_log) {
 					OverhauledDamage.info("--- apply stagger when no blocking was tried ---");
 					OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());

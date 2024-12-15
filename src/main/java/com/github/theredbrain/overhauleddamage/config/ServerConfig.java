@@ -7,14 +7,11 @@ import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
 import me.fzzyhmstrs.fzzy_config.util.Walkable;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
-import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedStringMap;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedAny;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedString;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @ConvertFrom(fileName = "server.json5", folder = "overhauleddamage")
 public class ServerConfig extends Config {
@@ -31,55 +28,58 @@ public class ServerConfig extends Config {
 
 	public static class DamageTypes extends ConfigSection {
 
-		public AttackTypeMultipliers default_damage_type_multipliers = new AttackTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+		public ValidatedAny<DamageTypeMultipliers> default_damage_type_multipliers = new ValidatedAny<>(new DamageTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+/*
+		// TODO wait for Fzzy Config update
+		public ValidatedMap<String, DamageTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(new HashMap<>() {{
+					put("minecraft:arrow", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:cactus", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:falling_stalactite", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:fireball", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+					put("minecraft:hot_floor", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+					put("minecraft:in_fire", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+					put("minecraft:lightning_bolt", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
+					put("minecraft:mob_attack", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:stalagmite", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:sting", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:sweet_berry_bush", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:thorns", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("minecraft:trident", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("overhauleddamage:mob_bashing_damage_type", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("overhauleddamage:mob_piercing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+					put("overhauleddamage:mob_slashing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				}}, new ValidatedString(), new ValidatedAny<>(new DamageTypeMultipliers()));
+*/
+		@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
+		public static class DamageTypeMultipliers implements Walkable {
 
-		public ValidatedMap<String, AttackTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(
+			public DamageTypeMultipliers() {
+				new DamageTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+			}
 
-//		)ValidatedStringMap.Builder<AttackTypeMultipliers>()
-//				.keyHandler(ValidatedString(""))
-//				.valueHandler(AttackTypeMultipliers())
-//				.defaul/*new HashMap<>() {{
-		/*put("minecraft:arrow", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:cactus", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:falling_stalactite", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:fireball", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-		put("minecraft:hot_floor", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-		put("minecraft:in_fire", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-		put("minecraft:lightning_bolt", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
-		put("minecraft:mob_attack", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:stalagmite", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:sting", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:sweet_berry_bush", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:thorns", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("minecraft:trident", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("overhauleddamage:mob_bashing_damage_type", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("overhauleddamage:mob_piercing_damage_type", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		put("overhauleddamage:mob_slashing_damage_type", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-	}}*/
-				this.getMap(), new ValidatedString(), new ValidatedAny<>(new AttackTypeMultipliers()));
-//	}
+			public DamageTypeMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
+				this.generic = generic;
+				this.bashing = bashing;
+				this.piercing = piercing;
+				this.slashing = slashing;
+				this.poison = poison;
+				this.fire = fire;
+				this.frost = frost;
+				this.lightning = lightning;
+			}
 
-		private Map<String, AttackTypeMultipliers> getMap() {
-			LinkedHashMap<String, AttackTypeMultipliers> damage_type_multipliers = new LinkedHashMap<>();
+			public float generic;
+			public float bashing;
+			public float piercing;
+			public float slashing;
+			public float poison;
+			public float fire;
+			public float frost;
+			public float lightning;
 
-			damage_type_multipliers.put("minecraft:arrow", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:cactus", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:falling_stalactite", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:fireball", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:hot_floor", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:in_fire", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:lightning_bolt", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
-			damage_type_multipliers.put("minecraft:mob_attack", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:stalagmite", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:sting", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:sweet_berry_bush", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:thorns", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("minecraft:trident", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("overhauleddamage:mob_bashing_damage_type", new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("overhauleddamage:mob_piercing_damage_type", new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			damage_type_multipliers.put("overhauleddamage:mob_slashing_damage_type", new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-//		}}
-			return damage_type_multipliers;
+			public String toString() {
+				return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
+			}
 		}
 	}
 
@@ -121,8 +121,40 @@ public class ServerConfig extends Config {
 //			Default: [1.0, 1.0, 0.5, 0.6, 0.0, 1.0, 0.0, 0.0]
 //			Example: By default the slashing part of each attack is reduced by 1.2 % per enchantment level. (0.6 * 2%)
 //			""")
-			public AttackTypeMultipliers protection_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 0.6F, 0.0F, 1.0F, 0.0F, 0.0F);
+			public ValidatedAny<ProtectionMultipliers> protection_multipliers = new ValidatedAny<>(new ProtectionMultipliers(1.0F, 1.0F, 0.5F, 0.6F, 0.0F, 1.0F, 0.0F, 0.0F));
 
+
+			@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
+			public static class ProtectionMultipliers implements Walkable {
+
+				public ProtectionMultipliers() {
+					new ProtectionMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+				}
+
+				public ProtectionMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
+					this.generic = generic;
+					this.bashing = bashing;
+					this.piercing = piercing;
+					this.slashing = slashing;
+					this.poison = poison;
+					this.fire = fire;
+					this.frost = frost;
+					this.lightning = lightning;
+				}
+
+				public float generic;
+				public float bashing;
+				public float piercing;
+				public float slashing;
+				public float poison;
+				public float fire;
+				public float frost;
+				public float lightning;
+
+				public String toString() {
+					return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
+				}
+			}
 		}
 
 		public ValidatedBoolean enable_armor_overhaul = new ValidatedBoolean(true);
@@ -135,8 +167,40 @@ public class ServerConfig extends Config {
 
 			public ValidatedBoolean enable_armor_toughness_attribute = new ValidatedBoolean(false);
 
-			public AttackTypeMultipliers armor_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F);
+			public ValidatedAny<ArmorMultipliers> armor_multipliers = new ValidatedAny<>(new ArmorMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F));
 
+
+			@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
+			public static class ArmorMultipliers implements Walkable {
+
+				public ArmorMultipliers() {
+					new ArmorMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+				}
+
+				public ArmorMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
+					this.generic = generic;
+					this.bashing = bashing;
+					this.piercing = piercing;
+					this.slashing = slashing;
+					this.poison = poison;
+					this.fire = fire;
+					this.frost = frost;
+					this.lightning = lightning;
+				}
+
+				public float generic;
+				public float bashing;
+				public float piercing;
+				public float slashing;
+				public float poison;
+				public float fire;
+				public float frost;
+				public float lightning;
+
+				public String toString() {
+					return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
+				}
+			}
 		}
 
 		//	@Comment("""
@@ -148,13 +212,45 @@ public class ServerConfig extends Config {
 //			""")
 //		public boolean enable_damage_taken_multiplier_attribute = true; // TODO
 
-		public AttackTypeMultipliers bleeding_multipliers = new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F);
+		public ValidatedAny<AttackTypeMultipliers> bleeding_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F));
 
-		public AttackTypeMultipliers stagger_multipliers = new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F);
+		public ValidatedAny<AttackTypeMultipliers> stagger_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F));
 
-		public AttackTypeMultipliers applied_damage_multipliers = new AttackTypeMultipliers(1.0F, 1.0F, 1.0F, 1.25F, 0.0F, 0.0F, 0.0F, 0.0F);
+		public ValidatedAny<AttackTypeMultipliers> applied_damage_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(1.0F, 1.0F, 1.0F, 1.25F, 0.0F, 0.0F, 0.0F, 0.0F));
 
 		public ValidatedBoolean enable_debug_log = new ValidatedBoolean(false);
+
+		@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
+		public static class AttackTypeMultipliers implements Walkable {
+
+			public AttackTypeMultipliers() {
+				new AttackTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+			}
+
+			public AttackTypeMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
+				this.generic = generic;
+				this.bashing = bashing;
+				this.piercing = piercing;
+				this.slashing = slashing;
+				this.poison = poison;
+				this.fire = fire;
+				this.frost = frost;
+				this.lightning = lightning;
+			}
+
+			public float generic;
+			public float bashing;
+			public float piercing;
+			public float slashing;
+			public float poison;
+			public float fire;
+			public float frost;
+			public float lightning;
+
+			public String toString() {
+				return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
+			}
+		}
 	}
 
 	public BuildUpEffects buildUpEffects = new BuildUpEffects();
@@ -182,37 +278,5 @@ public class ServerConfig extends Config {
 		public String stagger_status_effect_identifier = "variousstatuseffects:staggered";
 		public ValidatedBoolean should_stagger_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_stagger_amplifier_be_additive = new ValidatedBoolean(false);
-	}
-
-	@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
-	public static class AttackTypeMultipliers implements Walkable {
-
-		public AttackTypeMultipliers() {
-			new AttackTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-		}
-
-		public AttackTypeMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
-			this.generic = generic;
-			this.bashing = bashing;
-			this.piercing = piercing;
-			this.slashing = slashing;
-			this.poison = poison;
-			this.fire = fire;
-			this.frost = frost;
-			this.lightning = lightning;
-		}
-
-		public float generic;
-		public float bashing;
-		public float piercing;
-		public float slashing;
-		public float poison;
-		public float fire;
-		public float frost;
-		public float lightning;
-
-		public String toString() {
-			return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
-		}
 	}
 }
