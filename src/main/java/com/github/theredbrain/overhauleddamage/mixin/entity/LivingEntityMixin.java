@@ -268,6 +268,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	}
 
+	@Inject(method = "takeShieldHit", at = @At("TAIL"))
+	protected void overhauleddamage$takeShieldHit(LivingEntity attacker, CallbackInfo ci) {
+		if (!OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get() && OverhauledDamage.isStaminaAttributesLoaded) {
+			OverhauledDamage.addStamina(((LivingEntity) (Object) this), -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
+		}
+	}
+
 	// disables the vanilla armor calculation
 	@WrapOperation(
 			method = "applyArmorToDamage",
