@@ -6,6 +6,7 @@ import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
@@ -364,7 +365,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			// fallback
 			ServerConfig.DamageTypes.DamageTypeMultipliers damage_type_multiplier = null;
 
-//			ValidatedMap<String, ServerConfig.DamageTypes.DamageTypeMultipliers> damage_type_multipliers = serverConfig.damageTypes.damage_type_multipliers; // TODO wait for Fzzy Config update
+			ValidatedMap<String, ServerConfig.DamageTypes.DamageTypeMultipliers> damage_type_multipliers = serverConfig.damageTypes.damage_type_multipliers;
 
 			String damageTypeId = "";
 			Optional<RegistryKey<DamageType>> optional = source.getTypeRegistryEntry().getKey();
@@ -377,7 +378,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 					OverhauledDamage.info("damage type : " + damageTypeId);
 					OverhauledDamage.info("");
 				}
-//				damage_type_multiplier = damage_type_multipliers.get(damageTypeId); // TODO wait for Fzzy Config update
+				damage_type_multiplier = damage_type_multipliers.get(damageTypeId);
 			}
 			if (damage_type_multiplier == null) {
 				if (enable_debug_log) {

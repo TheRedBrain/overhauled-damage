@@ -29,8 +29,7 @@ public class ServerConfig extends Config {
 	public static class DamageTypes extends ConfigSection {
 
 		public ValidatedAny<DamageTypeMultipliers> default_damage_type_multipliers = new ValidatedAny<>(new DamageTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-/*
-		// TODO wait for Fzzy Config update
+
 		public ValidatedMap<String, DamageTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(new HashMap<>() {{
 					put("minecraft:arrow", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 					put("minecraft:cactus", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
@@ -49,7 +48,7 @@ public class ServerConfig extends Config {
 					put("overhauleddamage:mob_piercing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 					put("overhauleddamage:mob_slashing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 				}}, new ValidatedString(), new ValidatedAny<>(new DamageTypeMultipliers()));
-*/
+
 		@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
 		public static class DamageTypeMultipliers implements Walkable {
 
