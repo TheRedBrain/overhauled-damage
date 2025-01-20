@@ -5,11 +5,19 @@ import me.fzzyhmstrs.fzzy_config.annotations.ConvertFrom;
 import me.fzzyhmstrs.fzzy_config.annotations.Translation;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
+import me.fzzyhmstrs.fzzy_config.util.AllowableIdentifiers;
 import me.fzzyhmstrs.fzzy_config.util.Walkable;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
+import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
+import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedRegistryType;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedAny;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedString;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
 
@@ -22,6 +30,43 @@ public class ServerConfig extends Config {
 
 	public ValidatedBoolean damage_interrupts_item_usage = new ValidatedBoolean(true);
 
+	public ValidatedBoolean enable_hit_stun_mechanic = new ValidatedBoolean(true);
+
+	public HitStun hitStun = new HitStun();
+
+	public static class HitStun extends ConfigSection {
+
+		public ValidatedAny<HitStunSettings> default_hit_stun_settings = new ValidatedAny<>(new HitStunSettings(1, 0.0));
+
+		public ValidatedIdentifier attribute = new ValidatedIdentifier(new Identifier("overhauleddamage:generic.max_stagger_build_up"));
+
+		public ValidatedIdentifier hit_stun_status_effect_identifier = new ValidatedIdentifier(new Identifier("variousstatuseffects:hit_stun"));
+
+		public ValidatedMap<String, HitStunSettings> hit_stun_settings = new ValidatedMap<>(new HashMap<>() {{
+			put("overhauleddamage:mob_slashing_damage_type", new HitStunSettings(0, 0.0));
+		}}, new ValidatedString(), new ValidatedAny<>(new HitStunSettings()));
+
+		@Translation(prefix = "overhauleddamage.server.hit_sun_settings")
+		public static class HitStunSettings implements Walkable {
+
+			public HitStunSettings() {
+				new HitStunSettings(1, 0.0);
+			}
+
+			public HitStunSettings(int duration, double required_attribute_threshold) {
+				this.duration = duration;
+				this.required_attribute_threshold = required_attribute_threshold;
+			}
+
+			public int duration;
+			public double required_attribute_threshold;
+
+			public String toString() {
+				return "duration: " + this.duration + ", required_attribute_threshold: " + this.required_attribute_threshold;
+			}
+		}
+	}
+	
 	public ValidatedBoolean disable_jump_crit_mechanic = new ValidatedBoolean(true);
 
 	public DamageTypes damageTypes = new DamageTypes();

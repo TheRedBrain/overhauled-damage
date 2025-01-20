@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -27,6 +28,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -81,6 +83,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Shadow
 	protected ItemStack activeItemStack;
+
+	@Shadow public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
+
+	@Shadow public abstract AttributeContainer getAttributes();
+
+	@Shadow public abstract double getAttributeBaseValue(EntityAttribute attribute);
+
 	@Unique
 	private int bleedingTickTimer = 0;
 	@Unique
@@ -856,6 +865,47 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
 				OverhauledDamage.info("");
 			}
+
+			// apply hit stun
+			if (serverConfig.enable_hit_stun_mechanic.get()) {
+				EntityAttribute attribute = Registries.ATTRIBUTE.get(serverConfig.hitStun.attribute.get());
+				if (attribute != null) {
+					if (this.getAttributes().hasAttribute(attribute)) {
+						double attributeValue = this.getAttributeValue(attribute);
+						ServerConfig.HitStun.HitStunSettings hitStunSettings = serverConfig.hitStun.hit_stun_settings.get(damageTypeId);
+						if (hitStunSettings == null) {
+							hitStunSettings = serverConfig.hitStun.default_hit_stun_settings.get();
+						}
+
+						if (attributeValue <= hitStunSettings.required_attribute_threshold) {
+							// apply hit stun
+							StatusEffect hit_stun_status_effect = Registries.STATUS_EFFECT.get(serverConfig.hitStun.hit_stun_status_effect_identifier.get());
+							if (hit_stun_status_effect != null) {
+								this.addStatusEffect(new StatusEffectInstance(hit_stun_status_effect, hitStunSettings.duration, 0, false, false, true));
+							}
+						}
+					}
+				}
+			}
+//			if (source.isIn(Tags.APPLIES_BLEEDING)) {
+//				float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
+//
+//				if (enable_debug_log) {
+//					OverhauledDamage.info("--- apply bleeding build up ---");
+//					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers);
+//				}
+//
+//				if (applied_bleeding > 0) {
+//					if (enable_debug_log) {
+//						OverhauledDamage.info("applied bleeding build up : " + applied_bleeding);
+//						OverhauledDamage.info("");
+//					}
+//					this.overhauleddamage$addBleedingBuildUp(applied_bleeding);
+//				} else if (enable_debug_log) {
+//					OverhauledDamage.info("no bleeding build up was applied");
+//					OverhauledDamage.info("");
+//				}
+//			}
 
 			// apply bleeding
 			ServerConfig.DamageCalculation.AttackTypeMultipliers bleeding_multipliers = serverConfig.damageCalculation.bleeding_multipliers.get();
