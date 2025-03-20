@@ -886,6 +886,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 						}
 					}
 				}
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no bleeding build up was applied");
+				OverhauledDamage.info("");
 			}
 //			if (source.isIn(Tags.APPLIES_BLEEDING)) {
 //				float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
