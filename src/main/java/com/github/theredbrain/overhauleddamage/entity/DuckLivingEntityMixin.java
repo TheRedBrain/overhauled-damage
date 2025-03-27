@@ -40,6 +40,8 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getBleedingBuildUpReduction();
 
+	int overhauleddamage$getBleedingBuildUpReductionDelayThreshold();
+
 	float overhauleddamage$getAdditionalFireDamage();
 
 	float overhauleddamage$getIncreasedFireDamage();
@@ -61,6 +63,8 @@ public interface DuckLivingEntityMixin {
 	int overhauleddamage$getBurnTickThreshold();
 
 	int overhauleddamage$getBurnBuildUpReduction();
+
+	int overhauleddamage$getBurnBuildUpReductionDelayThreshold();
 
 	float overhauleddamage$getAdditionalFrostDamage();
 
@@ -84,6 +88,8 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getFreezeBuildUpReduction();
 
+	int overhauleddamage$getFreezeBuildUpReductionDelayThreshold();
+
 	void overhauleddamage$addStaggerBuildUp(float amount);
 
 	float overhauleddamage$getStaggerBuildUp();
@@ -97,6 +103,8 @@ public interface DuckLivingEntityMixin {
 	int overhauleddamage$getStaggerTickThreshold();
 
 	int overhauleddamage$getStaggerBuildUpReduction();
+
+	int overhauleddamage$getStaggerBuildUpReductionDelayThreshold();
 
 	float overhauleddamage$getAdditionalPoisonDamage();
 
@@ -120,6 +128,8 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getPoisonBuildUpReduction();
 
+	int overhauleddamage$getPoisonBuildUpReductionDelayThreshold();
+
 	float overhauleddamage$getAdditionalLightningDamage();
 
 	float overhauleddamage$getIncreasedLightningDamage();
@@ -141,6 +151,8 @@ public interface DuckLivingEntityMixin {
 	int overhauleddamage$getShockTickThreshold();
 
 	int overhauleddamage$getShockBuildUpReduction();
+
+	int overhauleddamage$getShockBuildUpReductionDelayThreshold();
 
 	float overhauleddamage$getBlockForce();
 

@@ -1,12 +1,18 @@
 package com.github.theredbrain.overhauleddamage.mixin.entity;
 
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
+import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -27,6 +33,9 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.UseAction;
@@ -46,7 +55,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.LinkedHashMap;
 import java.util.Optional;
-import java.util.jar.Attributes;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements DuckLivingEntityMixin {
@@ -74,9 +82,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Shadow
 	public abstract boolean blockedByShield(DamageSource source);
-//
-//	@Shadow
-//	public abstract boolean isBlocking();
 
 	@Shadow
 	public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
@@ -91,18 +96,35 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Shadow protected ItemStack activeItemStack;
 	@Shadow protected int itemUseTimeLeft;
+
+	@Shadow public abstract boolean isBlocking();
+
+	@Shadow public abstract AttributeContainer getAttributes();
+
 	@Unique
 	private int bleedingTickTimer = 0;
 	@Unique
+	private int bleedingReductionDelayTimer = 0;
+	@Unique
 	private int burnTickTimer = 0;
+	@Unique
+	private int burnReductionDelayTimer = 0;
 	@Unique
 	private int freezeTickTimer = 0;
 	@Unique
+	private int freezeReductionDelayTimer = 0;
+	@Unique
 	private int staggerTickTimer = 0;
+	@Unique
+	private int staggerReductionDelayTimer = 0;
 	@Unique
 	private int poisonTickTimer = 0;
 	@Unique
+	private int poisonReductionDelayTimer = 0;
+	@Unique
 	private int shockTickTimer = 0;
+	@Unique
+	private int shockReductionDelayTimer = 0;
 	@Unique
 	private int blockingTime = 0;
 
@@ -260,28 +282,29 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	}
 
-	// disables the vanilla armor calculation
-	@Redirect(
-			method = "applyArmorToDamage",
-			at = @At(
-					value = "INVOKE",
-					target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z"
-			)
-	)
-	public boolean overhauleddamage$redirect_bypassesArmor(DamageSource instance, TagKey<DamageType> tag) {
-		return true;
+	@Inject(method = "takeShieldHit", at = @At("TAIL"))
+	protected void overhauleddamage$takeShieldHit(LivingEntity attacker, CallbackInfo ci) {
+		if (!OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get() && OverhauledDamage.isStaminaAttributesLoaded) {
+			OverhauledDamage.addStamina(((LivingEntity) (Object) this), -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
+		}
 	}
 
-	// disables the vanilla shield blocking
-	@Redirect(
-			method = "damage",
-			at = @At(
-					value = "INVOKE",
-					target = "Lnet/minecraft/entity/LivingEntity;blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z"
-			)
+	// disables the vanilla armor calculation
+	@WrapOperation(
+			method = "applyArmorToDamage",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
 	)
-	public boolean overhauleddamage$redirect_blockedByShield(LivingEntity instance, DamageSource source) {
-		return false;
+	public boolean overhauleddamage$wrap_bypassesArmor(DamageSource instance, TagKey<DamageType> tag, Operation<Boolean> original) {
+		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul.get() || original.call(instance, tag);
+	}
+
+	// disables the vanilla shield blocking when blocking overhaul is enabled, the "blocking_requires_stamina" option is excluded from this
+	@WrapOperation(
+			method = "damage",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z")
+	)
+	public boolean overhauleddamage$wrap_blockedByShield(LivingEntity instance, DamageSource source, Operation<Boolean> original) {
+		return !OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get() && original.call(instance, source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !OverhauledDamage.SERVER_CONFIG.damageCalculation.blocking_requires_stamina.get() || !OverhauledDamage.isStaminaAttributesLoaded);
 	}
 
 	@ModifyVariable(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), argsOnly = true)
@@ -291,87 +314,100 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public float overhauleddamage$calculateOverhauledDamage(DamageSource source, float amount) {
-
-		var serverConfig = OverhauledDamage.serverConfig;
-		Optional<RegistryEntry.Reference<StatusEffect>> fall_immune_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(serverConfig.fall_immune_status_effect_identifier));
-		if (source.isIn(DamageTypeTags.IS_FALL) && fall_immune_status_effect.isPresent() && this.hasStatusEffect(fall_immune_status_effect.get())) {
-			return 0.0F;
+		var serverConfig = OverhauledDamage.SERVER_CONFIG;
+		boolean enable_debug_log = serverConfig.damageCalculation.enable_debug_log.get();
+		if (enable_debug_log) {
+			OverhauledDamage.info("----- start of new damage calculation log -----");
+			OverhauledDamage.info("");
+			OverhauledDamage.info("entity taken damage : " + this.getName().getString());
+			OverhauledDamage.info("");
+			OverhauledDamage.info("damage source : " + source.toString());
+			OverhauledDamage.info("");
+			OverhauledDamage.info("damage amount : " + amount);
+			OverhauledDamage.info("");
 		}
 
-		Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(serverConfig.staggered_status_effect_identifier));
-		if (staggered_status_effect.isPresent() && this.hasStatusEffect(staggered_status_effect.get())) {
-			amount = amount * 2;
+		LivingEntity attacker = null;
+		if (source.getAttacker() instanceof LivingEntity) {
+			attacker = (LivingEntity) source.getAttacker();
 		}
-
-		Optional<RegistryEntry.Reference<StatusEffect>> calamity_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(serverConfig.calamity_status_effect_identifier));
-		if (calamity_status_effect.isPresent()) {
-			StatusEffectInstance calamityEffectInstance = this.getStatusEffect(calamity_status_effect.get());
-			if (calamityEffectInstance != null) {
-				amount = amount * 2 + calamityEffectInstance.getAmplifier();
+		if (enable_debug_log) {
+			if (attacker != null) {
+				OverhauledDamage.info("entity dealing damage : " + attacker.getName().getString());
+				OverhauledDamage.info("");
 			}
-		}
-
-		float f = amount;
-		amount = Math.max(amount - this.getAbsorptionAmount(), 0.0F);
-		this.setAbsorptionAmount(this.getAbsorptionAmount() - (f - amount));
-		float g = f - amount;
-		if (g > 0.0F && g < 3.4028235E37F) {
-			Entity var6 = source.getAttacker();
-			if (var6 instanceof ServerPlayerEntity serverPlayerEntity) {
-				serverPlayerEntity.increaseStat(Stats.DAMAGE_DEALT_ABSORBED, Math.round(g * 10.0F));
-			}
-		}
-
-		if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR)) {
-			this.damageArmor(source, amount);
 		}
 
 		float applied_damage = 0;
 		float true_amount = 0;
 
-		// true damage is
 		if (source.isIn(Tags.IS_TRUE_DAMAGE)) {
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- is true damage ---");
+				OverhauledDamage.info("");
+				OverhauledDamage.info("--- true damage can't be blocked and is not reduced by armor, protection or resistances ---");
+				OverhauledDamage.info("");
+				OverhauledDamage.info("--- true damage does not apply effect build ups ---");
+				OverhauledDamage.info("");
+			}
 			true_amount = amount;
 			amount = 0;
 		}
 
 		if (amount > 0) {
 
-			LinkedHashMap<String, Float[]> damage_type_multipliers = serverConfig.damage_type_multipliers;
+			// fallback
+			ServerConfig.DamageTypes.DamageTypeMultipliers damage_type_multiplier = null;
+
+			ValidatedMap<String, ServerConfig.DamageTypes.DamageTypeMultipliers> damage_type_multipliers = serverConfig.damageTypes.damage_type_multipliers;
 
 			String damageTypeId = "";
-			Float[] damage_type_multiplier = null;
 			Optional<RegistryKey<DamageType>> optional = source.getTypeRegistryEntry().getKey();
 
 			if (optional.isPresent()) {
 				damageTypeId = optional.get().getValue().toString();
 			}
 			if (!damageTypeId.isEmpty()) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("damage type : " + damageTypeId);
+					OverhauledDamage.info("");
+				}
 				damage_type_multiplier = damage_type_multipliers.get(damageTypeId);
 			}
-
-			float bashing_amount = 0.0F;
-			float piercing_amount = 0.0F;
-			float slashing_amount = 0.0F;
-			float poison_amount = 0.0F;
-			float fire_amount = 0.0F;
-			float frost_amount = 0.0F;
-			float lightning_amount = 0.0F;
-
-			if (damage_type_multiplier != null && damage_type_multiplier.length == 7) {
-				bashing_amount = amount * damage_type_multiplier[0];
-				piercing_amount = amount * damage_type_multiplier[1];
-				slashing_amount = amount * damage_type_multiplier[2];
-				poison_amount = amount * damage_type_multiplier[3];
-				fire_amount = amount * damage_type_multiplier[4];
-				frost_amount = amount * damage_type_multiplier[5];
-				lightning_amount = amount * damage_type_multiplier[6];
+			if (damage_type_multiplier == null) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("using default_damage_type_multipliers");
+					OverhauledDamage.info("");
+				}
+				damage_type_multiplier = serverConfig.damageTypes.default_damage_type_multipliers.get();
+			}
+			if (enable_debug_log) {
+				OverhauledDamage.info("used damage_type_multipliers : " + damage_type_multiplier.toString());
+				OverhauledDamage.info("");
 			}
 
-			LivingEntity attacker = null;
-			if (source.getAttacker() instanceof LivingEntity) {
-				attacker = (LivingEntity) source.getAttacker();
+			// default values
+			float generic_amount = amount * damage_type_multiplier.generic;
+			float bashing_amount = amount * damage_type_multiplier.bashing;
+			float piercing_amount = amount * damage_type_multiplier.piercing;
+			float slashing_amount = amount * damage_type_multiplier.slashing;
+			float poison_amount = amount * damage_type_multiplier.poison;
+			float fire_amount = amount * damage_type_multiplier.fire;
+			float frost_amount = amount * damage_type_multiplier.frost;
+			float lightning_amount = amount * damage_type_multiplier.lightning;
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- initial attack amounts ---");
+				OverhauledDamage.info("generic_amount : " + generic_amount);
+				OverhauledDamage.info("bashing_amount : " + bashing_amount);
+				OverhauledDamage.info("piercing_amount : " + piercing_amount);
+				OverhauledDamage.info("slashing_amount : " + slashing_amount);
+				OverhauledDamage.info("poison_amount : " + poison_amount);
+				OverhauledDamage.info("fire_amount : " + fire_amount);
+				OverhauledDamage.info("frost_amount : " + frost_amount);
+				OverhauledDamage.info("lightning_amount : " + lightning_amount);
+				OverhauledDamage.info("");
 			}
+
 			if (attacker != null) {
 				bashing_amount = (((DuckLivingEntityMixin) attacker).overhauleddamage$getAdditionalBashingDamage() + bashing_amount) * ((DuckLivingEntityMixin) attacker).overhauleddamage$getIncreasedBashingDamage();
 				piercing_amount = (((DuckLivingEntityMixin) attacker).overhauleddamage$getAdditionalPiercingDamage() + piercing_amount) * ((DuckLivingEntityMixin) attacker).overhauleddamage$getIncreasedPiercingDamage();
@@ -381,108 +417,392 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				lightning_amount = (((DuckLivingEntityMixin) attacker).overhauleddamage$getAdditionalLightningDamage() + lightning_amount) * ((DuckLivingEntityMixin) attacker).overhauleddamage$getIncreasedLightningDamage();
 				poison_amount = (((DuckLivingEntityMixin) attacker).overhauleddamage$getAdditionalPoisonDamage() + poison_amount) * ((DuckLivingEntityMixin) attacker).overhauleddamage$getIncreasedPoisonDamage();
 			}
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- attack amounts after additions ---");
+				OverhauledDamage.info("generic_amount : " + generic_amount);
+				OverhauledDamage.info("bashing_amount : " + bashing_amount);
+				OverhauledDamage.info("piercing_amount : " + piercing_amount);
+				OverhauledDamage.info("slashing_amount : " + slashing_amount);
+				OverhauledDamage.info("poison_amount : " + poison_amount);
+				OverhauledDamage.info("fire_amount : " + fire_amount);
+				OverhauledDamage.info("frost_amount : " + frost_amount);
+				OverhauledDamage.info("lightning_amount : " + lightning_amount);
+				OverhauledDamage.info("");
+			}
+
+			//
+			boolean triedBlocking = false;
 
 			// region shield blocks
-			ItemStack shieldItemStack = this.getOffHandStack();
-			if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0)) {
-				// try to parry the attack
-				boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
-				double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
-				float blockedBashingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
-				float blockedPiercingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
-				float blockedSlashingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
-				float blockedFireDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFireDamage() * parryBonus);
-				float blockedFrostDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFrostDamage() * parryBonus);
-				float blockedLightningDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedLightningDamage() * parryBonus);
-				float blockedPoisonDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPoisonDamage() * parryBonus);
+			if (serverConfig.damageCalculation.enable_blocking_overhaul.get()) {
+				ItemStack shieldItemStack = this.activeItemStack;
+				if (this.isBlocking() && this.blockedByShield(source) && (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) > 0 || !serverConfig.damageCalculation.blocking_requires_stamina.get() || !OverhauledDamage.isStaminaAttributesLoaded)) {
+					// a parry is tried, if the blocking time < the parry window of the blocking entity, the blocking entity can parry at all and the blocking item is in the 'can_parry' item tag
+					boolean tryParry = this.overhauleddamage$canParry() && this.blockingTime <= ((DuckLivingEntityMixin) this).overhauleddamage$getParryWindow() && source.getAttacker() != null && source.getAttacker() instanceof LivingEntity && shieldItemStack.isIn(Tags.CAN_PARRY);
+					double parryBonus = tryParry ? ((DuckLivingEntityMixin) this).overhauleddamage$getParryBonus() : 1;
 
-				OverhauledDamage.addStamina(((LivingEntity) (Object) this), tryParry ? -((DuckLivingEntityMixin) this).overhauleddamage$getParryStaminaCost() : -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
+					triedBlocking = true;
 
-				if (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) >= 0 || !OverhauledDamage.isStaminaAttributesLoaded) {
+					if (enable_debug_log) {
+						OverhauledDamage.info("--- blocking/parrying ---");
+						OverhauledDamage.info("");
+						OverhauledDamage.info("tryParry : " + tryParry);
+						OverhauledDamage.info("");
+						OverhauledDamage.info("parryBonus : " + parryBonus);
+						OverhauledDamage.info("");
+					}
+					float blockedBashingDamage;
+					float blockedPiercingDamage;
+					float blockedSlashingDamage;
+					float blockedFireDamage;
+					float blockedFrostDamage;
+					float blockedLightningDamage;
+					float blockedPoisonDamage;
 
-					boolean isStaggered = false;
-					// apply stagger based on left over damage
-					float appliedStagger = (float) Math.max(((bashing_amount - blockedBashingDamage) * 0.75 + (piercing_amount - blockedPiercingDamage) * 0.5 + (slashing_amount - blockedSlashingDamage) * 0.5 + (lightning_amount - blockedLightningDamage) * 0.5), 0);
-					if (appliedStagger > 0) {
-						this.overhauleddamage$addStaggerBuildUp(appliedStagger);
-						isStaggered = this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp();
-
+					if (serverConfig.damageCalculation.blockingOverhaul.blocked_damage_calculation_works_with_flat_values.get()) {
+						if (enable_debug_log) {
+							OverhauledDamage.info("blocked damage calculation uses flat values");
+							OverhauledDamage.info("");
+						}
+						blockedBashingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
+						blockedPiercingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
+						blockedSlashingDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus);
+						blockedFireDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFireDamage() * parryBonus);
+						blockedFrostDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFrostDamage() * parryBonus);
+						blockedLightningDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedLightningDamage() * parryBonus);
+						blockedPoisonDamage = (float) (((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPoisonDamage() * parryBonus);
+					} else {
+						if (enable_debug_log) {
+							OverhauledDamage.info("blocked damage calculation uses percentage values");
+							OverhauledDamage.info("");
+						}
+						blockedBashingDamage = (float) (bashing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus / 100);
+						blockedPiercingDamage = (float) (piercing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus / 100);
+						blockedSlashingDamage = (float) (slashing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPhysicalDamage() * parryBonus / 100);
+						blockedFireDamage = (float) (fire_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFireDamage() * parryBonus / 100);
+						blockedFrostDamage = (float) (frost_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedFrostDamage() * parryBonus / 100);
+						blockedLightningDamage = (float) (lightning_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedLightningDamage() * parryBonus / 100);
+						blockedPoisonDamage = (float) (poison_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBlockedPoisonDamage() * parryBonus / 100);
 					}
 
-					// parry was successful
-					if (!isStaggered) {
-						bashing_amount -= blockedBashingDamage;
-						piercing_amount -= blockedPiercingDamage;
-						slashing_amount -= blockedSlashingDamage;
-						fire_amount -= blockedFireDamage;
-						frost_amount -= blockedFrostDamage;
-						lightning_amount -= blockedLightningDamage;
-						poison_amount -= blockedPoisonDamage;
+					if (enable_debug_log) {
+						OverhauledDamage.info("--- blocked damage amounts ---");
+						OverhauledDamage.info("blockedBashingDamage : " + blockedBashingDamage);
+						OverhauledDamage.info("blockedPiercingDamage : " + blockedPiercingDamage);
+						OverhauledDamage.info("blockedSlashingDamage : " + blockedSlashingDamage);
+						OverhauledDamage.info("blockedFireDamage : " + blockedFireDamage);
+						OverhauledDamage.info("blockedFrostDamage : " + blockedFrostDamage);
+						OverhauledDamage.info("blockedLightningDamage : " + blockedLightningDamage);
+						OverhauledDamage.info("blockedPoisonDamage : " + blockedPoisonDamage);
+						OverhauledDamage.info("");
+					}
+					// reduce the stamina of the blocking/parrying entity by the block/parry stamina cost
+					OverhauledDamage.addStamina(((LivingEntity) (Object) this), tryParry ? -((DuckLivingEntityMixin) this).overhauleddamage$getParryStaminaCost() : -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
 
-						if (tryParry) {
+					// when no stamina is left after blocking/parrying the block/parry was not successful and the damage is not reduced
+					if (OverhauledDamage.getCurrentStamina((LivingEntity) (Object) this) >= 0 || !OverhauledDamage.isStaminaAttributesLoaded) {
 
-							if (attacker != null) {
-								// attacker is staggered
-								((DuckLivingEntityMixin) attacker).overhauleddamage$addStaggerBuildUp(((DuckLivingEntityMixin) attacker).overhauleddamage$getMaxStaggerBuildUp());
+						boolean isStaggered = false;
+
+						// apply stagger based on left over damage
+						ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers.get();
+						if (enable_debug_log) {
+							OverhauledDamage.info("--- apply stagger based on left over damage ---");
+							OverhauledDamage.info("");
+							OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
+							OverhauledDamage.info("");
+						}
+						float appliedStagger = (generic_amount * stagger_multipliers.generic) + ((bashing_amount - blockedBashingDamage) * stagger_multipliers.bashing) + ((piercing_amount - blockedPiercingDamage) * stagger_multipliers.piercing) + ((slashing_amount - blockedSlashingDamage) * stagger_multipliers.slashing) + ((poison_amount - blockedPoisonDamage) * stagger_multipliers.poison) + ((fire_amount - blockedFireDamage) * stagger_multipliers.fire) + ((frost_amount - blockedFrostDamage) * stagger_multipliers.frost) + ((lightning_amount - blockedLightningDamage) * stagger_multipliers.lightning);
+						if (appliedStagger > 0) {
+							if (enable_debug_log) {
+								OverhauledDamage.info("appliedStagger : " + appliedStagger);
+								OverhauledDamage.info("");
+							}
+							this.overhauleddamage$addStaggerBuildUp(appliedStagger);
+							isStaggered = this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp();
+						}
+
+						// block/parry was successful
+						if (!isStaggered) {
+							bashing_amount -= blockedBashingDamage;
+							piercing_amount -= blockedPiercingDamage;
+							slashing_amount -= blockedSlashingDamage;
+							fire_amount -= blockedFireDamage;
+							frost_amount -= blockedFrostDamage;
+							lightning_amount -= blockedLightningDamage;
+							poison_amount -= blockedPoisonDamage;
+
+							if (tryParry) {
+
+								if (attacker != null) {
+									((DuckLivingEntityMixin) attacker).overhauleddamage$addStaggerBuildUp(((DuckLivingEntityMixin) attacker).overhauleddamage$getMaxStaggerBuildUp());
+									if (enable_debug_log) {
+										OverhauledDamage.info("--- successful parries stagger the attacker ---");
+										OverhauledDamage.info("");
+									}
+								}
+							} else {
+								if (attacker != null) {
+									float applied_knockback = ((DuckLivingEntityMixin) this).overhauleddamage$getBlockForce();
+									attacker.takeKnockback(applied_knockback, attacker.getX() - this.getX(), attacker.getZ() - this.getZ());
+									if (enable_debug_log) {
+										OverhauledDamage.info("--- successful blocks apply knockback to the attacker ---");
+										OverhauledDamage.info("applied_knockback : " + applied_knockback);
+										OverhauledDamage.info("");
+									}
+								}
+							}
+							float totalBlockedDamage = blockedBashingDamage + blockedPiercingDamage + blockedSlashingDamage + blockedFireDamage + blockedFrostDamage + blockedLightningDamage + blockedPoisonDamage;
+							if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity serverPlayerEntity && totalBlockedDamage > 0.0f && totalBlockedDamage < 3.4028235E37f) {
+								serverPlayerEntity.increaseStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(totalBlockedDamage * 10.0f));
+							}
+
+							if (tryParry) {
+								this.getWorld().playSoundFromEntity(null, this, SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1.0F, 1.2F + this.getWorld().random.nextFloat() * 0.4F);
+							} else {
+								this.getWorld().sendEntityStatus(this, EntityStatuses.BLOCK_WITH_SHIELD);
+							}
+							if (enable_debug_log) {
+								OverhauledDamage.info("--- attack amounts after blocking/parrying ---");
+								OverhauledDamage.info("generic_amount : " + generic_amount);
+								OverhauledDamage.info("bashing_amount : " + bashing_amount);
+								OverhauledDamage.info("piercing_amount : " + piercing_amount);
+								OverhauledDamage.info("slashing_amount : " + slashing_amount);
+								OverhauledDamage.info("poison_amount : " + poison_amount);
+								OverhauledDamage.info("fire_amount : " + fire_amount);
+								OverhauledDamage.info("frost_amount : " + frost_amount);
+								OverhauledDamage.info("lightning_amount : " + lightning_amount);
+								OverhauledDamage.info("");
 							}
 						} else {
-							// normal blocking applies knockback to the attacker
-							if (attacker != null) {
-								attacker.takeKnockback(((DuckLivingEntityMixin) this).overhauleddamage$getBlockForce(), attacker.getX() - this.getX(), attacker.getZ() - this.getZ());
+							this.getWorld().sendEntityStatus(this, EntityStatuses.BREAK_SHIELD);
+							if (enable_debug_log) {
+								OverhauledDamage.info("--- blocking/parrying failed because the damage was too high ---");
+								OverhauledDamage.info("");
 							}
 						}
-						float totalBlockedDamage = blockedBashingDamage + blockedPiercingDamage + blockedSlashingDamage + blockedFireDamage + blockedFrostDamage + blockedLightningDamage + blockedPoisonDamage;
-						if (((LivingEntity) (Object) this) instanceof ServerPlayerEntity serverPlayerEntity && totalBlockedDamage > 0.0f && totalBlockedDamage < 3.4028235E37f) {
-							serverPlayerEntity.increaseStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(totalBlockedDamage * 10.0f));
-						}
-
-						this.getWorld().sendEntityStatus(this, EntityStatuses.BLOCK_WITH_SHIELD);
-					} else {
-						this.getWorld().sendEntityStatus(this, EntityStatuses.BREAK_SHIELD);
+					} else if (enable_debug_log) {
+						OverhauledDamage.info("--- blocking/parrying failed because stamina was too low ---");
+						OverhauledDamage.info("");
 					}
+				} else if (enable_debug_log) {
+					OverhauledDamage.info("--- no blocking/parrying was tried ---");
+					OverhauledDamage.info("");
 				}
 			}
 			// endregion shield blocks
 
-			// region apply resistances/armor
-			// armorToughness now directly determines how effective armor is
-			// effective armor reduces damage by its amount
-			float effectiveArmor = this.getArmor() * (float) this.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+			// region apply protection
+			if (!source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS) && serverConfig.damageCalculation.enable_protection_overhaul.get()) {
 
-			// TODO think about this more
-			if (piercing_amount * 1.25 <= effectiveArmor) {
-				effectiveArmor -= (float) (piercing_amount * 1.25);
-				piercing_amount = 0;
-			} else {
-				piercing_amount -= (float) (effectiveArmor * 0.75);
-				effectiveArmor = 0;
+				// the protection enchantments reduce damage, with a default value of 2 percent reduction per enchantment level
+				float protection = 0.0F;
+				if (this.getWorld() instanceof ServerWorld serverWorld) {
+					protection = (float) (EnchantmentHelper.getProtectionAmount(serverWorld, ((LivingEntity) (Object) this), source) * serverConfig.damageCalculation.protectionOverhaul.protection_damage_reduction_per_level);
+				}
+
+				// band-aid solution to prevent fall damage being reduced a second time by Feather Falling
+				if (source.isIn(DamageTypeTags.IS_FALL)) {
+					protection = 0.0F;
+				}
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("protection : " + protection);
+					OverhauledDamage.info("");
+				}
+
+				// the different attack types also have a protection_multiplier
+				ServerConfig.DamageCalculation.ProtectionOverhaul.ProtectionMultipliers protection_multipliers = serverConfig.damageCalculation.protectionOverhaul.protection_multipliers.get();
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("protection_multipliers : " + protection_multipliers.toString());
+					OverhauledDamage.info("");
+				}
+
+				generic_amount = generic_amount - (generic_amount * protection * protection_multipliers.generic / 100);
+
+				bashing_amount = bashing_amount - (bashing_amount * protection * protection_multipliers.bashing / 100);
+
+				piercing_amount = piercing_amount - (piercing_amount * protection * protection_multipliers.piercing / 100);
+
+				slashing_amount = slashing_amount - (slashing_amount * protection * protection_multipliers.slashing / 100);
+
+				poison_amount = poison_amount - (poison_amount * protection * protection_multipliers.poison / 100);
+
+				fire_amount = fire_amount - (fire_amount * protection * protection_multipliers.fire / 100);
+
+				frost_amount = frost_amount - (frost_amount * protection * protection_multipliers.frost / 100);
+
+				lightning_amount = lightning_amount - (lightning_amount * protection * protection_multipliers.lightning / 100);
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("--- attack amounts after protection ---");
+					OverhauledDamage.info("generic_amount : " + generic_amount);
+					OverhauledDamage.info("bashing_amount : " + bashing_amount);
+					OverhauledDamage.info("piercing_amount : " + piercing_amount);
+					OverhauledDamage.info("slashing_amount : " + slashing_amount);
+					OverhauledDamage.info("poison_amount : " + poison_amount);
+					OverhauledDamage.info("fire_amount : " + fire_amount);
+					OverhauledDamage.info("frost_amount : " + frost_amount);
+					OverhauledDamage.info("lightning_amount : " + lightning_amount);
+					OverhauledDamage.info("");
+				}
+			} else if (enable_debug_log) {
+				if (!serverConfig.damageCalculation.enable_protection_overhaul.get()) {
+					OverhauledDamage.info("protection overhaul not active");
+				}
+				if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
+					OverhauledDamage.info("damage bypasses protection");
+				}
 			}
+			// endregion apply protection
 
-			if (bashing_amount <= effectiveArmor) {
-				effectiveArmor -= bashing_amount;
-				bashing_amount = 0;
-			} else {
-				bashing_amount -= effectiveArmor;
-				effectiveArmor = 0;
+			// region apply armor
+			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.damageCalculation.enable_armor_overhaul.get()) {
+				float armorDamage = 0.0F;
+				if (serverConfig.damageCalculation.armorOverhaul.armor_calculation_works_with_flat_values.get()) {
+					// TODO this calculation needs a serious overhaul
+					// armorToughness now directly determines how effective armor is
+					// effective armor reduces damage by its amount
+					// armor is more or less effective against different attack types
+					float effectiveArmor = this.getArmor();
+
+					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute.get()) {
+						if (enable_debug_log) {
+							OverhauledDamage.info("armor toughness is enabled");
+							OverhauledDamage.info("");
+						}
+						effectiveArmor *= (float) this.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+					} else if (enable_debug_log) {
+						OverhauledDamage.info("armor toughness is disabled");
+						OverhauledDamage.info("");
+					}
+
+					if (enable_debug_log) {
+						OverhauledDamage.info("armor calculation uses flat values");
+						OverhauledDamage.info("effective_armor : " + effectiveArmor);
+						OverhauledDamage.info("");
+					}
+
+					if (piercing_amount * 1.25 <= effectiveArmor) {
+						effectiveArmor -= (float) (piercing_amount * 1.25);
+						piercing_amount = 0;
+					} else {
+						piercing_amount -= (float) (effectiveArmor * 0.75);
+						effectiveArmor = 0;
+					}
+
+					if (bashing_amount <= effectiveArmor) {
+						effectiveArmor -= bashing_amount;
+						bashing_amount = 0;
+					} else {
+						bashing_amount -= effectiveArmor;
+						effectiveArmor = 0;
+					}
+
+					if (fire_amount <= effectiveArmor) {
+						effectiveArmor -= fire_amount;
+						fire_amount = 0;
+					} else {
+						fire_amount -= effectiveArmor;
+						effectiveArmor = 0;
+					}
+
+					if (slashing_amount <= effectiveArmor) {
+						effectiveArmor -= slashing_amount;
+						slashing_amount = 0;
+					} else {
+						slashing_amount -= effectiveArmor;
+						slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
+						effectiveArmor = 0;
+					}
+					armorDamage = this.getArmor() - effectiveArmor;
+				} else {
+					// this is the alternative armor calculation
+					// armor reduces damage on a percentage base
+					// 1 armor point = 1 percent reduction
+					// armor toughness is a multiplier to this
+					float effective_armor = this.getArmor();
+
+					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute.get()) {
+						if (enable_debug_log) {
+							OverhauledDamage.info("armor toughness is enabled");
+							OverhauledDamage.info("");
+						}
+						effective_armor *= (float) this.getAttributeValue(EntityAttributes.GENERIC_ARMOR_TOUGHNESS);
+					} else if (enable_debug_log) {
+						OverhauledDamage.info("armor toughness is disabled");
+						OverhauledDamage.info("");
+					}
+
+					if (enable_debug_log) {
+						OverhauledDamage.info("armor calculation uses percentage values");
+						OverhauledDamage.info("effective_armor : " + effective_armor);
+						OverhauledDamage.info("");
+					}
+
+					// notable difference to the first method:
+					// armor is not reduced when reducing the damage amount of one attack_type
+
+					// the different attack types have an armor_multiplier on their own
+					ServerConfig.DamageCalculation.ArmorOverhaul.ArmorMultipliers armor_multipliers = serverConfig.damageCalculation.armorOverhaul.armor_multipliers.get();
+
+					if (enable_debug_log) {
+						OverhauledDamage.info("armor_multipliers: " + armor_multipliers.toString());
+						OverhauledDamage.info("");
+					}
+					float generic_armor_damage = generic_amount * effective_armor * armor_multipliers.generic / 100;
+					generic_amount = generic_amount - generic_armor_damage;
+
+					float bashing_armor_damage = bashing_amount * effective_armor * armor_multipliers.bashing / 100;
+					bashing_amount = bashing_amount - bashing_armor_damage;
+
+					float piercing_armor_damage = piercing_amount * effective_armor * armor_multipliers.piercing / 100;
+					piercing_amount = piercing_amount - piercing_armor_damage;
+
+					float slashing_armor_damage = slashing_amount * effective_armor * armor_multipliers.slashing / 100;
+					slashing_amount = slashing_amount - slashing_armor_damage;
+
+					float poison_armor_damage = poison_amount * effective_armor * armor_multipliers.poison / 100;
+					poison_amount = poison_amount - poison_armor_damage;
+
+					float fire_armor_damage = fire_amount * effective_armor * armor_multipliers.fire / 100;
+					fire_amount = fire_amount - fire_armor_damage;
+
+					float frost_armor_damage = frost_amount * effective_armor * armor_multipliers.frost / 100;
+					frost_amount = frost_amount - frost_armor_damage;
+
+					float lightning_armor_damage = (lightning_amount * effective_armor * armor_multipliers.lightning / 100);
+					lightning_amount = lightning_amount - lightning_armor_damage;
+
+					armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
+
+				}
+				this.damageArmor(source, armorDamage);
+				if (enable_debug_log) {
+					OverhauledDamage.info("damage applied to equipped armor: " + armorDamage);
+					OverhauledDamage.info("");
+					OverhauledDamage.info("--- attack amounts after armor ---");
+					OverhauledDamage.info("generic_amount : " + generic_amount);
+					OverhauledDamage.info("bashing_amount : " + bashing_amount);
+					OverhauledDamage.info("piercing_amount : " + piercing_amount);
+					OverhauledDamage.info("slashing_amount : " + slashing_amount);
+					OverhauledDamage.info("poison_amount : " + poison_amount);
+					OverhauledDamage.info("fire_amount : " + fire_amount);
+					OverhauledDamage.info("frost_amount : " + frost_amount);
+					OverhauledDamage.info("lightning_amount : " + lightning_amount);
+					OverhauledDamage.info("");
+				}
+			} else if (enable_debug_log) {
+				if (serverConfig.damageCalculation.enable_armor_overhaul.get()) {
+					OverhauledDamage.info("armor overhaul not active");
+				} else {
+					OverhauledDamage.info("damage bypasses armor");
+				}
 			}
+			// endregion apply armor
 
-			if (fire_amount <= effectiveArmor) {
-				effectiveArmor -= fire_amount;
-				fire_amount = 0;
-			} else {
-				fire_amount -= effectiveArmor;
-				effectiveArmor = 0;
-			}
-
-			if (slashing_amount <= effectiveArmor) {
-				effectiveArmor -= slashing_amount;
-				slashing_amount = 0;
-			} else {
-				slashing_amount -= effectiveArmor;
-				slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
-				effectiveArmor = 0;
-			}
-
+			// region apply resistances
 			bashing_amount = bashing_amount - (bashing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getBashingResistance()) / 100;
 
 			piercing_amount = piercing_amount - (piercing_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getPiercingResistance()) / 100;
@@ -496,54 +816,198 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			frost_amount = frost_amount - (frost_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getFrostResistance()) / 100;
 
 			lightning_amount = lightning_amount - (lightning_amount * ((DuckLivingEntityMixin) this).overhauleddamage$getLightningResistance()) / 100;
-			// endregion apply resistances/armor
+			// endregion apply resistances
 
-			applied_damage = piercing_amount + bashing_amount + slashing_amount;
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- attack amounts after resistances ---");
+				OverhauledDamage.info("generic_amount : " + generic_amount);
+				OverhauledDamage.info("bashing_amount : " + bashing_amount);
+				OverhauledDamage.info("piercing_amount : " + piercing_amount);
+				OverhauledDamage.info("slashing_amount : " + slashing_amount);
+				OverhauledDamage.info("poison_amount : " + poison_amount);
+				OverhauledDamage.info("fire_amount : " + fire_amount);
+				OverhauledDamage.info("frost_amount : " + frost_amount);
+				OverhauledDamage.info("lightning_amount : " + lightning_amount);
+				OverhauledDamage.info("");
+			}
+
+			ServerConfig.DamageCalculation.AttackTypeMultipliers applied_damage_multipliers = serverConfig.damageCalculation.applied_damage_multipliers.get();
+			applied_damage = (generic_amount * applied_damage_multipliers.generic) + (bashing_amount * applied_damage_multipliers.bashing) + (piercing_amount * applied_damage_multipliers.piercing) + (slashing_amount * applied_damage_multipliers.slashing) + (poison_amount * applied_damage_multipliers.poison) + (fire_amount * applied_damage_multipliers.fire) + (frost_amount * applied_damage_multipliers.frost) + (lightning_amount * applied_damage_multipliers.lightning);
+
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- damage applied to resources like health is multiplied ---");
+				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
+				OverhauledDamage.info("");
+			}
 
 			// taking damage interrupts eating food, drinking potions, etc
-			if (applied_damage > 0.0f && !this.isBlocking() && serverConfig.damage_interrupts_item_usage) {
+			if (applied_damage > 0.0f && !this.isBlocking() && serverConfig.damage_interrupts_item_usage.get()) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("item usage was stopped");
+					OverhauledDamage.info("");
+				}
 				this.stopUsingItem();
 			}
 
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
+				OverhauledDamage.info("");
+			}
+
+			// apply hit stun
+			if (serverConfig.enable_hit_stun_mechanic.get()) {
+				Optional<RegistryEntry.Reference<EntityAttribute>> attribute = Registries.ATTRIBUTE.getEntry(serverConfig.hitStun.attribute.get());
+				if (attribute.isPresent()) {
+					if (this.getAttributes().hasAttribute(attribute.get())) {
+						double attributeValue = this.getAttributeValue(attribute.get());
+						ServerConfig.HitStun.HitStunSettings hitStunSettings = serverConfig.hitStun.hit_stun_settings.get(damageTypeId);
+						if (hitStunSettings == null) {
+							hitStunSettings = serverConfig.hitStun.default_hit_stun_settings.get();
+						}
+
+						if (attributeValue <= hitStunSettings.required_attribute_threshold) {
+							// apply hit stun
+							Optional<RegistryEntry.Reference<StatusEffect>> hit_stun_status_effect = Registries.STATUS_EFFECT.getEntry(serverConfig.hitStun.hit_stun_status_effect_identifier.get());
+							if (hit_stun_status_effect.isPresent()) {
+								this.addStatusEffect(new StatusEffectInstance(hit_stun_status_effect.get(), hitStunSettings.duration, 0, false, false, true));
+							}
+						}
+					}
+				}
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no hit stun was applied");
+				OverhauledDamage.info("");
+			}
+
 			// apply bleeding
-			float appliedBleeding = (float) ((piercing_amount * 0.5) + (slashing_amount * 0.5));
-			if (appliedBleeding > 0 && source.isIn(Tags.APPLIES_BLEEDING)) {
-				this.overhauleddamage$addBleedingBuildUp(appliedBleeding);
+			ServerConfig.DamageCalculation.AttackTypeMultipliers bleeding_multipliers = serverConfig.damageCalculation.bleeding_multipliers.get();
+			if (source.isIn(Tags.APPLIES_BLEEDING)) {
+				float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("--- apply bleeding build up ---");
+					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers);
+				}
+
+				if (applied_bleeding > 0) {
+					if (enable_debug_log) {
+						OverhauledDamage.info("applied bleeding build up : " + applied_bleeding);
+						OverhauledDamage.info("");
+					}
+					this.overhauleddamage$addBleedingBuildUp(applied_bleeding);
+				} else if (enable_debug_log) {
+					OverhauledDamage.info("no bleeding build up was applied");
+					OverhauledDamage.info("");
+				}
 			}
 
-			// apply burning
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply burn build up ---");
+			}
+			// apply burn
 			if (fire_amount > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied burn build up : " + fire_amount);
+					OverhauledDamage.info("");
+				}
 				this.overhauleddamage$addBurnBuildUp(fire_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no burn build up was applied");
+				OverhauledDamage.info("");
 			}
 
-			// apply chilled and frozen
+			// apply chilled effect and freeze build up
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply chilled effect and freeze build up ---");
+			}
 			if (frost_amount > 0) {
-				Optional<RegistryEntry.Reference<StatusEffect>> chilled_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(serverConfig.chilled_status_effect_identifier));
+				Optional<RegistryEntry.Reference<StatusEffect>> chilled_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(serverConfig.buildUpEffects.chilled_status_effect_identifier));
 				if (chilled_status_effect.isPresent()) {
-					int chilledDuration = (int) Math.ceil(frost_amount);
+					int chilledDuration = (int) Math.ceil(frost_amount * serverConfig.buildUpEffects.chilled_duration_multiplier);
+					int existingChilledDuration = 0;
+					int chilledAmplifier = 0;
 					StatusEffectInstance statusEffectInstance = this.getStatusEffect(chilled_status_effect.get());
 					if (statusEffectInstance != null) {
 						chilledDuration = chilledDuration + statusEffectInstance.getDuration();
+						if (serverConfig.buildUpEffects.should_chilled_duration_be_additive.get()) {
+							existingChilledDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_chilled_amplifier_be_additive.get()) {
+							chilledAmplifier = statusEffectInstance.getAmplifier();
+						}
 					}
-					this.addStatusEffect(new StatusEffectInstance(chilled_status_effect.get(), chilledDuration, 0, false, false, true));
+					if (enable_debug_log) {
+						OverhauledDamage.info("applied chilled effect with duration of : " + chilledDuration + existingChilledDuration + " and amplifier of : " + chilledAmplifier);
+						OverhauledDamage.info("");
+					}
+					this.addStatusEffect(new StatusEffectInstance(chilled_status_effect.get(), chilledDuration + existingChilledDuration, chilledAmplifier, false, false, true));
+				} else if (enable_debug_log) {
+					OverhauledDamage.info("no chilled effect was applied");
+					OverhauledDamage.info("");
+				}
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied freeze build up : " + frost_amount);
+					OverhauledDamage.info("");
 				}
 				this.overhauleddamage$addFreezeBuildUp(frost_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no chilled effect was applied");
+				OverhauledDamage.info("");
+				OverhauledDamage.info("no freeze build up was applied");
+				OverhauledDamage.info("");
 			}
 
-			// apply stagger
-			float appliedStagger = (float) ((bashing_amount * 0.75) + (piercing_amount * 0.5) + (slashing_amount * 0.5) + (lightning_amount * 0.5));
-			if (appliedStagger > 0) {
-				this.overhauleddamage$addStaggerBuildUp(appliedStagger);
+			if (!triedBlocking) {
+				// apply stagger
+				ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.damageCalculation.stagger_multipliers.get();
+				if (enable_debug_log) {
+					OverhauledDamage.info("--- apply stagger when no blocking was tried ---");
+					OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
+				}
+				float appliedStagger = (generic_amount * stagger_multipliers.generic) + (bashing_amount * stagger_multipliers.bashing) + (piercing_amount * stagger_multipliers.piercing) + (slashing_amount * stagger_multipliers.slashing) + (poison_amount * stagger_multipliers.poison) + (fire_amount * stagger_multipliers.fire) + (frost_amount * stagger_multipliers.frost) + (lightning_amount * stagger_multipliers.lightning);
+				if (appliedStagger > 0) {
+					if (enable_debug_log) {
+						OverhauledDamage.info("appliedStagger : " + appliedStagger);
+						OverhauledDamage.info("");
+					}
+					this.overhauleddamage$addStaggerBuildUp(appliedStagger);
+				} else if (enable_debug_log) {
+					OverhauledDamage.info("no stagger was applied");
+					OverhauledDamage.info("");
+				}
 			}
 
-			// apply poison
+			// apply poison build up
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply poison build up ---");
+			}
 			if (poison_amount > 0) {
 				this.overhauleddamage$addPoisonBuildUp(poison_amount);
 			}
+			if (poison_amount > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied poison build up : " + poison_amount);
+					OverhauledDamage.info("");
+				}
+				this.overhauleddamage$addPoisonBuildUp(poison_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no poison build up was applied");
+				OverhauledDamage.info("");
+			}
 
-			// apply shocked
+			// apply shock build up
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply shock build up ---");
+			}
 			if (lightning_amount > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied shock build up : " + lightning_amount);
+					OverhauledDamage.info("");
+				}
 				this.overhauleddamage$addShockBuildUp(lightning_amount);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no shock build up was applied");
+				OverhauledDamage.info("");
 			}
 		}
 
@@ -551,132 +1015,239 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 		float damageTakenFromMana = this.overhauleddamage$getDamageTakenFromManaMultiplier();
 		float damageTakenFromStamina = this.overhauleddamage$getDamageTakenFromStaminaMultiplier();
-		float manaDamage = 0.0F;
-		float staminaDamage = 0.0F;
+		float mana_damage = 0.0F;
+		float stamina_damage = 0.0F;
 		if (damageTakenFromMana > 0 && OverhauledDamage.isManaAttributesLoaded) {
-			manaDamage = health_damage * damageTakenFromMana;
-			OverhauledDamage.addMana(((LivingEntity) (Object) this), manaDamage);
+			mana_damage = health_damage * damageTakenFromMana;
+			OverhauledDamage.addMana(((LivingEntity) (Object) this), mana_damage);
 		}
 		if (damageTakenFromStamina > 0 && OverhauledDamage.isStaminaAttributesLoaded) {
-			staminaDamage = health_damage * damageTakenFromStamina;
-			OverhauledDamage.addStamina(((LivingEntity) (Object) this), staminaDamage);
+			stamina_damage = health_damage * damageTakenFromStamina;
+			OverhauledDamage.addStamina(((LivingEntity) (Object) this), stamina_damage);
 		}
-		return health_damage - manaDamage - staminaDamage;
+		health_damage = health_damage - mana_damage - stamina_damage;
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply damage by reducing health / mana / stamina ---");
+			OverhauledDamage.info("health_damage : " + health_damage);
+			OverhauledDamage.info("this is further reduced by absorption");
+			OverhauledDamage.info("");
+			OverhauledDamage.info("mana_damage : " + mana_damage);
+			OverhauledDamage.info("");
+			OverhauledDamage.info("stamina_damage : " + stamina_damage);
+			OverhauledDamage.info("");
+		}
+
+		return health_damage;
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void overhauleddamage$tick(CallbackInfo ci) {
 		if (!this.getWorld().isClient) {
 
+			ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
 			if (this.isBlocking()) {
 				this.blockingTime++;
 			} else if (this.blockingTime > 0) {
 				this.blockingTime = 0;
 			}
-
-			if (this.overhauleddamage$getBleedingBuildUp() > 0) {
-				this.bleedingTickTimer++;
-				if (this.bleedingTickTimer >= this.overhauleddamage$getBleedingTickThreshold()) {
-					if (this.overhauleddamage$getBleedingBuildUp() >= this.overhauleddamage$getMaxBleedingBuildUp()) {
-						Optional<RegistryEntry.Reference<StatusEffect>> bleeding_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.bleeding_status_effect_identifier));
+			if (this.overhauleddamage$getBleedingBuildUp() >= this.overhauleddamage$getMaxBleedingBuildUp()) {
+						Optional<RegistryEntry.Reference<StatusEffect>> bleeding_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 						if (bleeding_status_effect.isPresent()) {
-							this.addStatusEffect(new StatusEffectInstance(bleeding_status_effect.get(), this.overhauleddamage$getBleedingDuration(), 0, false, false, true));
+					int existingBleedingDuration = 0;
+					int bleedingAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(bleeding_status_effect.get());
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_bleeding_duration_be_additive.get()) {
+							existingBleedingDuration = statusEffectInstance.getDuration();
 						}
-//                        this.overhauleddamage$setBleedingBuildUp(-this.overhauleddamage$getMaxBleedingBuildUp()); // TODO play test
-						this.overhauleddamage$setBleedingBuildUp(0);
-					} else {
-						this.overhauleddamage$addBleedingBuildUp(-this.overhauleddamage$getBleedingBuildUpReduction());
+						if (serverConfig.buildUpEffects.should_bleeding_amplifier_be_additive.get()) {
+							bleedingAmplifier = statusEffectInstance.getAmplifier();
+						}
 					}
+					this.addStatusEffect(new StatusEffectInstance(bleeding_status_effect.get(), this.overhauleddamage$getBleedingDuration() + existingBleedingDuration, bleedingAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setBleedingBuildUp(0);
+				this.bleedingTickTimer = 0;
+				this.bleedingReductionDelayTimer = this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold();
+			}
+			if (this.overhauleddamage$getBleedingBuildUp() > 0) {
+				if (this.bleedingReductionDelayTimer < this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
+					this.bleedingReductionDelayTimer++;
+					this.bleedingTickTimer = 0;
+				} else {
+					this.bleedingTickTimer++;
+				}
+				if (this.bleedingTickTimer >= this.overhauleddamage$getBleedingTickThreshold() && this.bleedingReductionDelayTimer >= this.overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addBleedingBuildUp(-this.overhauleddamage$getBleedingBuildUpReduction());
 					this.bleedingTickTimer = 0;
 				}
 			}
 
-			if (this.overhauleddamage$getBurnBuildUp() > 0) {
-				this.burnTickTimer++;
-				if (this.burnTickTimer >= this.overhauleddamage$getBurnTickThreshold()) {
-					if (this.overhauleddamage$getBurnBuildUp() >= this.overhauleddamage$getMaxBurnBuildUp()) {
-						Optional<RegistryEntry.Reference<StatusEffect>> burning_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.burning_status_effect_identifier));
-						if (burning_status_effect.isPresent()) {
-							int burnDuration = this.overhauleddamage$getBurnDuration();
-							StatusEffectInstance statusEffectInstance = this.getStatusEffect(burning_status_effect.get());
-							if (statusEffectInstance != null) {
-								burnDuration = burnDuration + statusEffectInstance.getDuration();
-							}
-							this.addStatusEffect(new StatusEffectInstance(burning_status_effect.get(), burnDuration, 0, false, false, true));
+			if (this.overhauleddamage$getBurnBuildUp() >= this.overhauleddamage$getMaxBurnBuildUp()) {
+						Optional<RegistryEntry.Reference<StatusEffect>> burn_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
+				if (burn_status_effect.isPresent()) {
+					int existingBurnDuration = 0;
+					int burnAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(burn_status_effect.get());
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_burn_duration_be_additive.get()) {
+							existingBurnDuration = statusEffectInstance.getDuration();
 						}
-						this.overhauleddamage$setBurnBuildUp(0);
-					} else {
-						this.overhauleddamage$addBurnBuildUp(-this.overhauleddamage$getBurnBuildUpReduction());
+						if (serverConfig.buildUpEffects.should_burn_amplifier_be_additive.get()) {
+							burnAmplifier = statusEffectInstance.getAmplifier();
+						}
 					}
+					this.addStatusEffect(new StatusEffectInstance(burn_status_effect.get(), this.overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setBurnBuildUp(0);
+				this.burnTickTimer = 0;
+				this.burnReductionDelayTimer = this.overhauleddamage$getBurnBuildUpReduction();
+			}
+			if (this.overhauleddamage$getBurnBuildUp() > 0) {
+				if (this.burnReductionDelayTimer < this.overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
+					this.burnReductionDelayTimer++;
+					this.burnTickTimer = 0;
+				} else {
+					this.burnTickTimer++;
+				}
+				if (this.burnTickTimer >= this.overhauleddamage$getBurnTickThreshold() && this.burnReductionDelayTimer >= this.overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addBurnBuildUp(-this.overhauleddamage$getBurnBuildUpReduction());
 					this.burnTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getFreezeBuildUp() >= this.overhauleddamage$getMaxFreezeBuildUp()) {
+				Optional<RegistryEntry.Reference<StatusEffect>> freeze_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
+				if (freeze_status_effect.isPresent()) {
+					int existingFreezeDuration = 0;
+					int freezeAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(freeze_status_effect.get());
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_freeze_duration_be_additive.get()) {
+							existingFreezeDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_freeze_amplifier_be_additive.get()) {
+							freezeAmplifier = statusEffectInstance.getAmplifier();
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(freeze_status_effect.get(), this.overhauleddamage$getFreezeDuration() + existingFreezeDuration, freezeAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setFreezeBuildUp(0);
+				this.freezeTickTimer = 0;
+				this.freezeReductionDelayTimer = this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold();
+			}
 			if (this.overhauleddamage$getFreezeBuildUp() > 0) {
 				this.freezeTickTimer++;
-				if (this.freezeTickTimer >= this.overhauleddamage$getFreezeTickThreshold()) {
-					if (this.overhauleddamage$getFreezeBuildUp() >= this.overhauleddamage$getMaxFreezeBuildUp()) {
-						Optional<RegistryEntry.Reference<StatusEffect>> freeze_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.frozen_status_effect_identifier));
-						if (freeze_status_effect.isPresent()) {
-							this.addStatusEffect(new StatusEffectInstance(freeze_status_effect.get(), this.overhauleddamage$getFreezeDuration(), 0, false, false, true));
-						}
-						this.overhauleddamage$setFreezeBuildUp(0);
-					} else {
-						this.overhauleddamage$addFreezeBuildUp(-this.overhauleddamage$getFreezeBuildUpReduction());
-					}
+				if (this.freezeReductionDelayTimer < this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
+					this.freezeReductionDelayTimer++;
+					this.freezeTickTimer = 0;
+				} else {
+					this.freezeTickTimer++;
+				}
+				if (this.freezeTickTimer >= this.overhauleddamage$getFreezeTickThreshold() && this.freezeReductionDelayTimer >= this.overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addFreezeBuildUp(-this.overhauleddamage$getFreezeBuildUpReduction());
 					this.freezeTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp()) {
+				Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
+				if (staggered_status_effect.isPresent()) {
+					int existingStaggerDuration = 0;
+					int staggerAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(staggered_status_effect.get());
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_stagger_duration_be_additive.get()) {
+							existingStaggerDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_stagger_amplifier_be_additive.get()) {
+							staggerAmplifier = statusEffectInstance.getAmplifier();
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(staggered_status_effect.get(), this.overhauleddamage$getStaggerDuration() + existingStaggerDuration, staggerAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setStaggerBuildUp(0);
+				this.staggerTickTimer = 0;
+				this.staggerReductionDelayTimer = this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold();
+			}
 			if (this.overhauleddamage$getStaggerBuildUp() > 0) {
 				this.staggerTickTimer++;
-				if (this.staggerTickTimer >= this.overhauleddamage$getStaggerTickThreshold()) {
-					if (this.overhauleddamage$getStaggerBuildUp() >= this.overhauleddamage$getMaxStaggerBuildUp()) {
-						Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
-						if (staggered_status_effect.isPresent()) {
-							this.addStatusEffect(new StatusEffectInstance(staggered_status_effect.get(), this.overhauleddamage$getStaggerDuration(), 0, false, false, true));
-						}
-						this.overhauleddamage$setStaggerBuildUp(0);
-					} else {
-						this.overhauleddamage$addStaggerBuildUp(-this.overhauleddamage$getStaggerBuildUpReduction());
-					}
+				if (this.staggerReductionDelayTimer < this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
+					this.staggerReductionDelayTimer++;
+					this.staggerTickTimer = 0;
+				} else {
+					this.staggerTickTimer++;
+				}
+				if (this.staggerTickTimer >= this.overhauleddamage$getStaggerTickThreshold() && this.staggerReductionDelayTimer >= this.overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addStaggerBuildUp(-this.overhauleddamage$getStaggerBuildUpReduction());
 					this.staggerTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getPoisonBuildUp() >= this.overhauleddamage$getMaxPoisonBuildUp()) {
+				Optional<RegistryEntry.Reference<StatusEffect>> poison_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
+				if (poison_status_effect.isPresent()) {
+					int existingPoisonDuration = 0;
+					int poisonAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(poison_status_effect.get());
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_poison_duration_be_additive.get()) {
+							existingPoisonDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_poison_amplifier_be_additive.get()) {
+							poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(poison_status_effect.get(), this.overhauleddamage$getPoisonDuration() + existingPoisonDuration, poisonAmplifier, false, false, true));
+				}
+				this.overhauleddamage$setPoisonBuildUp(0);
+				this.poisonTickTimer = 0;
+				this.poisonReductionDelayTimer = this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold();
+			}
 			if (this.overhauleddamage$getPoisonBuildUp() > 0) {
 				this.poisonTickTimer++;
-				if (this.poisonTickTimer >= this.overhauleddamage$getPoisonTickThreshold()) {
-					if (this.overhauleddamage$getPoisonBuildUp() >= this.overhauleddamage$getMaxPoisonBuildUp()) {
-						int poisonAmplifier = 0;
-						Optional<RegistryEntry.Reference<StatusEffect>> poison_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.poison_status_effect_identifier));
-						if (poison_status_effect.isPresent()) {
-							StatusEffectInstance statusEffectInstance = this.getStatusEffect(poison_status_effect.get());
-							if (statusEffectInstance != null) {
-								poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
-							}
-							this.addStatusEffect(new StatusEffectInstance(poison_status_effect.get(), this.overhauleddamage$getPoisonDuration(), poisonAmplifier, false, false, true));
-						}
-						this.overhauleddamage$setPoisonBuildUp(0);
-					} else {
-						this.overhauleddamage$addPoisonBuildUp(-this.overhauleddamage$getPoisonBuildUpReduction());
-					}
+				if (this.poisonReductionDelayTimer < this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
+					this.poisonReductionDelayTimer++;
+					this.poisonTickTimer = 0;
+				} else {
+					this.poisonTickTimer++;
+				}
+				if (this.poisonTickTimer >= this.overhauleddamage$getPoisonTickThreshold() && this.poisonReductionDelayTimer >= this.overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addPoisonBuildUp(-this.overhauleddamage$getPoisonBuildUpReduction());
 					this.poisonTickTimer = 0;
 				}
 			}
 
+			if (this.overhauleddamage$getShockBuildUp() >= this.overhauleddamage$getMaxShockBuildUp()) {
+				Optional<RegistryEntry.Reference<StatusEffect>> shocked_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
+				if (shocked_status_effect.isPresent()) {
+					int existingShockDuration = 0;
+					int shockAmplifier = 0;
+					StatusEffectInstance statusEffectInstance = this.getStatusEffect(shocked_status_effect.get());
+					if (statusEffectInstance != null) {
+						if (serverConfig.buildUpEffects.should_shock_duration_be_additive.get()) {
+							existingShockDuration = statusEffectInstance.getDuration();
+						}
+						if (serverConfig.buildUpEffects.should_shock_amplifier_be_additive.get()) {
+							shockAmplifier = statusEffectInstance.getAmplifier() + 1;
+						}
+					}
+					this.addStatusEffect(new StatusEffectInstance(shocked_status_effect.get(), this.overhauleddamage$getShockDuration() + existingShockDuration, shockAmplifier, false, false, false));
+				}
+				this.overhauleddamage$setShockBuildUp(0);
+				this.shockTickTimer = 0;
+				this.shockReductionDelayTimer = this.overhauleddamage$getShockBuildUpReductionDelayThreshold();
+			}
 			if (this.overhauleddamage$getShockBuildUp() > 0) {
 				this.shockTickTimer++;
-				if (this.shockTickTimer >= this.overhauleddamage$getShockTickThreshold()) {
-					if (this.overhauleddamage$getShockBuildUp() >= this.overhauleddamage$getMaxShockBuildUp()) {
-						Optional<RegistryEntry.Reference<StatusEffect>> shocked_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.shocked_status_effect_identifier));
-						if (shocked_status_effect.isPresent()) {
-							this.addStatusEffect(new StatusEffectInstance(shocked_status_effect.get(), this.overhauleddamage$getShockDuration(), 0, false, false, false));
-						}
-						this.overhauleddamage$setShockBuildUp(0);
-					} else {
-						this.overhauleddamage$addShockBuildUp(-this.overhauleddamage$getShockBuildUpReduction());
-					}
+				if (this.shockReductionDelayTimer < this.overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
+					this.shockReductionDelayTimer++;
+					this.shockTickTimer = 0;
+				} else {
+					this.shockTickTimer++;
+				}
+				if (this.shockTickTimer >= this.overhauleddamage$getShockTickThreshold() && this.shockReductionDelayTimer >= this.overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
+					this.overhauleddamage$addShockBuildUp(-this.overhauleddamage$getShockBuildUpReduction());
 					this.shockTickTimer = 0;
 				}
 			}
@@ -684,23 +1255,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	}
 
 	// blocking is now active instantly
-//	@Inject(method = "isBlocking", at = @At(value = "RETURN", ordinal = 0), cancellable = true)
-//	public void overhauleddamage$isBlocking(CallbackInfoReturnable<Boolean> cir) {
-//		cir.setReturnValue(true);
-//	}
-
-	/**
-	 * @author TheRedBrain
-	 * @reason TODO
-	 */
-	@Overwrite
-	public boolean isBlocking() {
-		if (this.isUsingItem() && !this.activeItemStack.isEmpty()) {
-			Item item = this.activeItemStack.getItem();
-			return item.getUseAction(this.activeItemStack) != UseAction.BLOCK ? false : item.getMaxUseTime(this.activeItemStack, ((LivingEntity) (Object) this)) - this.itemUseTimeLeft >= 5;
-		} else {
-			return false;
-		}
+	@Inject(method = "isBlocking", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
+	public void overhauleddamage$isBlocking(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get());
 	}
 
 	@Override
@@ -756,7 +1313,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// region bleeding build up
 	@Override
 	public void overhauleddamage$addBleedingBuildUp(float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> bleeding_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.bleeding_status_effect_identifier));
+		Optional<RegistryEntry.Reference<StatusEffect>> bleeding_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 		if (bleeding_status_effect.isEmpty()) {
 			if (this.overhauleddamage$getBleedingBuildUp() > 0) {
 				this.overhauleddamage$setBleedingBuildUp(0);
@@ -802,6 +1359,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public int overhauleddamage$getBleedingBuildUpReduction() {
 		return (int) this.getAttributeValue(OverhauledDamage.BLEEDING_BUILD_UP_REDUCTION);
+	}
+
+	@Override
+	public int overhauleddamage$getBleedingBuildUpReductionDelayThreshold() {
+		return (int) this.getAttributeValue(OverhauledDamage.BLEEDING_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
 	}
 	// endregion bleeding build up
 
@@ -868,6 +1430,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public int overhauleddamage$getBurnBuildUpReduction() {
 		return (int) this.getAttributeValue(OverhauledDamage.BURN_BUILD_UP_REDUCTION);
 	}
+
+	@Override
+	public int overhauleddamage$getBurnBuildUpReductionDelayThreshold() {
+		return (int) this.getAttributeValue(OverhauledDamage.BURN_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
+	}
 	// endregion fire
 
 	// region frost
@@ -894,7 +1461,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public void overhauleddamage$addFreezeBuildUp(float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> freeze_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.frozen_status_effect_identifier));
+		Optional<RegistryEntry.Reference<StatusEffect>> freeze_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
 		if (this.overhauleddamage$getMaxFreezeBuildUp() != -1.0f && freeze_status_effect.isPresent() && !this.hasStatusEffect(freeze_status_effect.get())) {
 			float f = this.overhauleddamage$getFreezeBuildUp();
 			this.overhauleddamage$setFreezeBuildUp(f + amount);
@@ -935,12 +1502,17 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public int overhauleddamage$getFreezeBuildUpReduction() {
 		return (int) this.getAttributeValue(OverhauledDamage.FREEZE_BUILD_UP_REDUCTION);
 	}
+
+	@Override
+	public int overhauleddamage$getFreezeBuildUpReductionDelayThreshold() {
+		return (int) this.getAttributeValue(OverhauledDamage.FREEZE_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
+	}
 	// endregion frost
 
 	// region stagger build up
 	@Override
 	public void overhauleddamage$addStaggerBuildUp(float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.serverConfig.staggered_status_effect_identifier));
+		Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
 		if (this.overhauleddamage$getMaxStaggerBuildUp() != -1.0f && staggered_status_effect.isPresent() && !this.hasStatusEffect(staggered_status_effect.get())) {
 			float f = this.overhauleddamage$getStaggerBuildUp();
 			this.overhauleddamage$setStaggerBuildUp(f + amount);
@@ -980,6 +1552,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public int overhauleddamage$getStaggerBuildUpReduction() {
 		return (int) this.getAttributeValue(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION);
+	}
+
+	@Override
+	public int overhauleddamage$getStaggerBuildUpReductionDelayThreshold() {
+		return (int) this.getAttributeValue(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
 	}
 	// endregion stagger build up
 
@@ -1047,6 +1624,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public int overhauleddamage$getPoisonBuildUpReduction() {
 		return (int) this.getAttributeValue(OverhauledDamage.POISON_BUILD_UP_REDUCTION);
 	}
+
+	@Override
+	public int overhauleddamage$getPoisonBuildUpReductionDelayThreshold() {
+		return (int) this.getAttributeValue(OverhauledDamage.POISON_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
+	}
 	// endregion poison
 
 	// region lightning
@@ -1112,6 +1694,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public int overhauleddamage$getShockBuildUpReduction() {
 		return (int) this.getAttributeValue(OverhauledDamage.SHOCK_BUILD_UP_REDUCTION);
+	}
+
+	@Override
+	public int overhauleddamage$getShockBuildUpReductionDelayThreshold() {
+		return (int) this.getAttributeValue(OverhauledDamage.SHOCK_BUILD_UP_REDUCTION_DELAY_THRESHOLD);
 	}
 	// endregion lightning
 

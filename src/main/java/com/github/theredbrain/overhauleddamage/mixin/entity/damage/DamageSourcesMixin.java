@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class DamageSourcesMixin {
 
 	@Shadow
-	protected abstract DamageSource create(RegistryKey<DamageType> key, @Nullable Entity attacker);
+	public abstract DamageSource create(RegistryKey<DamageType> key, @Nullable Entity attacker);
 
 	@Inject(method = "mobAttack", at = @At("HEAD"), cancellable = true)
 	public void overhauleddamage$mobAttack(LivingEntity attacker, CallbackInfoReturnable<DamageSource> cir) {
