@@ -1,8 +1,25 @@
 # 2.3.0
 
-- added alternative build-up bars consisting of icons, similar to vanillas resource bars
-- fixed an issue where the build-up bars were visible in creative mode
-- fixed an issue where the build-up bars were visible even when the HUD was hidden (pressing F1)
+- additions
+  - added alternative build-up bars consisting of icons, similar to vanillas resource bars
+  - added generic attack type and changed default attack type multipliers to 1.0 for generic and 0.0 for all others
+  - added alternative armor calculation. The existing formula expects very high amounts of damage. This is not realistic in a vanilla/modded environment. The alternative calculation is based on a percentage reduction instead of flat values.
+  - added alternative blocked damage calculation. The existing formula expects very high amounts of damage. This is not realistic in a vanilla/modded environment. The alternative calculation is based on a percentage reduction instead of flat values.
+  - added protection enchantment overhaul. Feather Falling works like normal. 'Normal' protection now works with a (configurable) percentage reduction. All other protection enchantments are disabled. 
+  - added new sound for a successful parry
+  - added "damage taken from mana/stamina" attributes
+  - added a "build_up_reduction_delay_threshold" attribute for each build-up type, they describe a delay in build-up reduction, when build-up is added
+- changes
+  - reworked both client and server configs, improving the general layout and making the mod much more configurable
+- fixes
+  - fixed an issue where the build-up bars were visible in creative mode
+  - fixed an issue where the build-up bars were visible even when the HUD was hidden (pressing F1)
+- mod dependencies
+  - removed dependency on Cloth Config
+  - added dependency on Fzzy Config
+  - added dependency on Resource Bar API
+  - Stamina Attributes is now an optional dependency
+  - Mana Attributes is now an optional dependency
 
 # 2.2.1
 
