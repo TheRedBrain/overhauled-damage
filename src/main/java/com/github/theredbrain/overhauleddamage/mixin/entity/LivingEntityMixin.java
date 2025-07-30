@@ -1331,6 +1331,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				if (this.overhauleddamage$getBleedingBuildUp() > this.overhauleddamage$getMaxBleedingBuildUp()) {
 					this.bleedingTickTimer = this.overhauleddamage$getBleedingTickThreshold();
 				} else if (amount > 0) {
+					this.bleedingReductionDelayTimer = 0;
 					this.bleedingTickTimer = 0;
 				}
 			}
@@ -1402,6 +1403,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			if (this.overhauleddamage$getBurnBuildUp() > this.overhauleddamage$getMaxBurnBuildUp()) {
 				this.burnTickTimer = this.overhauleddamage$getBurnTickThreshold();
 			} else if (amount > 0) {
+				this.burnReductionDelayTimer = 0;
 				this.burnTickTimer = 0;
 			}
 		}
@@ -1474,6 +1476,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			if (this.overhauleddamage$getFreezeBuildUp() > this.overhauleddamage$getMaxFreezeBuildUp()) {
 				this.freezeTickTimer = this.overhauleddamage$getFreezeTickThreshold();
 			} else if (amount > 0) {
+				this.freezeReductionDelayTimer = 0;
 				this.freezeTickTimer = 0;
 			}
 		}
@@ -1525,6 +1528,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			if (this.overhauleddamage$getStaggerBuildUp() > this.overhauleddamage$getMaxStaggerBuildUp()) {
 				this.staggerTickTimer = this.overhauleddamage$getStaggerTickThreshold();
 			} else if (amount > 0) {
+				this.staggerReductionDelayTimer = 0;
 				this.staggerTickTimer = 0;
 			}
 		}
@@ -1596,6 +1600,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			if (this.overhauleddamage$getPoisonBuildUp() > this.overhauleddamage$getMaxPoisonBuildUp()) {
 				this.poisonTickTimer = this.overhauleddamage$getPoisonTickThreshold();
 			} else if (amount > 0) {
+				this.poisonReductionDelayTimer = 0;
 				this.poisonTickTimer = 0;
 			}
 		}
@@ -1667,6 +1672,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			if (this.overhauleddamage$getShockBuildUp() > this.overhauleddamage$getMaxShockBuildUp()) {
 				this.shockTickTimer = this.overhauleddamage$getShockTickThreshold();
 			} else if (amount > 0) {
+				this.shockReductionDelayTimer = 0;
 				this.shockTickTimer = 0;
 			}
 		}

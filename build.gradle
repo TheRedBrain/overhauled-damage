@@ -55,16 +55,16 @@ dependencies {
     modImplementation"me.fzzyhmstrs:fzzy_config:${project.fzzy_config_version}"
 
     // Stamina Attributes
-//    modImplementation "maven.modrinth:stamina-attributes:${project.stamina_attributes_version}"
-    modImplementation(files("libs/stamina-attributes-${project.stamina_attributes_version}.jar"))
+    modImplementation "maven.modrinth:stamina-attributes:${project.stamina_attributes_version}"
+//    modImplementation(files("libs/stamina-attributes-${project.stamina_attributes_version}.jar"))
 
     // Mana Attributes
-//    modImplementation "maven.modrinth:mana-attributes:${project.mana_attributes_version}"
-    modImplementation(files("libs/mana-attributes-${project.mana_attributes_version}.jar"))
+    modImplementation "maven.modrinth:mana-attributes:${project.mana_attributes_version}"
+//    modImplementation(files("libs/mana-attributes-${project.mana_attributes_version}.jar"))
 
     // Resource Bar API
-//    modImplementation "maven.modrinth:resource-bar-api:${project.resource_bar_api_version}"
-    modImplementation(files("libs/resource-bar-api-${project.resource_bar_api_version}.jar"))
+    modImplementation "maven.modrinth:resource-bar-api:${project.resource_bar_api_version}"
+//    modImplementation(files("libs/resource-bar-api-${project.resource_bar_api_version}.jar"))
 
 }
 

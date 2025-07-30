@@ -14,7 +14,8 @@
 	"attribute.name.generic.bleeding_duration": "Bleeding Duration",
 	"attribute.name.generic.bleeding_tick_threshold": "Bleeding Tick Threshold",
 	"attribute.name.generic.bleeding_build_up_reduction": "Bleeding Build-Up Reduction",
-	
+	"attribute.name.generic.bleeding_build_up_reduction_delay_threshold": "Bleeding Build-Up Reduction Delay Threshold",
+
 	"attribute.name.generic.additional_frost_damage": "Additional Frost Damage",
 	"attribute.name.generic.increased_frost_damage": "Increased Frost Damage",
 	"attribute.name.generic.blocked_frost_damage": "Blocked Frost Damage",
@@ -23,7 +24,8 @@
 	"attribute.name.generic.freeze_duration": "Freeze Duration",
 	"attribute.name.generic.freeze_tick_threshold": "Freeze Tick Threshold",
 	"attribute.name.generic.freeze_build_up_reduction": "Freeze Build-Up Reduction",
-	
+	"attribute.name.generic.freeze_build_up_reduction_delay_threshold": "Freeze Build-Up Reduction Delay Threshold",
+
 	"attribute.name.generic.additional_fire_damage": "Additional Fire Damage",
 	"attribute.name.generic.increased_fire_damage": "Increased Fire Damage",
 	"attribute.name.generic.blocked_fire_damage": "Blocked Fire Damage",
@@ -32,7 +34,8 @@
 	"attribute.name.generic.burn_duration": "Burn Duration",
 	"attribute.name.generic.burn_tick_threshold": "Burn Tick Threshold",
 	"attribute.name.generic.burn_build_up_reduction": "Burn Build-Up Reduction",
-	
+	"attribute.name.generic.burn_build_up_reduction_delay_threshold": "Burn Build-Up Reduction Delay Threshold",
+
 	"attribute.name.generic.additional_lightning_damage": "Additional Lightning Damage",
 	"attribute.name.generic.increased_lightning_damage": "Increased Lightning Damage",
 	"attribute.name.generic.blocked_lightning_damage": "Blocked Lightning Damage",
@@ -41,7 +44,8 @@
 	"attribute.name.generic.shock_duration": "Shock Duration",
 	"attribute.name.generic.shock_tick_threshold": "Shock Tick Threshold",
 	"attribute.name.generic.shock_build_up_reduction": "Shock Build-Up Reduction",
-	
+	"attribute.name.generic.shock_build_up_reduction_delay_threshold": "Shock Build-Up Reduction Delay Threshold",
+
 	"attribute.name.generic.additional_poison_damage": "Additional Poison Damage",
 	"attribute.name.generic.increased_poison_damage": "Increased Poison Damage",
 	"attribute.name.generic.blocked_poison_damage": "Blocked Poison Damage",
@@ -50,11 +54,13 @@
 	"attribute.name.generic.poison_duration": "Poison Duration",
 	"attribute.name.generic.poison_tick_threshold": "Poison Tick Threshold",
 	"attribute.name.generic.poison_build_up_reduction": "Poison Build-Up Reduction",
+	"attribute.name.generic.poison_build_up_reduction_delay_threshold": "Poison Build-Up Reduction Delay Threshold",
 
 	"attribute.name.generic.max_stagger_build_up": "Max Stagger Build Up",
 	"attribute.name.generic.stagger_duration": "Stagger Duration",
 	"attribute.name.generic.stagger_tick_threshold": "Stagger Tick Threshold",
 	"attribute.name.generic.stagger_build_up_reduction": "Stagger Build-Up Reduction",
+	"attribute.name.generic.stagger_build_up_reduction_delay_threshold": "Stagger Build-Up Reduction Delay Threshold",
 
 	"attribute.name.generic.block_force": "Block Force",
 	"attribute.name.generic.parry_bonus": "Parry Bonus",
