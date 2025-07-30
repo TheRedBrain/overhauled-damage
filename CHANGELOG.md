@@ -1,3 +1,9 @@
+# 2.3.0
+
+- added alternative build-up bars consisting of icons, similar to vanillas resource bars
+- fixed an issue where the build-up bars were visible in creative mode
+- fixed an issue where the build-up bars were visible even when the HUD was hidden (pressing F1)
+
 # 2.2.1
 
 - fixed some internal issues
