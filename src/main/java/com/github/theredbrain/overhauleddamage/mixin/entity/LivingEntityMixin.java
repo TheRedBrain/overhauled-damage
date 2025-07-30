@@ -182,6 +182,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.BLEEDING_DURATION)
 				.add(OverhauledDamage.BLEEDING_TICK_THRESHOLD)
 				.add(OverhauledDamage.BLEEDING_BUILD_UP_REDUCTION)
+				.add(OverhauledDamage.BLEEDING_BUILD_UP_REDUCTION_DELAY_THRESHOLD)
 
 				.add(OverhauledDamage.ADDITIONAL_FROST_DAMAGE)
 				.add(OverhauledDamage.INCREASED_FROST_DAMAGE)
@@ -191,6 +192,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.FREEZE_DURATION)
 				.add(OverhauledDamage.FREEZE_TICK_THRESHOLD)
 				.add(OverhauledDamage.FREEZE_BUILD_UP_REDUCTION)
+				.add(OverhauledDamage.FREEZE_BUILD_UP_REDUCTION_DELAY_THRESHOLD)
 
 				.add(OverhauledDamage.ADDITIONAL_FIRE_DAMAGE)
 				.add(OverhauledDamage.INCREASED_FIRE_DAMAGE)
@@ -200,6 +202,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.BURN_DURATION)
 				.add(OverhauledDamage.BURN_TICK_THRESHOLD)
 				.add(OverhauledDamage.BURN_BUILD_UP_REDUCTION)
+				.add(OverhauledDamage.BURN_BUILD_UP_REDUCTION_DELAY_THRESHOLD)
 
 				.add(OverhauledDamage.ADDITIONAL_LIGHTNING_DAMAGE)
 				.add(OverhauledDamage.INCREASED_LIGHTNING_DAMAGE)
@@ -209,6 +212,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.SHOCK_DURATION)
 				.add(OverhauledDamage.SHOCK_TICK_THRESHOLD)
 				.add(OverhauledDamage.SHOCK_BUILD_UP_REDUCTION)
+				.add(OverhauledDamage.SHOCK_BUILD_UP_REDUCTION_DELAY_THRESHOLD)
 
 				.add(OverhauledDamage.ADDITIONAL_POISON_DAMAGE)
 				.add(OverhauledDamage.INCREASED_POISON_DAMAGE)
@@ -218,11 +222,13 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.POISON_DURATION)
 				.add(OverhauledDamage.POISON_TICK_THRESHOLD)
 				.add(OverhauledDamage.POISON_BUILD_UP_REDUCTION)
+				.add(OverhauledDamage.POISON_BUILD_UP_REDUCTION_DELAY_THRESHOLD)
 
 				.add(OverhauledDamage.MAX_STAGGER_BUILD_UP)
 				.add(OverhauledDamage.STAGGER_DURATION)
 				.add(OverhauledDamage.STAGGER_TICK_THRESHOLD)
 				.add(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION)
+				.add(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD)
 
 				.add(OverhauledDamage.BLOCK_FORCE)
 				.add(OverhauledDamage.PARRY_BONUS)
