@@ -1,3 +1,9 @@
+# 2.4.0
+
+- reworked block knock back calculation
+- several internal refactors to improve maintainability
+- fixed several bugs with the icon bar configurations
+
 # 2.3.0
 
 - additions
