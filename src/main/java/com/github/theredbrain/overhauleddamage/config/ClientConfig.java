@@ -38,7 +38,7 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings iconBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings();
+		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(91);
@@ -47,7 +47,7 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 		}
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings smoothBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings();
+		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
 
 		public static class SmoothBarSettings extends ConfigSection {
 
@@ -214,7 +214,7 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings iconBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings();
+		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(91);
@@ -223,11 +223,11 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 		}
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings smoothBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings();
+		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
 
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public BleedingBuildUpSettings.SmoothBarSettings.PositionSettings positionSettings = new BleedingBuildUpSettings.SmoothBarSettings.PositionSettings();
+			public PositionSettings positionSettings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -239,8 +239,6 @@ public class ClientConfig extends Config {
 					put(0, 18);
 				}}, new ValidatedInt(), new ValidatedInt());
 			}
-
-			public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
 
 			public boolean show_current_value_overlay = false;
 
@@ -327,7 +325,7 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings animationSettings = new BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings();
+			public AnimationsSettings animationSettings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
@@ -393,7 +391,7 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings iconBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings();
+		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(91);
@@ -402,11 +400,11 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 		}
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings smoothBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings();
+		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
 
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public BleedingBuildUpSettings.SmoothBarSettings.PositionSettings positionSettings = new BleedingBuildUpSettings.SmoothBarSettings.PositionSettings();
+			public PositionSettings positionSettings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -506,7 +504,7 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings animationSettings = new BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings();
+			public AnimationsSettings animationSettings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
@@ -572,7 +570,7 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings iconBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings();
+		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(91);
@@ -581,11 +579,11 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 		}
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings smoothBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings();
+		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
 
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public BleedingBuildUpSettings.SmoothBarSettings.PositionSettings positionSettings = new BleedingBuildUpSettings.SmoothBarSettings.PositionSettings();
+			public PositionSettings positionSettings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -685,7 +683,7 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings animationSettings = new BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings();
+			public AnimationsSettings animationSettings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
@@ -751,7 +749,7 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings iconBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings();
+		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(91);
@@ -760,11 +758,11 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 		}
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings smoothBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings();
+		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
 
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public BleedingBuildUpSettings.SmoothBarSettings.PositionSettings positionSettings = new BleedingBuildUpSettings.SmoothBarSettings.PositionSettings();
+			public PositionSettings positionSettings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -864,7 +862,7 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings animationSettings = new BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings();
+			public AnimationsSettings animationSettings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
@@ -930,7 +928,7 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 6;
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings iconBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.IconBarSettings();
+		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(91);
@@ -939,11 +937,11 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 		}
 
-		public com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings smoothBarSettings = new com.github.theredbrain.staminaattributes.config.ClientConfig.SmoothBarSettings();
+		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
 
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public BleedingBuildUpSettings.SmoothBarSettings.PositionSettings positionSettings = new BleedingBuildUpSettings.SmoothBarSettings.PositionSettings();
+			public PositionSettings positionSettings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -1043,7 +1041,7 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings animationSettings = new BleedingBuildUpSettings.SmoothBarSettings.AnimationsSettings();
+			public AnimationsSettings animationSettings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
