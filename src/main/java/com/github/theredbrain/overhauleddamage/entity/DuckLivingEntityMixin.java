@@ -1,10 +1,10 @@
 package com.github.theredbrain.overhauleddamage.entity;
 
-import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
 
 public interface DuckLivingEntityMixin {
 
-	float overhauleddamage$calculateOverhauledDamage(DamageSource damageSource, float amount);
+	ItemStack overhauleddamage$getActiveItemStack();
 
 	float overhauleddamage$getAdditionalBashingDamage();
 
@@ -26,8 +26,6 @@ public interface DuckLivingEntityMixin {
 
 	float overhauleddamage$getBlockedPhysicalDamage();
 
-	void overhauleddamage$addBleedingBuildUp(float amount);
-
 	float overhauleddamage$getBleedingBuildUp();
 
 	void overhauleddamage$setBleedingBuildUp(float bleedingBuildUp);
@@ -42,6 +40,14 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getBleedingBuildUpReductionDelayThreshold();
 
+	int overhauleddamage$getBleedingTickTimer();
+
+	void overhauleddamage$setBleedingTickTimer(int bleedingTickTimer);
+
+	int overhauleddamage$getBleedingReductionDelayTimer();
+
+	void overhauleddamage$setBleedingReductionDelayTimer(int bleedingReductionDelayTimer);
+
 	float overhauleddamage$getAdditionalFireDamage();
 
 	float overhauleddamage$getIncreasedFireDamage();
@@ -49,8 +55,6 @@ public interface DuckLivingEntityMixin {
 	float overhauleddamage$getBlockedFireDamage();
 
 	float overhauleddamage$getFireResistance();
-
-	void overhauleddamage$addBurnBuildUp(float amount);
 
 	float overhauleddamage$getBurnBuildUp();
 
@@ -66,6 +70,14 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getBurnBuildUpReductionDelayThreshold();
 
+	int overhauleddamage$getBurnTickTimer();
+
+	void overhauleddamage$setBurnTickTimer(int burnTickTimer);
+
+	int overhauleddamage$getBurnReductionDelayTimer();
+
+	void overhauleddamage$setBurnReductionDelayTimer(int burnReductionDelayTimer);
+
 	float overhauleddamage$getAdditionalFrostDamage();
 
 	float overhauleddamage$getIncreasedFrostDamage();
@@ -73,8 +85,6 @@ public interface DuckLivingEntityMixin {
 	float overhauleddamage$getBlockedFrostDamage();
 
 	float overhauleddamage$getFrostResistance();
-
-	void overhauleddamage$addFreezeBuildUp(float amount);
 
 	float overhauleddamage$getFreezeBuildUp();
 
@@ -90,7 +100,13 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getFreezeBuildUpReductionDelayThreshold();
 
-	void overhauleddamage$addStaggerBuildUp(float amount);
+	int overhauleddamage$getFreezeTickTimer();
+
+	void overhauleddamage$setFreezeTickTimer(int freezeTickTimer);
+
+	int overhauleddamage$getFreezeReductionDelayTimer();
+
+	void overhauleddamage$setFreezeReductionDelayTimer(int freezeReductionDelayTimer);
 
 	float overhauleddamage$getStaggerBuildUp();
 
@@ -106,6 +122,14 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getStaggerBuildUpReductionDelayThreshold();
 
+	int overhauleddamage$getStaggerTickTimer();
+
+	void overhauleddamage$setStaggerTickTimer(int staggerTickTimer);
+
+	int overhauleddamage$getStaggerReductionDelayTimer();
+
+	void overhauleddamage$setStaggerReductionDelayTimer(int staggerReductionDelayTimer);
+
 	float overhauleddamage$getAdditionalPoisonDamage();
 
 	float overhauleddamage$getIncreasedPoisonDamage();
@@ -113,8 +137,6 @@ public interface DuckLivingEntityMixin {
 	float overhauleddamage$getBlockedPoisonDamage();
 
 	float overhauleddamage$getPoisonResistance();
-
-	void overhauleddamage$addPoisonBuildUp(float amount);
 
 	float overhauleddamage$getPoisonBuildUp();
 
@@ -130,6 +152,14 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getPoisonBuildUpReductionDelayThreshold();
 
+	int overhauleddamage$getPoisonTickTimer();
+
+	void overhauleddamage$setPoisonTickTimer(int poisonTickTimer);
+
+	int overhauleddamage$getPoisonReductionDelayTimer();
+
+	void overhauleddamage$setPoisonReductionDelayTimer(int poisonReductionDelayTimer);
+
 	float overhauleddamage$getAdditionalLightningDamage();
 
 	float overhauleddamage$getIncreasedLightningDamage();
@@ -137,8 +167,6 @@ public interface DuckLivingEntityMixin {
 	float overhauleddamage$getBlockedLightningDamage();
 
 	float overhauleddamage$getLightningResistance();
-
-	void overhauleddamage$addShockBuildUp(float amount);
 
 	float overhauleddamage$getShockBuildUp();
 
@@ -154,6 +182,14 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getShockBuildUpReductionDelayThreshold();
 
+	int overhauleddamage$getShockTickTimer();
+
+	void overhauleddamage$setShockTickTimer(int shockTickTimer);
+
+	int overhauleddamage$getShockReductionDelayTimer();
+
+	void overhauleddamage$setShockReductionDelayTimer(int shockReductionDelayTimer);
+
 	float overhauleddamage$getBlockForce();
 
 	float overhauleddamage$getParryBonus();
@@ -168,7 +204,10 @@ public interface DuckLivingEntityMixin {
 
 	int overhauleddamage$getBlockingTime();
 
+	void overhauleddamage$setBlockingTime(int blockingTime);
+
 	float overhauleddamage$getDamageTakenFromManaMultiplier();
 
 	float overhauleddamage$getDamageTakenFromStaminaMultiplier();
+
 }

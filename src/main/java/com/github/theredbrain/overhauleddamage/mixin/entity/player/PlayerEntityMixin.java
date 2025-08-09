@@ -2,6 +2,7 @@ package com.github.theredbrain.overhauleddamage.mixin.entity.player;
 
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
+import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.EntityType;
@@ -29,7 +30,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DuckLivi
 
 	@ModifyVariable(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), argsOnly = true)
 	private float overhauleddamage$applyDamage(float old, DamageSource source) {
-		return this.overhauleddamage$calculateOverhauledDamage(source, old);
+		return LivingEntityHelper.calculateOverhauledDamage(this, source, old);
 	}
 
 	// effectively disables the vanilla jump crit mechanic
