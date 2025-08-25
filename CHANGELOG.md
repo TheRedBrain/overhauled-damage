@@ -1,3 +1,7 @@
+# 2.4.2
+
+- fixed game rule
+
 # 2.4.1
 
 - added "naturalArmourToughness" game rule

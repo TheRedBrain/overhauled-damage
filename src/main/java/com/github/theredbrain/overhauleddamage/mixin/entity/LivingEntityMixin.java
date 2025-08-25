@@ -266,7 +266,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void overhauleddamage$tick(CallbackInfo ci) {
-		this.getAttributes().addTemporaryModifiers(getNaturalAttributeModifiers(this.getWorld()));
+		if (!this.getWorld().isClient()) {
+			this.getAttributes().addTemporaryModifiers(getNaturalAttributeModifiers(this.getWorld()));
+		}
 		LivingEntityHelper.tick(((LivingEntity) (Object) this));
 	}
 
