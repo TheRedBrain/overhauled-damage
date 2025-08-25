@@ -3,13 +3,18 @@ package com.github.theredbrain.overhauleddamage.mixin.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
+import com.github.theredbrain.overhauleddamage.registry.GameRulesRegistry;
+import com.google.common.collect.HashMultimap;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.data.DataTracker;
@@ -39,6 +44,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Shadow
 	protected ItemStack activeItemStack;
+
+	@Shadow public abstract AttributeContainer getAttributes();
 
 	@Unique
 	private int bleedingTickTimer = 0;
@@ -259,6 +266,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void overhauleddamage$tick(CallbackInfo ci) {
+		this.getAttributes().addTemporaryModifiers(getNaturalAttributeModifiers(this.getWorld()));
 		LivingEntityHelper.tick(((LivingEntity) (Object) this));
 	}
 
@@ -797,4 +805,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public float overhauleddamage$getDamageTakenFromStaminaMultiplier() {
 		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER);
 	}
+
+	@Unique
+	private HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getNaturalAttributeModifiers(World world) {
+		HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> hashMultimap = HashMultimap.create();
+		hashMultimap.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), world.getGameRules().get(GameRulesRegistry.NATURAL_ARMOUR_TOUGHNESS).get(), EntityAttributeModifier.Operation.ADD_VALUE));
+		return hashMultimap;
+	}
+
 }
