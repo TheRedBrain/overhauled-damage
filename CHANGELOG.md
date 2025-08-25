@@ -1,3 +1,9 @@
+# 2.4.1
+
+- added "naturalArmourToughness" game rule
+- added attackers "generic.attack_knockback" value into the block knock back calculation
+- fixed an issue where blocking an attack would never knock back the blocking entity
+
 # 2.4.0
 
 - reworked block knock back calculation

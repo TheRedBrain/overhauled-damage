@@ -42,7 +42,7 @@ Only a limited amount of damage is blocked, blocking costs [stamina](https://mod
 Parrying increases stagger build-up and when the build-up reaches the threshold, the parry fails and the parrying entity is staggered. In that case, no damage is blocked.
 A successful parry multiplies the blocked damage and staggers the attacker.
 
-A normal blocked attack (when the shield was raised for a longer time before the attack hit), can knock back either the attacking or the blocking entity. The knock back amount and which entity is affected is depending on damage type, damage amount, the block force of the blocking entity and a configurable multiplier.
+A normal blocked attack (when the shield was raised for a longer time before the attack hit), can knock back either the attacking or the blocking entity. The knock back amount and which entity is affected is depending on damage type, damage amount, the block force of the blocking entity, the attack knockback of the attacking entity and a configurable multiplier.
 
 ## Additional features
 
