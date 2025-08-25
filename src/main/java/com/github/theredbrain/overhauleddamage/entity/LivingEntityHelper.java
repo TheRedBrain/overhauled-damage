@@ -259,9 +259,9 @@ public class LivingEntityHelper {
 								}
 							} else {
 								if (attacker != null) {
-									ServerConfig.DamageCalculation.AttackTypeMultipliers negative_block_force_multipliers = serverConfig.damageCalculation.negative_block_force_multipliers.get();
-									float applied_knockback = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBlockForce() - (generic_amount * negative_block_force_multipliers.generic + blockedBashingDamage * negative_block_force_multipliers.bashing + blockedPiercingDamage * negative_block_force_multipliers.piercing + blockedSlashingDamage * negative_block_force_multipliers.slashing + blockedPoisonDamage * negative_block_force_multipliers.poison + blockedFireDamage * negative_block_force_multipliers.fire + blockedFrostDamage * negative_block_force_multipliers.frost + blockedLightningDamage * negative_block_force_multipliers.lightning);
-									attacker.takeKnockback(applied_knockback * serverConfig.damageCalculation.total_block_force_multiplier.get(), livingEntity.getX() - attacker.getX(), livingEntity.getZ() - attacker.getZ());
+									ServerConfig.DamageCalculation.AttackTypeMultipliers negative_block_force_multipliers = serverConfig.damageCalculation.blockingOverhaul.negative_block_force_multipliers.get();
+									float applied_knock_back = (float) (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBlockForce() - (attacker.getAttributeValue(EntityAttributes.GENERIC_ATTACK_KNOCKBACK) + generic_amount * negative_block_force_multipliers.generic + blockedBashingDamage * negative_block_force_multipliers.bashing + blockedPiercingDamage * negative_block_force_multipliers.piercing + blockedSlashingDamage * negative_block_force_multipliers.slashing + blockedPoisonDamage * negative_block_force_multipliers.poison + blockedFireDamage * negative_block_force_multipliers.fire + blockedFrostDamage * negative_block_force_multipliers.frost + blockedLightningDamage * negative_block_force_multipliers.lightning)) * serverConfig.damageCalculation.blockingOverhaul.total_block_force_multiplier.get();
+
 									if (enable_debug_log) {
 										OverhauledDamage.info("--- successful blocks apply knockback ---");
 										// blocked damage is multiplied based on attack type
@@ -270,8 +270,17 @@ public class LivingEntityHelper {
 										// if end result is positive, the attacker gets knocked back
 										// if end result is negative, the defender is knocked back
 										OverhauledDamage.info("negative block force multipliers: " + negative_block_force_multipliers);
-										OverhauledDamage.info("applied_knockback : " + applied_knockback);
+										OverhauledDamage.info("applied_knockback : " + applied_knock_back);
 										OverhauledDamage.info("");
+										OverhauledDamage.info("when applied_knock_back is greater zero, it's applied to the attacker");
+										OverhauledDamage.info("");
+										OverhauledDamage.info("when applied_knock_back is lesser zero, its absolute value is applied to the blocking entity");
+										OverhauledDamage.info("");
+									}
+									if (applied_knock_back > 0.0) {
+										attacker.takeKnockback(applied_knock_back, livingEntity.getX() - attacker.getX(), livingEntity.getZ() - attacker.getZ());
+									} else if (applied_knock_back < 0.0) {
+										livingEntity.takeKnockback(Math.abs(applied_knock_back), attacker.getX() - livingEntity.getX(), attacker.getZ() - livingEntity.getZ());
 									}
 								}
 							}

@@ -135,6 +135,11 @@ public class ServerConfig extends Config {
 		public static class BlockingOverhaul extends ConfigSection {
 
 			public ValidatedBoolean blocked_damage_calculation_works_with_flat_values = new ValidatedBoolean(false);
+
+			public ValidatedAny<AttackTypeMultipliers> negative_block_force_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F));
+
+			public ValidatedFloat total_block_force_multiplier = new ValidatedFloat(1.0F);
+
 		}
 
 		public ValidatedBoolean enable_protection_overhaul = new ValidatedBoolean(true);
@@ -254,10 +259,6 @@ public class ServerConfig extends Config {
 		public ValidatedAny<AttackTypeMultipliers> bleeding_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F));
 
 		public ValidatedAny<AttackTypeMultipliers> stagger_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F));
-
-		public ValidatedAny<AttackTypeMultipliers> negative_block_force_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F));
-
-		public ValidatedFloat total_block_force_multiplier = new ValidatedFloat(1.0F);
 
 		public ValidatedAny<AttackTypeMultipliers> applied_damage_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(1.0F, 1.0F, 1.0F, 1.25F, 0.0F, 0.0F, 0.0F, 0.0F));
 
