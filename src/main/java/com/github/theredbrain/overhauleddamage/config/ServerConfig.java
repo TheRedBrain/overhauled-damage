@@ -25,6 +25,8 @@ public class ServerConfig extends Config {
 
 	public ValidatedBoolean damage_interrupts_item_usage = new ValidatedBoolean(true);
 
+	public ValidatedBoolean knockback_interrupts_item_usage = new ValidatedBoolean(true);
+
 	public ValidatedBoolean enable_hit_stun_mechanic = new ValidatedBoolean(true);
 
 	public HitStun hitStun = new HitStun();
@@ -255,6 +257,16 @@ public class ServerConfig extends Config {
 //			Default: true
 //			""")
 //		public boolean enable_damage_taken_multiplier_attribute = true; // TODO
+
+		public ValidatedBoolean enable_knockback_overhaul = new ValidatedBoolean(true);
+
+		public KnockbackOverhaul knockbackOverhaul = new KnockbackOverhaul();
+
+		public static class KnockbackOverhaul extends ConfigSection {
+
+			public ValidatedAny<AttackTypeMultipliers> applied_knockback_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(1.0F, 2.0F, 1.25F, 0.75F, 0.0F, 0.0F, 0.0F, 0.0F));
+
+		}
 
 		public ValidatedAny<AttackTypeMultipliers> bleeding_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F));
 

@@ -3,6 +3,7 @@ package com.github.theredbrain.overhauleddamage.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
+import it.unimi.dsi.fastutil.doubles.DoubleDoubleImmutablePair;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityStatuses;
@@ -13,6 +14,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
@@ -563,17 +565,53 @@ public class LivingEntityHelper {
 				OverhauledDamage.info("");
 			}
 
-			ServerConfig.DamageCalculation.AttackTypeMultipliers applied_damage_multipliers = serverConfig.damageCalculation.applied_damage_multipliers.get();
-			applied_damage = (generic_amount * applied_damage_multipliers.generic) + (bashing_amount * applied_damage_multipliers.bashing) + (piercing_amount * applied_damage_multipliers.piercing) + (slashing_amount * applied_damage_multipliers.slashing) + (poison_amount * applied_damage_multipliers.poison) + (fire_amount * applied_damage_multipliers.fire) + (frost_amount * applied_damage_multipliers.frost) + (lightning_amount * applied_damage_multipliers.lightning);
+			if (!source.isIn(Tags.NO_APPLIED_DAMAGE)) {
+				ServerConfig.DamageCalculation.AttackTypeMultipliers applied_damage_multipliers = serverConfig.damageCalculation.applied_damage_multipliers.get();
+				applied_damage = (generic_amount * applied_damage_multipliers.generic) + (bashing_amount * applied_damage_multipliers.bashing) + (piercing_amount * applied_damage_multipliers.piercing) + (slashing_amount * applied_damage_multipliers.slashing) + (poison_amount * applied_damage_multipliers.poison) + (fire_amount * applied_damage_multipliers.fire) + (frost_amount * applied_damage_multipliers.frost) + (lightning_amount * applied_damage_multipliers.lightning);
 
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- damage applied to resources like health is multiplied ---");
-				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
-				OverhauledDamage.info("");
+				if (enable_debug_log) {
+					OverhauledDamage.info("--- damage applied to resources like health is multiplied ---");
+					OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
+					OverhauledDamage.info("");
+				}
+			} else {
+				applied_damage = 0.0F;
+				if (enable_debug_log) {
+					OverhauledDamage.info("--- no damage is applied to resources like health ---");
+					OverhauledDamage.info("");
+				}
 			}
 
-			// taking damage interrupts eating food, drinking potions, etc
-			if (applied_damage > 0.0f && !livingEntity.isBlocking() && serverConfig.damage_interrupts_item_usage.get()) {
+			float applied_knockback = 0.0F;
+			if (!triedBlocking && !source.isIn(DamageTypeTags.NO_KNOCKBACK)) {
+				ServerConfig.DamageCalculation.AttackTypeMultipliers applied_knockback_multipliers = serverConfig.damageCalculation.knockbackOverhaul.applied_knockback_multipliers.get();
+				applied_knockback = (generic_amount * applied_knockback_multipliers.generic) + (bashing_amount * applied_knockback_multipliers.bashing) + (piercing_amount * applied_knockback_multipliers.piercing) + (slashing_amount * applied_knockback_multipliers.slashing) + (poison_amount * applied_knockback_multipliers.poison) + (fire_amount * applied_knockback_multipliers.fire) + (frost_amount * applied_knockback_multipliers.frost) + (lightning_amount * applied_knockback_multipliers.lightning);
+
+
+				double d = 0.0;
+				double e = 0.0;
+				if (source.getSource() instanceof ProjectileEntity projectileEntity) {
+					DoubleDoubleImmutablePair doubleDoubleImmutablePair = projectileEntity.getKnockback(livingEntity, source);
+					d = -doubleDoubleImmutablePair.leftDouble();
+					e = -doubleDoubleImmutablePair.rightDouble();
+				} else if (source.getPosition() != null) {
+					d = source.getPosition().getX() - livingEntity.getX();
+					e = source.getPosition().getZ() - livingEntity.getZ();
+				}
+
+				livingEntity.takeKnockback(applied_knockback, d, e);
+
+				livingEntity.tiltScreen(d, e);
+
+				if (enable_debug_log) {
+					OverhauledDamage.info("--- knockback is applied ---");
+					OverhauledDamage.info("applied_knockback (before knockback resistance) : " + applied_knockback);
+					OverhauledDamage.info("");
+				}
+			}
+
+			// taking damage/knockback interrupts eating food, drinking potions, etc
+			if (!livingEntity.isBlocking() && ((applied_damage > 0.0f && serverConfig.damage_interrupts_item_usage.get()) || (applied_knockback > 0.0f && serverConfig.knockback_interrupts_item_usage.get()))) {
 				if (enable_debug_log) {
 					OverhauledDamage.info("item usage was stopped");
 					OverhauledDamage.info("");
