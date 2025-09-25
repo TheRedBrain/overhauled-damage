@@ -283,6 +283,16 @@ public class ServerConfig extends Config {
 //			""")
 //		public boolean enable_damage_taken_multiplier_attribute = true; // TODO
 
+		public ValidatedBoolean enable_knockback_overhaul = new ValidatedBoolean(true);
+
+		public KnockbackOverhaul knockbackOverhaul = new KnockbackOverhaul();
+
+		public static class KnockbackOverhaul extends ConfigSection {
+
+			public ValidatedAny<AttackTypeMultipliers> applied_knockback_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(1.0F, 2.0F, 1.25F, 0.75F, 0.0F, 0.0F, 0.0F, 0.0F));
+
+		}
+
 		public ValidatedAny<AttackTypeMultipliers> bleeding_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.0F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F));
 
 		public ValidatedAny<AttackTypeMultipliers> stagger_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.5F));

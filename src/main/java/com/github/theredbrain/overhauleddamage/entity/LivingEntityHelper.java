@@ -3,28 +3,28 @@ package com.github.theredbrain.overhauleddamage.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
-import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.doubles.DoubleDoubleImmutablePair;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
-import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
-import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.BlocksAttacks;
-import org.jspecify.annotations.Nullable;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityStatuses;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageType;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
+import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
@@ -172,8 +172,35 @@ public class LivingEntityHelper {
 			OverhauledDamage.info("");
 		}
 
+		float applied_knockback = 0.0F;
+		if (!triedBlocking && !source.isIn(DamageTypeTags.NO_KNOCKBACK)) {
+			ServerConfig.DamageCalculation.AttackTypeMultipliers applied_knockback_multipliers = serverConfig.damageCalculation.knockbackOverhaul.applied_knockback_multipliers.get();
+			applied_knockback = (generic_amount * applied_knockback_multipliers.generic) + (bashing_amount * applied_knockback_multipliers.bashing) + (piercing_amount * applied_knockback_multipliers.piercing) + (slashing_amount * applied_knockback_multipliers.slashing) + (poison_amount * applied_knockback_multipliers.poison) + (fire_amount * applied_knockback_multipliers.fire) + (frost_amount * applied_knockback_multipliers.frost) + (lightning_amount * applied_knockback_multipliers.lightning);
+
+
+			double d = 0.0;
+			double e = 0.0;
+			if (source.getSource() instanceof ProjectileEntity projectileEntity) {
+				DoubleDoubleImmutablePair doubleDoubleImmutablePair = projectileEntity.getKnockback(livingEntity, source);
+				d = -doubleDoubleImmutablePair.leftDouble();
+				e = -doubleDoubleImmutablePair.rightDouble();
+			} else if (source.getPosition() != null) {
+				d = source.getPosition().getX() - livingEntity.getX();
+				e = source.getPosition().getZ() - livingEntity.getZ();
+			}
+
+			livingEntity.takeKnockback(applied_knockback, d, e);
+
+			livingEntity.tiltScreen(d, e);
+
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- knockback is applied ---");
+				OverhauledDamage.info("applied_knockback (before knockback resistance) : " + applied_knockback);
+				OverhauledDamage.info("");
+			}
+		}
 		// taking actual damage interrupts eating food, drinking potions, etc
-		if (amount > 0.0f && !livingEntity.isBlocking() && serverConfig.overhauled_damage_calculation.damage_interrupts_item_usage.get()) {
+		if (!livingEntity.isBlocking() && ((amount > 0.0f && serverConfig.overhauled_damage_calculation.damage_interrupts_item_usage.get()) || (applied_knockback > 0.0f && serverConfig.knockback_interrupts_item_usage.get()))) {
 			if (enable_debug_log) {
 				OverhauledDamage.info("item usage was stopped");
 				OverhauledDamage.info("");
@@ -810,6 +837,23 @@ public class LivingEntityHelper {
 			OverhauledDamage.info("this is further reduced by absorption");
 			OverhauledDamage.info("");
 		}
+
+//		if (!source.isIn(Tags.NO_APPLIED_DAMAGE)) {
+//			ServerConfig.DamageCalculation.AttackTypeMultipliers applied_damage_multipliers = serverConfig.damageCalculation.applied_damage_multipliers.get();
+//			applied_damage = (generic_amount * applied_damage_multipliers.generic) + (bashing_amount * applied_damage_multipliers.bashing) + (piercing_amount * applied_damage_multipliers.piercing) + (slashing_amount * applied_damage_multipliers.slashing) + (poison_amount * applied_damage_multipliers.poison) + (fire_amount * applied_damage_multipliers.fire) + (frost_amount * applied_damage_multipliers.frost) + (lightning_amount * applied_damage_multipliers.lightning);
+//
+//			if (enable_debug_log) {
+//				OverhauledDamage.info("--- damage applied to resources like health is multiplied ---");
+//				OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
+//				OverhauledDamage.info("");
+//			}
+//		} else {
+//			applied_damage = 0.0F;
+//			if (enable_debug_log) {
+//				OverhauledDamage.info("--- no damage is applied to resources like health ---");
+//				OverhauledDamage.info("");
+//			}
+//		}
 
 		return amount;
 	}
