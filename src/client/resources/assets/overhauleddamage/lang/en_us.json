@@ -522,7 +522,5 @@
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_offset_x": "X offset from origin",
 	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_offset_y": "Y offset from origin",
 
-	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_color": "Number color",
-
-	"gamerule.naturalArmourToughness": "Natural armour toughness"
+	"text.autoconfig.overhauleddamage.option.staggerClientConfig.number_color": "Number color"
 }

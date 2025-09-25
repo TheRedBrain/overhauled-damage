@@ -833,7 +833,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Unique
 	private HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getNaturalAttributeModifiers(World world) {
 		HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> hashMultimap = HashMultimap.create();
-		hashMultimap.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), world.getGameRules().get(GameRulesRegistry.NATURAL_ARMOUR_TOUGHNESS).get(), EntityAttributeModifier.Operation.ADD_VALUE));
+		hashMultimap.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), OverhauledDamage.SERVER_CONFIG.damageCalculation.armorOverhaul.natural_player_armor_toughness.get(), EntityAttributeModifier.Operation.ADD_VALUE));
 		return hashMultimap;
 	}
 

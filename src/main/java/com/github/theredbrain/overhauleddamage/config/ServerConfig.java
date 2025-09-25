@@ -213,6 +213,8 @@ public class ServerConfig extends Config {
 
 			public ValidatedBoolean enable_armor_toughness_attribute = new ValidatedBoolean(false);
 
+			public ValidatedFloat natural_player_armor_toughness = new ValidatedFloat(1.0F);
+
 			public ValidatedAny<ArmorMultipliers> armor_multipliers = new ValidatedAny<>(new ArmorMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F));
 
 

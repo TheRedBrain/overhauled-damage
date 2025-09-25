@@ -2,7 +2,6 @@ package com.github.theredbrain.overhauleddamage;
 
 import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
-import com.github.theredbrain.overhauleddamage.registry.GameRulesRegistry;
 import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
@@ -130,11 +129,7 @@ public class OverhauledDamage implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Now dealing overhauled damage!");
-
-		// Config
 		SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new, RegisterType.BOTH);
-
-		GameRulesRegistry.init();
 	}
 
 	public static Identifier identifier(String path) {
