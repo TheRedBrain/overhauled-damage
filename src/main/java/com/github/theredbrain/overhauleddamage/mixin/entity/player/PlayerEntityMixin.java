@@ -5,6 +5,7 @@ import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -26,6 +27,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DuckLivi
 
 	protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
 		super(entityType, world);
+	}
+
+	// effectively disables the vanilla knockback on attack
+	@WrapOperation(
+			method = "attack",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getKnockbackAgainst(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)F")
+	)
+	private float overhauleddamage$attack(PlayerEntity instance, Entity entity, DamageSource damageSource, Operation<Float> original) {
+		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_knockback_overhaul.get() ? -1.0F : original.call(instance, entity, damageSource);
 	}
 
 	@ModifyVariable(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/player/PlayerEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), argsOnly = true)

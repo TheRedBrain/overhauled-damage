@@ -3,8 +3,8 @@ package com.github.theredbrain.overhauleddamage.mixin.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
-import com.github.theredbrain.overhauleddamage.registry.GameRulesRegistry;
 import com.google.common.collect.HashMultimap;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.Entity;
@@ -45,7 +45,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Shadow
 	protected ItemStack activeItemStack;
 
-	@Shadow public abstract AttributeContainer getAttributes();
+	@Shadow
+	public abstract AttributeContainer getAttributes();
 
 	@Unique
 	private int bleedingTickTimer = 0;
@@ -270,7 +271,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V")
 	)
 	public void overhauleddamage$wrap_takeKnockback(LivingEntity instance, double strength, double x, double z, Operation<Void> original) {
-		if(!OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_knockback_overhaul.get()) {
+		if (!OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_knockback_overhaul.get()) {
 			original.call(instance, strength, x, z);
 		}
 	}
@@ -281,7 +282,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tiltScreen(DD)V")
 	)
 	public void overhauleddamage$wrap_tiltScreen(LivingEntity instance, double deltaX, double deltaZ, Operation<Void> original) {
-		if(!OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_knockback_overhaul.get()) {
+		if (!OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_knockback_overhaul.get()) {
 			original.call(instance, deltaX, deltaZ);
 		}
 	}

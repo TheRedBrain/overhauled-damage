@@ -14,6 +14,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -597,6 +598,12 @@ public class LivingEntityHelper {
 				} else if (source.getPosition() != null) {
 					d = source.getPosition().getX() - livingEntity.getX();
 					e = source.getPosition().getZ() - livingEntity.getZ();
+				}
+
+				if (attacker instanceof PlayerEntity playerEntity && playerEntity.isSprinting() && (playerEntity.getAttackCooldownProgress(0.5F) > 0.9F)) {
+					applied_knockback += 1.0F;
+					attacker.setVelocity(attacker.getVelocity().multiply(0.6, 1.0, 0.6));
+					attacker.setSprinting(false);
 				}
 
 				livingEntity.takeKnockback(applied_knockback, d, e);
