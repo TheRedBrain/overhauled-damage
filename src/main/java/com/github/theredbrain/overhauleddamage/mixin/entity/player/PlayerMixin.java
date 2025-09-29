@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -78,6 +79,15 @@ public abstract class PlayerMixin extends LivingEntity implements DuckLivingEnti
 				.add(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION, 0.0)
 				.add(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD, 0.0)
 		;
+	}
+
+	// effectively disables the vanilla knockback on attack
+	@WrapOperation(
+			method = "actuallyHurt",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getKnockbackAgainst(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)F")
+	)
+	private float overhauleddamage$attack(Player instance, Entity entity, DamageSource damageSource, Operation<Float> original) {
+		return OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get() ? -1.0F : original.call(instance, entity, damageSource);
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))

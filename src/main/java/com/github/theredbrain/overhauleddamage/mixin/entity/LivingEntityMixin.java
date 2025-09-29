@@ -171,6 +171,28 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		return OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() ? LivingEntityHelper.calculateOverhauledDamage(level, ((LivingEntity) (Object) this), source, dmg) : dmg;
 	}
 
+	// disables the vanilla knockback on damage taken
+	@WrapOperation(
+			method = "damage",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V")
+	)
+	public void overhauleddamage$wrap_takeKnockback(LivingEntity instance, double strength, double x, double z, Operation<Void> original) {
+		if (!OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get()) {
+			original.call(instance, strength, x, z);
+		}
+	}
+
+	// disables the vanilla screen tilting on damage taken
+	@WrapOperation(
+			method = "damage",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tiltScreen(DD)V")
+	)
+	public void overhauleddamage$wrap_tiltScreen(LivingEntity instance, double deltaX, double deltaZ, Operation<Void> original) {
+		if (!OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get()) {
+			original.call(instance, deltaX, deltaZ);
+		}
+	}
+
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void overhauleddamage$tick(CallbackInfo ci) {
 		LivingEntityHelper.tick(((LivingEntity) (Object) this));
