@@ -9,27 +9,24 @@ import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.AttributeContainer;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -43,10 +40,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin extends Entity implements DuckLivingEntityMixin {
 
 	@Shadow
-	public abstract double getAttributeValue(RegistryEntry<EntityAttribute> attribute);
+	public abstract double getAttributeValue(Holder<Attribute> attribute);
 
 	@Shadow
-	protected ItemStack activeItemStack;
+	protected ItemStack useItem;
 
 	@Unique
 	private int bleedingTickTimer = 0;
@@ -74,40 +71,40 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	private int shockReductionDelayTimer = 0;
 
 	@Unique
-	private static final TrackedData<Float> BLEEDING_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final EntityDataAccessor<Float> BLEEDING_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
 	@Unique
-	private static final TrackedData<Float> BURN_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final EntityDataAccessor<Float> BURN_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
 	@Unique
-	private static final TrackedData<Float> FREEZE_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final EntityDataAccessor<Float> FREEZE_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
 	@Unique
-	private static final TrackedData<Float> STAGGER_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final EntityDataAccessor<Float> STAGGER_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
 	@Unique
-	private static final TrackedData<Float> POISON_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final EntityDataAccessor<Float> POISON_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
 	@Unique
-	private static final TrackedData<Float> SHOCK_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
+	private static final EntityDataAccessor<Float> SHOCK_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
 
-	public LivingEntityMixin(EntityType<?> type, World world) {
+	public LivingEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
 	}
 
-	@Inject(method = "initDataTracker", at = @At("RETURN"))
-	protected void overhauleddamage$initDataTracker(DataTracker.Builder builder, CallbackInfo ci) {
-		builder.add(BLEEDING_BUILD_UP, 0.0F);
-		builder.add(BURN_BUILD_UP, 0.0F);
-		builder.add(FREEZE_BUILD_UP, 0.0F);
-		builder.add(POISON_BUILD_UP, 0.0F);
-		builder.add(STAGGER_BUILD_UP, 0.0F);
-		builder.add(SHOCK_BUILD_UP, 0.0F);
+	@Inject(method = "defineSynchedData", at = @At("RETURN"))
+	protected void overhauleddamage$initDataTracker(SynchedEntityData.Builder builder, CallbackInfo ci) {
+		builder.define(BLEEDING_BUILD_UP, 0.0F);
+		builder.define(BURN_BUILD_UP, 0.0F);
+		builder.define(FREEZE_BUILD_UP, 0.0F);
+		builder.define(POISON_BUILD_UP, 0.0F);
+		builder.define(STAGGER_BUILD_UP, 0.0F);
+		builder.define(SHOCK_BUILD_UP, 0.0F);
 
 	}
 
 	@Inject(method = "createLivingAttributes", at = @At("RETURN"))
-	private static void overhauleddamage$createLivingAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
+	private static void overhauleddamage$createLivingAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
 		cir.getReturnValue()
 				.add(OverhauledDamage.ADDITIONAL_BASHING_DAMAGE)
 				.add(OverhauledDamage.INCREASED_BASHING_DAMAGE)
@@ -180,25 +177,25 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		;
 	}
 
-	@Inject(method = "readCustomData", at = @At("TAIL"))
-	public void overhauleddamage$readCustomDataFromNbt(ReadView view, CallbackInfo ci) {
+	@Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
+	public void overhauleddamage$readCustomDataFromNbt(ValueInput view, CallbackInfo ci) {
 
-		this.overhauleddamage$setBleedingBuildUp(view.getFloat("bleeding_build_up", 0.0F));
+		this.overhauleddamage$setBleedingBuildUp(view.getFloatOr("bleeding_build_up", 0.0F));
 
-		this.overhauleddamage$setBurnBuildUp(view.getFloat("burn_build_up", 0.0F));
+		this.overhauleddamage$setBurnBuildUp(view.getFloatOr("burn_build_up", 0.0F));
 
-		this.overhauleddamage$setFreezeBuildUp(view.getFloat("freeze_build_up", 0.0F));
+		this.overhauleddamage$setFreezeBuildUp(view.getFloatOr("freeze_build_up", 0.0F));
 
-		this.overhauleddamage$setPoisonBuildUp(view.getFloat("poison_build_up", 0.0F));
+		this.overhauleddamage$setPoisonBuildUp(view.getFloatOr("poison_build_up", 0.0F));
 
-		this.overhauleddamage$setStaggerBuildUp(view.getFloat("stagger_build_up", 0.0F));
+		this.overhauleddamage$setStaggerBuildUp(view.getFloatOr("stagger_build_up", 0.0F));
 
-		this.overhauleddamage$setShockBuildUp(view.getFloat("shock_build_up", 0.0F));
+		this.overhauleddamage$setShockBuildUp(view.getFloatOr("shock_build_up", 0.0F));
 
 	}
 
-	@Inject(method = "writeCustomData", at = @At("TAIL"))
-	public void overhauleddamage$writeCustomDataToNbt(WriteView view, CallbackInfo ci) {
+	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
+	public void overhauleddamage$writeCustomDataToNbt(ValueOutput view, CallbackInfo ci) {
 
 		view.putFloat("bleeding_build_up", this.overhauleddamage$getBleedingBuildUp());
 
@@ -216,15 +213,15 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	// disables the vanilla armor calculation
 	@WrapOperation(
-			method = "applyArmorToDamage",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
+			method = "getDamageAfterArmorAbsorb",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z")
 	)
 	public boolean overhauleddamage$wrap_bypassesArmor(DamageSource instance, TagKey<DamageType> tag, Operation<Boolean> original) {
 		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul.get() || original.call(instance, tag);
 	}
 
-	@WrapOperation(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getDamageBlockedAmount(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)F"))
-	private float overhauleddamage$wrap_getDamageBlockedAmount(LivingEntity instance, ServerWorld world, DamageSource source, float amount, Operation<Float> original) {
+	@WrapOperation(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;applyItemBlocking(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)F"))
+	private float overhauleddamage$wrap_getDamageBlockedAmount(LivingEntity instance, ServerLevel world, DamageSource source, float amount, Operation<Float> original) {
 		if (OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get()) {
 			return 0.0F;
 		} else {
@@ -232,9 +229,9 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		}
 	}
 
-	@Definition(id = "modifyAppliedDamage", method = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F")
+	@Definition(id = "modifyAppliedDamage", method = "Lnet/minecraft/world/entity/LivingEntity;getDamageAfterMagicAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F")
 	@Expression("? = ?.modifyAppliedDamage(?, ?)")
-	@ModifyVariable(method = "applyDamage", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER), argsOnly = true)
+	@ModifyVariable(method = "actuallyHurt", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER), argsOnly = true)
 	private float overhauleddamage$modify_applyDamage(float value, @Local(argsOnly = true) DamageSource source) {
 		return LivingEntityHelper.calculateOverhauledDamage(((LivingEntity) (Object) this), source, value);
 	}
@@ -246,7 +243,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public ItemStack overhauleddamage$getActiveItemStack() {
-		return this.activeItemStack;
+		return this.useItem;
 	}
 
 	@Override
@@ -302,12 +299,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// region bleeding build up
 	@Override
 	public float overhauleddamage$getBleedingBuildUp() {
-		return this.dataTracker.get(BLEEDING_BUILD_UP);
+		return this.entityData.get(BLEEDING_BUILD_UP);
 	}
 
 	@Override
 	public void overhauleddamage$setBleedingBuildUp(float bleedingBuildUp) {
-		this.dataTracker.set(BLEEDING_BUILD_UP, MathHelper.clamp(bleedingBuildUp, 0, this.overhauleddamage$getMaxBleedingBuildUp()));
+		this.entityData.set(BLEEDING_BUILD_UP, Mth.clamp(bleedingBuildUp, 0, this.overhauleddamage$getMaxBleedingBuildUp()));
 	}
 
 	@Override
@@ -379,12 +376,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public float overhauleddamage$getBurnBuildUp() {
-		return this.dataTracker.get(BURN_BUILD_UP);
+		return this.entityData.get(BURN_BUILD_UP);
 	}
 
 	@Override
 	public void overhauleddamage$setBurnBuildUp(float burnBuildUp) {
-		this.dataTracker.set(BURN_BUILD_UP, MathHelper.clamp(burnBuildUp, 0, this.overhauleddamage$getMaxBurnBuildUp()));
+		this.entityData.set(BURN_BUILD_UP, Mth.clamp(burnBuildUp, 0, this.overhauleddamage$getMaxBurnBuildUp()));
 	}
 
 	@Override
@@ -457,12 +454,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public float overhauleddamage$getFreezeBuildUp() {
-		return this.dataTracker.get(FREEZE_BUILD_UP);
+		return this.entityData.get(FREEZE_BUILD_UP);
 	}
 
 	@Override
 	public void overhauleddamage$setFreezeBuildUp(float freezeBuildUp) {
-		this.dataTracker.set(FREEZE_BUILD_UP, MathHelper.clamp(freezeBuildUp, 0, this.overhauleddamage$getMaxFreezeBuildUp()));
+		this.entityData.set(FREEZE_BUILD_UP, Mth.clamp(freezeBuildUp, 0, this.overhauleddamage$getMaxFreezeBuildUp()));
 	}
 
 	@Override
@@ -514,12 +511,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// region stagger build up
 	@Override
 	public float overhauleddamage$getStaggerBuildUp() {
-		return this.dataTracker.get(STAGGER_BUILD_UP);
+		return this.entityData.get(STAGGER_BUILD_UP);
 	}
 
 	@Override
 	public void overhauleddamage$setStaggerBuildUp(float staggerBuildUp) {
-		this.dataTracker.set(STAGGER_BUILD_UP, MathHelper.clamp(staggerBuildUp, 0, this.overhauleddamage$getMaxStaggerBuildUp()));
+		this.entityData.set(STAGGER_BUILD_UP, Mth.clamp(staggerBuildUp, 0, this.overhauleddamage$getMaxStaggerBuildUp()));
 	}
 
 	@Override
@@ -592,12 +589,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public float overhauleddamage$getPoisonBuildUp() {
-		return this.dataTracker.get(POISON_BUILD_UP);
+		return this.entityData.get(POISON_BUILD_UP);
 	}
 
 	@Override
 	public void overhauleddamage$setPoisonBuildUp(float poisonBuildUp) {
-		this.dataTracker.set(POISON_BUILD_UP, MathHelper.clamp(poisonBuildUp, 0, this.overhauleddamage$getMaxPoisonBuildUp()));
+		this.entityData.set(POISON_BUILD_UP, Mth.clamp(poisonBuildUp, 0, this.overhauleddamage$getMaxPoisonBuildUp()));
 	}
 
 	@Override
@@ -670,12 +667,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Override
 	public float overhauleddamage$getShockBuildUp() {
-		return this.dataTracker.get(SHOCK_BUILD_UP);
+		return this.entityData.get(SHOCK_BUILD_UP);
 	}
 
 	@Override
 	public void overhauleddamage$setShockBuildUp(float shockBuildUp) {
-		this.dataTracker.set(SHOCK_BUILD_UP, MathHelper.clamp(shockBuildUp, 0, this.overhauleddamage$getMaxShockBuildUp()));
+		this.entityData.set(SHOCK_BUILD_UP, Mth.clamp(shockBuildUp, 0, this.overhauleddamage$getMaxShockBuildUp()));
 	}
 
 	@Override

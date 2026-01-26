@@ -9,12 +9,12 @@ import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,74 +23,74 @@ public class OverhauledDamage implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static ServerConfig SERVER_CONFIG;
 
-	public static RegistryEntry<EntityAttribute> ADDITIONAL_BASHING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> INCREASED_BASHING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> BASHING_RESISTANCE;
+	public static Holder<Attribute> ADDITIONAL_BASHING_DAMAGE;
+	public static Holder<Attribute> INCREASED_BASHING_DAMAGE;
+	public static Holder<Attribute> BASHING_RESISTANCE;
 
-	public static RegistryEntry<EntityAttribute> ADDITIONAL_PIERCING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> INCREASED_PIERCING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> PIERCING_RESISTANCE;
+	public static Holder<Attribute> ADDITIONAL_PIERCING_DAMAGE;
+	public static Holder<Attribute> INCREASED_PIERCING_DAMAGE;
+	public static Holder<Attribute> PIERCING_RESISTANCE;
 
-	public static RegistryEntry<EntityAttribute> ADDITIONAL_SLASHING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> INCREASED_SLASHING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> SLASHING_RESISTANCE;
+	public static Holder<Attribute> ADDITIONAL_SLASHING_DAMAGE;
+	public static Holder<Attribute> INCREASED_SLASHING_DAMAGE;
+	public static Holder<Attribute> SLASHING_RESISTANCE;
 
-	public static RegistryEntry<EntityAttribute> BLOCKED_PHYSICAL_DAMAGE;
+	public static Holder<Attribute> BLOCKED_PHYSICAL_DAMAGE;
 
-	public static RegistryEntry<EntityAttribute> MAX_BLEEDING_BUILD_UP;
-	public static RegistryEntry<EntityAttribute> BLEEDING_DURATION;
-	public static RegistryEntry<EntityAttribute> BLEEDING_TICK_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> BLEEDING_BUILD_UP_REDUCTION;
-	public static RegistryEntry<EntityAttribute> BLEEDING_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
+	public static Holder<Attribute> MAX_BLEEDING_BUILD_UP;
+	public static Holder<Attribute> BLEEDING_DURATION;
+	public static Holder<Attribute> BLEEDING_TICK_THRESHOLD;
+	public static Holder<Attribute> BLEEDING_BUILD_UP_REDUCTION;
+	public static Holder<Attribute> BLEEDING_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
-	public static RegistryEntry<EntityAttribute> ADDITIONAL_FROST_DAMAGE;
-	public static RegistryEntry<EntityAttribute> INCREASED_FROST_DAMAGE;
-	public static RegistryEntry<EntityAttribute> BLOCKED_FROST_DAMAGE;
-	public static RegistryEntry<EntityAttribute> FROST_RESISTANCE;
-	public static RegistryEntry<EntityAttribute> MAX_FREEZE_BUILD_UP;
-	public static RegistryEntry<EntityAttribute> FREEZE_DURATION;
-	public static RegistryEntry<EntityAttribute> FREEZE_TICK_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> FREEZE_BUILD_UP_REDUCTION;
-	public static RegistryEntry<EntityAttribute> FREEZE_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
+	public static Holder<Attribute> ADDITIONAL_FROST_DAMAGE;
+	public static Holder<Attribute> INCREASED_FROST_DAMAGE;
+	public static Holder<Attribute> BLOCKED_FROST_DAMAGE;
+	public static Holder<Attribute> FROST_RESISTANCE;
+	public static Holder<Attribute> MAX_FREEZE_BUILD_UP;
+	public static Holder<Attribute> FREEZE_DURATION;
+	public static Holder<Attribute> FREEZE_TICK_THRESHOLD;
+	public static Holder<Attribute> FREEZE_BUILD_UP_REDUCTION;
+	public static Holder<Attribute> FREEZE_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
-	public static RegistryEntry<EntityAttribute> ADDITIONAL_FIRE_DAMAGE;
-	public static RegistryEntry<EntityAttribute> INCREASED_FIRE_DAMAGE;
-	public static RegistryEntry<EntityAttribute> BLOCKED_FIRE_DAMAGE;
-	public static RegistryEntry<EntityAttribute> FIRE_RESISTANCE;
-	public static RegistryEntry<EntityAttribute> MAX_BURN_BUILD_UP;
-	public static RegistryEntry<EntityAttribute> BURN_DURATION;
-	public static RegistryEntry<EntityAttribute> BURN_TICK_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> BURN_BUILD_UP_REDUCTION;
-	public static RegistryEntry<EntityAttribute> BURN_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
+	public static Holder<Attribute> ADDITIONAL_FIRE_DAMAGE;
+	public static Holder<Attribute> INCREASED_FIRE_DAMAGE;
+	public static Holder<Attribute> BLOCKED_FIRE_DAMAGE;
+	public static Holder<Attribute> FIRE_RESISTANCE;
+	public static Holder<Attribute> MAX_BURN_BUILD_UP;
+	public static Holder<Attribute> BURN_DURATION;
+	public static Holder<Attribute> BURN_TICK_THRESHOLD;
+	public static Holder<Attribute> BURN_BUILD_UP_REDUCTION;
+	public static Holder<Attribute> BURN_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
-	public static RegistryEntry<EntityAttribute> ADDITIONAL_LIGHTNING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> INCREASED_LIGHTNING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> BLOCKED_LIGHTNING_DAMAGE;
-	public static RegistryEntry<EntityAttribute> LIGHTNING_RESISTANCE;
-	public static RegistryEntry<EntityAttribute> MAX_SHOCK_BUILD_UP;
-	public static RegistryEntry<EntityAttribute> SHOCK_DURATION;
-	public static RegistryEntry<EntityAttribute> SHOCK_TICK_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> SHOCK_BUILD_UP_REDUCTION;
-	public static RegistryEntry<EntityAttribute> SHOCK_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
+	public static Holder<Attribute> ADDITIONAL_LIGHTNING_DAMAGE;
+	public static Holder<Attribute> INCREASED_LIGHTNING_DAMAGE;
+	public static Holder<Attribute> BLOCKED_LIGHTNING_DAMAGE;
+	public static Holder<Attribute> LIGHTNING_RESISTANCE;
+	public static Holder<Attribute> MAX_SHOCK_BUILD_UP;
+	public static Holder<Attribute> SHOCK_DURATION;
+	public static Holder<Attribute> SHOCK_TICK_THRESHOLD;
+	public static Holder<Attribute> SHOCK_BUILD_UP_REDUCTION;
+	public static Holder<Attribute> SHOCK_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
-	public static RegistryEntry<EntityAttribute> ADDITIONAL_POISON_DAMAGE;
-	public static RegistryEntry<EntityAttribute> INCREASED_POISON_DAMAGE;
-	public static RegistryEntry<EntityAttribute> BLOCKED_POISON_DAMAGE;
-	public static RegistryEntry<EntityAttribute> POISON_RESISTANCE;
-	public static RegistryEntry<EntityAttribute> MAX_POISON_BUILD_UP;
-	public static RegistryEntry<EntityAttribute> POISON_DURATION;
-	public static RegistryEntry<EntityAttribute> POISON_TICK_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> POISON_BUILD_UP_REDUCTION;
-	public static RegistryEntry<EntityAttribute> POISON_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
+	public static Holder<Attribute> ADDITIONAL_POISON_DAMAGE;
+	public static Holder<Attribute> INCREASED_POISON_DAMAGE;
+	public static Holder<Attribute> BLOCKED_POISON_DAMAGE;
+	public static Holder<Attribute> POISON_RESISTANCE;
+	public static Holder<Attribute> MAX_POISON_BUILD_UP;
+	public static Holder<Attribute> POISON_DURATION;
+	public static Holder<Attribute> POISON_TICK_THRESHOLD;
+	public static Holder<Attribute> POISON_BUILD_UP_REDUCTION;
+	public static Holder<Attribute> POISON_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
-	public static RegistryEntry<EntityAttribute> MAX_STAGGER_BUILD_UP;
-	public static RegistryEntry<EntityAttribute> STAGGER_DURATION;
-	public static RegistryEntry<EntityAttribute> STAGGER_TICK_THRESHOLD;
-	public static RegistryEntry<EntityAttribute> STAGGER_BUILD_UP_REDUCTION;
-	public static RegistryEntry<EntityAttribute> STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
+	public static Holder<Attribute> MAX_STAGGER_BUILD_UP;
+	public static Holder<Attribute> STAGGER_DURATION;
+	public static Holder<Attribute> STAGGER_TICK_THRESHOLD;
+	public static Holder<Attribute> STAGGER_BUILD_UP_REDUCTION;
+	public static Holder<Attribute> STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
-	public static RegistryEntry<EntityAttribute> DAMAGE_TAKEN_FROM_MANA_MULTIPLIER;
-	public static RegistryEntry<EntityAttribute> DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER;
+	public static Holder<Attribute> DAMAGE_TAKEN_FROM_MANA_MULTIPLIER;
+	public static Holder<Attribute> DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER;
 
 	public static final boolean isManaAttributesLoaded = FabricLoader.getInstance().isModLoaded("manaattributes");
 	public static final boolean isStaminaAttributesLoaded = FabricLoader.getInstance().isModLoaded("staminaattributes");
@@ -172,7 +172,7 @@ public class OverhauledDamage implements ModInitializer {
 	}
 
 	public static Identifier identifier(String path) {
-		return Identifier.of(MOD_ID, path);
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 
 	public static void info(String message) {

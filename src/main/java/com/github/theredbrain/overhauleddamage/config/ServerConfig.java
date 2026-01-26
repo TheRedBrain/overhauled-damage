@@ -12,8 +12,7 @@ import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedAny;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedString;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedFloat;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 
 @ConvertFrom(fileName = "server.json5", folder = "overhauleddamage")
@@ -33,9 +32,9 @@ public class ServerConfig extends Config {
 
 		public ValidatedAny<HitStunSettings> default_hit_stun_settings = new ValidatedAny<>(new HitStunSettings(1, 0.0));
 
-		public ValidatedIdentifier attribute = new ValidatedIdentifier(Identifier.of("overhauleddamage:generic.max_stagger_build_up"));
+		public ValidatedIdentifier attribute = new ValidatedIdentifier(Identifier.parse("overhauleddamage:generic.max_stagger_build_up"));
 
-		public ValidatedIdentifier hit_stun_status_effect_identifier = new ValidatedIdentifier(Identifier.of("variousstatuseffects:hit_stun"));
+		public ValidatedIdentifier hit_stun_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:hit_stun"));
 
 		public ValidatedMap<String, HitStunSettings> hit_stun_settings = new ValidatedMap<>(new HashMap<>() {{
 			put("overhauleddamage:mob_slashing_damage_type", new HitStunSettings(0, 0.0));

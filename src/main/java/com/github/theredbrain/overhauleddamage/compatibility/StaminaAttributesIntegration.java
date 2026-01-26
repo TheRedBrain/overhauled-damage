@@ -1,7 +1,7 @@
 package com.github.theredbrain.overhauleddamage.compatibility;
 
 import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 public class StaminaAttributesIntegration {
 

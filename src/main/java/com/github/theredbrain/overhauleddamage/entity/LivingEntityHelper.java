@@ -5,27 +5,26 @@ import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
 import com.google.common.collect.HashMultimap;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import java.util.Optional;
 
 public class LivingEntityHelper {
@@ -45,8 +44,8 @@ public class LivingEntityHelper {
 		}
 
 		LivingEntity attacker = null;
-		if (source.getAttacker() instanceof LivingEntity) {
-			attacker = (LivingEntity) source.getAttacker();
+		if (source.getEntity() instanceof LivingEntity) {
+			attacker = (LivingEntity) source.getEntity();
 		}
 		if (enable_debug_log) {
 			if (attacker != null) {
@@ -58,7 +57,7 @@ public class LivingEntityHelper {
 		float applied_damage = 0;
 		float true_amount = 0;
 
-		if (source.isIn(Tags.IS_TRUE_DAMAGE)) {
+		if (source.is(Tags.IS_TRUE_DAMAGE)) {
 			if (enable_debug_log) {
 				OverhauledDamage.info("--- is true damage ---");
 				OverhauledDamage.info("");
@@ -79,10 +78,10 @@ public class LivingEntityHelper {
 			ValidatedMap<String, ServerConfig.DamageTypes.DamageTypeMultipliers> damage_type_multipliers = serverConfig.damageTypes.damage_type_multipliers;
 
 			String damageTypeId = "";
-			Optional<RegistryKey<DamageType>> optional = source.getTypeRegistryEntry().getKey();
+			Optional<ResourceKey<DamageType>> optional = source.typeHolder().unwrapKey();
 
 			if (optional.isPresent()) {
-				damageTypeId = optional.get().getValue().toString();
+				damageTypeId = optional.get().identifier().toString();
 			}
 			if (!damageTypeId.isEmpty()) {
 				if (enable_debug_log) {
@@ -290,19 +289,19 @@ public class LivingEntityHelper {
 											OverhauledDamage.info("");
 										}
 										if (applied_knock_back > 0.0) {
-											attacker.takeKnockback(applied_knock_back, livingEntity.getX() - attacker.getX(), livingEntity.getZ() - attacker.getZ());
+											attacker.knockback(applied_knock_back, livingEntity.getX() - attacker.getX(), livingEntity.getZ() - attacker.getZ());
 										} else if (applied_knock_back < 0.0) {
-											livingEntity.takeKnockback(Math.abs(applied_knock_back), attacker.getX() - livingEntity.getX(), attacker.getZ() - livingEntity.getZ());
+											livingEntity.knockback(Math.abs(applied_knock_back), attacker.getX() - livingEntity.getX(), attacker.getZ() - livingEntity.getZ());
 										}
 									}
 								}
 								float totalBlockedDamage = blockedBashingDamage + blockedPiercingDamage + blockedSlashingDamage + blockedFireDamage + blockedFrostDamage + blockedLightningDamage + blockedPoisonDamage;
-								if (livingEntity instanceof ServerPlayerEntity serverPlayerEntity && totalBlockedDamage > 0.0f && totalBlockedDamage < 3.4028235E37f) {
-									serverPlayerEntity.increaseStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(totalBlockedDamage * 10.0f));
+								if (livingEntity instanceof ServerPlayer serverPlayerEntity && totalBlockedDamage > 0.0f && totalBlockedDamage < 3.4028235E37f) {
+									serverPlayerEntity.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(totalBlockedDamage * 10.0f));
 								}
 
 								if (tryParry) {
-									livingEntity.getEntityWorld().playSoundFromEntity(null, livingEntity, SoundEvents.ITEM_SHIELD_BLOCK.value(), SoundCategory.PLAYERS, 1.0F, 1.2F + livingEntity.getEntityWorld().random.nextFloat() * 0.4F);
+									livingEntity.level().playSound(null, livingEntity, SoundEvents.SHIELD_BLOCK.value(), SoundSource.PLAYERS, 1.0F, 1.2F + livingEntity.level().random.nextFloat() * 0.4F);
 								} else {
 //								livingEntity.getEntityWorld().sendEntityStatus(livingEntity, EntityStatuses.BLOCK_WITH_SHIELD);
 								}
@@ -342,16 +341,16 @@ public class LivingEntityHelper {
 			// endregion shield blocks
 
 			// region apply protection
-			if (!source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS) && serverConfig.damageCalculation.enable_protection_overhaul.get()) {
+			if (!source.is(DamageTypeTags.BYPASSES_ENCHANTMENTS) && serverConfig.damageCalculation.enable_protection_overhaul.get()) {
 
 				// the protection enchantments reduce damage, with a default value of 2 percent reduction per enchantment level
 				float protection = 0.0F;
-				if (livingEntity.getEntityWorld() instanceof ServerWorld serverWorld) {
-					protection = (float) (EnchantmentHelper.getProtectionAmount(serverWorld, livingEntity, source) * serverConfig.damageCalculation.protectionOverhaul.protection_damage_reduction_per_level);
+				if (livingEntity.level() instanceof ServerLevel serverWorld) {
+					protection = (float) (EnchantmentHelper.getDamageProtection(serverWorld, livingEntity, source) * serverConfig.damageCalculation.protectionOverhaul.protection_damage_reduction_per_level);
 				}
 
 				// band-aid solution to prevent fall damage being reduced a second time by Feather Falling
-				if (source.isIn(DamageTypeTags.IS_FALL)) {
+				if (source.is(DamageTypeTags.IS_FALL)) {
 					protection = 0.0F;
 				}
 
@@ -400,28 +399,28 @@ public class LivingEntityHelper {
 				if (!serverConfig.damageCalculation.enable_protection_overhaul.get()) {
 					OverhauledDamage.info("protection overhaul not active");
 				}
-				if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
+				if (source.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
 					OverhauledDamage.info("damage bypasses protection");
 				}
 			}
 			// endregion apply protection
 
 			// region apply armor
-			if (!source.isIn(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.damageCalculation.enable_armor_overhaul.get()) {
+			if (!source.is(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.damageCalculation.enable_armor_overhaul.get()) {
 				float armorDamage = 0.0F;
 				if (serverConfig.damageCalculation.armorOverhaul.armor_calculation_works_with_flat_values.get()) {
 					// TODO this calculation needs a serious overhaul
 					// armorToughness now directly determines how effective armor is
 					// effective armor reduces damage by its amount
 					// armor is more or less effective against different attack types
-					float effectiveArmor = livingEntity.getArmor();
+					float effectiveArmor = livingEntity.getArmorValue();
 
 					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute.get()) {
 						if (enable_debug_log) {
 							OverhauledDamage.info("armor toughness is enabled");
 							OverhauledDamage.info("");
 						}
-						effectiveArmor *= (float) livingEntity.getAttributeValue(EntityAttributes.ARMOR_TOUGHNESS);
+						effectiveArmor *= (float) livingEntity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
 					} else if (enable_debug_log) {
 						OverhauledDamage.info("armor toughness is disabled");
 						OverhauledDamage.info("");
@@ -465,20 +464,20 @@ public class LivingEntityHelper {
 						slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
 						effectiveArmor = 0;
 					}
-					armorDamage = livingEntity.getArmor() - effectiveArmor;
+					armorDamage = livingEntity.getArmorValue() - effectiveArmor;
 				} else {
 					// this is the alternative armor calculation
 					// armor reduces damage on a percentage base
 					// 1 armor point = 1 percent reduction
 					// armor toughness is a multiplier to this
-					float effective_armor = livingEntity.getArmor();
+					float effective_armor = livingEntity.getArmorValue();
 
 					if (serverConfig.damageCalculation.armorOverhaul.enable_armor_toughness_attribute.get()) {
 						if (enable_debug_log) {
 							OverhauledDamage.info("armor toughness is enabled");
 							OverhauledDamage.info("");
 						}
-						effective_armor *= (float) livingEntity.getAttributeValue(EntityAttributes.ARMOR_TOUGHNESS);
+						effective_armor *= (float) livingEntity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
 					} else if (enable_debug_log) {
 						OverhauledDamage.info("armor toughness is disabled");
 						OverhauledDamage.info("");
@@ -527,7 +526,7 @@ public class LivingEntityHelper {
 					armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
 
 				}
-				livingEntity.damageArmor(source, armorDamage);
+				livingEntity.hurtArmor(source, armorDamage);
 				if (enable_debug_log) {
 					OverhauledDamage.info("damage applied to equipped armor: " + armorDamage);
 					OverhauledDamage.info("");
@@ -595,7 +594,7 @@ public class LivingEntityHelper {
 					OverhauledDamage.info("item usage was stopped");
 					OverhauledDamage.info("");
 				}
-				livingEntity.stopUsingItem();
+				livingEntity.releaseUsingItem();
 			}
 
 			if (enable_debug_log) {
@@ -605,7 +604,7 @@ public class LivingEntityHelper {
 
 			// apply hit stun
 			if (serverConfig.enable_hit_stun_mechanic.get()) {
-				Optional<RegistryEntry.Reference<EntityAttribute>> attribute = Registries.ATTRIBUTE.getEntry(serverConfig.hitStun.attribute.get());
+				Optional<Holder.Reference<Attribute>> attribute = BuiltInRegistries.ATTRIBUTE.get(serverConfig.hitStun.attribute.get());
 				if (attribute.isPresent()) {
 					if (livingEntity.getAttributes().hasAttribute(attribute.get())) {
 						double attributeValue = livingEntity.getAttributeValue(attribute.get());
@@ -616,9 +615,9 @@ public class LivingEntityHelper {
 
 						if (attributeValue <= hitStunSettings.required_attribute_threshold) {
 							// apply hit stun
-							Optional<RegistryEntry.Reference<StatusEffect>> hit_stun_status_effect = Registries.STATUS_EFFECT.getEntry(serverConfig.hitStun.hit_stun_status_effect_identifier.get());
+							Optional<Holder.Reference<MobEffect>> hit_stun_status_effect = BuiltInRegistries.MOB_EFFECT.get(serverConfig.hitStun.hit_stun_status_effect_identifier.get());
 							if (hit_stun_status_effect.isPresent()) {
-								livingEntity.addStatusEffect(new StatusEffectInstance(hit_stun_status_effect.get(), hitStunSettings.duration, 0, false, false, true));
+								livingEntity.addEffect(new MobEffectInstance(hit_stun_status_effect.get(), hitStunSettings.duration, 0, false, false, true));
 							}
 						}
 					}
@@ -630,7 +629,7 @@ public class LivingEntityHelper {
 
 			// apply bleeding
 			ServerConfig.DamageCalculation.AttackTypeMultipliers bleeding_multipliers = serverConfig.damageCalculation.bleeding_multipliers.get();
-			if (source.isIn(Tags.APPLIES_BLEEDING)) {
+			if (source.is(Tags.APPLIES_BLEEDING)) {
 				float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
 
 				if (enable_debug_log) {
@@ -670,12 +669,12 @@ public class LivingEntityHelper {
 				OverhauledDamage.info("--- apply chilled effect and freeze build up ---");
 			}
 			if (frost_amount > 0) {
-				Optional<RegistryEntry.Reference<StatusEffect>> chilled_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(serverConfig.buildUpEffects.chilled_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> chilled_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(serverConfig.buildUpEffects.chilled_status_effect_identifier));
 				if (chilled_status_effect.isPresent()) {
 					int chilledDuration = (int) Math.ceil(frost_amount * serverConfig.buildUpEffects.chilled_duration_multiplier);
 					int existingChilledDuration = 0;
 					int chilledAmplifier = 0;
-					StatusEffectInstance statusEffectInstance = livingEntity.getStatusEffect(chilled_status_effect.get());
+					MobEffectInstance statusEffectInstance = livingEntity.getEffect(chilled_status_effect.get());
 					if (statusEffectInstance != null) {
 						chilledDuration = chilledDuration + statusEffectInstance.getDuration();
 						if (serverConfig.buildUpEffects.should_chilled_duration_be_additive.get()) {
@@ -689,7 +688,7 @@ public class LivingEntityHelper {
 						OverhauledDamage.info("applied chilled effect with duration of : " + chilledDuration + existingChilledDuration + " and amplifier of : " + chilledAmplifier);
 						OverhauledDamage.info("");
 					}
-					livingEntity.addStatusEffect(new StatusEffectInstance(chilled_status_effect.get(), chilledDuration + existingChilledDuration, chilledAmplifier, false, false, true));
+					livingEntity.addEffect(new MobEffectInstance(chilled_status_effect.get(), chilledDuration + existingChilledDuration, chilledAmplifier, false, false, true));
 				} else if (enable_debug_log) {
 					OverhauledDamage.info("no chilled effect was applied");
 					OverhauledDamage.info("");
@@ -791,19 +790,19 @@ public class LivingEntityHelper {
 
 	public static void tick(LivingEntity livingEntity) {
 
-		if (!livingEntity.getEntityWorld().isClient()) {
+		if (!livingEntity.level().isClientSide()) {
 			ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
 
 			// apply natural attribute modifiers
-			livingEntity.getAttributes().addTemporaryModifiers(getNaturalAttributeModifiers());
+			livingEntity.getAttributes().addTransientAttributeModifiers(getNaturalAttributeModifiers());
 
 			// bleeding
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
-				Optional<RegistryEntry.Reference<StatusEffect>> bleeding_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 				if (bleeding_status_effect.isPresent()) {
 					int existingBleedingDuration = 0;
 					int bleedingAmplifier = 0;
-					StatusEffectInstance statusEffectInstance = livingEntity.getStatusEffect(bleeding_status_effect.get());
+					MobEffectInstance statusEffectInstance = livingEntity.getEffect(bleeding_status_effect.get());
 					if (statusEffectInstance != null) {
 						if (serverConfig.buildUpEffects.should_bleeding_duration_be_additive.get()) {
 							existingBleedingDuration = statusEffectInstance.getDuration();
@@ -812,7 +811,7 @@ public class LivingEntityHelper {
 							bleedingAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
-					livingEntity.addStatusEffect(new StatusEffectInstance(bleeding_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingDuration() + existingBleedingDuration, bleedingAmplifier, false, false, true));
+					livingEntity.addEffect(new MobEffectInstance(bleeding_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingDuration() + existingBleedingDuration, bleedingAmplifier, false, false, true));
 				}
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingBuildUp(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingTickTimer(0);
@@ -833,11 +832,11 @@ public class LivingEntityHelper {
 
 			// burn
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()) {
-				Optional<RegistryEntry.Reference<StatusEffect>> burn_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
 				if (burn_status_effect.isPresent()) {
 					int existingBurnDuration = 0;
 					int burnAmplifier = 0;
-					StatusEffectInstance statusEffectInstance = livingEntity.getStatusEffect(burn_status_effect.get());
+					MobEffectInstance statusEffectInstance = livingEntity.getEffect(burn_status_effect.get());
 					if (statusEffectInstance != null) {
 						if (serverConfig.buildUpEffects.should_burn_duration_be_additive.get()) {
 							existingBurnDuration = statusEffectInstance.getDuration();
@@ -846,7 +845,7 @@ public class LivingEntityHelper {
 							burnAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
-					livingEntity.addStatusEffect(new StatusEffectInstance(burn_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));
+					livingEntity.addEffect(new MobEffectInstance(burn_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));
 				}
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnBuildUp(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnTickTimer(0);
@@ -867,11 +866,11 @@ public class LivingEntityHelper {
 
 			// freeze
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
-				Optional<RegistryEntry.Reference<StatusEffect>> freeze_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
 				if (freeze_status_effect.isPresent()) {
 					int existingFreezeDuration = 0;
 					int freezeAmplifier = 0;
-					StatusEffectInstance statusEffectInstance = livingEntity.getStatusEffect(freeze_status_effect.get());
+					MobEffectInstance statusEffectInstance = livingEntity.getEffect(freeze_status_effect.get());
 					if (statusEffectInstance != null) {
 						if (serverConfig.buildUpEffects.should_freeze_duration_be_additive.get()) {
 							existingFreezeDuration = statusEffectInstance.getDuration();
@@ -880,7 +879,7 @@ public class LivingEntityHelper {
 							freezeAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
-					livingEntity.addStatusEffect(new StatusEffectInstance(freeze_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeDuration() + existingFreezeDuration, freezeAmplifier, false, false, true));
+					livingEntity.addEffect(new MobEffectInstance(freeze_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeDuration() + existingFreezeDuration, freezeAmplifier, false, false, true));
 				}
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeBuildUp(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeTickTimer(0);
@@ -901,11 +900,11 @@ public class LivingEntityHelper {
 
 			// stagger
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
-				Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
 				if (staggered_status_effect.isPresent()) {
 					int existingStaggerDuration = 0;
 					int staggerAmplifier = 0;
-					StatusEffectInstance statusEffectInstance = livingEntity.getStatusEffect(staggered_status_effect.get());
+					MobEffectInstance statusEffectInstance = livingEntity.getEffect(staggered_status_effect.get());
 					if (statusEffectInstance != null) {
 						if (serverConfig.buildUpEffects.should_stagger_duration_be_additive.get()) {
 							existingStaggerDuration = statusEffectInstance.getDuration();
@@ -914,7 +913,7 @@ public class LivingEntityHelper {
 							staggerAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
-					livingEntity.addStatusEffect(new StatusEffectInstance(staggered_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerDuration() + existingStaggerDuration, staggerAmplifier, false, false, true));
+					livingEntity.addEffect(new MobEffectInstance(staggered_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerDuration() + existingStaggerDuration, staggerAmplifier, false, false, true));
 				}
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerBuildUp(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerTickTimer(0);
@@ -935,11 +934,11 @@ public class LivingEntityHelper {
 
 			// poison
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()) {
-				Optional<RegistryEntry.Reference<StatusEffect>> poison_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
 				if (poison_status_effect.isPresent()) {
 					int existingPoisonDuration = 0;
 					int poisonAmplifier = 0;
-					StatusEffectInstance statusEffectInstance = livingEntity.getStatusEffect(poison_status_effect.get());
+					MobEffectInstance statusEffectInstance = livingEntity.getEffect(poison_status_effect.get());
 					if (statusEffectInstance != null) {
 						if (serverConfig.buildUpEffects.should_poison_duration_be_additive.get()) {
 							existingPoisonDuration = statusEffectInstance.getDuration();
@@ -948,7 +947,7 @@ public class LivingEntityHelper {
 							poisonAmplifier = statusEffectInstance.getAmplifier() + 1;
 						}
 					}
-					livingEntity.addStatusEffect(new StatusEffectInstance(poison_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonDuration() + existingPoisonDuration, poisonAmplifier, false, false, true));
+					livingEntity.addEffect(new MobEffectInstance(poison_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonDuration() + existingPoisonDuration, poisonAmplifier, false, false, true));
 				}
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonBuildUp(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonTickTimer(0);
@@ -969,11 +968,11 @@ public class LivingEntityHelper {
 
 			// shock
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()) {
-				Optional<RegistryEntry.Reference<StatusEffect>> shocked_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> shocked_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
 				if (shocked_status_effect.isPresent()) {
 					int existingShockDuration = 0;
 					int shockAmplifier = 0;
-					StatusEffectInstance statusEffectInstance = livingEntity.getStatusEffect(shocked_status_effect.get());
+					MobEffectInstance statusEffectInstance = livingEntity.getEffect(shocked_status_effect.get());
 					if (statusEffectInstance != null) {
 						if (serverConfig.buildUpEffects.should_shock_duration_be_additive.get()) {
 							existingShockDuration = statusEffectInstance.getDuration();
@@ -982,7 +981,7 @@ public class LivingEntityHelper {
 							shockAmplifier = statusEffectInstance.getAmplifier() + 1;
 						}
 					}
-					livingEntity.addStatusEffect(new StatusEffectInstance(shocked_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockDuration() + existingShockDuration, shockAmplifier, false, false, false));
+					livingEntity.addEffect(new MobEffectInstance(shocked_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockDuration() + existingShockDuration, shockAmplifier, false, false, false));
 				}
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockBuildUp(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockTickTimer(0);
@@ -1003,20 +1002,20 @@ public class LivingEntityHelper {
 		}
 	}
 
-	private static HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getNaturalAttributeModifiers() {
-		HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> hashMultimap = HashMultimap.create();
-		hashMultimap.put(EntityAttributes.ARMOR_TOUGHNESS, new EntityAttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), OverhauledDamage.SERVER_CONFIG.damageCalculation.armorOverhaul.natural_armor_toughness.get(), EntityAttributeModifier.Operation.ADD_VALUE));
+	private static HashMultimap<Holder<Attribute>, AttributeModifier> getNaturalAttributeModifiers() {
+		HashMultimap<Holder<Attribute>, AttributeModifier> hashMultimap = HashMultimap.create();
+		hashMultimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), OverhauledDamage.SERVER_CONFIG.damageCalculation.armorOverhaul.natural_armor_toughness.get(), AttributeModifier.Operation.ADD_VALUE));
 		return hashMultimap;
 	}
 
 	public static void addBleedingBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> bleeding_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 		if (bleeding_status_effect.isEmpty()) {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp() > 0) {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingBuildUp(0);
 			}
 		} else {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !livingEntity.hasStatusEffect(bleeding_status_effect.get())) {
+			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !livingEntity.hasEffect(bleeding_status_effect.get())) {
 				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp();
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingBuildUp(f + amount);
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
@@ -1030,7 +1029,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addBurnBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> burn_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
 		if (burn_status_effect.isEmpty()) {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUp() > 0) {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnBuildUp(0);
@@ -1049,13 +1048,13 @@ public class LivingEntityHelper {
 	}
 
 	public static void addFreezeBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> freeze_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
 		if (freeze_status_effect.isEmpty()) {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp() > 0) {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeBuildUp(0);
 			}
 		} else {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp() != -1.0f && !livingEntity.hasStatusEffect(freeze_status_effect.get())) {
+			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp() != -1.0f && !livingEntity.hasEffect(freeze_status_effect.get())) {
 				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp();
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeBuildUp(f + amount);
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
@@ -1069,13 +1068,13 @@ public class LivingEntityHelper {
 	}
 
 	public static void addStaggerBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> staggered_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
 		if (staggered_status_effect.isEmpty()) {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() > 0) {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerBuildUp(0);
 			}
 		} else {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp() != -1.0f && !livingEntity.hasStatusEffect(staggered_status_effect.get())) {
+			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp() != -1.0f && !livingEntity.hasEffect(staggered_status_effect.get())) {
 				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp();
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerBuildUp(f + amount);
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
@@ -1089,7 +1088,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addPoisonBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> poison_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
 		if (poison_status_effect.isEmpty()) {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUp() > 0) {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonBuildUp(0);
@@ -1109,7 +1108,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addShockBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<RegistryEntry.Reference<StatusEffect>> shock_status_effect = Registries.STATUS_EFFECT.getEntry(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> shock_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
 		if (shock_status_effect.isEmpty()) {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUp() > 0) {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockBuildUp(0);

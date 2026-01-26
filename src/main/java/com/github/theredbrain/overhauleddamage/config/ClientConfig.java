@@ -11,8 +11,7 @@ import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedColor;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 
 @ConvertFrom(fileName = "client.json5", folder = "overhauleddamage")
@@ -82,7 +81,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_background.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_background.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -106,19 +105,19 @@ public class ClientConfig extends Config {
 					// TODO prepend text explaining what the different textures are used for
 
 					public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_decrease_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_decrease_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_value.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_value.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -140,7 +139,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_overlay.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_overlay.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -259,7 +258,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_background.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_background.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -283,19 +282,19 @@ public class ClientConfig extends Config {
 					// TODO prepend text explaining what the different textures are used for
 
 					public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_decrease_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_decrease_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_value.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_value.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -317,7 +316,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_overlay.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_overlay.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -438,7 +437,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_background.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_background.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -462,19 +461,19 @@ public class ClientConfig extends Config {
 					// TODO prepend text explaining what the different textures are used for
 
 					public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_decrease_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_decrease_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_value.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_value.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -496,7 +495,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_overlay.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_overlay.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -617,7 +616,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_background.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_background.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -641,19 +640,19 @@ public class ClientConfig extends Config {
 					// TODO prepend text explaining what the different textures are used for
 
 					public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_decrease_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_decrease_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_value.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_value.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -675,7 +674,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_overlay.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_overlay.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -796,7 +795,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_background.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_background.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -820,19 +819,19 @@ public class ClientConfig extends Config {
 					// TODO prepend text explaining what the different textures are used for
 
 					public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_decrease_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_decrease_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_value.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_value.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -854,7 +853,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_overlay.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_overlay.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -975,7 +974,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_background.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_background.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -999,19 +998,19 @@ public class ClientConfig extends Config {
 					// TODO prepend text explaining what the different textures are used for
 
 					public ValidatedMap<Integer, Identifier> progress_decrease_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_decrease_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_decrease_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_animation_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_animation.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_animation.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_increase_value_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_value.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_value.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 					public ValidatedMap<Integer, Identifier> progress_texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
@@ -1033,7 +1032,7 @@ public class ClientConfig extends Config {
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
-						put(0, Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_overlay.png"));
+						put(0, Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_overlay.png"));
 					}}, new ValidatedInt(), new ValidatedIdentifier());
 
 				}
