@@ -8,6 +8,9 @@
 		"entity.damage.DamageSourcesMixin",
 		"entity.player.PlayerEntityMixin"
 	],
+	"mixinextras": {
+		"minVersion": "0.5.0"
+	},
 	"injectors": {
 		"defaultRequire": 1
 	}

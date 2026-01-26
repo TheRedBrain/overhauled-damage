@@ -126,8 +126,6 @@ public class ServerConfig extends Config {
 
 	public static class DamageCalculation extends ConfigSection {
 
-		public ValidatedBoolean blocking_requires_stamina = new ValidatedBoolean(true);
-
 		public ValidatedBoolean enable_blocking_overhaul = new ValidatedBoolean(true);
 
 		public BlockingOverhaul blockingOverhaul = new BlockingOverhaul();
@@ -137,8 +135,6 @@ public class ServerConfig extends Config {
 			public ValidatedBoolean blocked_damage_calculation_works_with_flat_values = new ValidatedBoolean(false);
 
 			public ValidatedAny<AttackTypeMultipliers> negative_block_force_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(0.0F, 0.75F, 0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F));
-
-			public ValidatedFloat total_block_force_multiplier = new ValidatedFloat(1.0F);
 
 		}
 
@@ -210,6 +206,8 @@ public class ServerConfig extends Config {
 			public ValidatedBoolean armor_calculation_works_with_flat_values = new ValidatedBoolean(false);
 
 			public ValidatedBoolean enable_armor_toughness_attribute = new ValidatedBoolean(false);
+
+			public ValidatedFloat natural_armor_toughness = new ValidatedFloat(0.0F);
 
 			public ValidatedAny<ArmorMultipliers> armor_multipliers = new ValidatedAny<>(new ArmorMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F));
 

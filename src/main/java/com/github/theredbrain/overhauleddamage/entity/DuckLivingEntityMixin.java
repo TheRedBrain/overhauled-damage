@@ -190,22 +190,6 @@ public interface DuckLivingEntityMixin {
 
 	void overhauleddamage$setShockReductionDelayTimer(int shockReductionDelayTimer);
 
-	float overhauleddamage$getBlockForce();
-
-	float overhauleddamage$getParryBonus();
-
-	float overhauleddamage$getParryWindow();
-
-	float overhauleddamage$getBlockStaminaCost();
-
-	float overhauleddamage$getParryStaminaCost();
-
-	boolean overhauleddamage$canParry();
-
-	int overhauleddamage$getBlockingTime();
-
-	void overhauleddamage$setBlockingTime(int blockingTime);
-
 	float overhauleddamage$getDamageTakenFromManaMultiplier();
 
 	float overhauleddamage$getDamageTakenFromStaminaMultiplier();

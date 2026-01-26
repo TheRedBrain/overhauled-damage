@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.11-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.github.breadmoirai.github-release" version "2.4.1"
     id "com.modrinth.minotaur" version "2.+"
@@ -13,12 +13,6 @@ base {
 }
 
 repositories {
-    // Fzzy Config
-    maven {
-        name = "FzzyMaven"
-        url = "https://maven.fzzyhmstrs.me/"
-    }
-
     // Stamina Attributes, Mana Attributes
     maven {
         name = "Modrinth"
@@ -26,6 +20,12 @@ repositories {
         content {
             includeGroup "maven.modrinth"
         }
+    }
+
+    // Fzzy Config
+    maven {
+        name = "FzzyMaven"
+        url = "https://maven.fzzyhmstrs.me/"
     }
 
 }
@@ -58,13 +58,17 @@ dependencies {
     modImplementation "maven.modrinth:stamina-attributes:${project.stamina_attributes_version}"
 //    modImplementation(files("libs/stamina-attributes-${project.stamina_attributes_version}.jar"))
 
-    // Mana Attributes
-    modImplementation "maven.modrinth:mana-attributes:${project.mana_attributes_version}"
+    // Mana Attributes TODO re-enable Mana Attributes
+//    modImplementation "maven.modrinth:mana-attributes:${project.mana_attributes_version}"
 //    modImplementation(files("libs/mana-attributes-${project.mana_attributes_version}.jar"))
 
     // Resource Bar API
     modImplementation "maven.modrinth:resource-bar-api:${project.resource_bar_api_version}"
 //    modImplementation(files("libs/resource-bar-api-${project.resource_bar_api_version}.jar"))
+
+    // Blocking Overhaul
+//    modImplementation "maven.modrinth:resource-bar-api:${project.resource_bar_api_version}"
+    modImplementation(files("libs/blocking-overhaul-${project.blocking_overhaul_version}.jar"))
 
 }
 
@@ -125,6 +129,7 @@ if(project.hasProperty('release_type')) {
                 requiredDependency 'resource-bar-api'
                 optionalDependency 'stamina-attributes'
                 optionalDependency 'mana-attributes'
+                optionalDependency 'blocking-overhaul'
             }
 
             mainArtifact(remapJar)
@@ -156,6 +161,7 @@ if(project.hasProperty('release_type')) {
             required.project 'resource-bar-api'
             optional.project 'stamina-attributes'
             optional.project 'mana-attributes'
+            optional.project 'blocking-overhaul'
             optional.project 'various-status-effects'
         }
     }

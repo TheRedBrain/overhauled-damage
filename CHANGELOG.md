@@ -1,3 +1,13 @@
+# 3.0.0
+
+- update to 1.21.11
+- improved integration of Stamina Attributes and Mana Attributes
+- reworked the blocking overhaul
+  - now requires the mod "Blocking Overhaul" to be present, which is a standalone implementation of most blocking overhaul features
+- replaced game rule naturalArmourToughness with server config option
+- removed instant blocking feature (now possible with vanilla tech)
+
+
 # 2.4.2
 
 - fixed game rule

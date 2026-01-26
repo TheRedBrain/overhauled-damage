@@ -3,10 +3,12 @@ package com.github.theredbrain.overhauleddamage.mixin.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
-import com.github.theredbrain.overhauleddamage.registry.GameRulesRegistry;
 import com.google.common.collect.HashMultimap;
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -21,10 +23,11 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,8 +47,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@Shadow
 	protected ItemStack activeItemStack;
-
-	@Shadow public abstract AttributeContainer getAttributes();
 
 	@Unique
 	private int bleedingTickTimer = 0;
@@ -71,8 +72,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	private int shockTickTimer = 0;
 	@Unique
 	private int shockReductionDelayTimer = 0;
-	@Unique
-	private int blockingTime = 0;
 
 	@Unique
 	private static final TrackedData<Float> BLEEDING_BUILD_UP = DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.FLOAT);
@@ -176,69 +175,43 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION)
 				.add(OverhauledDamage.STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD)
 
-				.add(OverhauledDamage.BLOCK_FORCE)
-				.add(OverhauledDamage.PARRY_BONUS)
-				.add(OverhauledDamage.PARRY_WINDOW)
-
-				.add(OverhauledDamage.BLOCK_STAMINA_COST)
-				.add(OverhauledDamage.PARRY_STAMINA_COST)
-
 				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER)
 				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER)
 		;
 	}
 
-	@Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-	public void overhauleddamage$readCustomDataFromNbt(NbtCompound nbt, CallbackInfo ci) {
+	@Inject(method = "readCustomData", at = @At("TAIL"))
+	public void overhauleddamage$readCustomDataFromNbt(ReadView view, CallbackInfo ci) {
 
-		if (nbt.contains("bleeding_build_up", NbtElement.NUMBER_TYPE)) {
-			this.overhauleddamage$setBleedingBuildUp(nbt.getFloat("bleeding_build_up"));
-		}
+		this.overhauleddamage$setBleedingBuildUp(view.getFloat("bleeding_build_up", 0.0F));
 
-		if (nbt.contains("burn_build_up", NbtElement.NUMBER_TYPE)) {
-			this.overhauleddamage$setBurnBuildUp(nbt.getFloat("burn_build_up"));
-		}
+		this.overhauleddamage$setBurnBuildUp(view.getFloat("burn_build_up", 0.0F));
 
-		if (nbt.contains("freeze_build_up", NbtElement.NUMBER_TYPE)) {
-			this.overhauleddamage$setFreezeBuildUp(nbt.getFloat("freeze_build_up"));
-		}
+		this.overhauleddamage$setFreezeBuildUp(view.getFloat("freeze_build_up", 0.0F));
 
-		if (nbt.contains("poison_build_up", NbtElement.NUMBER_TYPE)) {
-			this.overhauleddamage$setPoisonBuildUp(nbt.getFloat("poison_build_up"));
-		}
+		this.overhauleddamage$setPoisonBuildUp(view.getFloat("poison_build_up", 0.0F));
 
-		if (nbt.contains("stagger_build_up", NbtElement.NUMBER_TYPE)) {
-			this.overhauleddamage$setStaggerBuildUp(nbt.getFloat("stagger_build_up"));
-		}
+		this.overhauleddamage$setStaggerBuildUp(view.getFloat("stagger_build_up", 0.0F));
 
-		if (nbt.contains("shock_build_up", NbtElement.NUMBER_TYPE)) {
-			this.overhauleddamage$setShockBuildUp(nbt.getFloat("shock_build_up"));
-		}
+		this.overhauleddamage$setShockBuildUp(view.getFloat("shock_build_up", 0.0F));
 
 	}
 
-	@Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-	public void overhauleddamage$writeCustomDataToNbt(NbtCompound nbt, CallbackInfo ci) {
+	@Inject(method = "writeCustomData", at = @At("TAIL"))
+	public void overhauleddamage$writeCustomDataToNbt(WriteView view, CallbackInfo ci) {
 
-		nbt.putFloat("bleeding_build_up", this.overhauleddamage$getBleedingBuildUp());
+		view.putFloat("bleeding_build_up", this.overhauleddamage$getBleedingBuildUp());
 
-		nbt.putFloat("burn_build_up", this.overhauleddamage$getBurnBuildUp());
+		view.putFloat("burn_build_up", this.overhauleddamage$getBurnBuildUp());
 
-		nbt.putFloat("freeze_build_up", this.overhauleddamage$getFreezeBuildUp());
+		view.putFloat("freeze_build_up", this.overhauleddamage$getFreezeBuildUp());
 
-		nbt.putFloat("poison_build_up", this.overhauleddamage$getPoisonBuildUp());
+		view.putFloat("poison_build_up", this.overhauleddamage$getPoisonBuildUp());
 
-		nbt.putFloat("stagger_build_up", this.overhauleddamage$getStaggerBuildUp());
+		view.putFloat("stagger_build_up", this.overhauleddamage$getStaggerBuildUp());
 
-		nbt.putFloat("shock_build_up", this.overhauleddamage$getShockBuildUp());
+		view.putFloat("shock_build_up", this.overhauleddamage$getShockBuildUp());
 
-	}
-
-	@Inject(method = "takeShieldHit", at = @At("TAIL"))
-	protected void overhauleddamage$takeShieldHit(LivingEntity attacker, CallbackInfo ci) {
-		if (!OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get() && OverhauledDamage.isStaminaAttributesLoaded) {
-			OverhauledDamage.addStamina(((LivingEntity) (Object) this), -((DuckLivingEntityMixin) this).overhauleddamage$getBlockStaminaCost());
-		}
 	}
 
 	// disables the vanilla armor calculation
@@ -250,32 +223,25 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul.get() || original.call(instance, tag);
 	}
 
-	// disables the vanilla shield blocking when blocking overhaul is enabled, the "blocking_requires_stamina" option is excluded from this
-	@WrapOperation(
-			method = "damage",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;blockedByShield(Lnet/minecraft/entity/damage/DamageSource;)Z")
-	)
-	public boolean overhauleddamage$wrap_blockedByShield(LivingEntity instance, DamageSource source, Operation<Boolean> original) {
-		return !OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get() && original.call(instance, source) && (OverhauledDamage.getCurrentStamina(instance) > 0 || !OverhauledDamage.SERVER_CONFIG.damageCalculation.blocking_requires_stamina.get() || !OverhauledDamage.isStaminaAttributesLoaded);
+	@WrapOperation(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getDamageBlockedAmount(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)F"))
+	private float overhauleddamage$wrap_getDamageBlockedAmount(LivingEntity instance, ServerWorld world, DamageSource source, float amount, Operation<Float> original) {
+		if (OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get()) {
+			return 0.0F;
+		} else {
+			return original.call(instance, world, source, amount);
+		}
 	}
 
-	@ModifyVariable(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F"), argsOnly = true)
-	private float overhauleddamage$applyDamage(float old, DamageSource source) {
-		return LivingEntityHelper.calculateOverhauledDamage(((LivingEntity) (Object) this), source, old);
+	@Definition(id = "modifyAppliedDamage", method = "Lnet/minecraft/entity/LivingEntity;modifyAppliedDamage(Lnet/minecraft/entity/damage/DamageSource;F)F")
+	@Expression("? = ?.modifyAppliedDamage(?, ?)")
+	@ModifyVariable(method = "applyDamage", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER), argsOnly = true)
+	private float overhauleddamage$modify_applyDamage(float value, @Local(argsOnly = true) DamageSource source) {
+		return LivingEntityHelper.calculateOverhauledDamage(((LivingEntity) (Object) this), source, value);
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void overhauleddamage$tick(CallbackInfo ci) {
-		if (!this.getWorld().isClient()) {
-			this.getAttributes().addTemporaryModifiers(getNaturalAttributeModifiers(this.getWorld()));
-		}
 		LivingEntityHelper.tick(((LivingEntity) (Object) this));
-	}
-
-	// blocking is now active instantly
-	@Inject(method = "isBlocking", at = @At(value = "RETURN", ordinal = 1), cancellable = true)
-	public void overhauleddamage$isBlocking(CallbackInfoReturnable<Boolean> cir) {
-		cir.setReturnValue(OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get());
 	}
 
 	@Override
@@ -759,46 +725,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// endregion lightning
 
 	@Override
-	public float overhauleddamage$getBlockForce() {
-		return (float) this.getAttributeValue(OverhauledDamage.BLOCK_FORCE);
-	}
-
-	@Override
-	public float overhauleddamage$getParryBonus() {
-		return (float) this.getAttributeValue(OverhauledDamage.PARRY_BONUS);
-	}
-
-	@Override
-	public float overhauleddamage$getParryWindow() {
-		return (float) this.getAttributeValue(OverhauledDamage.PARRY_WINDOW);
-	}
-
-	@Override
-	public float overhauleddamage$getBlockStaminaCost() {
-		return (float) this.getAttributeValue(OverhauledDamage.BLOCK_STAMINA_COST);
-	}
-
-	@Override
-	public float overhauleddamage$getParryStaminaCost() {
-		return (float) this.getAttributeValue(OverhauledDamage.PARRY_STAMINA_COST);
-	}
-
-	@Override
-	public boolean overhauleddamage$canParry() {
-		return false;
-	}
-
-	@Override
-	public int overhauleddamage$getBlockingTime() {
-		return this.blockingTime;
-	}
-
-	@Override
-	public void overhauleddamage$setBlockingTime(int blockingTime) {
-		this.blockingTime = blockingTime;
-	}
-
-	@Override
 	public float overhauleddamage$getDamageTakenFromManaMultiplier() {
 		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER);
 	}
@@ -806,13 +732,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public float overhauleddamage$getDamageTakenFromStaminaMultiplier() {
 		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER);
-	}
-
-	@Unique
-	private HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> getNaturalAttributeModifiers(World world) {
-		HashMultimap<RegistryEntry<EntityAttribute>, EntityAttributeModifier> hashMultimap = HashMultimap.create();
-		hashMultimap.put(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), world.getGameRules().get(GameRulesRegistry.NATURAL_ARMOUR_TOUGHNESS).get(), EntityAttributeModifier.Operation.ADD_VALUE));
-		return hashMultimap;
 	}
 
 }

@@ -1,15 +1,18 @@
 package com.github.theredbrain.overhauleddamage;
 
-import com.github.theredbrain.manaattributes.entity.ManaUsingEntity;
+import com.github.theredbrain.blockingoverhaul.BlockingOverhaul;
+import com.github.theredbrain.overhauleddamage.compatibility.BlockingOverhaulIntegration;
+import com.github.theredbrain.overhauleddamage.compatibility.ManaAttributesIntegration;
+import com.github.theredbrain.overhauleddamage.compatibility.StaminaAttributesIntegration;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
-import com.github.theredbrain.overhauleddamage.registry.GameRulesRegistry;
-import com.github.theredbrain.staminaattributes.entity.StaminaUsingEntity;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -86,45 +89,77 @@ public class OverhauledDamage implements ModInitializer {
 	public static RegistryEntry<EntityAttribute> STAGGER_BUILD_UP_REDUCTION;
 	public static RegistryEntry<EntityAttribute> STAGGER_BUILD_UP_REDUCTION_DELAY_THRESHOLD;
 
-	public static RegistryEntry<EntityAttribute> BLOCK_FORCE;
-	public static RegistryEntry<EntityAttribute> PARRY_BONUS;
-	public static RegistryEntry<EntityAttribute> PARRY_WINDOW;
-
-	public static RegistryEntry<EntityAttribute> BLOCK_STAMINA_COST;
-	public static RegistryEntry<EntityAttribute> PARRY_STAMINA_COST;
-
 	public static RegistryEntry<EntityAttribute> DAMAGE_TAKEN_FROM_MANA_MULTIPLIER;
 	public static RegistryEntry<EntityAttribute> DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER;
 
 	public static final boolean isManaAttributesLoaded = FabricLoader.getInstance().isModLoaded("manaattributes");
 	public static final boolean isStaminaAttributesLoaded = FabricLoader.getInstance().isModLoaded("staminaattributes");
+	public static final boolean isBlockingOverhaulLoaded = FabricLoader.getInstance().isModLoaded("blockingoverhaul");
 
 	public static float getCurrentMana(LivingEntity livingEntity) {
 		float currentMana = 0.0F;
 		if (isManaAttributesLoaded) {
-			currentMana = ((ManaUsingEntity) livingEntity).manaattributes$getMana();
+			currentMana = ManaAttributesIntegration.getCurrentMana(livingEntity);
 		}
 		return currentMana;
 	}
 
 	public static void addMana(LivingEntity livingEntity, float amount) {
 		if (isManaAttributesLoaded) {
-			((ManaUsingEntity) livingEntity).manaattributes$addMana(amount);
+			ManaAttributesIntegration.addMana(livingEntity, amount);
 		}
 	}
 
 	public static float getCurrentStamina(LivingEntity livingEntity) {
 		float currentStamina = 0.0F;
 		if (isStaminaAttributesLoaded) {
-			currentStamina = ((StaminaUsingEntity) livingEntity).staminaattributes$getStamina();
+			currentStamina = StaminaAttributesIntegration.getCurrentStamina(livingEntity);
 		}
 		return currentStamina;
 	}
 
 	public static void addStamina(LivingEntity livingEntity, float amount) {
 		if (isStaminaAttributesLoaded) {
-			((StaminaUsingEntity) livingEntity).staminaattributes$addStamina(amount);
+			StaminaAttributesIntegration.addStamina(livingEntity, amount);
 		}
+	}
+
+	public static void applyBlockAttackStaminaCost(LivingEntity livingEntity, boolean parried) {
+		if (isBlockingOverhaulLoaded) {
+			BlockingOverhaulIntegration.applyBlockAttackStaminaCost(livingEntity, parried);
+		}
+	}
+
+	public static boolean canParry(LivingEntity livingEntity, DamageSource damageSource, ItemStack shieldItemStack) {
+		boolean canParry = true;
+		if (isBlockingOverhaulLoaded) {
+			canParry = BlockingOverhaulIntegration.canParry(livingEntity, damageSource, shieldItemStack);
+		}
+		return canParry;
+	}
+
+	public static double getParryMultiplier(LivingEntity livingEntity, boolean parried) {
+		double parryMultiplier = 1.0;
+		if (isBlockingOverhaulLoaded) {
+			parryMultiplier = BlockingOverhaulIntegration.getParryMultiplier(livingEntity, parried);
+		}
+		return parryMultiplier;
+	}
+
+	public static double getAppliedBlockingKnockback(LivingEntity defender, LivingEntity attacker, ItemStack blockingItemStack, boolean parried, double additionalAttackKnockback) {
+		double appliedBlockingKnockback = 0.0;
+		if (isBlockingOverhaulLoaded) {
+			appliedBlockingKnockback = BlockingOverhaulIntegration.getAppliedBlockingKnockback(defender, attacker, blockingItemStack, parried, additionalAttackKnockback);
+		}
+		return appliedBlockingKnockback;
+	}
+
+	public static boolean currentStaminaAllowsBlocking(LivingEntity livingEntity) {
+		boolean currentStaminaAllowsBlocking = true;
+		if (isStaminaAttributesLoaded) {
+			currentStaminaAllowsBlocking = BlockingOverhaulIntegration.currentStaminaAllowsBlocking(livingEntity);
+		}
+		return currentStaminaAllowsBlocking;
 	}
 
 	@Override
@@ -134,7 +169,6 @@ public class OverhauledDamage implements ModInitializer {
 		// Config
 		SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new, RegisterType.BOTH);
 
-		GameRulesRegistry.init();
 	}
 
 	public static Identifier identifier(String path) {
