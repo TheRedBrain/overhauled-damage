@@ -3,6 +3,7 @@ package com.github.theredbrain.overhauleddamage.registry;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.OverhauledDamageClient;
 import com.github.theredbrain.overhauleddamage.config.ClientConfig;
+import com.github.theredbrain.overhauleddamage.entity.DataAttachmentHelper;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
@@ -64,7 +65,7 @@ public class ClientEventsRegistry {
 				int dynamic_offset_y = 0;
 
 				// region bleeding
-				double bleedingBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
+				double bleedingBuildUp = Mth.ceil(DataAttachmentHelper.getBleedingBuildUp(playerEntity));
 				double maxBleedingBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
 
 				if (!playerEntity.isCreative() && maxBleedingBuildUp > 0) {
@@ -195,7 +196,7 @@ public class ClientEventsRegistry {
 				// endregion bleeding
 
 				// region burn
-				double burnBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
+				double burnBuildUp = Mth.ceil(DataAttachmentHelper.getBurnBuildUp(playerEntity));
 				double maxBurnBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
 
 				if (!playerEntity.isCreative() && maxBurnBuildUp > 0) {
@@ -326,7 +327,7 @@ public class ClientEventsRegistry {
 				// endregion burn
 
 				// region freeze
-				double freezeBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
+				double freezeBuildUp = Mth.ceil(DataAttachmentHelper.getStaggerBuildUp(playerEntity));
 				double maxFreezeBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
 
 				if (!playerEntity.isCreative() && maxFreezeBuildUp > 0) {
@@ -457,7 +458,7 @@ public class ClientEventsRegistry {
 				// endregion freeze
 
 				// region poison
-				double poisonBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
+				double poisonBuildUp = Mth.ceil(DataAttachmentHelper.getPoisonBuildUp(playerEntity));
 				double maxPoisonBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
 
 				if (!playerEntity.isCreative() && maxPoisonBuildUp > 0) {
@@ -588,7 +589,7 @@ public class ClientEventsRegistry {
 				// endregion poison
 
 				// region shock
-				double shockBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
+				double shockBuildUp = Mth.ceil(DataAttachmentHelper.getShockBuildUp(playerEntity));
 				double maxShockBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
 
 				if (!playerEntity.isCreative() && maxShockBuildUp > 0) {
@@ -719,7 +720,7 @@ public class ClientEventsRegistry {
 				// endregion shock
 
 				// region stagger
-				double staggerBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
+				double staggerBuildUp = Mth.ceil(DataAttachmentHelper.getStaggerBuildUp(playerEntity));
 				double maxStaggerBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
 
 				if (!playerEntity.isCreative() && maxStaggerBuildUp > 0) {
@@ -851,7 +852,7 @@ public class ClientEventsRegistry {
 			}
 		});
 		ConfigApi.event().onUpdateClient((identifier, config) -> {
-			if (identifier.equals(Identifier.fromNamespaceAndPath(OverhauledDamage.MOD_ID, "client"))) {
+			if (identifier.equals(OverhauledDamage.identifier("client"))) {
 				ResourceBarAPIClient.clearCache(
 						BLEEDING_BAR_IDENTIFIER_STRING,
 						new double[]{
@@ -872,13 +873,13 @@ public class ClientEventsRegistry {
 								0
 						},
 						new Identifier[]{
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_background.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_decrease_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_value.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_background.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress_decrease_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress_increase_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress_increase_value.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress.png"),
 								null,
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_overlay.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_overlay.png"),
 								null
 						}
 				);
@@ -902,13 +903,13 @@ public class ClientEventsRegistry {
 								0
 						},
 						new Identifier[]{
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_background.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_decrease_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_value.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_background.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress_decrease_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress_increase_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress_increase_value.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress.png"),
 								null,
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_overlay.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_overlay.png"),
 								null
 						}
 				);
@@ -932,13 +933,13 @@ public class ClientEventsRegistry {
 								0
 						},
 						new Identifier[]{
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_background.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_decrease_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_value.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_background.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress_decrease_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress_increase_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress_increase_value.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress.png"),
 								null,
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_overlay.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_overlay.png"),
 								null
 						}
 				);
@@ -962,13 +963,13 @@ public class ClientEventsRegistry {
 								0
 						},
 						new Identifier[]{
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_background.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_decrease_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_value.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_background.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress_decrease_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress_increase_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress_increase_value.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress.png"),
 								null,
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_overlay.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_overlay.png"),
 								null
 						}
 				);
@@ -992,13 +993,13 @@ public class ClientEventsRegistry {
 								0
 						},
 						new Identifier[]{
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_background.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_decrease_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_value.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_background.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress_decrease_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress_increase_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress_increase_value.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress.png"),
 								null,
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_overlay.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_overlay.png"),
 								null
 						}
 				);
@@ -1022,13 +1023,13 @@ public class ClientEventsRegistry {
 								0
 						},
 						new Identifier[]{
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_background.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_decrease_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_animation.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_value.png"),
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_background.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress_decrease_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress_increase_animation.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress_increase_value.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress.png"),
 								null,
-								Identifier.fromNamespaceAndPath("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_overlay.png"),
+								OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_overlay.png"),
 								null
 						}
 				);

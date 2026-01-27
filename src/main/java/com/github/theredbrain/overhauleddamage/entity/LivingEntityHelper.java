@@ -251,7 +251,7 @@ public class LivingEntityHelper {
 										OverhauledDamage.info("");
 									}
 									addStaggerBuildUp(livingEntity, appliedStagger);
-									isStaggered = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp();
+									isStaggered = DataAttachmentHelper.getStaggerBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp();
 								}
 
 								// block/parry was successful
@@ -797,7 +797,7 @@ public class LivingEntityHelper {
 			livingEntity.getAttributes().addTransientAttributeModifiers(getNaturalAttributeModifiers());
 
 			// bleeding
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
+			if (DataAttachmentHelper.getBleedingBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
 				Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 				if (bleeding_status_effect.isPresent()) {
 					int existingBleedingDuration = 0;
@@ -813,11 +813,11 @@ public class LivingEntityHelper {
 					}
 					livingEntity.addEffect(new MobEffectInstance(bleeding_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingDuration() + existingBleedingDuration, bleedingAmplifier, false, false, true));
 				}
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingBuildUp(0);
+				DataAttachmentHelper.setBleedingBuildUp(livingEntity, 0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUpReductionDelayThreshold());
 			}
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp() > 0) {
+			if (DataAttachmentHelper.getBleedingBuildUp(livingEntity) > 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingTickTimer(0);
@@ -831,7 +831,7 @@ public class LivingEntityHelper {
 			}
 
 			// burn
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()) {
+			if (DataAttachmentHelper.getBurnBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()) {
 				Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
 				if (burn_status_effect.isPresent()) {
 					int existingBurnDuration = 0;
@@ -847,11 +847,11 @@ public class LivingEntityHelper {
 					}
 					livingEntity.addEffect(new MobEffectInstance(burn_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));
 				}
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnBuildUp(0);
+				DataAttachmentHelper.setBurnBuildUp(livingEntity, 0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUpReductionDelayThreshold());
 			}
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUp() > 0) {
+			if (DataAttachmentHelper.getBurnBuildUp(livingEntity) > 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnTickTimer(0);
@@ -865,7 +865,7 @@ public class LivingEntityHelper {
 			}
 
 			// freeze
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
+			if (DataAttachmentHelper.getFreezeBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
 				Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
 				if (freeze_status_effect.isPresent()) {
 					int existingFreezeDuration = 0;
@@ -881,11 +881,11 @@ public class LivingEntityHelper {
 					}
 					livingEntity.addEffect(new MobEffectInstance(freeze_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeDuration() + existingFreezeDuration, freezeAmplifier, false, false, true));
 				}
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeBuildUp(0);
+				DataAttachmentHelper.setFreezeBuildUp(livingEntity, 0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUpReductionDelayThreshold());
 			}
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp() > 0) {
+			if (DataAttachmentHelper.getFreezeBuildUp(livingEntity) > 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeTickTimer(0);
@@ -899,7 +899,7 @@ public class LivingEntityHelper {
 			}
 
 			// stagger
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
+			if (DataAttachmentHelper.getStaggerBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
 				Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
 				if (staggered_status_effect.isPresent()) {
 					int existingStaggerDuration = 0;
@@ -915,11 +915,11 @@ public class LivingEntityHelper {
 					}
 					livingEntity.addEffect(new MobEffectInstance(staggered_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerDuration() + existingStaggerDuration, staggerAmplifier, false, false, true));
 				}
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerBuildUp(0);
+				DataAttachmentHelper.setStaggerBuildUp(livingEntity, 0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUpReductionDelayThreshold());
 			}
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() > 0) {
+			if (DataAttachmentHelper.getStaggerBuildUp(livingEntity) > 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerTickTimer(0);
@@ -933,7 +933,7 @@ public class LivingEntityHelper {
 			}
 
 			// poison
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()) {
+			if (DataAttachmentHelper.getPoisonBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()) {
 				Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
 				if (poison_status_effect.isPresent()) {
 					int existingPoisonDuration = 0;
@@ -949,11 +949,11 @@ public class LivingEntityHelper {
 					}
 					livingEntity.addEffect(new MobEffectInstance(poison_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonDuration() + existingPoisonDuration, poisonAmplifier, false, false, true));
 				}
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonBuildUp(0);
+				DataAttachmentHelper.setPoisonBuildUp(livingEntity, 0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUpReductionDelayThreshold());
 			}
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUp() > 0) {
+			if (DataAttachmentHelper.getPoisonBuildUp(livingEntity) > 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonTickTimer(0);
@@ -967,7 +967,7 @@ public class LivingEntityHelper {
 			}
 
 			// shock
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUp() >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()) {
+			if (DataAttachmentHelper.getShockBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()) {
 				Optional<Holder.Reference<MobEffect>> shocked_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
 				if (shocked_status_effect.isPresent()) {
 					int existingShockDuration = 0;
@@ -983,11 +983,11 @@ public class LivingEntityHelper {
 					}
 					livingEntity.addEffect(new MobEffectInstance(shocked_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockDuration() + existingShockDuration, shockAmplifier, false, false, false));
 				}
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockBuildUp(0);
+				DataAttachmentHelper.setShockBuildUp(livingEntity, 0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUpReductionDelayThreshold());
 			}
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUp() > 0) {
+			if (DataAttachmentHelper.getShockBuildUp(livingEntity) > 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockTickTimer(0);
@@ -1011,14 +1011,14 @@ public class LivingEntityHelper {
 	public static void addBleedingBuildUp(LivingEntity livingEntity, float amount) {
 		Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
 		if (bleeding_status_effect.isEmpty()) {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp() > 0) {
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingBuildUp(0);
+			if (DataAttachmentHelper.getBleedingBuildUp(livingEntity) > 0) {
+				DataAttachmentHelper.setBleedingBuildUp(livingEntity, 0);
 			}
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !livingEntity.hasEffect(bleeding_status_effect.get())) {
-				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp();
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingBuildUp(f + amount);
-				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
+				double f = DataAttachmentHelper.getBleedingBuildUp(livingEntity);
+				DataAttachmentHelper.setBleedingBuildUp(livingEntity, f + amount);
+				if (DataAttachmentHelper.getBleedingBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingTickThreshold());
 				} else if (amount > 0) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingReductionDelayTimer(0);
@@ -1031,13 +1031,13 @@ public class LivingEntityHelper {
 	public static void addBurnBuildUp(LivingEntity livingEntity, float amount) {
 		Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
 		if (burn_status_effect.isEmpty()) {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUp() > 0) {
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnBuildUp(0);
+			if (DataAttachmentHelper.getBurnBuildUp(livingEntity) > 0) {
+				DataAttachmentHelper.setBurnBuildUp(livingEntity, 0);
 			}
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp() != -1.0f) {
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnBuildUp(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUp() + amount);
-				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()) {
+				DataAttachmentHelper.setBurnBuildUp(livingEntity, DataAttachmentHelper.getBurnBuildUp(livingEntity) + amount);
+				if (DataAttachmentHelper.getBurnBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnTickThreshold());
 				} else if (amount > 0) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnReductionDelayTimer(0);
@@ -1050,14 +1050,14 @@ public class LivingEntityHelper {
 	public static void addFreezeBuildUp(LivingEntity livingEntity, float amount) {
 		Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
 		if (freeze_status_effect.isEmpty()) {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp() > 0) {
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeBuildUp(0);
+			if (DataAttachmentHelper.getFreezeBuildUp(livingEntity) > 0) {
+				DataAttachmentHelper.setFreezeBuildUp(livingEntity, 0);
 			}
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp() != -1.0f && !livingEntity.hasEffect(freeze_status_effect.get())) {
-				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp();
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeBuildUp(f + amount);
-				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
+				double f = DataAttachmentHelper.getFreezeBuildUp(livingEntity);
+				DataAttachmentHelper.setFreezeBuildUp(livingEntity, f + amount);
+				if (DataAttachmentHelper.getFreezeBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeTickThreshold());
 				} else if (amount > 0) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeReductionDelayTimer(0);
@@ -1070,14 +1070,14 @@ public class LivingEntityHelper {
 	public static void addStaggerBuildUp(LivingEntity livingEntity, float amount) {
 		Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
 		if (staggered_status_effect.isEmpty()) {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() > 0) {
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerBuildUp(0);
+			if (DataAttachmentHelper.getStaggerBuildUp(livingEntity) > 0) {
+				DataAttachmentHelper.setStaggerBuildUp(livingEntity, 0);
 			}
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp() != -1.0f && !livingEntity.hasEffect(staggered_status_effect.get())) {
-				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp();
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerBuildUp(f + amount);
-				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
+				double f = DataAttachmentHelper.getStaggerBuildUp(livingEntity);
+				DataAttachmentHelper.setStaggerBuildUp(livingEntity, f + amount);
+				if (DataAttachmentHelper.getStaggerBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerTickThreshold());
 				} else if (amount > 0) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerReductionDelayTimer(0);
@@ -1090,14 +1090,14 @@ public class LivingEntityHelper {
 	public static void addPoisonBuildUp(LivingEntity livingEntity, float amount) {
 		Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
 		if (poison_status_effect.isEmpty()) {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUp() > 0) {
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonBuildUp(0);
+			if (DataAttachmentHelper.getPoisonBuildUp(livingEntity) > 0) {
+				DataAttachmentHelper.setPoisonBuildUp(livingEntity, 0);
 			}
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp() != -1.0f) {
-				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUp();
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonBuildUp(f + amount);
-				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()) {
+				double f = DataAttachmentHelper.getPoisonBuildUp(livingEntity);
+				DataAttachmentHelper.setPoisonBuildUp(livingEntity, f + amount);
+				if (DataAttachmentHelper.getPoisonBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonTickThreshold());
 				} else if (amount > 0) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonReductionDelayTimer(0);
@@ -1110,14 +1110,14 @@ public class LivingEntityHelper {
 	public static void addShockBuildUp(LivingEntity livingEntity, float amount) {
 		Optional<Holder.Reference<MobEffect>> shock_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
 		if (shock_status_effect.isEmpty()) {
-			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUp() > 0) {
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockBuildUp(0);
+			if (DataAttachmentHelper.getShockBuildUp(livingEntity) > 0) {
+				DataAttachmentHelper.setShockBuildUp(livingEntity, 0);
 			}
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp() != -1.0f) {
-				float f = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUp();
-				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockBuildUp(f + amount);
-				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUp() > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()) {
+				double f = DataAttachmentHelper.getShockBuildUp(livingEntity);
+				DataAttachmentHelper.setShockBuildUp(livingEntity, f + amount);
+				if (DataAttachmentHelper.getShockBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockTickThreshold());
 				} else if (amount > 0) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockReductionDelayTimer(0);

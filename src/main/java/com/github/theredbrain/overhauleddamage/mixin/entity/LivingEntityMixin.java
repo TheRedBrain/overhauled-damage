@@ -67,37 +67,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Unique
 	private int shockReductionDelayTimer = 0;
 
-	@Unique
-	private static final EntityDataAccessor<Float> BLEEDING_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
-
-	@Unique
-	private static final EntityDataAccessor<Float> BURN_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
-
-	@Unique
-	private static final EntityDataAccessor<Float> FREEZE_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
-
-	@Unique
-	private static final EntityDataAccessor<Float> STAGGER_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
-
-	@Unique
-	private static final EntityDataAccessor<Float> POISON_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
-
-	@Unique
-	private static final EntityDataAccessor<Float> SHOCK_BUILD_UP = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.FLOAT);
-
 	public LivingEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
-	}
-
-	@Inject(method = "defineSynchedData", at = @At("RETURN"))
-	protected void overhauleddamage$initDataTracker(SynchedEntityData.Builder builder, CallbackInfo ci) {
-		builder.define(BLEEDING_BUILD_UP, 0.0F);
-		builder.define(BURN_BUILD_UP, 0.0F);
-		builder.define(FREEZE_BUILD_UP, 0.0F);
-		builder.define(POISON_BUILD_UP, 0.0F);
-		builder.define(STAGGER_BUILD_UP, 0.0F);
-		builder.define(SHOCK_BUILD_UP, 0.0F);
-
 	}
 
 	@Inject(method = "createLivingAttributes", at = @At("RETURN"))
@@ -172,40 +143,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_MANA_MULTIPLIER)
 				.add(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER)
 		;
-	}
-
-	@Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-	public void overhauleddamage$readCustomDataFromNbt(ValueInput view, CallbackInfo ci) {
-
-		this.overhauleddamage$setBleedingBuildUp(view.getFloatOr("bleeding_build_up", 0.0F));
-
-		this.overhauleddamage$setBurnBuildUp(view.getFloatOr("burn_build_up", 0.0F));
-
-		this.overhauleddamage$setFreezeBuildUp(view.getFloatOr("freeze_build_up", 0.0F));
-
-		this.overhauleddamage$setPoisonBuildUp(view.getFloatOr("poison_build_up", 0.0F));
-
-		this.overhauleddamage$setStaggerBuildUp(view.getFloatOr("stagger_build_up", 0.0F));
-
-		this.overhauleddamage$setShockBuildUp(view.getFloatOr("shock_build_up", 0.0F));
-
-	}
-
-	@Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-	public void overhauleddamage$writeCustomDataToNbt(ValueOutput view, CallbackInfo ci) {
-
-		view.putFloat("bleeding_build_up", this.overhauleddamage$getBleedingBuildUp());
-
-		view.putFloat("burn_build_up", this.overhauleddamage$getBurnBuildUp());
-
-		view.putFloat("freeze_build_up", this.overhauleddamage$getFreezeBuildUp());
-
-		view.putFloat("poison_build_up", this.overhauleddamage$getPoisonBuildUp());
-
-		view.putFloat("stagger_build_up", this.overhauleddamage$getStaggerBuildUp());
-
-		view.putFloat("shock_build_up", this.overhauleddamage$getShockBuildUp());
-
 	}
 
 	// disables the vanilla armor calculation
@@ -289,16 +226,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	// region bleeding build up
 	@Override
-	public float overhauleddamage$getBleedingBuildUp() {
-		return this.entityData.get(BLEEDING_BUILD_UP);
-	}
-
-	@Override
-	public void overhauleddamage$setBleedingBuildUp(float bleedingBuildUp) {
-		this.entityData.set(BLEEDING_BUILD_UP, Mth.clamp(bleedingBuildUp, 0, this.overhauleddamage$getMaxBleedingBuildUp()));
-	}
-
-	@Override
 	public float overhauleddamage$getMaxBleedingBuildUp() {
 		return (float) this.getAttributeValue(OverhauledDamage.MAX_BLEEDING_BUILD_UP);
 	}
@@ -363,16 +290,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public float overhauleddamage$getFireResistance() {
 		return (float) this.getAttributeValue(OverhauledDamage.FIRE_RESISTANCE);
-	}
-
-	@Override
-	public float overhauleddamage$getBurnBuildUp() {
-		return this.entityData.get(BURN_BUILD_UP);
-	}
-
-	@Override
-	public void overhauleddamage$setBurnBuildUp(float burnBuildUp) {
-		this.entityData.set(BURN_BUILD_UP, Mth.clamp(burnBuildUp, 0, this.overhauleddamage$getMaxBurnBuildUp()));
 	}
 
 	@Override
@@ -444,16 +361,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	}
 
 	@Override
-	public float overhauleddamage$getFreezeBuildUp() {
-		return this.entityData.get(FREEZE_BUILD_UP);
-	}
-
-	@Override
-	public void overhauleddamage$setFreezeBuildUp(float freezeBuildUp) {
-		this.entityData.set(FREEZE_BUILD_UP, Mth.clamp(freezeBuildUp, 0, this.overhauleddamage$getMaxFreezeBuildUp()));
-	}
-
-	@Override
 	public float overhauleddamage$getMaxFreezeBuildUp() {
 		return (float) this.getAttributeValue(OverhauledDamage.MAX_FREEZE_BUILD_UP);
 	}
@@ -500,16 +407,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	// endregion frost
 
 	// region stagger build up
-	@Override
-	public float overhauleddamage$getStaggerBuildUp() {
-		return this.entityData.get(STAGGER_BUILD_UP);
-	}
-
-	@Override
-	public void overhauleddamage$setStaggerBuildUp(float staggerBuildUp) {
-		this.entityData.set(STAGGER_BUILD_UP, Mth.clamp(staggerBuildUp, 0, this.overhauleddamage$getMaxStaggerBuildUp()));
-	}
-
 	@Override
 	public float overhauleddamage$getMaxStaggerBuildUp() {
 		return (float) this.getAttributeValue(OverhauledDamage.MAX_STAGGER_BUILD_UP);
@@ -579,16 +476,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	}
 
 	@Override
-	public float overhauleddamage$getPoisonBuildUp() {
-		return this.entityData.get(POISON_BUILD_UP);
-	}
-
-	@Override
-	public void overhauleddamage$setPoisonBuildUp(float poisonBuildUp) {
-		this.entityData.set(POISON_BUILD_UP, Mth.clamp(poisonBuildUp, 0, this.overhauleddamage$getMaxPoisonBuildUp()));
-	}
-
-	@Override
 	public float overhauleddamage$getMaxPoisonBuildUp() {
 		return (float) this.getAttributeValue(OverhauledDamage.MAX_POISON_BUILD_UP);
 	}
@@ -654,16 +541,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public float overhauleddamage$getLightningResistance() {
 		return (float) this.getAttributeValue(OverhauledDamage.LIGHTNING_RESISTANCE);
-	}
-
-	@Override
-	public float overhauleddamage$getShockBuildUp() {
-		return this.entityData.get(SHOCK_BUILD_UP);
-	}
-
-	@Override
-	public void overhauleddamage$setShockBuildUp(float shockBuildUp) {
-		this.entityData.set(SHOCK_BUILD_UP, Mth.clamp(shockBuildUp, 0, this.overhauleddamage$getMaxShockBuildUp()));
 	}
 
 	@Override
