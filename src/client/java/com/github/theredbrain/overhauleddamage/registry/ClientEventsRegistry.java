@@ -11,7 +11,10 @@ import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
 import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.ArrayList;
@@ -51,18 +54,18 @@ public class ClientEventsRegistry {
 
 	public static void initializeClientEvents() {
 		HudRenderCallback.EVENT.register((matrixStack, delta) -> {
-			MinecraftClient minecraftClient = MinecraftClient.getInstance();
-			PlayerEntity playerEntity = minecraftClient.player;
+			Minecraft minecraftClient = Minecraft.getInstance();
+			Player playerEntity = minecraftClient.player;
 			ClientConfig clientConfig = OverhauledDamageClient.CLIENT_CONFIG;
 
-			if (playerEntity != null && !playerEntity.isCreative() && !minecraftClient.options.hudHidden) {
+			if (playerEntity != null && !playerEntity.isCreative() && !minecraftClient.options.hideGui) {
 
 				int dynamic_offset_x = 0;
 				int dynamic_offset_y = 0;
 
 				// region bleeding
-				double bleedingBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
-				double maxBleedingBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
+				double bleedingBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUp());
+				double maxBleedingBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
 
 				if (!playerEntity.isCreative() && maxBleedingBuildUp > 0) {
 					boolean should_bleeding_bar_be_rendered = bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.show_empty_bar;
@@ -114,18 +117,18 @@ public class ClientEventsRegistry {
 										0
 								},
 								new Identifier[]{
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_background.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_decrease_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress_increase_value.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_progress.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_background.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress_decrease_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress_increase_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress_increase_value.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_progress.png"),
 										null,
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_bleeding_overlay.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_bleeding_overlay.png"),
 										null
 								},
 								bleedingBuildUp,
 								maxBleedingBuildUp,
-								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUpReduction()),
 								maxBleedingBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -170,7 +173,7 @@ public class ClientEventsRegistry {
 					if (should_bleeding_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraftClient,
-								minecraftClient.textRenderer,
+								minecraftClient.font,
 								matrixStack,
 								BLEEDING_BAR_IDENTIFIER_STRING,
 								bleedingBuildUp,
@@ -192,8 +195,8 @@ public class ClientEventsRegistry {
 				// endregion bleeding
 
 				// region burn
-				double burnBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
-				double maxBurnBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
+				double burnBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUp());
+				double maxBurnBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
 
 				if (!playerEntity.isCreative() && maxBurnBuildUp > 0) {
 					boolean should_burn_bar_be_rendered = burnBuildUp > 0 || clientConfig.burnBuildUpSettings.show_empty_bar;
@@ -245,18 +248,18 @@ public class ClientEventsRegistry {
 										0
 								},
 								new Identifier[]{
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_background.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_decrease_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress_increase_value.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_progress.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_background.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress_decrease_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress_increase_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress_increase_value.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_progress.png"),
 										null,
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_burn_overlay.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_burn_overlay.png"),
 										null
 								},
 								burnBuildUp,
 								maxBurnBuildUp,
-								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUpReduction()),
 								maxBurnBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -301,7 +304,7 @@ public class ClientEventsRegistry {
 					if (should_burn_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraftClient,
-								minecraftClient.textRenderer,
+								minecraftClient.font,
 								matrixStack,
 								BURN_BAR_IDENTIFIER_STRING,
 								burnBuildUp,
@@ -323,8 +326,8 @@ public class ClientEventsRegistry {
 				// endregion burn
 
 				// region freeze
-				double freezeBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
-				double maxFreezeBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
+				double freezeBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUp());
+				double maxFreezeBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
 
 				if (!playerEntity.isCreative() && maxFreezeBuildUp > 0) {
 					boolean should_freeze_bar_be_rendered = freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.show_empty_bar;
@@ -376,18 +379,18 @@ public class ClientEventsRegistry {
 										0
 								},
 								new Identifier[]{
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_background.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_decrease_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress_increase_value.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_progress.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_background.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress_decrease_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress_increase_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress_increase_value.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_progress.png"),
 										null,
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_freeze_overlay.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_freeze_overlay.png"),
 										null
 								},
 								freezeBuildUp,
 								maxFreezeBuildUp,
-								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUpReduction()),
 								maxFreezeBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -432,7 +435,7 @@ public class ClientEventsRegistry {
 					if (should_freeze_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraftClient,
-								minecraftClient.textRenderer,
+								minecraftClient.font,
 								matrixStack,
 								FREEZE_BAR_IDENTIFIER_STRING,
 								freezeBuildUp,
@@ -454,8 +457,8 @@ public class ClientEventsRegistry {
 				// endregion freeze
 
 				// region poison
-				double poisonBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
-				double maxPoisonBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
+				double poisonBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUp());
+				double maxPoisonBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
 
 				if (!playerEntity.isCreative() && maxPoisonBuildUp > 0) {
 					boolean should_poison_bar_be_rendered = poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.show_empty_bar;
@@ -507,18 +510,18 @@ public class ClientEventsRegistry {
 										0
 								},
 								new Identifier[]{
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_background.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_decrease_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress_increase_value.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_progress.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_background.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress_decrease_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress_increase_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress_increase_value.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_progress.png"),
 										null,
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_poison_overlay.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_poison_overlay.png"),
 										null
 								},
 								poisonBuildUp,
 								maxPoisonBuildUp,
-								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUpReduction()),
 								maxPoisonBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -563,7 +566,7 @@ public class ClientEventsRegistry {
 					if (should_poison_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraftClient,
-								minecraftClient.textRenderer,
+								minecraftClient.font,
 								matrixStack,
 								POISON_BAR_IDENTIFIER_STRING,
 								poisonBuildUp,
@@ -585,8 +588,8 @@ public class ClientEventsRegistry {
 				// endregion poison
 
 				// region shock
-				double shockBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
-				double maxShockBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
+				double shockBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUp());
+				double maxShockBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
 
 				if (!playerEntity.isCreative() && maxShockBuildUp > 0) {
 					boolean should_shock_bar_be_rendered = shockBuildUp > 0 || clientConfig.shockBuildUpSettings.show_empty_bar;
@@ -638,18 +641,18 @@ public class ClientEventsRegistry {
 										0
 								},
 								new Identifier[]{
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_background.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_decrease_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress_increase_value.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_progress.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_background.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress_decrease_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress_increase_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress_increase_value.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_progress.png"),
 										null,
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_shock_overlay.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_shock_overlay.png"),
 										null
 								},
 								shockBuildUp,
 								maxShockBuildUp,
-								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUpReduction()),
 								maxShockBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -694,7 +697,7 @@ public class ClientEventsRegistry {
 					if (should_shock_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraftClient,
-								minecraftClient.textRenderer,
+								minecraftClient.font,
 								matrixStack,
 								SHOCK_BAR_IDENTIFIER_STRING,
 								shockBuildUp,
@@ -716,8 +719,8 @@ public class ClientEventsRegistry {
 				// endregion shock
 
 				// region stagger
-				double staggerBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
-				double maxStaggerBuildUp = MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
+				double staggerBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUp());
+				double maxStaggerBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
 
 				if (!playerEntity.isCreative() && maxStaggerBuildUp > 0) {
 					boolean should_stagger_bar_be_rendered = staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.show_empty_bar;
@@ -769,18 +772,18 @@ public class ClientEventsRegistry {
 										0
 								},
 								new Identifier[]{
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_background.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_decrease_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_animation.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress_increase_value.png"),
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_progress.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_background.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress_decrease_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress_increase_animation.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress_increase_value.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_progress.png"),
 										null,
-										Identifier.of("overhauleddamage", "textures/gui/sprites/hud/horizontal_stagger_overlay.png"),
+										OverhauledDamage.identifier("textures/gui/sprites/hud/horizontal_stagger_overlay.png"),
 										null
 								},
 								staggerBuildUp,
 								maxStaggerBuildUp,
-								MathHelper.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUpReduction()),
 								maxStaggerBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -825,7 +828,7 @@ public class ClientEventsRegistry {
 					if (should_stagger_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraftClient,
-								minecraftClient.textRenderer,
+								minecraftClient.font,
 								matrixStack,
 								STAGGER_BAR_IDENTIFIER_STRING,
 								staggerBuildUp,
