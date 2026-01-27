@@ -33,16 +33,26 @@ When no valid status effect is defined, the build-up will not be applied by atta
 
 Build-ups are displayed in the HUD, which can be disabled in the client config.
 
-## Blocking and Parrying
+## (Expanded) Blocking Overhaul
 
-Shields are completely overhauled. They no longer provide complete damage immunity.
+The blocking overhaul was extracted into a stand-alone mod (Blocking Overhaul), which is an optional dependency, but required for this part of Overhauled Damage.
 
-Only a limited amount of damage is blocked, blocking costs [stamina](https://modrinth.com/mod/stamina-attributes) and when the shield is raised just before a hit, the attack is parried.
+### Changed amount of blocked damage
 
-Parrying increases stagger build-up and when the build-up reaches the threshold, the parry fails and the parrying entity is staggered. In that case, no damage is blocked.
+The amount of blocked damage is no longer determined by the "minecraft:blocks_attacks" data component, but is now depending on the damage_type (more specifically on its attack_types) of the attack and on several entity attributes.
+
+### Changed parry effect
+
+Parrying is also changed. It is no longer a simple multiplier to blocked damage and knockback.
+
+Parrying increases stagger build-up for the blocking entity and when the build-up reaches the threshold, the parry fails and the parrying entity is staggered. In that case, no damage is blocked.
 A successful parry multiplies the blocked damage and staggers the attacker.
 
-A normal blocked attack (when the shield was raised for a longer time before the attack hit), can knock back either the attacking or the blocking entity. The knock back amount and which entity is affected is depending on damage type, damage amount, the block force of the blocking entity, the attack knockback of the attacking entity and a configurable multiplier.
+### Changed blocking/parrying knockback
+
+The calculation for the knockback applied on blocking is also changed. The attack_knockback of the attacker is increased depending on the damage_type (more specifically by its attack_types) of the attack. This also depends on several attack_type specific multipliers, which can be set in the server config.
+
+If you are familiar with the calculation used by "Blocking Overhaul", this changes the "additional_attack_knockback" part of that calculation.
 
 ## Additional features
 

@@ -33,7 +33,7 @@ import java.util.Optional;
 
 public class LivingEntityHelper {
 
-	public static float calculateOverhauledDamage(LivingEntity livingEntity, DamageSource source, float amount) {
+	public static float calculateOverhauledDamage(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource source, float amount) {
 		ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
 		boolean enable_debug_log = serverConfig.damageCalculation.enable_debug_log.get();
 		if (enable_debug_log) {
@@ -304,11 +304,8 @@ public class LivingEntityHelper {
 										serverPlayerEntity.awardStat(Stats.DAMAGE_BLOCKED_BY_SHIELD, Math.round(totalBlockedDamage * 10.0f));
 									}
 
-									if (tryParry) {
-										livingEntity.level().playSound(null, livingEntity, SoundEvents.SHIELD_BLOCK.value(), SoundSource.PLAYERS, 1.0F, 1.2F + livingEntity.level().random.nextFloat() * 0.4F);
-									} else {
-//								livingEntity.getEntityWorld().sendEntityStatus(livingEntity, EntityStatuses.BLOCK_WITH_SHIELD);
-									}
+									OverhauledDamage.playBlockingSoundEvent(serverLevel, livingEntity, shieldItemStack, tryParry);
+
 									if (enable_debug_log) {
 										OverhauledDamage.info("--- attack amounts after blocking/parrying ---");
 										OverhauledDamage.info("generic_amount : " + generic_amount);
@@ -322,7 +319,6 @@ public class LivingEntityHelper {
 										OverhauledDamage.info("");
 									}
 								} else {
-//							livingEntity.getEntityWorld().sendEntityStatus(livingEntity, EntityStatuses.BREAK_SHIELD);
 									if (enable_debug_log) {
 										OverhauledDamage.info("--- blocking/parrying failed because the damage was too high ---");
 										OverhauledDamage.info("");

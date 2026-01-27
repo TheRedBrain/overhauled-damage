@@ -11,6 +11,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -132,6 +133,12 @@ public class OverhauledDamage implements ModInitializer {
 	public static void applyBlockAttackStaminaCost(LivingEntity livingEntity, boolean parried) {
 		if (isBlockingOverhaulLoaded) {
 			BlockingOverhaulIntegration.applyBlockAttackStaminaCost(livingEntity, parried);
+		}
+	}
+
+	public static void playBlockingSoundEvent(ServerLevel serverLevel, LivingEntity livingEntity, ItemStack itemStack, boolean parried) {
+		if (isBlockingOverhaulLoaded) {
+			BlockingOverhaulIntegration.playBlockingSoundEvent(serverLevel, livingEntity, itemStack, parried);
 		}
 	}
 
