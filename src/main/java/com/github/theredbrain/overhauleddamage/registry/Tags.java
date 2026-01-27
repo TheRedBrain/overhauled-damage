@@ -16,6 +16,4 @@ public class Tags {
 	public static final TagKey<DamageType> IS_TRUE_DAMAGE = TagKey.create(Registries.DAMAGE_TYPE, OverhauledDamage.identifier("is_true_damage"));
 	public static final TagKey<DamageType> APPLIES_BLEEDING = TagKey.create(Registries.DAMAGE_TYPE, OverhauledDamage.identifier("applies_bleeding"));
 
-	public static final TagKey<Item> CAN_PARRY = TagKey.create(Registries.ITEM, OverhauledDamage.identifier("can_parry"));
-
 }

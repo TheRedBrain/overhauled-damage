@@ -39,9 +39,4 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DuckLivi
 	public boolean overhauleddamage$wrap_isCriticalHit(Entity target, Operation<Boolean> original) {
 		return !OverhauledDamage.SERVER_CONFIG.disable_jump_crit_mechanic.get() && original.call(target);
 	}
-
-	@Override
-	public boolean overhauleddamage$canParry() {
-		return true;
-	}
 }

@@ -42,9 +42,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Shadow
 	public abstract double getAttributeValue(Holder<Attribute> attribute);
 
-	@Shadow
-	protected ItemStack useItem;
-
 	@Unique
 	private int bleedingTickTimer = 0;
 	@Unique
@@ -220,15 +217,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		return OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul.get() || original.call(instance, tag);
 	}
 
-	@WrapOperation(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;applyItemBlocking(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)F"))
-	private float overhauleddamage$wrap_getDamageBlockedAmount(LivingEntity instance, ServerLevel world, DamageSource source, float amount, Operation<Float> original) {
-		if (OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get()) {
-			return 0.0F;
-		} else {
-			return original.call(instance, world, source, amount);
-		}
-	}
-
 	@Definition(id = "modifyAppliedDamage", method = "Lnet/minecraft/world/entity/LivingEntity;getDamageAfterMagicAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F")
 	@Expression("? = ?.modifyAppliedDamage(?, ?)")
 	@ModifyVariable(method = "actuallyHurt", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER), argsOnly = true)
@@ -239,11 +227,6 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void overhauleddamage$tick(CallbackInfo ci) {
 		LivingEntityHelper.tick(((LivingEntity) (Object) this));
-	}
-
-	@Override
-	public ItemStack overhauleddamage$getActiveItemStack() {
-		return this.useItem;
 	}
 
 	@Override

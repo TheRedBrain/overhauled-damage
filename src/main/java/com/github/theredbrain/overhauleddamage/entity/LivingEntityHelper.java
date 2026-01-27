@@ -154,7 +154,7 @@ public class LivingEntityHelper {
 			boolean triedBlocking = false;
 
 			// region shield blocks
-			if (serverConfig.damageCalculation.enable_blocking_overhaul.get() && OverhauledDamage.isBlockingOverhaulLoaded) {
+			if (OverhauledDamage.isBlockingOverhaulEnabled()) {
 				ItemStack shieldItemStack = livingEntity.getUseItem();
 				BlocksAttacks blocksAttacks = shieldItemStack.get(DataComponents.BLOCKS_ATTACKS);
 

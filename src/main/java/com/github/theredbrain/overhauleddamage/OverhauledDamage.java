@@ -104,6 +104,7 @@ public class OverhauledDamage implements ModInitializer {
 		return currentMana;
 	}
 
+	// region API
 	public static void addMana(LivingEntity livingEntity, float amount) {
 		if (isManaAttributesLoaded) {
 			ManaAttributesIntegration.addMana(livingEntity, amount);
@@ -122,6 +123,10 @@ public class OverhauledDamage implements ModInitializer {
 		if (isStaminaAttributesLoaded) {
 			StaminaAttributesIntegration.addStamina(livingEntity, amount);
 		}
+	}
+
+	public static boolean isBlockingOverhaulEnabled() {
+		return isBlockingOverhaulLoaded && SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get();
 	}
 
 	public static void applyBlockAttackStaminaCost(LivingEntity livingEntity, boolean parried) {
@@ -161,6 +166,7 @@ public class OverhauledDamage implements ModInitializer {
 		}
 		return currentStaminaAllowsBlocking;
 	}
+	// endregion API
 
 	@Override
 	public void onInitialize() {

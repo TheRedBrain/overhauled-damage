@@ -1,5 +1,8 @@
 package com.github.theredbrain.overhauleddamage.compatibility;
 
+import com.github.theredbrain.blockingoverhaul.BlockingOverhaul;
+import com.github.theredbrain.blockingoverhaul.entity.DuckLivingEntityMixin;
+import com.github.theredbrain.blockingoverhaul.entity.LivingEntityHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -7,23 +10,23 @@ import net.minecraft.world.item.ItemStack;
 public class BlockingOverhaulIntegration {
 
 	public static void applyBlockAttackStaminaCost(LivingEntity livingEntity, boolean parried) {
-		// TODO
+		BlockingOverhaul.applyBlockAttackStaminaCost(livingEntity, parried);
 	}
 
 	public static boolean canParry(LivingEntity livingEntity, DamageSource damageSource, ItemStack shieldItemStack) {
-		return true; // TODO
+		return LivingEntityHelper.canParry(livingEntity, damageSource, shieldItemStack);
 	}
 
 	public static double getParryMultiplier(LivingEntity livingEntity, boolean parried) {
-		return 1.0; // TODO
+		return parried ? ((DuckLivingEntityMixin) livingEntity).blockingoverhaul$getParryMultiplier() : 1.0;
 	}
 
 	public static double getAppliedBlockingKnockback(LivingEntity defender, LivingEntity attacker, ItemStack blockingItemStack, boolean parried, double additionalAttackKnockback) {
-		return 0.0; // TODO
+		return LivingEntityHelper.getAppliedBlockingKnockback(defender, attacker, blockingItemStack, parried, additionalAttackKnockback);
 	}
 
 	public static boolean currentStaminaAllowsBlocking(LivingEntity livingEntity) {
-//		return true;//BlockingOverhaul.currentStaminaAllowsBlocking(livingEntity);
+		return BlockingOverhaul.currentStaminaAllowsBlocking(livingEntity);
 	}
 
 }

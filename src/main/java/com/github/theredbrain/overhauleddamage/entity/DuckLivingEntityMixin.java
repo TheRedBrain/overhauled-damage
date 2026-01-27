@@ -1,10 +1,6 @@
 package com.github.theredbrain.overhauleddamage.entity;
 
-import net.minecraft.world.item.ItemStack;
-
 public interface DuckLivingEntityMixin {
-
-	ItemStack overhauleddamage$getActiveItemStack();
 
 	float overhauleddamage$getAdditionalBashingDamage();
 
