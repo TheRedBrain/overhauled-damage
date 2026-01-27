@@ -2,11 +2,22 @@
 
 - update to 1.21.11
 - improved integration of Stamina Attributes and Mana Attributes
+
+
+- added server config options to set default entity attribute values (only for players)
+
+## Changes
+
 - reworked the blocking overhaul
   - now requires the mod "Blocking Overhaul" to be present, which is a standalone implementation of most blocking overhaul features
 - replaced game rule naturalArmourToughness with server config option
 - removed instant blocking feature (now possible with vanilla tech)
 
+## Technical
+
+- removed "generic." prefix from all entity attributes, following vanillas example
+- improved integration of Stamina Attributes and Mana Attributes
+- migrated to Mojang Mappings
 
 # 2.4.2
 

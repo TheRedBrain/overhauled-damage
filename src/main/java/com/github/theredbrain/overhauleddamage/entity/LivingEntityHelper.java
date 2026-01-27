@@ -761,6 +761,7 @@ public class LivingEntityHelper {
 
 		float health_damage = applied_damage + true_amount;
 
+		// TODO do these attributes need a rework? maybe clamp them between 0 and 100
 		float damageTakenFromMana = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getDamageTakenFromManaMultiplier();
 		float damageTakenFromStamina = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getDamageTakenFromStaminaMultiplier();
 		float mana_damage = 0.0F;
@@ -792,9 +793,6 @@ public class LivingEntityHelper {
 
 		if (!livingEntity.level().isClientSide()) {
 			ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
-
-			// apply natural attribute modifiers
-			livingEntity.getAttributes().addTransientAttributeModifiers(getNaturalAttributeModifiers());
 
 			// bleeding
 			if (DataAttachmentHelper.getBleedingBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
@@ -1000,12 +998,6 @@ public class LivingEntityHelper {
 				}
 			}
 		}
-	}
-
-	private static HashMultimap<Holder<Attribute>, AttributeModifier> getNaturalAttributeModifiers() {
-		HashMultimap<Holder<Attribute>, AttributeModifier> hashMultimap = HashMultimap.create();
-		hashMultimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), OverhauledDamage.SERVER_CONFIG.damageCalculation.armorOverhaul.natural_armor_toughness.get(), AttributeModifier.Operation.ADD_VALUE));
-		return hashMultimap;
 	}
 
 	public static void addBleedingBuildUp(LivingEntity livingEntity, float amount) {

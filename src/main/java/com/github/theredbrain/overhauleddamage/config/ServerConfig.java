@@ -11,6 +11,7 @@ import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedAny;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedString;
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedDouble;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedFloat;
 import net.minecraft.resources.Identifier;
 import java.util.HashMap;
@@ -319,5 +320,68 @@ public class ServerConfig extends Config {
 		public String stagger_status_effect_identifier = "variousstatuseffects:staggered";
 		public ValidatedBoolean should_stagger_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_stagger_amplifier_be_additive = new ValidatedBoolean(false);
+	}
+
+	public NaturalPlayerAttributeValuesSection naturalPlayerAttributeValues = new NaturalPlayerAttributeValuesSection();
+
+	public static class NaturalPlayerAttributeValuesSection extends ConfigSection {
+		public ValidatedDouble natural_additional_bashing_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_increased_bashing_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_bashing_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_additional_piercing_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_increased_piercing_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_piercing_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_additional_slashing_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_increased_slashing_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_slashing_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_blocked_physical_damage = new ValidatedDouble(0.0, 0.0, 1024.0);
+		public ValidatedDouble natural_max_bleeding_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
+		public ValidatedDouble natural_bleeding_duration = new ValidatedDouble(201.0, 1000000.0, 1.0);
+		public ValidatedDouble natural_bleeding_tick_threshold = new ValidatedDouble(20.0, 0.0, 1024.0);
+		public ValidatedDouble natural_bleeding_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
+		public ValidatedDouble natural_bleeding_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+		public ValidatedDouble natural_additional_frost_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_increased_frost_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_blocked_frost_damage = new ValidatedDouble(0.0, 0.0, 1024.0);
+		public ValidatedDouble natural_frost_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_max_freeze_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
+		public ValidatedDouble natural_freeze_duration = new ValidatedDouble(200.0, 1000000.0, 1.0);
+		public ValidatedDouble natural_freeze_tick_threshold = new ValidatedDouble(20.0, 0.0, 1024.0);
+		public ValidatedDouble natural_freeze_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
+		public ValidatedDouble natural_freeze_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+		public ValidatedDouble natural_additional_fire_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_increased_fire_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_blocked_fire_damage = new ValidatedDouble(0.0, 0.0, 1024.0);
+		public ValidatedDouble natural_fire_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_max_burn_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
+		public ValidatedDouble natural_burn_duration = new ValidatedDouble(351.0, 1000000.0, 1.0);
+		public ValidatedDouble natural_burn_tick_threshold = new ValidatedDouble(20.0, 0.0, 1024.0);
+		public ValidatedDouble natural_burn_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
+		public ValidatedDouble natural_burn_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+		public ValidatedDouble natural_additional_lightning_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_increased_lightning_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_blocked_lightning_damage = new ValidatedDouble(0.0, 0.0, 1024.0);
+		public ValidatedDouble natural_lightning_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_max_shock_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
+		public ValidatedDouble natural_shock_duration = new ValidatedDouble(10.0, 1000000.0, 1.0);
+		public ValidatedDouble natural_shock_tick_threshold = new ValidatedDouble(20.0, 0.0, 1024.0);
+		public ValidatedDouble natural_shock_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
+		public ValidatedDouble natural_shock_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+		public ValidatedDouble natural_additional_poison_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_increased_poison_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_blocked_poison_damage = new ValidatedDouble(0.0, 0.0, 1024.0);
+		public ValidatedDouble natural_poison_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
+		public ValidatedDouble natural_max_poison_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
+		public ValidatedDouble natural_poison_duration = new ValidatedDouble(201.0, 1000000.0, 1.0);
+		public ValidatedDouble natural_poison_tick_threshold = new ValidatedDouble(20.0, 0.0, 1024.0);
+		public ValidatedDouble natural_poison_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
+		public ValidatedDouble natural_poison_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+		public ValidatedDouble natural_max_stagger_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
+		public ValidatedDouble natural_stagger_duration = new ValidatedDouble(200.0, 1000000.0, 1.0);
+		public ValidatedDouble natural_stagger_tick_threshold = new ValidatedDouble(20.0, 0.0, 1024.0);
+		public ValidatedDouble natural_stagger_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
+		public ValidatedDouble natural_stagger_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+		public ValidatedDouble natural_damage_taken_from_mana_multiplier = new ValidatedDouble(0.0, 0.0, 1024.0);
+		public ValidatedDouble natural_damage_taken_from_stamina_multiplier = new ValidatedDouble(0.0, 0.0, 1024.0);
 	}
 }
