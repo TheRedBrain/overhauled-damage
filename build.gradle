@@ -58,8 +58,8 @@ dependencies {
     modImplementation "maven.modrinth:stamina-attributes:${project.stamina_attributes_version}"
 //    modImplementation(files("libs/stamina-attributes-${project.stamina_attributes_version}.jar"))
 
-    // Mana Attributes TODO re-enable Mana Attributes
-//    modImplementation "maven.modrinth:mana-attributes:${project.mana_attributes_version}"
+    // Mana Attributes
+    modImplementation "maven.modrinth:mana-attributes:${project.mana_attributes_version}"
 //    modImplementation(files("libs/mana-attributes-${project.mana_attributes_version}.jar"))
 
     // Resource Bar API
@@ -67,8 +67,8 @@ dependencies {
 //    modImplementation(files("libs/resource-bar-api-${project.resource_bar_api_version}.jar"))
 
     // Blocking Overhaul
-//    modImplementation "maven.modrinth:resource-bar-api:${project.resource_bar_api_version}"
-    modImplementation(files("libs/blocking-overhaul-${project.blocking_overhaul_version}.jar"))
+    modImplementation "maven.modrinth:blocking-overhaul:${project.blocking_overhaul_version}"
+//    modImplementation(files("libs/blocking-overhaul-${project.blocking_overhaul_version}.jar"))
 
 }
 

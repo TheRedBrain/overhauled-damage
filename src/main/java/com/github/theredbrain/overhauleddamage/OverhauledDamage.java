@@ -97,6 +97,7 @@ public class OverhauledDamage implements ModInitializer {
 	public static final boolean isStaminaAttributesLoaded = FabricLoader.getInstance().isModLoaded("staminaattributes");
 	public static final boolean isBlockingOverhaulLoaded = FabricLoader.getInstance().isModLoaded("blockingoverhaul");
 
+	// region API
 	public static float getCurrentMana(LivingEntity livingEntity) {
 		float currentMana = 0.0F;
 		if (isManaAttributesLoaded) {
@@ -105,7 +106,6 @@ public class OverhauledDamage implements ModInitializer {
 		return currentMana;
 	}
 
-	// region API
 	public static void addMana(LivingEntity livingEntity, float amount) {
 		if (isManaAttributesLoaded) {
 			ManaAttributesIntegration.addMana(livingEntity, amount);

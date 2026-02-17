@@ -1,8 +1,8 @@
 # 3.0.0
 
 - update to 1.21.11
-- improved integration of Stamina Attributes and Mana Attributes
 
+## Additions
 
 - added server config options to set default entity attribute values (only for players)
 
