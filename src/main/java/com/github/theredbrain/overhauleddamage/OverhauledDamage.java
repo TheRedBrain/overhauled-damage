@@ -1,10 +1,20 @@
 package com.github.theredbrain.overhauleddamage;
 
+import com.github.theredbrain.overhauleddamage.advancements.criterion.OverhauledDamageEntityPredicate;
 import com.github.theredbrain.overhauleddamage.compatibility.BlockingOverhaulIntegration;
 import com.github.theredbrain.overhauleddamage.compatibility.ManaAttributesIntegration;
 import com.github.theredbrain.overhauleddamage.compatibility.StaminaAttributesIntegration;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.registry.DataAttachmentRegistry;
+import com.github.theredbrain.overhauleddamage.registry.EnchantmentEntityEffectRegistry;
+import com.github.theredbrain.overhauleddamage.registry.EntitySubPredicateTypeRegistry;
+import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddBleedingBuildUpEnchantmentEntityEffect;
+import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddBurnBuildUpEnchantmentEntityEffect;
+import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddFreezeBuildUpEnchantmentEntityEffect;
+import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddPoisonBuildUpEnchantmentEntityEffect;
+import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddShockBuildUpEnchantmentEntityEffect;
+import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddStaggerBuildUpEnchantmentEntityEffect;
+import com.mojang.serialization.MapCodec;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import net.fabricmc.api.ModInitializer;
@@ -92,6 +102,15 @@ public class OverhauledDamage implements ModInitializer {
 
 	public static Holder<Attribute> DAMAGE_TAKEN_FROM_MANA_MULTIPLIER;
 	public static Holder<Attribute> DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER;
+
+	public static MapCodec<OverhauledDamageEntityPredicate> OVERHAULED_DAMAGE_ENTITY_PREDICATE;
+
+	public static MapCodec<AddBleedingBuildUpEnchantmentEntityEffect> ADD_BLEEDING_BUILD_UP;
+	public static MapCodec<AddBurnBuildUpEnchantmentEntityEffect> ADD_BURN_BUILD_UP;
+	public static MapCodec<AddFreezeBuildUpEnchantmentEntityEffect> ADD_FREEZE_BUILD_UP;
+	public static MapCodec<AddPoisonBuildUpEnchantmentEntityEffect> ADD_POISON_BUILD_UP;
+	public static MapCodec<AddShockBuildUpEnchantmentEntityEffect> ADD_SHOCK_BUILD_UP;
+	public static MapCodec<AddStaggerBuildUpEnchantmentEntityEffect> ADD_STAGGER_BUILD_UP;
 
 	public static final boolean isManaAttributesLoaded = FabricLoader.getInstance().isModLoaded("manaattributes");
 	public static final boolean isStaminaAttributesLoaded = FabricLoader.getInstance().isModLoaded("staminaattributes");
@@ -183,6 +202,8 @@ public class OverhauledDamage implements ModInitializer {
 		SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new, RegisterType.BOTH);
 
 		DataAttachmentRegistry.init();
+		EnchantmentEntityEffectRegistry.init();
+		EntitySubPredicateTypeRegistry.init();
 	}
 
 	public static Identifier identifier(String path) {
