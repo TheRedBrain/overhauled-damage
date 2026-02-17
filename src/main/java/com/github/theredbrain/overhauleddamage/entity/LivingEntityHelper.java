@@ -16,6 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
@@ -1009,7 +1010,7 @@ public class LivingEntityHelper {
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp() != -1.0f && !livingEntity.hasEffect(bleeding_status_effect.get())) {
 				double f = DataAttachmentHelper.getBleedingBuildUp(livingEntity);
-				DataAttachmentHelper.setBleedingBuildUp(livingEntity, f + amount);
+				DataAttachmentHelper.setBleedingBuildUp(livingEntity, (float) Mth.clamp(f + amount, 0.0, ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()));
 				if (DataAttachmentHelper.getBleedingBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingTickThreshold());
 				} else if (amount > 0) {
@@ -1028,7 +1029,7 @@ public class LivingEntityHelper {
 			}
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp() != -1.0f) {
-				DataAttachmentHelper.setBurnBuildUp(livingEntity, DataAttachmentHelper.getBurnBuildUp(livingEntity) + amount);
+				DataAttachmentHelper.setBurnBuildUp(livingEntity, (float) Mth.clamp(DataAttachmentHelper.getBurnBuildUp(livingEntity) + amount, 0.0, ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()));
 				if (DataAttachmentHelper.getBurnBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnTickThreshold());
 				} else if (amount > 0) {
@@ -1048,7 +1049,7 @@ public class LivingEntityHelper {
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp() != -1.0f && !livingEntity.hasEffect(freeze_status_effect.get())) {
 				double f = DataAttachmentHelper.getFreezeBuildUp(livingEntity);
-				DataAttachmentHelper.setFreezeBuildUp(livingEntity, f + amount);
+				DataAttachmentHelper.setFreezeBuildUp(livingEntity, (float) Mth.clamp(f + amount, 0.0, ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()));
 				if (DataAttachmentHelper.getFreezeBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeTickThreshold());
 				} else if (amount > 0) {
@@ -1068,7 +1069,7 @@ public class LivingEntityHelper {
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp() != -1.0f && !livingEntity.hasEffect(staggered_status_effect.get())) {
 				double f = DataAttachmentHelper.getStaggerBuildUp(livingEntity);
-				DataAttachmentHelper.setStaggerBuildUp(livingEntity, f + amount);
+				DataAttachmentHelper.setStaggerBuildUp(livingEntity, (float) Mth.clamp(f + amount, 0.0, ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()));
 				if (DataAttachmentHelper.getStaggerBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerTickThreshold());
 				} else if (amount > 0) {
@@ -1088,7 +1089,7 @@ public class LivingEntityHelper {
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp() != -1.0f) {
 				double f = DataAttachmentHelper.getPoisonBuildUp(livingEntity);
-				DataAttachmentHelper.setPoisonBuildUp(livingEntity, f + amount);
+				DataAttachmentHelper.setPoisonBuildUp(livingEntity, (float) Mth.clamp(f + amount, 0.0, ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()));
 				if (DataAttachmentHelper.getPoisonBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonTickThreshold());
 				} else if (amount > 0) {
@@ -1108,7 +1109,7 @@ public class LivingEntityHelper {
 		} else {
 			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp() != -1.0f) {
 				double f = DataAttachmentHelper.getShockBuildUp(livingEntity);
-				DataAttachmentHelper.setShockBuildUp(livingEntity, f + amount);
+				DataAttachmentHelper.setShockBuildUp(livingEntity, (float) Mth.clamp(f + amount, 0.0, ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()));
 				if (DataAttachmentHelper.getShockBuildUp(livingEntity) > ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockTickTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockTickThreshold());
 				} else if (amount > 0) {
