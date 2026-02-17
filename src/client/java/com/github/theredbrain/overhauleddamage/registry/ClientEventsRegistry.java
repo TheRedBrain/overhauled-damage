@@ -5,6 +5,7 @@ import com.github.theredbrain.overhauleddamage.OverhauledDamageClient;
 import com.github.theredbrain.overhauleddamage.config.ClientConfig;
 import com.github.theredbrain.overhauleddamage.entity.DataAttachmentHelper;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
+import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
 import com.github.theredbrain.overhauleddamage.gui.hud.DuckGuiMixin;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
@@ -91,7 +92,7 @@ public class ClientEventsRegistry {
 				DuckGuiMixin gui = ((DuckGuiMixin) minecraft.gui);
 
 				// region bleeding
-				int bleedingBuildUp = Mth.ceil(DataAttachmentHelper.getBleedingBuildUp(localPlayer));
+				int bleedingBuildUp = Mth.ceil(LivingEntityHelper.getBleedingBuildUp(localPlayer));
 
 				int currentDisplayBleedingBuildUp = bleedingBuildUp;
 
@@ -247,7 +248,7 @@ public class ClientEventsRegistry {
 				// endregion bleeding
 
 				// region burn
-				int burnBuildUp = Mth.ceil(DataAttachmentHelper.getBurnBuildUp(localPlayer));
+				int burnBuildUp = Mth.ceil(LivingEntityHelper.getBurnBuildUp(localPlayer));
 
 				int currentDisplayBurnBuildUp = burnBuildUp;
 
@@ -403,7 +404,7 @@ public class ClientEventsRegistry {
 				// endregion burn
 
 				// region freeze
-				int freezeBuildUp = Mth.ceil(DataAttachmentHelper.getFreezeBuildUp(localPlayer));
+				int freezeBuildUp = Mth.ceil(LivingEntityHelper.getFreezeBuildUp(localPlayer));
 
 				int currentDisplayFreezeBuildUp = freezeBuildUp;
 
@@ -559,7 +560,7 @@ public class ClientEventsRegistry {
 				// endregion freeze
 
 				// region poison
-				int poisonBuildUp = Mth.ceil(DataAttachmentHelper.getPoisonBuildUp(localPlayer));
+				int poisonBuildUp = Mth.ceil(LivingEntityHelper.getPoisonBuildUp(localPlayer));
 
 				int currentDisplayPoisonBuildUp = poisonBuildUp;
 
@@ -715,7 +716,7 @@ public class ClientEventsRegistry {
 				// endregion poison
 
 				// region shock
-				int shockBuildUp = Mth.ceil(DataAttachmentHelper.getShockBuildUp(localPlayer));
+				int shockBuildUp = Mth.ceil(LivingEntityHelper.getShockBuildUp(localPlayer));
 
 				int currentDisplayShockBuildUp = shockBuildUp;
 
@@ -871,7 +872,7 @@ public class ClientEventsRegistry {
 				// endregion shock
 
 				// region stagger
-				int staggerBuildUp = Mth.ceil(DataAttachmentHelper.getStaggerBuildUp(localPlayer));
+				int staggerBuildUp = Mth.ceil(LivingEntityHelper.getStaggerBuildUp(localPlayer));
 
 				int currentDisplayStaggerBuildUp = staggerBuildUp;
 
