@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.github.theredbrain.overhauleddamage.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+		"gui.hud.GuiMixin"
+	],
+	"mixinextras": {
+		"minVersion": "0.5.0"
+	},
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

@@ -5,21 +5,25 @@ import com.github.theredbrain.overhauleddamage.OverhauledDamageClient;
 import com.github.theredbrain.overhauleddamage.config.ClientConfig;
 import com.github.theredbrain.overhauleddamage.entity.DataAttachmentHelper;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
+import com.github.theredbrain.overhauleddamage.gui.hud.DuckGuiMixin;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPI;
 import com.github.theredbrain.resourcebarapi.ResourceBarAPIClient;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
 import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Util;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ClientEventsRegistry {
 	private static final String BLEEDING_BAR_IDENTIFIER_STRING = OverhauledDamage.MOD_ID + ":bleeding";
@@ -32,61 +36,108 @@ public class ClientEventsRegistry {
 	private static final Identifier ICON_BLEEDING_CONTAINER = OverhauledDamage.identifier("hud/icon_bleeding_container");
 	private static final Identifier ICON_BLEEDING_FULL = OverhauledDamage.identifier("hud/icon_bleeding_full");
 	private static final Identifier ICON_BLEEDING_HALF = OverhauledDamage.identifier("hud/icon_bleeding_half");
+	private static final Identifier ICON_BLEEDING_CONTAINER_BLINKING = OverhauledDamage.identifier("hud/icon_bleeding_container_blinking");
+	private static final Identifier ICON_BLEEDING_FULL_BLINKING = OverhauledDamage.identifier("hud/icon_bleeding_full_blinking");
+	private static final Identifier ICON_BLEEDING_HALF_BLINKING = OverhauledDamage.identifier("hud/icon_bleeding_half_blinking");
 
 	private static final Identifier ICON_BURNING_CONTAINER = OverhauledDamage.identifier("hud/icon_burning_container");
 	private static final Identifier ICON_BURNING_FULL = OverhauledDamage.identifier("hud/icon_burning_full");
 	private static final Identifier ICON_BURNING_HALF = OverhauledDamage.identifier("hud/icon_burning_half");
+	private static final Identifier ICON_BURNING_CONTAINER_BLINKING = OverhauledDamage.identifier("hud/icon_burning_container_blinking");
+	private static final Identifier ICON_BURNING_FULL_BLINKING = OverhauledDamage.identifier("hud/icon_burning_full_blinking");
+	private static final Identifier ICON_BURNING_HALF_BLINKING = OverhauledDamage.identifier("hud/icon_burning_half_blinking");
 
 	private static final Identifier ICON_FREEZE_CONTAINER = OverhauledDamage.identifier("hud/icon_freeze_container");
 	private static final Identifier ICON_FREEZE_FULL = OverhauledDamage.identifier("hud/icon_freeze_full");
 	private static final Identifier ICON_FREEZE_HALF = OverhauledDamage.identifier("hud/icon_freeze_half");
+	private static final Identifier ICON_FREEZE_CONTAINER_BLINKING = OverhauledDamage.identifier("hud/icon_freeze_container_blinking");
+	private static final Identifier ICON_FREEZE_FULL_BLINKING = OverhauledDamage.identifier("hud/icon_freeze_full_blinking");
+	private static final Identifier ICON_FREEZE_HALF_BLINKING = OverhauledDamage.identifier("hud/icon_freeze_half_blinking");
 
 	private static final Identifier ICON_POISON_CONTAINER = OverhauledDamage.identifier("hud/icon_poison_container");
 	private static final Identifier ICON_POISON_FULL = OverhauledDamage.identifier("hud/icon_poison_full");
 	private static final Identifier ICON_POISON_HALF = OverhauledDamage.identifier("hud/icon_poison_half");
+	private static final Identifier ICON_POISON_CONTAINER_BLINKING = OverhauledDamage.identifier("hud/icon_poison_container_blinking");
+	private static final Identifier ICON_POISON_FULL_BLINKING = OverhauledDamage.identifier("hud/icon_poison_full_blinking");
+	private static final Identifier ICON_POISON_HALF_BLINKING = OverhauledDamage.identifier("hud/icon_poison_half_blinking");
 
 	private static final Identifier ICON_SHOCK_CONTAINER = OverhauledDamage.identifier("hud/icon_shock_container");
 	private static final Identifier ICON_SHOCK_FULL = OverhauledDamage.identifier("hud/icon_shock_full");
 	private static final Identifier ICON_SHOCK_HALF = OverhauledDamage.identifier("hud/icon_shock_half");
+	private static final Identifier ICON_SHOCK_CONTAINER_BLINKING = OverhauledDamage.identifier("hud/icon_shock_container_blinking");
+	private static final Identifier ICON_SHOCK_FULL_BLINKING = OverhauledDamage.identifier("hud/icon_shock_full_blinking");
+	private static final Identifier ICON_SHOCK_HALF_BLINKING = OverhauledDamage.identifier("hud/icon_shock_half_blinking");
 
 	private static final Identifier ICON_STAGGER_CONTAINER = OverhauledDamage.identifier("hud/icon_stagger_container");
 	private static final Identifier ICON_STAGGER_FULL = OverhauledDamage.identifier("hud/icon_stagger_full");
 	private static final Identifier ICON_STAGGER_HALF = OverhauledDamage.identifier("hud/icon_stagger_half");
+	private static final Identifier ICON_STAGGER_CONTAINER_BLINKING = OverhauledDamage.identifier("hud/icon_stagger_container_blinking");
+	private static final Identifier ICON_STAGGER_FULL_BLINKING = OverhauledDamage.identifier("hud/icon_stagger_full_blinking");
+	private static final Identifier ICON_STAGGER_HALF_BLINKING = OverhauledDamage.identifier("hud/icon_stagger_half_blinking");
 
 	public static void initializeClientEvents() {
-		HudRenderCallback.EVENT.register((matrixStack, delta) -> {
-			Minecraft minecraftClient = Minecraft.getInstance();
-			Player playerEntity = minecraftClient.player;
+		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, OverhauledDamage.identifier("effect_build_ups"), ((guiGraphics, delta) -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			LocalPlayer localPlayer = minecraft.player;
 			ClientConfig clientConfig = OverhauledDamageClient.CLIENT_CONFIG;
 
-			if (playerEntity != null && !playerEntity.isCreative() && !minecraftClient.options.hideGui) {
+			if (localPlayer != null && !localPlayer.isCreative() && !minecraft.options.hideGui) {
 
 				int dynamic_offset_x = 0;
 				int dynamic_offset_y = 0;
 
-				// region bleeding
-				double bleedingBuildUp = Mth.ceil(DataAttachmentHelper.getBleedingBuildUp(playerEntity));
-				double maxBleedingBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBleedingBuildUp());
+				boolean shouldBlink = false;
 
-				if (!playerEntity.isCreative() && maxBleedingBuildUp > 0) {
+				DuckGuiMixin gui = ((DuckGuiMixin) minecraft.gui);
+
+				// region bleeding
+				int bleedingBuildUp = Mth.ceil(DataAttachmentHelper.getBleedingBuildUp(localPlayer));
+
+				int currentDisplayBleedingBuildUp = bleedingBuildUp;
+
+				if (clientConfig.bleedingBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+					shouldBlink = gui.overhauleddamage$getBleedingBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getBleedingBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
+					long l = Util.getMillis();
+					if (bleedingBuildUp < gui.overhauleddamage$getLastBleedingBuildUp()) {
+						gui.overhauleddamage$setLastBleedingBuildUpTime(l);
+						gui.overhauleddamage$setBleedingBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 10);
+					} else if (bleedingBuildUp > gui.overhauleddamage$getLastBleedingBuildUp()) {
+						gui.overhauleddamage$setLastBleedingBuildUpTime(l);
+						gui.overhauleddamage$setBleedingBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 5);
+					}
+
+					if (l - gui.overhauleddamage$getLastBleedingBuildUpTime() > 100L) {
+						gui.overhauleddamage$setDisplayBleedingBuildUp(bleedingBuildUp);
+						gui.overhauleddamage$setLastBleedingBuildUpTime(l);
+					}
+
+					gui.overhauleddamage$setLastBleedingBuildUp(bleedingBuildUp);
+					currentDisplayBleedingBuildUp = gui.overhauleddamage$getDisplayBleedingBuildUp();
+				}
+
+				double maxBleedingBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxBleedingBuildUp()), Math.max(currentDisplayBleedingBuildUp, bleedingBuildUp));
+
+				if (maxBleedingBuildUp > 0) {
 					boolean should_bleeding_bar_be_rendered = bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.show_empty_bar;
 					boolean should_bleeding_icon_be_rendered = clientConfig.bleedingBuildUpSettings.show_icon && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_bleeding_number_be_rendered = clientConfig.bleedingBuildUpSettings.show_number && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.bleedingBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.bleedingBuildUpSettings.origin);
 
 					if (clientConfig.bleedingBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_bleeding_bar_be_rendered) {
-						ResourceBarAPIClient.drawIconResourceBar(
-								minecraftClient,
-								matrixStack,
-								BLEEDING_BAR_IDENTIFIER_STRING,
-								bleedingBuildUp,
+
+						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								currentDisplayBleedingBuildUp,
 								maxBleedingBuildUp,
-								ICON_BLEEDING_CONTAINER,
-								ICON_BLEEDING_FULL,
-								ICON_BLEEDING_HALF,
-								new ArrayList<>(),
-								new ArrayList<>(),
+								shouldBlink ? ICON_BLEEDING_CONTAINER_BLINKING : ICON_BLEEDING_CONTAINER,
+								shouldBlink ? ICON_BLEEDING_FULL_BLINKING : ICON_BLEEDING_FULL,
+								shouldBlink ? ICON_BLEEDING_HALF_BLINKING : ICON_BLEEDING_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
+						ResourceBarAPIClient.drawIconResourceBar(
+								guiGraphics,
+								list,
 								originPos.getLeft(),
 								originPos.getRight(),
 								clientConfig.bleedingBuildUpSettings.iconBarSettings.offset_x.get(),
@@ -97,8 +148,8 @@ public class ClientEventsRegistry {
 						);
 					} else if (clientConfig.bleedingBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_bleeding_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
-								minecraftClient,
-								matrixStack,
+								minecraft,
+								guiGraphics,
 								BLEEDING_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -129,7 +180,7 @@ public class ClientEventsRegistry {
 								},
 								bleedingBuildUp,
 								maxBleedingBuildUp,
-								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBleedingBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getBleedingBuildUpReduction()),
 								maxBleedingBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -173,9 +224,9 @@ public class ClientEventsRegistry {
 					}
 					if (should_bleeding_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
-								minecraftClient,
-								minecraftClient.font,
-								matrixStack,
+								minecraft,
+								minecraft.font,
+								guiGraphics,
 								BLEEDING_BAR_IDENTIFIER_STRING,
 								bleedingBuildUp,
 								maxBleedingBuildUp,
@@ -196,28 +247,53 @@ public class ClientEventsRegistry {
 				// endregion bleeding
 
 				// region burn
-				double burnBuildUp = Mth.ceil(DataAttachmentHelper.getBurnBuildUp(playerEntity));
-				double maxBurnBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxBurnBuildUp());
+				int burnBuildUp = Mth.ceil(DataAttachmentHelper.getBurnBuildUp(localPlayer));
 
-				if (!playerEntity.isCreative() && maxBurnBuildUp > 0) {
+				int currentDisplayBurnBuildUp = burnBuildUp;
+
+				if (clientConfig.burnBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+					shouldBlink = gui.overhauleddamage$getBurnBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getBurnBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
+					long l = Util.getMillis();
+					if (burnBuildUp < gui.overhauleddamage$getLastBurnBuildUp()) {
+						gui.overhauleddamage$setLastBurnBuildUpTime(l);
+						gui.overhauleddamage$setBurnBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 10);
+					} else if (burnBuildUp > gui.overhauleddamage$getLastBurnBuildUp()) {
+						gui.overhauleddamage$setLastBurnBuildUpTime(l);
+						gui.overhauleddamage$setBurnBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 5);
+					}
+
+					if (l - gui.overhauleddamage$getLastBurnBuildUpTime() > 100L) {
+						gui.overhauleddamage$setDisplayBurnBuildUp(burnBuildUp);
+						gui.overhauleddamage$setLastBurnBuildUpTime(l);
+					}
+
+					gui.overhauleddamage$setLastBurnBuildUp(burnBuildUp);
+					currentDisplayBurnBuildUp = gui.overhauleddamage$getDisplayBurnBuildUp();
+				}
+
+				double maxBurnBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxBurnBuildUp()), Math.max(currentDisplayBurnBuildUp, burnBuildUp));
+
+				if (maxBurnBuildUp > 0) {
 					boolean should_burn_bar_be_rendered = burnBuildUp > 0 || clientConfig.burnBuildUpSettings.show_empty_bar;
 					boolean should_burn_icon_be_rendered = clientConfig.burnBuildUpSettings.show_icon && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_burn_number_be_rendered = clientConfig.burnBuildUpSettings.show_number && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.burnBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.burnBuildUpSettings.origin);
 
 					if (clientConfig.burnBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_burn_bar_be_rendered) {
+
+						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								currentDisplayBleedingBuildUp,
+								maxBleedingBuildUp,
+								shouldBlink ? ICON_BURNING_CONTAINER_BLINKING : ICON_BURNING_CONTAINER,
+								shouldBlink ? ICON_BURNING_FULL_BLINKING : ICON_BURNING_FULL,
+								shouldBlink ? ICON_BURNING_HALF_BLINKING : ICON_BURNING_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								minecraftClient,
-								matrixStack,
-								BURN_BAR_IDENTIFIER_STRING,
-								burnBuildUp,
-								maxBurnBuildUp,
-								ICON_BURNING_CONTAINER,
-								ICON_BURNING_FULL,
-								ICON_BURNING_HALF,
-								new ArrayList<>(),
-								new ArrayList<>(),
+								guiGraphics,
+								list,
 								originPos.getLeft(),
 								originPos.getRight(),
 								clientConfig.burnBuildUpSettings.iconBarSettings.offset_x.get(),
@@ -228,8 +304,8 @@ public class ClientEventsRegistry {
 						);
 					} else if (clientConfig.burnBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_burn_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
-								minecraftClient,
-								matrixStack,
+								minecraft,
+								guiGraphics,
 								BURN_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -260,7 +336,7 @@ public class ClientEventsRegistry {
 								},
 								burnBuildUp,
 								maxBurnBuildUp,
-								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getBurnBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getBurnBuildUpReduction()),
 								maxBurnBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -304,9 +380,9 @@ public class ClientEventsRegistry {
 					}
 					if (should_burn_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
-								minecraftClient,
-								minecraftClient.font,
-								matrixStack,
+								minecraft,
+								minecraft.font,
+								guiGraphics,
 								BURN_BAR_IDENTIFIER_STRING,
 								burnBuildUp,
 								maxBurnBuildUp,
@@ -327,28 +403,53 @@ public class ClientEventsRegistry {
 				// endregion burn
 
 				// region freeze
-				double freezeBuildUp = Mth.ceil(DataAttachmentHelper.getStaggerBuildUp(playerEntity));
-				double maxFreezeBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxFreezeBuildUp());
+				int freezeBuildUp = Mth.ceil(DataAttachmentHelper.getFreezeBuildUp(localPlayer));
 
-				if (!playerEntity.isCreative() && maxFreezeBuildUp > 0) {
+				int currentDisplayFreezeBuildUp = freezeBuildUp;
+
+				if (clientConfig.freezeBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+					shouldBlink = gui.overhauleddamage$getFreezeBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getFreezeBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
+					long l = Util.getMillis();
+					if (freezeBuildUp < gui.overhauleddamage$getLastFreezeBuildUp()) {
+						gui.overhauleddamage$setLastFreezeBuildUpTime(l);
+						gui.overhauleddamage$setFreezeBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 10);
+					} else if (freezeBuildUp > gui.overhauleddamage$getLastFreezeBuildUp()) {
+						gui.overhauleddamage$setLastFreezeBuildUpTime(l);
+						gui.overhauleddamage$setFreezeBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 5);
+					}
+
+					if (l - gui.overhauleddamage$getLastFreezeBuildUpTime() > 100L) {
+						gui.overhauleddamage$setDisplayFreezeBuildUp(freezeBuildUp);
+						gui.overhauleddamage$setLastFreezeBuildUpTime(l);
+					}
+
+					gui.overhauleddamage$setLastFreezeBuildUp(freezeBuildUp);
+					currentDisplayFreezeBuildUp = gui.overhauleddamage$getDisplayFreezeBuildUp();
+				}
+
+				double maxFreezeBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxFreezeBuildUp()), Math.max(currentDisplayFreezeBuildUp, freezeBuildUp));
+
+				if (maxFreezeBuildUp > 0) {
 					boolean should_freeze_bar_be_rendered = freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.show_empty_bar;
 					boolean should_freeze_icon_be_rendered = clientConfig.freezeBuildUpSettings.show_icon && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_freeze_number_be_rendered = clientConfig.freezeBuildUpSettings.show_number && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.freezeBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.freezeBuildUpSettings.origin);
 
 					if (clientConfig.freezeBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_freeze_bar_be_rendered) {
+
+						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								currentDisplayBleedingBuildUp,
+								maxBleedingBuildUp,
+								shouldBlink ? ICON_FREEZE_CONTAINER_BLINKING : ICON_FREEZE_CONTAINER,
+								shouldBlink ? ICON_FREEZE_FULL_BLINKING : ICON_FREEZE_FULL,
+								shouldBlink ? ICON_FREEZE_HALF_BLINKING : ICON_FREEZE_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								minecraftClient,
-								matrixStack,
-								FREEZE_BAR_IDENTIFIER_STRING,
-								freezeBuildUp,
-								maxFreezeBuildUp,
-								ICON_FREEZE_CONTAINER,
-								ICON_FREEZE_FULL,
-								ICON_FREEZE_HALF,
-								new ArrayList<>(),
-								new ArrayList<>(),
+								guiGraphics,
+								list,
 								originPos.getLeft(),
 								originPos.getRight(),
 								clientConfig.freezeBuildUpSettings.iconBarSettings.offset_x.get(),
@@ -359,8 +460,8 @@ public class ClientEventsRegistry {
 						);
 					} else if (clientConfig.freezeBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_freeze_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
-								minecraftClient,
-								matrixStack,
+								minecraft,
+								guiGraphics,
 								FREEZE_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -391,7 +492,7 @@ public class ClientEventsRegistry {
 								},
 								freezeBuildUp,
 								maxFreezeBuildUp,
-								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getFreezeBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getFreezeBuildUpReduction()),
 								maxFreezeBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -435,9 +536,9 @@ public class ClientEventsRegistry {
 					}
 					if (should_freeze_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
-								minecraftClient,
-								minecraftClient.font,
-								matrixStack,
+								minecraft,
+								minecraft.font,
+								guiGraphics,
 								FREEZE_BAR_IDENTIFIER_STRING,
 								freezeBuildUp,
 								maxFreezeBuildUp,
@@ -458,28 +559,53 @@ public class ClientEventsRegistry {
 				// endregion freeze
 
 				// region poison
-				double poisonBuildUp = Mth.ceil(DataAttachmentHelper.getPoisonBuildUp(playerEntity));
-				double maxPoisonBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxPoisonBuildUp());
+				int poisonBuildUp = Mth.ceil(DataAttachmentHelper.getPoisonBuildUp(localPlayer));
 
-				if (!playerEntity.isCreative() && maxPoisonBuildUp > 0) {
+				int currentDisplayPoisonBuildUp = poisonBuildUp;
+
+				if (clientConfig.poisonBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+					shouldBlink = gui.overhauleddamage$getPoisonBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getPoisonBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
+					long l = Util.getMillis();
+					if (poisonBuildUp < gui.overhauleddamage$getLastPoisonBuildUp()) {
+						gui.overhauleddamage$setLastPoisonBuildUpTime(l);
+						gui.overhauleddamage$setPoisonBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 10);
+					} else if (poisonBuildUp > gui.overhauleddamage$getLastPoisonBuildUp()) {
+						gui.overhauleddamage$setLastPoisonBuildUpTime(l);
+						gui.overhauleddamage$setPoisonBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 5);
+					}
+
+					if (l - gui.overhauleddamage$getLastPoisonBuildUpTime() > 100L) {
+						gui.overhauleddamage$setDisplayPoisonBuildUp(poisonBuildUp);
+						gui.overhauleddamage$setLastPoisonBuildUpTime(l);
+					}
+
+					gui.overhauleddamage$setLastPoisonBuildUp(poisonBuildUp);
+					currentDisplayPoisonBuildUp = gui.overhauleddamage$getDisplayPoisonBuildUp();
+				}
+
+				double maxPoisonBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxPoisonBuildUp()), Math.max(currentDisplayPoisonBuildUp, poisonBuildUp));
+
+				if (maxPoisonBuildUp > 0) {
 					boolean should_poison_bar_be_rendered = poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.show_empty_bar;
 					boolean should_poison_icon_be_rendered = clientConfig.poisonBuildUpSettings.show_icon && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_poison_number_be_rendered = clientConfig.poisonBuildUpSettings.show_number && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.poisonBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.poisonBuildUpSettings.origin);
 
 					if (clientConfig.poisonBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_poison_bar_be_rendered) {
+
+						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								currentDisplayBleedingBuildUp,
+								maxBleedingBuildUp,
+								shouldBlink ? ICON_POISON_CONTAINER_BLINKING : ICON_POISON_CONTAINER,
+								shouldBlink ? ICON_POISON_FULL_BLINKING : ICON_POISON_FULL,
+								shouldBlink ? ICON_POISON_HALF_BLINKING : ICON_POISON_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								minecraftClient,
-								matrixStack,
-								POISON_BAR_IDENTIFIER_STRING,
-								poisonBuildUp,
-								maxPoisonBuildUp,
-								ICON_POISON_CONTAINER,
-								ICON_POISON_FULL,
-								ICON_POISON_HALF,
-								new ArrayList<>(),
-								new ArrayList<>(),
+								guiGraphics,
+								list,
 								originPos.getLeft(),
 								originPos.getRight(),
 								clientConfig.poisonBuildUpSettings.iconBarSettings.offset_x.get(),
@@ -490,8 +616,8 @@ public class ClientEventsRegistry {
 						);
 					} else if (clientConfig.poisonBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_poison_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
-								minecraftClient,
-								matrixStack,
+								minecraft,
+								guiGraphics,
 								POISON_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -522,7 +648,7 @@ public class ClientEventsRegistry {
 								},
 								poisonBuildUp,
 								maxPoisonBuildUp,
-								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getPoisonBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getPoisonBuildUpReduction()),
 								maxPoisonBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -566,9 +692,9 @@ public class ClientEventsRegistry {
 					}
 					if (should_poison_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
-								minecraftClient,
-								minecraftClient.font,
-								matrixStack,
+								minecraft,
+								minecraft.font,
+								guiGraphics,
 								POISON_BAR_IDENTIFIER_STRING,
 								poisonBuildUp,
 								maxPoisonBuildUp,
@@ -589,28 +715,53 @@ public class ClientEventsRegistry {
 				// endregion poison
 
 				// region shock
-				double shockBuildUp = Mth.ceil(DataAttachmentHelper.getShockBuildUp(playerEntity));
-				double maxShockBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxShockBuildUp());
+				int shockBuildUp = Mth.ceil(DataAttachmentHelper.getShockBuildUp(localPlayer));
 
-				if (!playerEntity.isCreative() && maxShockBuildUp > 0) {
+				int currentDisplayShockBuildUp = shockBuildUp;
+
+				if (clientConfig.shockBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+					shouldBlink = gui.overhauleddamage$getShockBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getShockBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
+					long l = Util.getMillis();
+					if (shockBuildUp < gui.overhauleddamage$getLastShockBuildUp()) {
+						gui.overhauleddamage$setLastShockBuildUpTime(l);
+						gui.overhauleddamage$setShockBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 10);
+					} else if (shockBuildUp > gui.overhauleddamage$getLastShockBuildUp()) {
+						gui.overhauleddamage$setLastShockBuildUpTime(l);
+						gui.overhauleddamage$setShockBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 5);
+					}
+
+					if (l - gui.overhauleddamage$getLastShockBuildUpTime() > 100L) {
+						gui.overhauleddamage$setDisplayShockBuildUp(shockBuildUp);
+						gui.overhauleddamage$setLastShockBuildUpTime(l);
+					}
+
+					gui.overhauleddamage$setLastShockBuildUp(shockBuildUp);
+					currentDisplayShockBuildUp = gui.overhauleddamage$getDisplayShockBuildUp();
+				}
+
+				double maxShockBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxShockBuildUp()), Math.max(currentDisplayShockBuildUp, shockBuildUp));
+
+				if (maxShockBuildUp > 0) {
 					boolean should_shock_bar_be_rendered = shockBuildUp > 0 || clientConfig.shockBuildUpSettings.show_empty_bar;
 					boolean should_shock_icon_be_rendered = clientConfig.shockBuildUpSettings.show_icon && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_shock_number_be_rendered = clientConfig.shockBuildUpSettings.show_number && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.shockBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.shockBuildUpSettings.origin);
 
 					if (clientConfig.shockBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_shock_bar_be_rendered) {
+
+						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								currentDisplayBleedingBuildUp,
+								maxBleedingBuildUp,
+								shouldBlink ? ICON_SHOCK_CONTAINER_BLINKING : ICON_SHOCK_CONTAINER,
+								shouldBlink ? ICON_SHOCK_FULL_BLINKING : ICON_SHOCK_FULL,
+								shouldBlink ? ICON_SHOCK_HALF_BLINKING : ICON_SHOCK_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								minecraftClient,
-								matrixStack,
-								SHOCK_BAR_IDENTIFIER_STRING,
-								shockBuildUp,
-								maxShockBuildUp,
-								ICON_SHOCK_CONTAINER,
-								ICON_SHOCK_FULL,
-								ICON_SHOCK_HALF,
-								new ArrayList<>(),
-								new ArrayList<>(),
+								guiGraphics,
+								list,
 								originPos.getLeft(),
 								originPos.getRight(),
 								clientConfig.shockBuildUpSettings.iconBarSettings.offset_x.get(),
@@ -621,8 +772,8 @@ public class ClientEventsRegistry {
 						);
 					} else if (clientConfig.shockBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_shock_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
-								minecraftClient,
-								matrixStack,
+								minecraft,
+								guiGraphics,
 								SHOCK_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -653,7 +804,7 @@ public class ClientEventsRegistry {
 								},
 								shockBuildUp,
 								maxShockBuildUp,
-								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getShockBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getShockBuildUpReduction()),
 								maxShockBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -697,9 +848,9 @@ public class ClientEventsRegistry {
 					}
 					if (should_shock_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
-								minecraftClient,
-								minecraftClient.font,
-								matrixStack,
+								minecraft,
+								minecraft.font,
+								guiGraphics,
 								SHOCK_BAR_IDENTIFIER_STRING,
 								shockBuildUp,
 								maxShockBuildUp,
@@ -720,28 +871,53 @@ public class ClientEventsRegistry {
 				// endregion shock
 
 				// region stagger
-				double staggerBuildUp = Mth.ceil(DataAttachmentHelper.getStaggerBuildUp(playerEntity));
-				double maxStaggerBuildUp = Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getMaxStaggerBuildUp());
+				int staggerBuildUp = Mth.ceil(DataAttachmentHelper.getStaggerBuildUp(localPlayer));
 
-				if (!playerEntity.isCreative() && maxStaggerBuildUp > 0) {
+				int currentDisplayStaggerBuildUp = staggerBuildUp;
+
+				if (clientConfig.staggerBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+					shouldBlink = gui.overhauleddamage$getStaggerBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getStaggerBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
+					long l = Util.getMillis();
+					if (staggerBuildUp < gui.overhauleddamage$getLastStaggerBuildUp()) {
+						gui.overhauleddamage$setLastStaggerBuildUpTime(l);
+						gui.overhauleddamage$setStaggerBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 10);
+					} else if (staggerBuildUp > gui.overhauleddamage$getLastStaggerBuildUp()) {
+						gui.overhauleddamage$setLastStaggerBuildUpTime(l);
+						gui.overhauleddamage$setStaggerBuildUpIconBlinkTime(gui.overhauleddamage$getTickCount() + 5);
+					}
+
+					if (l - gui.overhauleddamage$getLastStaggerBuildUpTime() > 100L) {
+						gui.overhauleddamage$setDisplayStaggerBuildUp(staggerBuildUp);
+						gui.overhauleddamage$setLastStaggerBuildUpTime(l);
+					}
+
+					gui.overhauleddamage$setLastStaggerBuildUp(staggerBuildUp);
+					currentDisplayStaggerBuildUp = gui.overhauleddamage$getDisplayStaggerBuildUp();
+				}
+
+				double maxStaggerBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxStaggerBuildUp()), Math.max(currentDisplayStaggerBuildUp, staggerBuildUp));
+
+				if (maxStaggerBuildUp > 0) {
 					boolean should_stagger_bar_be_rendered = staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.show_empty_bar;
 					boolean should_stagger_icon_be_rendered = clientConfig.staggerBuildUpSettings.show_icon && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_stagger_number_be_rendered = clientConfig.staggerBuildUpSettings.show_number && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(matrixStack, clientConfig.staggerBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.staggerBuildUpSettings.origin);
 
 					if (clientConfig.staggerBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_stagger_bar_be_rendered) {
-						ResourceBarAPIClient.drawIconResourceBar(
-								minecraftClient,
-								matrixStack,
-								STAGGER_BAR_IDENTIFIER_STRING,
-								staggerBuildUp,
+
+						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
+						list.add(new ResourceBarAPI.ResourceBarIconType(
+								currentDisplayStaggerBuildUp,
 								maxStaggerBuildUp,
-								ICON_STAGGER_CONTAINER,
-								ICON_STAGGER_FULL,
-								ICON_STAGGER_HALF,
-								new ArrayList<>(),
-								new ArrayList<>(),
+								shouldBlink ? ICON_STAGGER_CONTAINER_BLINKING : ICON_STAGGER_CONTAINER,
+								shouldBlink ? ICON_STAGGER_FULL_BLINKING : ICON_STAGGER_FULL,
+								shouldBlink ? ICON_STAGGER_HALF_BLINKING : ICON_STAGGER_HALF,
+								ResourceBarAPI.ContinuationType.NEW_ICON
+						));
+						ResourceBarAPIClient.drawIconResourceBar(
+								guiGraphics,
+								list,
 								originPos.getLeft(),
 								originPos.getRight(),
 								clientConfig.staggerBuildUpSettings.iconBarSettings.offset_x.get(),
@@ -752,8 +928,8 @@ public class ClientEventsRegistry {
 						);
 					} else if (clientConfig.staggerBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_stagger_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
-								minecraftClient,
-								matrixStack,
+								minecraft,
+								guiGraphics,
 								STAGGER_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -784,7 +960,7 @@ public class ClientEventsRegistry {
 								},
 								staggerBuildUp,
 								maxStaggerBuildUp,
-								Mth.ceil(((DuckLivingEntityMixin) playerEntity).overhauleddamage$getStaggerBuildUpReduction()),
+								Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getStaggerBuildUpReduction()),
 								maxStaggerBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
@@ -828,9 +1004,9 @@ public class ClientEventsRegistry {
 					}
 					if (should_stagger_number_be_rendered) {
 						ResourceBarAPIClient.drawResourceNumber(
-								minecraftClient,
-								minecraftClient.font,
-								matrixStack,
+								minecraft,
+								minecraft.font,
+								guiGraphics,
 								STAGGER_BAR_IDENTIFIER_STRING,
 								staggerBuildUp,
 								maxStaggerBuildUp,
@@ -850,7 +1026,7 @@ public class ClientEventsRegistry {
 				}
 				// endregion stagger
 			}
-		});
+		}));
 		ConfigApi.event().onUpdateClient((identifier, config) -> {
 			if (identifier.equals(OverhauledDamage.identifier("client"))) {
 				ResourceBarAPIClient.clearCache(
