@@ -1,10 +1,10 @@
 package com.github.theredbrain.overhauleddamage;
 
-import com.github.theredbrain.blockingoverhaul.BlockingOverhaul;
 import com.github.theredbrain.overhauleddamage.compatibility.BlockingOverhaulIntegration;
 import com.github.theredbrain.overhauleddamage.compatibility.ManaAttributesIntegration;
 import com.github.theredbrain.overhauleddamage.compatibility.StaminaAttributesIntegration;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
+import com.github.theredbrain.overhauleddamage.registry.DataAttachmentRegistry;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import net.fabricmc.api.ModInitializer;
@@ -182,6 +182,7 @@ public class OverhauledDamage implements ModInitializer {
 		// Config
 		SERVER_CONFIG = ConfigApiJava.registerAndLoadConfig(ServerConfig::new, RegisterType.BOTH);
 
+		DataAttachmentRegistry.init();
 	}
 
 	public static Identifier identifier(String path) {
