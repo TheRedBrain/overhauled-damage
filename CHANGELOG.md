@@ -1,3 +1,9 @@
+# 2.5.0
+
+- added knockback overhaul, allowing better control over how much knockback is applied when taking damage
+- added "overhauleddamage:no_applied_damage" damage type tag. Attacks with damage types in this tag don't deal damage to health/mana/stamina, but all other effects still apply.
+- replaced natural armour toughness game rule with server config option
+
 # 2.4.2
 
 - fixed game rule

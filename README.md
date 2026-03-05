@@ -44,6 +44,10 @@ A successful parry multiplies the blocked damage and staggers the attacker.
 
 A normal blocked attack (when the shield was raised for a longer time before the attack hit), can knock back either the attacking or the blocking entity. The knock back amount and which entity is affected is depending on damage type, damage amount, the block force of the blocking entity, the attack knockback of the attacking entity and a configurable multiplier.
 
+## Knockback Overhaul
+
+Taking damage without attempting to block now applies knockback depending on damage amount and type. The vanilla tag "minecraft:no_knockback" still applies.
+
 ## Additional features
 
 3 entity type tags which allow for easy customization of mob attack types. (include vanilla melee mobs by default, eg zombies deal bashing damage)
@@ -52,6 +56,7 @@ Optional features enabled in the server config:
 - disable "jump crit mechanic"
 - taking damage cancels using items (doesn't apply when blocking or when damage is "true")
 - blocking requires at least 1 stamina
+- "no_applied_damage" damage type tag. Attacks with damage types in this tag don't deal damage to health/mana/stamina, but all other effects still apply.
 
 ## Customization
 
