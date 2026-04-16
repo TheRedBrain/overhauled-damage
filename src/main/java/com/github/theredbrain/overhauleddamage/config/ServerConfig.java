@@ -122,6 +122,8 @@ public class ServerConfig extends Config {
 		}
 	}
 
+	public ValidatedBoolean enable_overhauled_damage_calculation = new ValidatedBoolean(true);
+
 	public DamageCalculation damageCalculation = new DamageCalculation();
 
 	public static class DamageCalculation extends ConfigSection {

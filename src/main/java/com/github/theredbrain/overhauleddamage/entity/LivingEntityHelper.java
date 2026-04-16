@@ -36,6 +36,9 @@ public class LivingEntityHelper {
 
 	public static float calculateOverhauledDamage(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource source, float amount) {
 		ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
+		if (!OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get()) {
+			return amount;
+		}
 		boolean enable_debug_log = serverConfig.damageCalculation.enable_debug_log.get();
 		if (enable_debug_log) {
 			OverhauledDamage.info("----- start of new damage calculation log -----");
