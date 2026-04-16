@@ -8,7 +8,7 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(Attributes.class)
-public class EntityAttributesMixin {
+public class AttributesMixin {
 	static {
 		OverhauledDamage.ADDITIONAL_BASHING_DAMAGE = Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, OverhauledDamage.identifier("additional_bashing_damage"), new RangedAttribute("attribute.name.additional_bashing_damage", 0.0, -1024.0, 1024.0).setSyncable(true));
 		OverhauledDamage.INCREASED_BASHING_DAMAGE = Registry.registerForHolder(BuiltInRegistries.ATTRIBUTE, OverhauledDamage.identifier("increased_bashing_damage"), new RangedAttribute("attribute.name.increased_bashing_damage", 1.0, -1024.0, 1024.0).setSyncable(true));

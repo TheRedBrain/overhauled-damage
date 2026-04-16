@@ -3,19 +3,14 @@ package com.github.theredbrain.overhauleddamage.mixin.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
-import com.google.common.collect.HashMultimap;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.Holder;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
@@ -23,10 +18,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.level.storage.ValueOutput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -153,20 +145,21 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	public boolean overhauleddamage$wrap_bypassesArmor(DamageSource instance, TagKey<DamageType> tag, Operation<Boolean> original) {
 		return (OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() && OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul.get()) || original.call(instance, tag);
 	}
+
 	@WrapOperation(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;applyItemBlocking(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)F"))
-	private float overhauleddamage$wrap_getDamageBlockedAmount(LivingEntity instance, ServerLevel world, DamageSource source, float amount, Operation<Float> original) {
+	private float overhauleddamage$wrap_applyItemBlocking(LivingEntity instance, ServerLevel level, DamageSource source, float damage, Operation<Float> original) {
 		if (OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() && OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get()) {
 			return 0.0F;
 		} else {
-			return original.call(instance, world, source, amount);
+			return original.call(instance, level, source, damage);
 		}
 	}
 
 	@Definition(id = "modifyAppliedDamage", method = "Lnet/minecraft/world/entity/LivingEntity;getDamageAfterMagicAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F")
 	@Expression("? = ?.modifyAppliedDamage(?, ?)")
-	@ModifyVariable(method = "actuallyHurt", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER), argsOnly = true)
-	private float overhauleddamage$modify_applyDamage(float value, @Local(argsOnly = true) ServerLevel serverLevel, @Local(argsOnly = true) DamageSource source) {
-		return OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() ? LivingEntityHelper.calculateOverhauledDamage(serverLevel, ((LivingEntity) (Object) this), source, value) : value;
+	@ModifyVariable(method = "actuallyHurt", at = @At(value = "MIXINEXTRAS:EXPRESSION", shift = At.Shift.AFTER), argsOnly = true, name = "dmg")
+	private float overhauleddamage$modify_applyDamage(float dmg, @Local(argsOnly = true, name = "level") ServerLevel level, @Local(argsOnly = true, name = "source") DamageSource source) {
+		return OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() ? LivingEntityHelper.calculateOverhauledDamage(level, ((LivingEntity) (Object) this), source, dmg) : dmg;
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))

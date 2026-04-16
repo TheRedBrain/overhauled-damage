@@ -5,9 +5,9 @@
 	"mixins": [
 		"entity.LivingEntityMixin",
 		"entity.MobMixin",
-		"entity.attribute.EntityAttributesMixin",
+		"entity.attribute.AttributesMixin",
 		"entity.damage.DamageSourcesMixin",
-		"entity.player.PlayerEntityMixin"
+		"entity.player.PlayerMixin"
 	],
 	"mixinextras": {
 		"minVersion": "0.5.0"
