@@ -1,6 +1,6 @@
 # 3.0.0
 
-- update to 1.21.11
+- update to 26.1.x
 
 ## Additions
 
