@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
 		"entity.LivingEntityMixin",
+		"entity.MobMixin",
 		"entity.attribute.EntityAttributesMixin",
 		"entity.damage.DamageSourcesMixin",
 		"entity.player.PlayerEntityMixin"

@@ -17,6 +17,7 @@
   - this includes the overhauls to blocking attacks, protection enchantments, armor calculation and the entire "attack type" system. Note that the individual toggles for the various overhauls are still available, if you only want to disable individual systems.
   - this does not include the effect build up system
 - the effect build up icon bars now blink when their corresponding build up changes, similar to the vanilla health bar. This can be disabled in the client config.
+- added Java API to give "Mob" entities a custom damage type
 
 ## Changes
 
