@@ -4,7 +4,19 @@
 
 ## Additions
 
+- added enchantment effects to add effect build up
+  - "overhauleddamage:add_bleeding_build_up"
+  - "overhauleddamage:add_burn_build_up"
+  - "overhauleddamage:add_freeze_build_up"
+  - "overhauleddamage:add_poison_build_up"
+  - "overhauleddamage:add_shock_build_up"
+  - "overhauleddamage:add_stagger_build_up"
+- added "overhauleddamage:overhauled_damage_entity" entity sub predicate, which allows to check for each effect build up
 - added server config options to set default entity attribute values (only for players)
+- added server config option to disable overhauled damage calculation
+  - this includes the overhauls to blocking attacks, protection enchantments, armor calculation and the entire "attack type" system. Note that the individual toggles for the various overhauls are still available, if you only want to disable individual systems.
+  - this does not include the effect build up system
+- the effect build up icon bars now blink when their corresponding build up changes, similar to the vanilla health bar. This can be disabled in the client config.
 
 ## Changes
 
