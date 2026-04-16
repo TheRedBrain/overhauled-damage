@@ -673,7 +673,7 @@ public class LivingEntityHelper {
 				OverhauledDamage.info("--- apply chilled effect and freeze build up ---");
 			}
 			if (frost_amount > 0) {
-				Optional<Holder.Reference<MobEffect>> chilled_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(serverConfig.buildUpEffects.chilled_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> chilled_status_effect = BuiltInRegistries.MOB_EFFECT.get(serverConfig.buildUpEffects.chilled_status_effect_identifier.get());
 				if (chilled_status_effect.isPresent()) {
 					int chilledDuration = (int) Math.ceil(frost_amount * serverConfig.buildUpEffects.chilled_duration_multiplier);
 					int existingChilledDuration = 0;
@@ -800,7 +800,7 @@ public class LivingEntityHelper {
 
 			// bleeding
 			if (getBleedingBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBleedingBuildUp()) {
-				Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier.get());
 				if (bleeding_status_effect.isPresent()) {
 					int existingBleedingDuration = 0;
 					int bleedingAmplifier = 0;
@@ -834,7 +834,7 @@ public class LivingEntityHelper {
 
 			// burn
 			if (getBurnBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxBurnBuildUp()) {
-				Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier.get());
 				if (burn_status_effect.isPresent()) {
 					int existingBurnDuration = 0;
 					int burnAmplifier = 0;
@@ -868,7 +868,7 @@ public class LivingEntityHelper {
 
 			// freeze
 			if (getFreezeBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxFreezeBuildUp()) {
-				Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier.get());
 				if (freeze_status_effect.isPresent()) {
 					int existingFreezeDuration = 0;
 					int freezeAmplifier = 0;
@@ -902,7 +902,7 @@ public class LivingEntityHelper {
 
 			// stagger
 			if (getStaggerBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp()) {
-				Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier.get());
 				if (staggered_status_effect.isPresent()) {
 					int existingStaggerDuration = 0;
 					int staggerAmplifier = 0;
@@ -936,7 +936,7 @@ public class LivingEntityHelper {
 
 			// poison
 			if (getPoisonBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxPoisonBuildUp()) {
-				Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier.get());
 				if (poison_status_effect.isPresent()) {
 					int existingPoisonDuration = 0;
 					int poisonAmplifier = 0;
@@ -970,7 +970,7 @@ public class LivingEntityHelper {
 
 			// shock
 			if (getShockBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxShockBuildUp()) {
-				Optional<Holder.Reference<MobEffect>> shocked_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
+				Optional<Holder.Reference<MobEffect>> shocked_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier.get());
 				if (shocked_status_effect.isPresent()) {
 					int existingShockDuration = 0;
 					int shockAmplifier = 0;
@@ -1013,7 +1013,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addBleedingBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> bleeding_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.bleeding_status_effect_identifier.get());
 		if (bleeding_status_effect.isEmpty()) {
 			if (getBleedingBuildUp(livingEntity) > 0) {
 				setBleedingBuildUp(livingEntity, 0);
@@ -1041,7 +1041,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addBurnBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> burn_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.burn_status_effect_identifier.get());
 		if (burn_status_effect.isEmpty()) {
 			if (getBurnBuildUp(livingEntity) > 0) {
 				setBurnBuildUp(livingEntity, 0);
@@ -1068,7 +1068,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addFreezeBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> freeze_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.freeze_status_effect_identifier.get());
 		if (freeze_status_effect.isEmpty()) {
 			if (getFreezeBuildUp(livingEntity) > 0) {
 				setFreezeBuildUp(livingEntity, 0);
@@ -1096,7 +1096,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addStaggerBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> staggered_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.stagger_status_effect_identifier.get());
 		if (staggered_status_effect.isEmpty()) {
 			if (getStaggerBuildUp(livingEntity) > 0) {
 				setStaggerBuildUp(livingEntity, 0);
@@ -1124,7 +1124,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addPoisonBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> poison_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.poison_status_effect_identifier.get());
 		if (poison_status_effect.isEmpty()) {
 			if (getPoisonBuildUp(livingEntity) > 0) {
 				setPoisonBuildUp(livingEntity, 0);
@@ -1152,7 +1152,7 @@ public class LivingEntityHelper {
 	}
 
 	public static void addShockBuildUp(LivingEntity livingEntity, float amount) {
-		Optional<Holder.Reference<MobEffect>> shock_status_effect = BuiltInRegistries.MOB_EFFECT.get(Identifier.tryParse(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier));
+		Optional<Holder.Reference<MobEffect>> shock_status_effect = BuiltInRegistries.MOB_EFFECT.get(OverhauledDamage.SERVER_CONFIG.buildUpEffects.shock_status_effect_identifier.get());
 		if (shock_status_effect.isEmpty()) {
 			if (getShockBuildUp(livingEntity) > 0) {
 				setShockBuildUp(livingEntity, 0);
