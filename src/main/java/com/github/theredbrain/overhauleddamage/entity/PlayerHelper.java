@@ -19,7 +19,7 @@ public class PlayerHelper {
 
 	private static HashMultimap<Holder<Attribute>, AttributeModifier> getNaturalAttributeModifiers() {
 		HashMultimap<Holder<Attribute>, AttributeModifier> hashMultimap = HashMultimap.create();
-		hashMultimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), OverhauledDamage.SERVER_CONFIG.damageCalculation.armorOverhaul.natural_armor_toughness.get(), AttributeModifier.Operation.ADD_VALUE));
+		hashMultimap.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(OverhauledDamage.identifier("natural_armour_toughness_modifier"), OverhauledDamage.SERVER_CONFIG.naturalPlayerAttributeValues.natural_armor_toughness.get(), AttributeModifier.Operation.ADD_VALUE));
 		hashMultimap.put(OverhauledDamage.ADDITIONAL_BASHING_DAMAGE, new AttributeModifier(OverhauledDamage.identifier("natural_additional_bashing_damage_modifier"), OverhauledDamage.SERVER_CONFIG.naturalPlayerAttributeValues.natural_additional_bashing_damage.get(), AttributeModifier.Operation.ADD_VALUE));
 		hashMultimap.put(OverhauledDamage.INCREASED_BASHING_DAMAGE, new AttributeModifier(OverhauledDamage.identifier("natural_increased_bashing_damage_modifier"), OverhauledDamage.SERVER_CONFIG.naturalPlayerAttributeValues.natural_increased_bashing_damage.get(), AttributeModifier.Operation.ADD_VALUE));
 		hashMultimap.put(OverhauledDamage.BASHING_RESISTANCE, new AttributeModifier(OverhauledDamage.identifier("natural_bashing_resistance_modifier"), OverhauledDamage.SERVER_CONFIG.naturalPlayerAttributeValues.natural_bashing_resistance.get(), AttributeModifier.Operation.ADD_VALUE));

@@ -209,8 +209,6 @@ public class ServerConfig extends Config {
 
 			public ValidatedBoolean enable_armor_toughness_attribute = new ValidatedBoolean(false);
 
-			public ValidatedFloat natural_armor_toughness = new ValidatedFloat(0.0F);
-
 			public ValidatedAny<ArmorMultipliers> armor_multipliers = new ValidatedAny<>(new ArmorMultipliers(1.0F, 1.0F, 0.5F, 1.5F, 0.0F, 1.0F, 0.0F, 0.0F));
 
 
@@ -327,6 +325,7 @@ public class ServerConfig extends Config {
 	public NaturalPlayerAttributeValuesSection naturalPlayerAttributeValues = new NaturalPlayerAttributeValuesSection();
 
 	public static class NaturalPlayerAttributeValuesSection extends ConfigSection {
+		public ValidatedDouble natural_armor_toughness = new ValidatedDouble(0.0, 1024.0, 4.0);
 		public ValidatedDouble natural_additional_bashing_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_increased_bashing_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_bashing_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
