@@ -70,9 +70,13 @@
 	"attribute.name.generic.parry_stamina_cost": "Parry Stamina Cost",
 
 
+	"death.attack.bleeding": "%s lost to much blood",
+	"death.attack.burning": "%s burned to ashes",
 	"death.attack.mob_bashing": "%s was smashed into the ground by %s",
 	"death.attack.mob_piercing": "%s was stabbed to death by %s",
 	"death.attack.mob_slashing": "%s was cut into pieces by %s",
+	"death.attack.poison": "%s was poisoned",
+	"death.attack.shocked": "%s was electrocuted",
 
 
 	"text.autoconfig.overhauleddamage.title": "Overhauled Damage",

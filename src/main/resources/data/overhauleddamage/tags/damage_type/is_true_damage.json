@@ -17,7 +17,11 @@
 		"minecraft:outside_border",
 		"minecraft:sonic_boom",
 		"minecraft:starve",
-		"minecraft:wither"
+		"minecraft:wither",
+		"overhauleddamage:bleeding_damage_type",
+		"overhauleddamage:burning_damage_type",
+		"overhauleddamage:poison_damage_type",
+		"overhauleddamage:shocked_damage_type"
 	]
 }
 

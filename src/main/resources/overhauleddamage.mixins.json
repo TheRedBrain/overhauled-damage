@@ -6,7 +6,7 @@
 		"entity.LivingEntityMixin",
 		"entity.MobMixin",
 		"entity.attribute.AttributesMixin",
-		"entity.damage.DamageSourcesMixin",
+    "world.damagesource.DamageSourcesMixin",
 		"entity.player.PlayerMixin"
 	],
 	"mixinextras": {

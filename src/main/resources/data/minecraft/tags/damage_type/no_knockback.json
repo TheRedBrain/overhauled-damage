@@ -1,0 +1,8 @@
+{
+  "values": [
+    "overhauleddamage:bleeding_damage_type",
+    "overhauleddamage:burning_damage_type",
+    "overhauleddamage:poison_damage_type",
+    "overhauleddamage:shocked_damage_type"
+  ]
+}
