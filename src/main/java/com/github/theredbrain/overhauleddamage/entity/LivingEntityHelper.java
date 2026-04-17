@@ -162,7 +162,7 @@ public class LivingEntityHelper {
 				ItemStack shieldItemStack = livingEntity.getUseItem();
 				BlocksAttacks blocksAttacks = shieldItemStack.get(DataComponents.BLOCKS_ATTACKS);
 
-				if (blocksAttacks != null && !(Boolean) blocksAttacks.bypassedBy().map(source::is).orElse(false)) {
+				if (blocksAttacks != null && !(Boolean) blocksAttacks.bypassedBy().map(t -> t.contains(source.typeHolder())).orElse(false)) {
 
 					if (source.getDirectEntity() instanceof AbstractArrow abstractArrow && abstractArrow.getPierceLevel() > 0) {
 
