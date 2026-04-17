@@ -35,13 +35,13 @@ public class ClientConfig extends Config {
 		// TODO prepend text explaining dynamic offsets
 
 		public int dynamic_offset_increase_x = 0;
-		public int dynamic_offset_increase_y = 6;
+		public int dynamic_offset_increase_y = 10;
 
 		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
-			public ValidatedInt offset_x = new ValidatedInt(91);
-			public ValidatedInt offset_y = new ValidatedInt(-39);
+			public ValidatedInt offset_x = new ValidatedInt(-41);
+			public ValidatedInt offset_y = new ValidatedInt(5);
 			public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
@@ -212,13 +212,13 @@ public class ClientConfig extends Config {
 		// TODO prepend text explaining dynamic offsets
 
 		public int dynamic_offset_increase_x = 0;
-		public int dynamic_offset_increase_y = 6;
+		public int dynamic_offset_increase_y = 10;
 
 		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
-			public ValidatedInt offset_x = new ValidatedInt(91);
-			public ValidatedInt offset_y = new ValidatedInt(-39);
+			public ValidatedInt offset_x = new ValidatedInt(-41);
+			public ValidatedInt offset_y = new ValidatedInt(5);
 			public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
@@ -232,7 +232,6 @@ public class ClientConfig extends Config {
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
-				public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
 				public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
 					put(0, -31);
 				}}, new ValidatedInt(), new ValidatedInt());
@@ -390,13 +389,13 @@ public class ClientConfig extends Config {
 		// TODO prepend text explaining dynamic offsets
 
 		public int dynamic_offset_increase_x = 0;
-		public int dynamic_offset_increase_y = 6;
+		public int dynamic_offset_increase_y = 10;
 
 		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
-			public ValidatedInt offset_x = new ValidatedInt(91);
-			public ValidatedInt offset_y = new ValidatedInt(-39);
+			public ValidatedInt offset_x = new ValidatedInt(-41);
+			public ValidatedInt offset_y = new ValidatedInt(5);
 			public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
@@ -410,7 +409,6 @@ public class ClientConfig extends Config {
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
-				public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
 				public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
 					put(0, -31);
 				}}, new ValidatedInt(), new ValidatedInt());
@@ -418,8 +416,6 @@ public class ClientConfig extends Config {
 					put(0, 18);
 				}}, new ValidatedInt(), new ValidatedInt());
 			}
-
-			public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
 
 			public boolean show_current_value_overlay = false;
 
@@ -570,13 +566,13 @@ public class ClientConfig extends Config {
 		// TODO prepend text explaining dynamic offsets
 
 		public int dynamic_offset_increase_x = 0;
-		public int dynamic_offset_increase_y = 6;
+		public int dynamic_offset_increase_y = 10;
 
 		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
-			public ValidatedInt offset_x = new ValidatedInt(91);
-			public ValidatedInt offset_y = new ValidatedInt(-39);
+			public ValidatedInt offset_x = new ValidatedInt(-41);
+			public ValidatedInt offset_y = new ValidatedInt(5);
 			public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
@@ -590,7 +586,6 @@ public class ClientConfig extends Config {
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
-				public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
 				public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
 					put(0, -31);
 				}}, new ValidatedInt(), new ValidatedInt());
@@ -598,8 +593,6 @@ public class ClientConfig extends Config {
 					put(0, 18);
 				}}, new ValidatedInt(), new ValidatedInt());
 			}
-
-			public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
 
 			public boolean show_current_value_overlay = false;
 
@@ -750,13 +743,13 @@ public class ClientConfig extends Config {
 		// TODO prepend text explaining dynamic offsets
 
 		public int dynamic_offset_increase_x = 0;
-		public int dynamic_offset_increase_y = 6;
+		public int dynamic_offset_increase_y = 10;
 
 		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
-			public ValidatedInt offset_x = new ValidatedInt(91);
-			public ValidatedInt offset_y = new ValidatedInt(-39);
+			public ValidatedInt offset_x = new ValidatedInt(-41);
+			public ValidatedInt offset_y = new ValidatedInt(5);
 			public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
@@ -770,7 +763,6 @@ public class ClientConfig extends Config {
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
-				public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
 				public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
 					put(0, -31);
 				}}, new ValidatedInt(), new ValidatedInt());
@@ -778,8 +770,6 @@ public class ClientConfig extends Config {
 					put(0, 18);
 				}}, new ValidatedInt(), new ValidatedInt());
 			}
-
-			public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
 
 			public boolean show_current_value_overlay = false;
 
@@ -929,14 +919,14 @@ public class ClientConfig extends Config {
 
 		// TODO prepend text explaining dynamic offsets
 
-		public int dynamic_offset_increase_x = 0;
-		public int dynamic_offset_increase_y = 6;
+//		public int dynamic_offset_increase_x = 0;
+//		public int dynamic_offset_increase_y = 10;
 
 		public IconBarSettings iconBarSettings = new IconBarSettings();
 
 		public static class IconBarSettings extends ConfigSection {
-			public ValidatedInt offset_x = new ValidatedInt(91);
-			public ValidatedInt offset_y = new ValidatedInt(-39);
+			public ValidatedInt offset_x = new ValidatedInt(-41);
+			public ValidatedInt offset_y = new ValidatedInt(5);
 			public ValidatedInt max_icon_amount_per_bar = new ValidatedInt(10);
 			public ValidatedBoolean reverse_stack_direction = new ValidatedBoolean(true);
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
@@ -950,7 +940,6 @@ public class ClientConfig extends Config {
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
-				public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
 				public ValidatedMap<Integer, Integer> offsets_x = new ValidatedMap<>(new HashMap<>() {{
 					put(0, -31);
 				}}, new ValidatedInt(), new ValidatedInt());
@@ -958,8 +947,6 @@ public class ClientConfig extends Config {
 					put(0, 18);
 				}}, new ValidatedInt(), new ValidatedInt());
 			}
-
-			public ResourceBarAPI.ResourceBarFillDirection fill_direction = ResourceBarAPI.ResourceBarFillDirection.LEFT_TO_RIGHT;
 
 			public boolean show_current_value_overlay = false;
 

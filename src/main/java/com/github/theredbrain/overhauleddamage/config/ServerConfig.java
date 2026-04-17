@@ -10,9 +10,11 @@ import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
 import me.fzzyhmstrs.fzzy_config.validation.minecraft.ValidatedIdentifier;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedAny;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
+import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedColor;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedString;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedDouble;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedFloat;
+import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 import net.minecraft.resources.Identifier;
 import java.util.HashMap;
 
@@ -35,7 +37,7 @@ public class ServerConfig extends Config {
 
 		public ValidatedIdentifier attribute = new ValidatedIdentifier(Identifier.parse("overhauleddamage:max_stagger_build_up"));
 
-		public ValidatedIdentifier hit_stun_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:hit_stun"));
+		public ValidatedIdentifier hit_stun_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:hit_stun"));
 
 		public ValidatedMap<String, HitStunSettings> hit_stun_settings = new ValidatedMap<>(new HashMap<>() {{
 			put("overhauleddamage:mob_slashing_damage_type", new HitStunSettings(0, 0.0));
@@ -298,26 +300,26 @@ public class ServerConfig extends Config {
 	public BuildUpEffects buildUpEffects = new BuildUpEffects();
 
 	public static class BuildUpEffects extends ConfigSection {
-		public ValidatedIdentifier bleeding_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:bleeding"));
+		public ValidatedIdentifier bleeding_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:bleeding"));
 		public ValidatedBoolean should_bleeding_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_bleeding_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier burn_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:burning"));
+		public ValidatedIdentifier burn_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:burning"));
 		public ValidatedBoolean should_burn_duration_be_additive = new ValidatedBoolean(true);
 		public ValidatedBoolean should_burn_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier chilled_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:chilled"));
+		public ValidatedIdentifier chilled_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:chilled"));
 		public double chilled_duration_multiplier = 1.0;
 		public ValidatedBoolean should_chilled_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_chilled_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier freeze_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:frozen"));
+		public ValidatedIdentifier freeze_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:frozen"));
 		public ValidatedBoolean should_freeze_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_freeze_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier poison_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:poison"));
+		public ValidatedIdentifier poison_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:poison"));
 		public ValidatedBoolean should_poison_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_poison_amplifier_be_additive = new ValidatedBoolean(true);
-		public ValidatedIdentifier shock_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:shocked"));
+		public ValidatedIdentifier shock_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:shocked"));
 		public ValidatedBoolean should_shock_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_shock_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier stagger_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("variousstatuseffects:staggered"));
+		public ValidatedIdentifier stagger_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:staggered"));
 		public ValidatedBoolean should_stagger_duration_be_additive = new ValidatedBoolean(false);
 		public ValidatedBoolean should_stagger_amplifier_be_additive = new ValidatedBoolean(false);
 	}
