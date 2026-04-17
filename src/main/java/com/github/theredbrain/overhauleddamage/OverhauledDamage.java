@@ -3,11 +3,13 @@ package com.github.theredbrain.overhauleddamage;
 import com.github.theredbrain.overhauleddamage.advancements.criterion.OverhauledDamageEntityPredicate;
 import com.github.theredbrain.overhauleddamage.compatibility.BlockingOverhaulIntegration;
 import com.github.theredbrain.overhauleddamage.compatibility.ManaAttributesIntegration;
+import com.github.theredbrain.overhauleddamage.compatibility.SpellEngineIntegration;
 import com.github.theredbrain.overhauleddamage.compatibility.StaminaAttributesIntegration;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.registry.DataAttachmentRegistry;
 import com.github.theredbrain.overhauleddamage.registry.EnchantmentEntityEffectRegistry;
 import com.github.theredbrain.overhauleddamage.registry.EntitySubPredicateTypeRegistry;
+import com.github.theredbrain.overhauleddamage.registry.MobEffectsRegistry;
 import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddBleedingBuildUpEnchantmentEntityEffect;
 import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddBurnBuildUpEnchantmentEntityEffect;
 import com.github.theredbrain.overhauleddamage.world.item.enchantment.AddFreezeBuildUpEnchantmentEntityEffect;
@@ -23,6 +25,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
@@ -112,9 +115,19 @@ public class OverhauledDamage implements ModInitializer {
 	public static MapCodec<AddShockBuildUpEnchantmentEntityEffect> ADD_SHOCK_BUILD_UP;
 	public static MapCodec<AddStaggerBuildUpEnchantmentEntityEffect> ADD_STAGGER_BUILD_UP;
 
+	public static Holder<MobEffect> BLEEDING;
+	public static Holder<MobEffect> BURNING;
+	public static Holder<MobEffect> CHILLED;
+	public static Holder<MobEffect> FROZEN;
+	public static Holder<MobEffect> POISON;
+	public static Holder<MobEffect> SHOCKED;
+	public static Holder<MobEffect> STAGGERED;
+	public static Holder<MobEffect> HIT_STUN;
+
 	public static final boolean isManaAttributesLoaded = FabricLoader.getInstance().isModLoaded("manaattributes");
 	public static final boolean isStaminaAttributesLoaded = FabricLoader.getInstance().isModLoaded("staminaattributes");
 	public static final boolean isBlockingOverhaulLoaded = FabricLoader.getInstance().isModLoaded("blockingoverhaul");
+	public static final boolean isSpellEngineLoaded = FabricLoader.getInstance().isModLoaded("spell_engine");
 
 	// region API
 	public static float getCurrentMana(LivingEntity livingEntity) {
@@ -192,6 +205,19 @@ public class OverhauledDamage implements ModInitializer {
 		}
 		return currentStaminaAllowsBlocking;
 	}
+
+	public static void addModdedAttributesToEffects() {
+		if (isSpellEngineLoaded) {
+			SpellEngineIntegration.addAttributes();
+		}
+	}
+
+	public static void configureEffects() {
+		if (isSpellEngineLoaded) {
+			SpellEngineIntegration.configureEffects();
+		}
+	}
+
 	// endregion API
 
 	@Override
@@ -204,6 +230,7 @@ public class OverhauledDamage implements ModInitializer {
 		DataAttachmentRegistry.init();
 		EnchantmentEntityEffectRegistry.init();
 		EntitySubPredicateTypeRegistry.init();
+		MobEffectsRegistry.registerEffects();
 	}
 
 	public static Identifier identifier(String path) {

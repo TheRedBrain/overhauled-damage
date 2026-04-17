@@ -166,4 +166,8 @@ public interface DuckLivingEntityMixin {
 
 	float overhauleddamage$getDamageTakenFromStaminaMultiplier();
 
+	boolean overhauleddamage$isMoving();
+
+	void overhauleddamage$setIsMoving(boolean isMoving);
+
 }

@@ -78,6 +78,22 @@
 	"death.attack.poison": "%s was poisoned",
 	"death.attack.shocked": "%s was electrocuted",
 
+	
+	"effect.overhauleddamage.bleeding": "Bleeding",
+	"effect.overhauleddamage.bleeding.description": "You are losing blood!",
+	"effect.overhauleddamage.burning": "Burning",
+	"effect.overhauleddamage.burning.description": "You are on fire!",
+	"effect.overhauleddamage.chilled": "Chilled",
+	"effect.overhauleddamage.chilled.description": "Chilled",
+	"effect.overhauleddamage.frozen": "Frozen",
+	"effect.overhauleddamage.frozen.description": "Frozen",
+	"effect.overhauleddamage.poison": "Poison",
+	"effect.overhauleddamage.poison.description": "Poisoned",
+	"effect.overhauleddamage.shocked": "Shocked",
+	"effect.overhauleddamage.shocked.description": "You take more damage",
+	"effect.overhauleddamage.staggered": "Staggered",
+	"effect.overhauleddamage.staggered.description": "Staggered",
+
 
 	"text.autoconfig.overhauleddamage.title": "Overhauled Damage",
 

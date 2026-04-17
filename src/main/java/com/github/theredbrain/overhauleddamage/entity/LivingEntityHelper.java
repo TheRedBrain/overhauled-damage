@@ -844,7 +844,6 @@ public class LivingEntityHelper {
 							existingBurnDuration = statusEffectInstance.getDuration();
 						}
 						if (serverConfig.buildUpEffects.should_burn_amplifier_be_additive.get()) {
-							burnAmplifier = statusEffectInstance.getAmplifier();
 						}
 					}
 					livingEntity.addEffect(new MobEffectInstance(burn_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));

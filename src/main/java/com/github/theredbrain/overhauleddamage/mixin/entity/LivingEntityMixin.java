@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,8 +32,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements DuckLivingEntityMixin {
 
+	@Unique
+	private boolean overhauleddamage$isMoving = false;
+
 	@Shadow
 	public abstract double getAttributeValue(Holder<Attribute> attribute);
+
+	@Shadow
+	public abstract boolean hasEffect(Holder<MobEffect> effect);
 
 	@Unique
 	private int bleedingTickTimer = 0;
@@ -165,6 +172,11 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Inject(method = "tick", at = @At("TAIL"))
 	public void overhauleddamage$tick(CallbackInfo ci) {
 		LivingEntityHelper.tick(((LivingEntity) (Object) this));
+	}
+
+	@Override
+	public boolean displayFireAnimation() {
+		return super.displayFireAnimation() || (this.hasEffect(OverhauledDamage.BURNING) && !this.isSpectator());
 	}
 
 	@Override
@@ -590,6 +602,16 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public float overhauleddamage$getDamageTakenFromStaminaMultiplier() {
 		return (float) this.getAttributeValue(OverhauledDamage.DAMAGE_TAKEN_FROM_STAMINA_MULTIPLIER);
+	}
+
+	@Override
+	public boolean overhauleddamage$isMoving() {
+		return this.overhauleddamage$isMoving;
+	}
+
+	@Override
+	public void overhauleddamage$setIsMoving(boolean isMoving) {
+		this.overhauleddamage$isMoving = isMoving;
 	}
 
 }

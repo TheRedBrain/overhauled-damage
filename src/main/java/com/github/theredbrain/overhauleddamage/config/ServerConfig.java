@@ -322,6 +322,72 @@ public class ServerConfig extends Config {
 		public ValidatedBoolean should_stagger_amplifier_be_additive = new ValidatedBoolean(false);
 	}
 
+	public StatusEffects status_effects = new StatusEffects();
+
+	public static class StatusEffects extends ConfigSection {
+
+		public BleedingSection bleeding_effect = new BleedingSection();
+
+		public static class BleedingSection extends ConfigSection {
+			public ValidatedInt tick_update_threshold = new ValidatedInt(20);
+			public ValidatedBoolean moving_doubles_damage = new ValidatedBoolean(true);
+			public ValidatedFloat max_health_multiplier = new ValidatedFloat(0.1F);
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+
+		public BurningSection burning_effect = new BurningSection();
+
+		public static class BurningSection extends ConfigSection {
+			public ValidatedInt tick_update_threshold = new ValidatedInt(50);
+			public ValidatedFloat damage_per_tick = new ValidatedFloat(2.0F);
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+
+		public ChilledSection chilled_effect = new ChilledSection();
+
+		public static class ChilledSection extends ConfigSection {
+			public ValidatedDouble movement_speed_total_multiplier = new ValidatedDouble(-0.15);
+			public ValidatedDouble attack_speed_total_multiplier = new ValidatedDouble(-0.15);
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+
+		public FrozenSection frozen_effect = new FrozenSection();
+
+		public static class FrozenSection extends ConfigSection {
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+
+		public PoisonSection poison_effect = new PoisonSection();
+
+		public static class PoisonSection extends ConfigSection {
+			public ValidatedInt tick_update_threshold = new ValidatedInt(25);
+			public ValidatedFloat amplifier_multiplier = new ValidatedFloat(1.0F);
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+
+		public ShockedSection shocked_effect = new ShockedSection();
+
+		public static class ShockedSection extends ConfigSection {
+//			public ValidatedDouble additional_damage_taken = new ValidatedDouble(25.0);
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+
+		public HitStunSection hit_stun_effect = new HitStunSection();
+
+		public static class HitStunSection extends ConfigSection {
+//			public ValidatedDouble additional_roll_distance = new ValidatedDouble(0.0);
+			public ValidatedDouble movement_speed_total_multiplier = new ValidatedDouble(-0.7);
+			public ValidatedDouble attack_speed_total_multiplier = new ValidatedDouble(-0.1);
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+
+		public StaggerSection stagger_effect = new StaggerSection();
+
+		public static class StaggerSection extends ConfigSection {
+			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
+		}
+	}
+
 	public NaturalPlayerAttributeValuesSection naturalPlayerAttributeValues = new NaturalPlayerAttributeValuesSection();
 
 	public static class NaturalPlayerAttributeValuesSection extends ConfigSection {
