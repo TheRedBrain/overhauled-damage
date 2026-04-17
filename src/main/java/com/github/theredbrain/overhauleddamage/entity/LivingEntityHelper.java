@@ -796,6 +796,14 @@ public class LivingEntityHelper {
 	public static void tick(LivingEntity livingEntity) {
 
 		if (!livingEntity.level().isClientSide()) {
+
+			if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$delayEffectBuildUpTick()) {
+				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setDelayEffectBuildUpTick(false);
+				return;
+			}
+
+			((DuckLivingEntityMixin) livingEntity).overhauleddamage$setIsMoving(!livingEntity.oldPosition().equals(livingEntity.position()));;
+
 			ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
 
 			// bleeding
@@ -844,6 +852,7 @@ public class LivingEntityHelper {
 							existingBurnDuration = statusEffectInstance.getDuration();
 						}
 						if (serverConfig.buildUpEffects.should_burn_amplifier_be_additive.get()) {
+							burnAmplifier = statusEffectInstance.getAmplifier() + 1;
 						}
 					}
 					livingEntity.addEffect(new MobEffectInstance(burn_status_effect.get(), ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnDuration() + existingBurnDuration, burnAmplifier, false, false, true));

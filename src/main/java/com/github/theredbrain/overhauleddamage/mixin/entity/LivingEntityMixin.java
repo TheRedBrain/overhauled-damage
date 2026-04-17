@@ -65,6 +65,8 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	private int shockTickTimer = 0;
 	@Unique
 	private int shockReductionDelayTimer = 0;
+	@Unique
+	private boolean delayEffectBuildUpTick = false;
 
 	public LivingEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
@@ -612,6 +614,16 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 	@Override
 	public void overhauleddamage$setIsMoving(boolean isMoving) {
 		this.overhauleddamage$isMoving = isMoving;
+	}
+
+	@Override
+	public boolean overhauleddamage$delayEffectBuildUpTick() {
+		return this.delayEffectBuildUpTick;
+	}
+
+	@Override
+	public void overhauleddamage$setDelayEffectBuildUpTick(boolean delayEffectBuildUpTick) {
+		this.delayEffectBuildUpTick = delayEffectBuildUpTick;
 	}
 
 }

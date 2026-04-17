@@ -3,7 +3,6 @@ package com.github.theredbrain.overhauleddamage.registry;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.OverhauledDamageClient;
 import com.github.theredbrain.overhauleddamage.config.ClientConfig;
-import com.github.theredbrain.overhauleddamage.entity.DataAttachmentHelper;
 import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
 import com.github.theredbrain.overhauleddamage.gui.hud.DuckGuiMixin;
@@ -77,7 +76,7 @@ public class ClientEventsRegistry {
 	private static final Identifier ICON_STAGGER_HALF_BLINKING = OverhauledDamage.identifier("hud/icon_stagger_half_blinking");
 
 	public static void initializeClientEvents() {
-		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, OverhauledDamage.identifier("effect_build_ups"), ((guiGraphics, delta) -> {
+		HudElementRegistry.attachElementAfter(VanillaHudElements.HEALTH_BAR, OverhauledDamage.identifier("effect_build_ups"), ((guiGraphicsExtractor, deltaTracker) -> {
 			Minecraft minecraft = Minecraft.getInstance();
 			LocalPlayer localPlayer = minecraft.player;
 			ClientConfig clientConfig = OverhauledDamageClient.CLIENT_CONFIG;
@@ -123,7 +122,7 @@ public class ClientEventsRegistry {
 					boolean should_bleeding_icon_be_rendered = clientConfig.bleedingBuildUpSettings.show_icon && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_bleeding_number_be_rendered = clientConfig.bleedingBuildUpSettings.show_number && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.bleedingBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.bleedingBuildUpSettings.origin);
 
 					if (clientConfig.bleedingBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_bleeding_bar_be_rendered) {
 
@@ -137,12 +136,12 @@ public class ClientEventsRegistry {
 								ResourceBarAPI.ContinuationType.NEW_ICON
 						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								guiGraphics,
+								guiGraphicsExtractor,
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.bleedingBuildUpSettings.iconBarSettings.offset_x.get(),
-								clientConfig.bleedingBuildUpSettings.iconBarSettings.offset_y.get(),
+								clientConfig.bleedingBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
+								clientConfig.bleedingBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
 								clientConfig.bleedingBuildUpSettings.fill_direction,
 								clientConfig.bleedingBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
 								clientConfig.bleedingBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
@@ -150,7 +149,7 @@ public class ClientEventsRegistry {
 					} else if (clientConfig.bleedingBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_bleeding_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
-								guiGraphics,
+								guiGraphicsExtractor,
 								BLEEDING_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -227,7 +226,7 @@ public class ClientEventsRegistry {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraft,
 								minecraft.font,
-								guiGraphics,
+								guiGraphicsExtractor,
 								BLEEDING_BAR_IDENTIFIER_STRING,
 								bleedingBuildUp,
 								maxBleedingBuildUp,
@@ -241,8 +240,8 @@ public class ClientEventsRegistry {
 						);
 					}
 					if ((should_bleeding_bar_be_rendered && clientConfig.bleedingBuildUpSettings.bar_display != ResourceBarAPI.ResourceBarDisplay.NONE) || should_bleeding_icon_be_rendered || should_bleeding_number_be_rendered) {
-						dynamic_offset_x = clientConfig.bleedingBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y = clientConfig.bleedingBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.bleedingBuildUpSettings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.bleedingBuildUpSettings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion bleeding
@@ -279,26 +278,26 @@ public class ClientEventsRegistry {
 					boolean should_burn_icon_be_rendered = clientConfig.burnBuildUpSettings.show_icon && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_burn_number_be_rendered = clientConfig.burnBuildUpSettings.show_number && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.burnBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.burnBuildUpSettings.origin);
 
 					if (clientConfig.burnBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_burn_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
-								currentDisplayBleedingBuildUp,
-								maxBleedingBuildUp,
+								currentDisplayBurnBuildUp,
+								maxBurnBuildUp,
 								shouldBlink ? ICON_BURNING_CONTAINER_BLINKING : ICON_BURNING_CONTAINER,
 								shouldBlink ? ICON_BURNING_FULL_BLINKING : ICON_BURNING_FULL,
 								shouldBlink ? ICON_BURNING_HALF_BLINKING : ICON_BURNING_HALF,
 								ResourceBarAPI.ContinuationType.NEW_ICON
 						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								guiGraphics,
+								guiGraphicsExtractor,
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.burnBuildUpSettings.iconBarSettings.offset_x.get(),
-								clientConfig.burnBuildUpSettings.iconBarSettings.offset_y.get(),
+								clientConfig.burnBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
+								clientConfig.burnBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
 								clientConfig.burnBuildUpSettings.fill_direction,
 								clientConfig.burnBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
 								clientConfig.burnBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
@@ -306,7 +305,7 @@ public class ClientEventsRegistry {
 					} else if (clientConfig.burnBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_burn_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
-								guiGraphics,
+								guiGraphicsExtractor,
 								BURN_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -383,7 +382,7 @@ public class ClientEventsRegistry {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraft,
 								minecraft.font,
-								guiGraphics,
+								guiGraphicsExtractor,
 								BURN_BAR_IDENTIFIER_STRING,
 								burnBuildUp,
 								maxBurnBuildUp,
@@ -397,8 +396,8 @@ public class ClientEventsRegistry {
 						);
 					}
 					if (should_burn_bar_be_rendered || should_burn_icon_be_rendered || should_burn_number_be_rendered) {
-						dynamic_offset_x = clientConfig.burnBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y = clientConfig.burnBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.burnBuildUpSettings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.burnBuildUpSettings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion burn
@@ -435,26 +434,26 @@ public class ClientEventsRegistry {
 					boolean should_freeze_icon_be_rendered = clientConfig.freezeBuildUpSettings.show_icon && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_freeze_number_be_rendered = clientConfig.freezeBuildUpSettings.show_number && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.freezeBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.freezeBuildUpSettings.origin);
 
 					if (clientConfig.freezeBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_freeze_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
-								currentDisplayBleedingBuildUp,
-								maxBleedingBuildUp,
+								currentDisplayFreezeBuildUp,
+								maxFreezeBuildUp,
 								shouldBlink ? ICON_FREEZE_CONTAINER_BLINKING : ICON_FREEZE_CONTAINER,
 								shouldBlink ? ICON_FREEZE_FULL_BLINKING : ICON_FREEZE_FULL,
 								shouldBlink ? ICON_FREEZE_HALF_BLINKING : ICON_FREEZE_HALF,
 								ResourceBarAPI.ContinuationType.NEW_ICON
 						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								guiGraphics,
+								guiGraphicsExtractor,
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.freezeBuildUpSettings.iconBarSettings.offset_x.get(),
-								clientConfig.freezeBuildUpSettings.iconBarSettings.offset_y.get(),
+								clientConfig.freezeBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
+								clientConfig.freezeBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
 								clientConfig.freezeBuildUpSettings.fill_direction,
 								clientConfig.freezeBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
 								clientConfig.freezeBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
@@ -462,7 +461,7 @@ public class ClientEventsRegistry {
 					} else if (clientConfig.freezeBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_freeze_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
-								guiGraphics,
+								guiGraphicsExtractor,
 								FREEZE_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -539,7 +538,7 @@ public class ClientEventsRegistry {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraft,
 								minecraft.font,
-								guiGraphics,
+								guiGraphicsExtractor,
 								FREEZE_BAR_IDENTIFIER_STRING,
 								freezeBuildUp,
 								maxFreezeBuildUp,
@@ -553,8 +552,8 @@ public class ClientEventsRegistry {
 						);
 					}
 					if (should_freeze_bar_be_rendered || should_freeze_icon_be_rendered || should_freeze_number_be_rendered) {
-						dynamic_offset_x = clientConfig.freezeBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y = clientConfig.freezeBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.freezeBuildUpSettings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.freezeBuildUpSettings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion freeze
@@ -591,26 +590,26 @@ public class ClientEventsRegistry {
 					boolean should_poison_icon_be_rendered = clientConfig.poisonBuildUpSettings.show_icon && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_poison_number_be_rendered = clientConfig.poisonBuildUpSettings.show_number && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.poisonBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.poisonBuildUpSettings.origin);
 
 					if (clientConfig.poisonBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_poison_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
-								currentDisplayBleedingBuildUp,
-								maxBleedingBuildUp,
+								currentDisplayPoisonBuildUp,
+								maxPoisonBuildUp,
 								shouldBlink ? ICON_POISON_CONTAINER_BLINKING : ICON_POISON_CONTAINER,
 								shouldBlink ? ICON_POISON_FULL_BLINKING : ICON_POISON_FULL,
 								shouldBlink ? ICON_POISON_HALF_BLINKING : ICON_POISON_HALF,
 								ResourceBarAPI.ContinuationType.NEW_ICON
 						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								guiGraphics,
+								guiGraphicsExtractor,
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.poisonBuildUpSettings.iconBarSettings.offset_x.get(),
-								clientConfig.poisonBuildUpSettings.iconBarSettings.offset_y.get(),
+								clientConfig.poisonBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
+								clientConfig.poisonBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
 								clientConfig.poisonBuildUpSettings.fill_direction,
 								clientConfig.poisonBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
 								clientConfig.poisonBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
@@ -618,7 +617,7 @@ public class ClientEventsRegistry {
 					} else if (clientConfig.poisonBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_poison_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
-								guiGraphics,
+								guiGraphicsExtractor,
 								POISON_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -695,7 +694,7 @@ public class ClientEventsRegistry {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraft,
 								minecraft.font,
-								guiGraphics,
+								guiGraphicsExtractor,
 								POISON_BAR_IDENTIFIER_STRING,
 								poisonBuildUp,
 								maxPoisonBuildUp,
@@ -709,8 +708,8 @@ public class ClientEventsRegistry {
 						);
 					}
 					if (should_poison_bar_be_rendered || should_poison_icon_be_rendered || should_poison_number_be_rendered) {
-						dynamic_offset_x = clientConfig.poisonBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y = clientConfig.poisonBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.poisonBuildUpSettings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.poisonBuildUpSettings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion poison
@@ -747,26 +746,26 @@ public class ClientEventsRegistry {
 					boolean should_shock_icon_be_rendered = clientConfig.shockBuildUpSettings.show_icon && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_shock_number_be_rendered = clientConfig.shockBuildUpSettings.show_number && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.shockBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.shockBuildUpSettings.origin);
 
 					if (clientConfig.shockBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_shock_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
-								currentDisplayBleedingBuildUp,
-								maxBleedingBuildUp,
+								currentDisplayShockBuildUp,
+								maxShockBuildUp,
 								shouldBlink ? ICON_SHOCK_CONTAINER_BLINKING : ICON_SHOCK_CONTAINER,
 								shouldBlink ? ICON_SHOCK_FULL_BLINKING : ICON_SHOCK_FULL,
 								shouldBlink ? ICON_SHOCK_HALF_BLINKING : ICON_SHOCK_HALF,
 								ResourceBarAPI.ContinuationType.NEW_ICON
 						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								guiGraphics,
+								guiGraphicsExtractor,
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.shockBuildUpSettings.iconBarSettings.offset_x.get(),
-								clientConfig.shockBuildUpSettings.iconBarSettings.offset_y.get(),
+								clientConfig.shockBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
+								clientConfig.shockBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
 								clientConfig.shockBuildUpSettings.fill_direction,
 								clientConfig.shockBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
 								clientConfig.shockBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
@@ -774,7 +773,7 @@ public class ClientEventsRegistry {
 					} else if (clientConfig.shockBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_shock_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
-								guiGraphics,
+								guiGraphicsExtractor,
 								SHOCK_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -851,7 +850,7 @@ public class ClientEventsRegistry {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraft,
 								minecraft.font,
-								guiGraphics,
+								guiGraphicsExtractor,
 								SHOCK_BAR_IDENTIFIER_STRING,
 								shockBuildUp,
 								maxShockBuildUp,
@@ -865,8 +864,8 @@ public class ClientEventsRegistry {
 						);
 					}
 					if (should_shock_bar_be_rendered || should_shock_icon_be_rendered || should_shock_number_be_rendered) {
-						dynamic_offset_x = clientConfig.shockBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y = clientConfig.shockBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.shockBuildUpSettings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.shockBuildUpSettings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion shock
@@ -903,7 +902,7 @@ public class ClientEventsRegistry {
 					boolean should_stagger_icon_be_rendered = clientConfig.staggerBuildUpSettings.show_icon && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.iconTextureSettings.show_when_bar_empty);
 					boolean should_stagger_number_be_rendered = clientConfig.staggerBuildUpSettings.show_number && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.numberSettings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphics, clientConfig.staggerBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.staggerBuildUpSettings.origin);
 
 					if (clientConfig.staggerBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_stagger_bar_be_rendered) {
 
@@ -917,12 +916,12 @@ public class ClientEventsRegistry {
 								ResourceBarAPI.ContinuationType.NEW_ICON
 						));
 						ResourceBarAPIClient.drawIconResourceBar(
-								guiGraphics,
+								guiGraphicsExtractor,
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.staggerBuildUpSettings.iconBarSettings.offset_x.get(),
-								clientConfig.staggerBuildUpSettings.iconBarSettings.offset_y.get(),
+								clientConfig.staggerBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
+								clientConfig.staggerBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
 								clientConfig.staggerBuildUpSettings.fill_direction,
 								clientConfig.staggerBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
 								clientConfig.staggerBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
@@ -930,7 +929,7 @@ public class ClientEventsRegistry {
 					} else if (clientConfig.staggerBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_stagger_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
-								guiGraphics,
+								guiGraphicsExtractor,
 								STAGGER_BAR_IDENTIFIER_STRING,
 								new double[]{
 										-1,
@@ -1007,7 +1006,7 @@ public class ClientEventsRegistry {
 						ResourceBarAPIClient.drawResourceNumber(
 								minecraft,
 								minecraft.font,
-								guiGraphics,
+								guiGraphicsExtractor,
 								STAGGER_BAR_IDENTIFIER_STRING,
 								staggerBuildUp,
 								maxStaggerBuildUp,
@@ -1021,8 +1020,8 @@ public class ClientEventsRegistry {
 						);
 					}
 //				if (should_stagger_bar_be_rendered || should_stagger_icon_be_rendered|| should_stagger_number_be_rendered) {
-//					dynamic_offset_x = clientConfig.staggerBuildUpSettings.dynamic_offset_increase_x;
-//					dynamic_offset_y = clientConfig.staggerBuildUpSettings.dynamic_offset_increase_y;
+//					dynamic_offset_x += clientConfig.staggerBuildUpSettings.dynamic_offset_increase_x;
+//					dynamic_offset_y += clientConfig.staggerBuildUpSettings.dynamic_offset_increase_y;
 //				}
 				}
 				// endregion stagger

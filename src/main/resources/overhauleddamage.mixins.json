@@ -1,18 +1,19 @@
 {
-	"required": true,
-	"package": "com.github.theredbrain.overhauleddamage.mixin",
-	"compatibilityLevel": "JAVA_25",
-	"mixins": [
-		"entity.LivingEntityMixin",
-		"entity.MobMixin",
-		"entity.attribute.AttributesMixin",
-    "world.damagesource.DamageSourcesMixin",
-		"entity.player.PlayerMixin"
-	],
-	"mixinextras": {
-		"minVersion": "0.5.0"
-	},
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "com.github.theredbrain.overhauleddamage.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "entity.LivingEntityMixin",
+    "entity.MobMixin",
+    "entity.attribute.AttributesMixin",
+    "entity.player.PlayerMixin",
+    "server.PlayerListMixin",
+    "world.damagesource.DamageSourcesMixin"
+  ],
+  "mixinextras": {
+    "minVersion": "0.5.0"
+  },
+  "injectors": {
+    "defaultRequire": 1
 	}
 }

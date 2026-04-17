@@ -170,4 +170,8 @@ public interface DuckLivingEntityMixin {
 
 	void overhauleddamage$setIsMoving(boolean isMoving);
 
+	boolean overhauleddamage$delayEffectBuildUpTick();
+
+	void overhauleddamage$setDelayEffectBuildUpTick(boolean delayEffectBuildUpTick);
+
 }
