@@ -12,6 +12,7 @@ import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedBoolean;
 import me.fzzyhmstrs.fzzy_config.validation.misc.ValidatedColor;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 import net.minecraft.resources.Identifier;
+
 import java.util.HashMap;
 
 @ConvertFrom(fileName = "client.json5", folder = "overhauleddamage")

@@ -2,7 +2,7 @@ package com.github.theredbrain.overhauleddamage.gui.hud;
 
 public interface DuckGuiMixin {
 	int overhauleddamage$getTickCount();
-	
+
 	int overhauleddamage$getDisplayBleedingBuildUp();
 
 	void overhauleddamage$setDisplayBleedingBuildUp(int displayBleedingBuildUp);
@@ -18,7 +18,7 @@ public interface DuckGuiMixin {
 	long overhauleddamage$getBleedingBuildUpIconBlinkTime();
 
 	void overhauleddamage$setBleedingBuildUpIconBlinkTime(long bleedingBuildUpIconBlinkTime);
-	
+
 	int overhauleddamage$getDisplayBurnBuildUp();
 
 	void overhauleddamage$setDisplayBurnBuildUp(int displayBurnBuildUp);
@@ -34,7 +34,7 @@ public interface DuckGuiMixin {
 	long overhauleddamage$getBurnBuildUpIconBlinkTime();
 
 	void overhauleddamage$setBurnBuildUpIconBlinkTime(long burnBuildUpIconBlinkTime);
-	
+
 	int overhauleddamage$getDisplayFreezeBuildUp();
 
 	void overhauleddamage$setDisplayFreezeBuildUp(int displayFreezeBuildUp);
@@ -50,7 +50,7 @@ public interface DuckGuiMixin {
 	long overhauleddamage$getFreezeBuildUpIconBlinkTime();
 
 	void overhauleddamage$setFreezeBuildUpIconBlinkTime(long freezeBuildUpIconBlinkTime);
-	
+
 	int overhauleddamage$getDisplayPoisonBuildUp();
 
 	void overhauleddamage$setDisplayPoisonBuildUp(int displayPoisonBuildUp);
@@ -66,7 +66,7 @@ public interface DuckGuiMixin {
 	long overhauleddamage$getPoisonBuildUpIconBlinkTime();
 
 	void overhauleddamage$setPoisonBuildUpIconBlinkTime(long poisonBuildUpIconBlinkTime);
-	
+
 	int overhauleddamage$getDisplayShockBuildUp();
 
 	void overhauleddamage$setDisplayShockBuildUp(int displayShockBuildUp);
@@ -82,7 +82,7 @@ public interface DuckGuiMixin {
 	long overhauleddamage$getShockBuildUpIconBlinkTime();
 
 	void overhauleddamage$setShockBuildUpIconBlinkTime(long shockBuildUpIconBlinkTime);
-	
+
 	int overhauleddamage$getDisplayStaggerBuildUp();
 
 	void overhauleddamage$setDisplayStaggerBuildUp(int displayStaggerBuildUp);

@@ -16,6 +16,7 @@ import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedDouble;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedFloat;
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt;
 import net.minecraft.resources.Identifier;
+
 import java.util.HashMap;
 
 @ConvertFrom(fileName = "server.json5", folder = "overhauleddamage")

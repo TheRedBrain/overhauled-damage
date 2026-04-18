@@ -731,7 +731,7 @@ public class LivingEntityHelper {
 				return;
 			}
 
-			((DuckLivingEntityMixin) livingEntity).overhauleddamage$setIsMoving(!livingEntity.oldPosition().equals(livingEntity.position()));;
+			((DuckLivingEntityMixin) livingEntity).overhauleddamage$setIsMoving(!livingEntity.oldPosition().equals(livingEntity.position()));
 
 			ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
 
