@@ -88,6 +88,15 @@
 	"effect.overhauleddamage.staggered.description": "Staggered",
 
 
+	"enchantment.overhauleddamage.bleeding_protection": "Bleeding Protection",
+	"enchantment.overhauleddamage.frost_aspect": "Frost Aspect",
+	"enchantment.overhauleddamage.frost_protection": "Frost Protection",
+	"enchantment.overhauleddamage.lightning_aspect": "Lightning Aspect",
+	"enchantment.overhauleddamage.lightning_protection": "Lightning Protection",
+	"enchantment.overhauleddamage.poison_aspect": "Poison Aspect",
+	"enchantment.overhauleddamage.poison_protection": "Poison Protection",
+
+
 	"overhauleddamage.client": "Client Side Settings",
 
 	"overhauleddamage.client.bleeding_build_up_settings": "Bleeding Build Up",
@@ -326,6 +335,8 @@
 	"overhauleddamage.server.natural_player_attribute_values.natural_damage_taken_from_mana_multiplier": "Damage Taken From Mana Multiplier",
 	"overhauleddamage.server.natural_player_attribute_values.natural_damage_taken_from_stamina_multiplier": "Damage Taken From Stamina Multiplier",
 
+	"resourcepack.overhauleddamage.overhauled_damage_enchantments.name": "Overhauled Damage Enchantments",
+	"resourcepack.overhauleddamage.overhauled_damage_enchantments.description": "Adds several enchantments that utilize Overhauled Damage attributes and mechanics",
 	"resourcepack.overhauleddamage.vanilla_enchantments_overhaul.name": "Vanilla Enchantments Overhaul",
 	"resourcepack.overhauleddamage.vanilla_enchantments_overhaul.description": "Integrates vanilla enchantments into Overhauled Damage"
 

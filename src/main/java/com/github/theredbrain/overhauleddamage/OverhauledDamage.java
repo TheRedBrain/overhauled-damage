@@ -240,6 +240,7 @@ public class OverhauledDamage implements ModInitializer {
 
 		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(MOD_ID);
 		if (modContainer.isPresent()) {
+			ResourceLoader.registerBuiltinPack(identifier("overhauled_damage_enchantments"), modContainer.get(), Component.translatable("resourcepack.overhauleddamage.overhauled_damage_enchantments.name"), PackActivationType.DEFAULT_ENABLED);
 			ResourceLoader.registerBuiltinPack(identifier("vanilla_enchantments_overhaul"), modContainer.get(), Component.translatable("resourcepack.overhauleddamage.vanilla_enchantments_overhaul.name"), PackActivationType.DEFAULT_ENABLED);
 		}
 	}
