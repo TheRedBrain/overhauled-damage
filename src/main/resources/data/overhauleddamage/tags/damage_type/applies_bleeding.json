@@ -1,8 +1,10 @@
 {
 	"values": [
 		"minecraft:cactus",
-		"minecraft:stalagmite",
 		"minecraft:sweet_berry_bush",
+		"minecraft:stalagmite",
+		"minecraft:falling_stalactite",
+		"minecraft:trident",
 		"minecraft:thorns"
 	]
 }
