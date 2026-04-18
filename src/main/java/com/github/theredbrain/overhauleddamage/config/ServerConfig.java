@@ -25,114 +25,75 @@ public class ServerConfig extends Config {
 		super(OverhauledDamage.identifier("server"));
 	}
 
-	public ValidatedBoolean damage_interrupts_item_usage = new ValidatedBoolean(true);
-
-	public ValidatedBoolean enable_hit_stun_mechanic = new ValidatedBoolean(true);
-
-	public HitStun hitStun = new HitStun();
-
-	public static class HitStun extends ConfigSection {
-
-		public ValidatedAny<HitStunSettings> default_hit_stun_settings = new ValidatedAny<>(new HitStunSettings(1, 0.0));
-
-		public ValidatedIdentifier attribute = new ValidatedIdentifier(Identifier.parse("overhauleddamage:max_stagger_build_up"));
-
-		public ValidatedIdentifier hit_stun_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:hit_stun"));
-
-		public ValidatedMap<String, HitStunSettings> hit_stun_settings = new ValidatedMap<>(new HashMap<>() {{
-			put("overhauleddamage:mob_slashing_damage_type", new HitStunSettings(0, 0.0));
-		}}, new ValidatedString(), new ValidatedAny<>(new HitStunSettings()));
-
-		@Translation(prefix = "overhauleddamage.server.hit_sun_settings")
-		public static class HitStunSettings implements Walkable {
-
-			public HitStunSettings() {
-				new HitStunSettings(1, 0.0);
-			}
-
-			public HitStunSettings(int duration, double required_attribute_threshold) {
-				this.duration = duration;
-				this.required_attribute_threshold = required_attribute_threshold;
-			}
-
-			public int duration;
-			public double required_attribute_threshold;
-
-			public String toString() {
-				return "duration: " + this.duration + ", required_attribute_threshold: " + this.required_attribute_threshold;
-			}
-		}
-	}
-
 	public ValidatedBoolean disable_jump_crit_mechanic = new ValidatedBoolean(true);
-
-	public DamageTypes damageTypes = new DamageTypes();
-
-	public static class DamageTypes extends ConfigSection {
-
-		public ValidatedAny<DamageTypeMultipliers> default_damage_type_multipliers = new ValidatedAny<>(new DamageTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-
-		public ValidatedMap<String, DamageTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(new HashMap<>() {{
-			put("minecraft:arrow", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:cactus", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:falling_stalactite", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:fireball", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-			put("minecraft:hot_floor", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-			put("minecraft:in_fire", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-			put("minecraft:lightning_bolt", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
-			put("minecraft:mob_attack", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:stalagmite", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:sting", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:sweet_berry_bush", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:thorns", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("minecraft:trident", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("overhauleddamage:mob_bashing_damage_type", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("overhauleddamage:mob_piercing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-			put("overhauleddamage:mob_slashing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-		}}, new ValidatedString(), new ValidatedAny<>(new DamageTypeMultipliers()));
-
-		@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
-		public static class DamageTypeMultipliers implements Walkable {
-
-			public DamageTypeMultipliers() {
-				new DamageTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-			}
-
-			public DamageTypeMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
-				this.generic = generic;
-				this.bashing = bashing;
-				this.piercing = piercing;
-				this.slashing = slashing;
-				this.poison = poison;
-				this.fire = fire;
-				this.frost = frost;
-				this.lightning = lightning;
-			}
-
-			public float generic;
-			public float bashing;
-			public float piercing;
-			public float slashing;
-			public float poison;
-			public float fire;
-			public float frost;
-			public float lightning;
-
-			public String toString() {
-				return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
-			}
-		}
-	}
 
 	public ValidatedBoolean enable_overhauled_damage_calculation = new ValidatedBoolean(true);
 
-	public DamageCalculation damageCalculation = new DamageCalculation();
+	public DamageCalculation overhauled_damage_calculation = new DamageCalculation();
 
 	public static class DamageCalculation extends ConfigSection {
 
+		public DamageTypes damage_types = new DamageTypes();
+
+		public static class DamageTypes extends ConfigSection {
+
+			public ValidatedAny<DamageTypeMultipliers> default_damage_type_multipliers = new ValidatedAny<>(new DamageTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+
+			public ValidatedMap<String, DamageTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(new HashMap<>() {{
+				put("minecraft:arrow", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:cactus", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:falling_stalactite", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:fireball", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+				put("minecraft:hot_floor", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+				put("minecraft:in_fire", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+				put("minecraft:lightning_bolt", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
+				put("minecraft:mob_attack", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:stalagmite", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:sting", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:sweet_berry_bush", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:thorns", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("minecraft:trident", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("overhauleddamage:mob_bashing_damage_type", new DamageTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("overhauleddamage:mob_piercing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+				put("overhauleddamage:mob_slashing_damage_type", new DamageTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			}}, new ValidatedString(), new ValidatedAny<>(new DamageTypeMultipliers()));
+
+			@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
+			public static class DamageTypeMultipliers implements Walkable {
+
+				public DamageTypeMultipliers() {
+					new DamageTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
+				}
+
+				public DamageTypeMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
+					this.generic = generic;
+					this.bashing = bashing;
+					this.piercing = piercing;
+					this.slashing = slashing;
+					this.poison = poison;
+					this.fire = fire;
+					this.frost = frost;
+					this.lightning = lightning;
+				}
+
+				public float generic;
+				public float bashing;
+				public float piercing;
+				public float slashing;
+				public float poison;
+				public float fire;
+				public float frost;
+				public float lightning;
+
+				public String toString() {
+					return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
+				}
+			}
+		}
+
 		public ValidatedBoolean enable_blocking_overhaul = new ValidatedBoolean(true);
 
-		public BlockingOverhaul blockingOverhaul = new BlockingOverhaul();
+		public BlockingOverhaul blocking_overhaul = new BlockingOverhaul();
 
 		public static class BlockingOverhaul extends ConfigSection {
 
@@ -144,7 +105,7 @@ public class ServerConfig extends Config {
 
 		public ValidatedBoolean enable_protection_overhaul = new ValidatedBoolean(true);
 
-		public ProtectionOverhaul protectionOverhaul = new ProtectionOverhaul();
+		public ProtectionOverhaul protection_overhaul = new ProtectionOverhaul();
 
 		public static class ProtectionOverhaul extends ConfigSection {
 
@@ -203,7 +164,7 @@ public class ServerConfig extends Config {
 
 		public ValidatedBoolean enable_armor_overhaul = new ValidatedBoolean(true);
 
-		public ArmorOverhaul armorOverhaul = new ArmorOverhaul();
+		public ArmorOverhaul armor_overhaul = new ArmorOverhaul();
 
 		public static class ArmorOverhaul extends ConfigSection {
 
@@ -247,6 +208,44 @@ public class ServerConfig extends Config {
 			}
 		}
 
+		public ValidatedBoolean damage_interrupts_item_usage = new ValidatedBoolean(true);
+
+		public ValidatedBoolean enable_hit_stun_mechanic = new ValidatedBoolean(true);
+
+		public HitStunMechanic hit_stun_mechanic = new HitStunMechanic();
+
+		public static class HitStunMechanic extends ConfigSection {
+
+			public ValidatedAny<HitStunSettings> default_hit_stun_settings = new ValidatedAny<>(new HitStunSettings(1, 0.0));
+
+			public ValidatedIdentifier hit_stun_counter_attribute_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:max_stagger_build_up"));
+
+			public ValidatedIdentifier hit_stun_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:hit_stun"));
+
+			public ValidatedMap<String, HitStunSettings> hit_stun_settings = new ValidatedMap<>(new HashMap<>() {
+			}, new ValidatedString(), new ValidatedAny<>(new HitStunSettings()));
+
+			@Translation(prefix = "overhauleddamage.server.hit_stun_mechanic.hit_sun_setting")
+			public static class HitStunSettings implements Walkable {
+
+				public HitStunSettings() {
+					new HitStunSettings(1, 0.0);
+				}
+
+				public HitStunSettings(int duration, double required_attribute_threshold) {
+					this.duration = duration;
+					this.required_attribute_threshold = required_attribute_threshold;
+				}
+
+				public int duration;
+				public double required_attribute_threshold;
+
+				public String toString() {
+					return "duration: " + this.duration + ", required_attribute_threshold: " + this.required_attribute_threshold;
+				}
+			}
+		}
+
 		//	@Comment("""
 //			When set to 'true', "overhauleddamage:generic.damage_taken_multiplier" is multiplying every damage taken.
 //
@@ -264,7 +263,7 @@ public class ServerConfig extends Config {
 
 		public ValidatedBoolean enable_debug_log = new ValidatedBoolean(false);
 
-		@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
+		@Translation(prefix = "overhauleddamage.server.overhauled_damage_calculation.attack_type_multipliers")
 		public static class AttackTypeMultipliers implements Walkable {
 
 			public AttackTypeMultipliers() {
@@ -297,31 +296,77 @@ public class ServerConfig extends Config {
 		}
 	}
 
-	public BuildUpEffects buildUpEffects = new BuildUpEffects();
+	public BuildUpEffects build_up_effects = new BuildUpEffects();
 
 	public static class BuildUpEffects extends ConfigSection {
-		public ValidatedIdentifier bleeding_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:bleeding"));
-		public ValidatedBoolean should_bleeding_duration_be_additive = new ValidatedBoolean(false);
-		public ValidatedBoolean should_bleeding_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier burn_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:burning"));
-		public ValidatedBoolean should_burn_duration_be_additive = new ValidatedBoolean(true);
-		public ValidatedBoolean should_burn_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier chilled_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:chilled"));
-		public double chilled_duration_multiplier = 1.0;
-		public ValidatedBoolean should_chilled_duration_be_additive = new ValidatedBoolean(false);
-		public ValidatedBoolean should_chilled_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier freeze_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:frozen"));
-		public ValidatedBoolean should_freeze_duration_be_additive = new ValidatedBoolean(false);
-		public ValidatedBoolean should_freeze_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier poison_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:poison"));
-		public ValidatedBoolean should_poison_duration_be_additive = new ValidatedBoolean(false);
-		public ValidatedBoolean should_poison_amplifier_be_additive = new ValidatedBoolean(true);
-		public ValidatedIdentifier shock_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:shocked"));
-		public ValidatedBoolean should_shock_duration_be_additive = new ValidatedBoolean(false);
-		public ValidatedBoolean should_shock_amplifier_be_additive = new ValidatedBoolean(false);
-		public ValidatedIdentifier stagger_status_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:staggered"));
-		public ValidatedBoolean should_stagger_duration_be_additive = new ValidatedBoolean(false);
-		public ValidatedBoolean should_stagger_amplifier_be_additive = new ValidatedBoolean(false);
+
+		public BleedingSection bleeding_build_up = new BleedingSection();
+
+		@Translation(prefix = "overhauleddamage.server.build_up_effect")
+		public static class BleedingSection extends ConfigSection {
+
+			public ValidatedIdentifier mob_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:bleeding"));
+			public ValidatedBoolean duration_is_additive = new ValidatedBoolean(false);
+			public ValidatedBoolean amplifier_is_additive = new ValidatedBoolean(false);
+		}
+
+		public BurnSection burn_build_up = new BurnSection();
+
+		@Translation(prefix = "overhauleddamage.server.build_up_effect")
+		public static class BurnSection extends ConfigSection {
+
+			public ValidatedIdentifier mob_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:burning"));
+			public ValidatedBoolean duration_is_additive = new ValidatedBoolean(true);
+			public ValidatedBoolean amplifier_is_additive = new ValidatedBoolean(false);
+		}
+
+		public FreezeSection freeze_build_up = new FreezeSection();
+
+		@Translation(prefix = "overhauleddamage.server.build_up_effect")
+		public static class FreezeSection extends ConfigSection {
+
+			@Translation(prefix = "overhauleddamage.server.freeze_build_up")
+			public ValidatedIdentifier chilled_mob_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:chilled"));
+			@Translation(prefix = "overhauleddamage.server.freeze_build_up")
+			public double chilled_duration_multiplier = 1.0;
+			@Translation(prefix = "overhauleddamage.server.freeze_build_up")
+			public ValidatedBoolean chilled_duration_is_additive = new ValidatedBoolean(false);
+			@Translation(prefix = "overhauleddamage.server.freeze_build_up")
+			public ValidatedBoolean chilled_amplifier_is_additive = new ValidatedBoolean(false);
+			public ValidatedIdentifier mob_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:frozen"));
+			public ValidatedBoolean duration_is_additive = new ValidatedBoolean(false);
+			public ValidatedBoolean amplifier_is_additive = new ValidatedBoolean(false);
+		}
+
+		public PoisonSection poison_build_up = new PoisonSection();
+
+		@Translation(prefix = "overhauleddamage.server.build_up_effect")
+		public static class PoisonSection extends ConfigSection {
+
+			public ValidatedIdentifier mob_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:poison"));
+			public ValidatedBoolean duration_is_additive = new ValidatedBoolean(false);
+			public ValidatedBoolean amplifier_is_additive = new ValidatedBoolean(true);
+		}
+
+		public ShockSection shock_build_up = new ShockSection();
+
+		@Translation(prefix = "overhauleddamage.server.build_up_effect")
+		public static class ShockSection extends ConfigSection {
+
+			public ValidatedIdentifier mob_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:shocked"));
+			public ValidatedBoolean duration_is_additive = new ValidatedBoolean(false);
+			public ValidatedBoolean amplifier_is_additive = new ValidatedBoolean(false);
+		}
+
+		public StaggerSection stagger_build_up = new StaggerSection();
+
+		@Translation(prefix = "overhauleddamage.server.build_up_effect")
+		public static class StaggerSection extends ConfigSection {
+
+			public ValidatedIdentifier mob_effect_identifier = new ValidatedIdentifier(Identifier.parse("overhauleddamage:staggered"));
+			public ValidatedBoolean duration_is_additive = new ValidatedBoolean(false);
+			public ValidatedBoolean amplifier_is_additive = new ValidatedBoolean(false);
+		}
 	}
 
 	public StatusEffects status_effects = new StatusEffects();
@@ -330,23 +375,29 @@ public class ServerConfig extends Config {
 
 		public BleedingSection bleeding_effect = new BleedingSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class BleedingSection extends ConfigSection {
 			public ValidatedInt tick_update_threshold = new ValidatedInt(20);
+			@Translation(prefix = "overhauleddamage.server.bleeding_effect")
 			public ValidatedBoolean moving_doubles_damage = new ValidatedBoolean(true);
+			@Translation(prefix = "overhauleddamage.server.bleeding_effect")
 			public ValidatedFloat max_health_multiplier = new ValidatedFloat(0.1F);
 			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
 		}
 
 		public BurningSection burning_effect = new BurningSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class BurningSection extends ConfigSection {
 			public ValidatedInt tick_update_threshold = new ValidatedInt(50);
+			@Translation(prefix = "overhauleddamage.server.burning_effect")
 			public ValidatedFloat damage_per_tick = new ValidatedFloat(2.0F);
 			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
 		}
 
 		public ChilledSection chilled_effect = new ChilledSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class ChilledSection extends ConfigSection {
 			public ValidatedDouble movement_speed_total_multiplier = new ValidatedDouble(-0.15);
 			public ValidatedDouble attack_speed_total_multiplier = new ValidatedDouble(-0.15);
@@ -355,20 +406,24 @@ public class ServerConfig extends Config {
 
 		public FrozenSection frozen_effect = new FrozenSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class FrozenSection extends ConfigSection {
 			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
 		}
 
 		public PoisonSection poison_effect = new PoisonSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class PoisonSection extends ConfigSection {
 			public ValidatedInt tick_update_threshold = new ValidatedInt(25);
+			@Translation(prefix = "overhauleddamage.server.poison_effect")
 			public ValidatedFloat amplifier_multiplier = new ValidatedFloat(1.0F);
 			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
 		}
 
 		public ShockedSection shocked_effect = new ShockedSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class ShockedSection extends ConfigSection {
 //			public ValidatedDouble additional_damage_taken = new ValidatedDouble(25.0);
 			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
@@ -376,6 +431,7 @@ public class ServerConfig extends Config {
 
 		public HitStunSection hit_stun_effect = new HitStunSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class HitStunSection extends ConfigSection {
 //			public ValidatedDouble additional_roll_distance = new ValidatedDouble(0.0);
 			public ValidatedDouble movement_speed_total_multiplier = new ValidatedDouble(-0.7);
@@ -385,15 +441,17 @@ public class ServerConfig extends Config {
 
 		public StaggerSection stagger_effect = new StaggerSection();
 
+		@Translation(prefix = "overhauleddamage.server.status_effect")
 		public static class StaggerSection extends ConfigSection {
 			public ValidatedColor effect_color = new ValidatedColor(1, 1, 1);
 		}
 	}
 
-	public NaturalPlayerAttributeValuesSection naturalPlayerAttributeValues = new NaturalPlayerAttributeValuesSection();
+	public NaturalPlayerAttributeValuesSection natural_player_attribute_values = new NaturalPlayerAttributeValuesSection();
 
 	public static class NaturalPlayerAttributeValuesSection extends ConfigSection {
 		public ValidatedDouble natural_armor_toughness = new ValidatedDouble(0.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_additional_bashing_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_increased_bashing_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_bashing_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
@@ -404,11 +462,13 @@ public class ServerConfig extends Config {
 		public ValidatedDouble natural_increased_slashing_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_slashing_resistance = new ValidatedDouble(0.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_blocked_physical_damage = new ValidatedDouble(0.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_max_bleeding_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
 		public ValidatedDouble natural_bleeding_duration = new ValidatedDouble(201.0, 1000000.0, 1.0);
 		public ValidatedDouble natural_bleeding_tick_threshold = new ValidatedDouble(20.0, 1024.0, 0.0);
 		public ValidatedDouble natural_bleeding_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
 		public ValidatedDouble natural_bleeding_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_additional_frost_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_increased_frost_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_blocked_frost_damage = new ValidatedDouble(0.0, 1024.0, 0.0);
@@ -418,6 +478,7 @@ public class ServerConfig extends Config {
 		public ValidatedDouble natural_freeze_tick_threshold = new ValidatedDouble(20.0, 1024.0, 0.0);
 		public ValidatedDouble natural_freeze_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
 		public ValidatedDouble natural_freeze_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_additional_fire_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_increased_fire_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_blocked_fire_damage = new ValidatedDouble(0.0, 1024.0, 0.0);
@@ -427,6 +488,7 @@ public class ServerConfig extends Config {
 		public ValidatedDouble natural_burn_tick_threshold = new ValidatedDouble(20.0, 1024.0, 0.0);
 		public ValidatedDouble natural_burn_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
 		public ValidatedDouble natural_burn_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_additional_lightning_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_increased_lightning_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_blocked_lightning_damage = new ValidatedDouble(0.0, 1024.0, 0.0);
@@ -436,6 +498,7 @@ public class ServerConfig extends Config {
 		public ValidatedDouble natural_shock_tick_threshold = new ValidatedDouble(20.0, 1024.0, 0.0);
 		public ValidatedDouble natural_shock_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
 		public ValidatedDouble natural_shock_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_additional_poison_damage = new ValidatedDouble(0.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_increased_poison_damage = new ValidatedDouble(1.0, 1024.0, -1024.0);
 		public ValidatedDouble natural_blocked_poison_damage = new ValidatedDouble(0.0, 1024.0, 0.0);
@@ -445,11 +508,13 @@ public class ServerConfig extends Config {
 		public ValidatedDouble natural_poison_tick_threshold = new ValidatedDouble(20.0, 1024.0, 0.0);
 		public ValidatedDouble natural_poison_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
 		public ValidatedDouble natural_poison_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_max_stagger_build_up = new ValidatedDouble(20.0, 1024.0, -1.0);
 		public ValidatedDouble natural_stagger_duration = new ValidatedDouble(200.0, 1000000.0, 1.0);
 		public ValidatedDouble natural_stagger_tick_threshold = new ValidatedDouble(20.0, 1024.0, 0.0);
 		public ValidatedDouble natural_stagger_build_up_reduction = new ValidatedDouble(1.0, 1024.0, 0.0);
 		public ValidatedDouble natural_stagger_build_up_reduction_delay_threshold = new ValidatedDouble(40.0, 1024.0, 0.0);
+
 		public ValidatedDouble natural_damage_taken_from_mana_multiplier = new ValidatedDouble(0.0, 1024.0, 0.0);
 		public ValidatedDouble natural_damage_taken_from_stamina_multiplier = new ValidatedDouble(0.0, 1024.0, 0.0);
 	}

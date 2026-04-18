@@ -21,12 +21,11 @@ public class ClientConfig extends Config {
 		super(OverhauledDamage.identifier("client"));
 	}
 
-	public BleedingBuildUpSettings bleedingBuildUpSettings = new BleedingBuildUpSettings();
+	public BleedingBuildUpSettings bleeding_build_up_settings = new BleedingBuildUpSettings();
 
 	@Translation(prefix = "overhauleddamage.client.resource_bar")
 	public static class BleedingBuildUpSettings extends ConfigSection {
 
-		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 		public boolean show_empty_bar = false;
 
 		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
@@ -37,8 +36,11 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 10;
 
-		public IconBarSettings iconBarSettings = new IconBarSettings();
+		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 
+		public IconBarSettings icon_bar_settings = new IconBarSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(-41);
 			public ValidatedInt offset_y = new ValidatedInt(5);
@@ -47,11 +49,12 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
 		}
 
-		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
+		public SmoothBarSettings smooth_bar_settings = new SmoothBarSettings();
 
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public PositionSettings positionSettings = new PositionSettings();
+			public PositionSettings position_settings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -65,11 +68,11 @@ public class ClientConfig extends Config {
 
 			public boolean show_current_value_overlay = false;
 
-			public TextureSettings textureSettings = new TextureSettings();
+			public TextureSettings texture_settings = new TextureSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class TextureSettings extends ConfigSection {
-				public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+				public BackgroundTextureSettings background_texture_settings = new BackgroundTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class BackgroundTextureSettings extends ConfigSection {
@@ -87,7 +90,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+				public ProgressTextureSettings progress_texture_settings = new ProgressTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class ProgressTextureSettings extends ConfigSection {
@@ -123,7 +126,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+				public OverlayTextureSettings overlay_texture_settings = new OverlayTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class OverlayTextureSettings extends ConfigSection {
@@ -148,45 +151,45 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public AnimationsSettings animationSettings = new AnimationsSettings();
+			public AnimationsSettings animation_settings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
 				public int animation_interval = 1;
 				public boolean max_value_change_is_animated = false;
 			}
-		}
 
-		public boolean show_icon = false;
+			public boolean show_icon = false;
 
-		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+			public IconTextureSettings icon_texture_settings = new IconTextureSettings();
 
-		@Translation(prefix = "overhauleddamage.client.texture_layer")
-		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class IconTextureSettings extends ConfigSection {
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_x = 0;
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_y = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_x = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_y = 0;
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public boolean show_when_bar_empty = false;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public boolean show_when_bar_empty = false;
 
-			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
-			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
 
-			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
-			}, new ValidatedInt(), new ValidatedIdentifier());
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+				}, new ValidatedInt(), new ValidatedIdentifier());
 
+			}
 		}
 
 		public boolean show_number = false;
 
-		public NumberSettings numberSettings = new NumberSettings();
+		public NumberSettings number_settings = new NumberSettings();
 
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
@@ -198,12 +201,11 @@ public class ClientConfig extends Config {
 		}
 	}
 
-	public BurnBuildUpSettings burnBuildUpSettings = new BurnBuildUpSettings();
+	public BurnBuildUpSettings burn_build_up_settings = new BurnBuildUpSettings();
 
 	@Translation(prefix = "overhauleddamage.client.resource_bar")
 	public static class BurnBuildUpSettings extends ConfigSection {
 
-		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 		public boolean show_empty_bar = false;
 
 		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
@@ -214,8 +216,11 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 10;
 
-		public IconBarSettings iconBarSettings = new IconBarSettings();
+		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 
+		public IconBarSettings icon_bar_settings = new IconBarSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(-41);
 			public ValidatedInt offset_y = new ValidatedInt(5);
@@ -224,11 +229,12 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
 		}
 
-		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
+		public SmoothBarSettings smooth_bar_settings = new SmoothBarSettings();
 
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public PositionSettings positionSettings = new PositionSettings();
+			public PositionSettings position_settings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -242,11 +248,11 @@ public class ClientConfig extends Config {
 
 			public boolean show_current_value_overlay = false;
 
-			public TextureSettings textureSettings = new TextureSettings();
+			public TextureSettings texture_settings = new TextureSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class TextureSettings extends ConfigSection {
-				public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+				public BackgroundTextureSettings background_texture_settings = new BackgroundTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class BackgroundTextureSettings extends ConfigSection {
@@ -264,7 +270,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+				public ProgressTextureSettings progress_texture_settings = new ProgressTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class ProgressTextureSettings extends ConfigSection {
@@ -300,7 +306,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+				public OverlayTextureSettings overlay_texture_settings = new OverlayTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class OverlayTextureSettings extends ConfigSection {
@@ -325,45 +331,45 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public AnimationsSettings animationSettings = new AnimationsSettings();
+			public AnimationsSettings animation_settings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
 				public int animation_interval = 1;
 				public boolean max_value_change_is_animated = false;
 			}
-		}
 
-		public boolean show_icon = false;
+			public boolean show_icon = false;
 
-		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+			public IconTextureSettings icon_texture_settings = new IconTextureSettings();
 
-		@Translation(prefix = "overhauleddamage.client.texture_layer")
-		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class IconTextureSettings extends ConfigSection {
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_x = 0;
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_y = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_x = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_y = 0;
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public boolean show_when_bar_empty = false;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public boolean show_when_bar_empty = false;
 
-			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
-			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
 
-			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
-			}, new ValidatedInt(), new ValidatedIdentifier());
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+				}, new ValidatedInt(), new ValidatedIdentifier());
 
+			}
 		}
 
 		public boolean show_number = false;
 
-		public NumberSettings numberSettings = new NumberSettings();
+		public NumberSettings number_settings = new NumberSettings();
 
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
@@ -375,12 +381,11 @@ public class ClientConfig extends Config {
 		}
 	}
 
-	public FreezeBuildUpSettings freezeBuildUpSettings = new FreezeBuildUpSettings();
+	public FreezeBuildUpSettings freeze_build_up_settings = new FreezeBuildUpSettings();
 
 	@Translation(prefix = "overhauleddamage.client.resource_bar")
 	public static class FreezeBuildUpSettings extends ConfigSection {
 
-		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 		public boolean show_empty_bar = false;
 
 		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
@@ -391,8 +396,11 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 10;
 
-		public IconBarSettings iconBarSettings = new IconBarSettings();
+		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 
+		public IconBarSettings icon_bar_settings = new IconBarSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(-41);
 			public ValidatedInt offset_y = new ValidatedInt(5);
@@ -401,11 +409,12 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
 		}
 
-		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
+		public SmoothBarSettings smooth_bar_settings = new SmoothBarSettings();
 
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public PositionSettings positionSettings = new PositionSettings();
+			public PositionSettings position_settings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -419,11 +428,11 @@ public class ClientConfig extends Config {
 
 			public boolean show_current_value_overlay = false;
 
-			public TextureSettings textureSettings = new TextureSettings();
+			public TextureSettings texture_settings = new TextureSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class TextureSettings extends ConfigSection {
-				public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+				public BackgroundTextureSettings background_texture_settings = new BackgroundTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class BackgroundTextureSettings extends ConfigSection {
@@ -441,7 +450,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+				public ProgressTextureSettings progress_texture_settings = new ProgressTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class ProgressTextureSettings extends ConfigSection {
@@ -477,7 +486,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+				public OverlayTextureSettings overlay_texture_settings = new OverlayTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class OverlayTextureSettings extends ConfigSection {
@@ -502,45 +511,45 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public AnimationsSettings animationSettings = new AnimationsSettings();
+			public AnimationsSettings animation_settings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
 				public int animation_interval = 1;
 				public boolean max_value_change_is_animated = false;
 			}
-		}
 
-		public boolean show_icon = false;
+			public boolean show_icon = false;
 
-		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+			public IconTextureSettings icon_texture_settings = new IconTextureSettings();
 
-		@Translation(prefix = "overhauleddamage.client.texture_layer")
-		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class IconTextureSettings extends ConfigSection {
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_x = 0;
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_y = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_x = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_y = 0;
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public boolean show_when_bar_empty = false;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public boolean show_when_bar_empty = false;
 
-			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
-			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
 
-			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
-			}, new ValidatedInt(), new ValidatedIdentifier());
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+				}, new ValidatedInt(), new ValidatedIdentifier());
 
+			}
 		}
 
 		public boolean show_number = false;
 
-		public NumberSettings numberSettings = new NumberSettings();
+		public NumberSettings number_settings = new NumberSettings();
 
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
@@ -552,12 +561,11 @@ public class ClientConfig extends Config {
 		}
 	}
 
-	public PoisonBuildUpSettings poisonBuildUpSettings = new PoisonBuildUpSettings();
+	public PoisonBuildUpSettings poison_build_up_settings = new PoisonBuildUpSettings();
 
 	@Translation(prefix = "overhauleddamage.client.resource_bar")
 	public static class PoisonBuildUpSettings extends ConfigSection {
 
-		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 		public boolean show_empty_bar = false;
 
 		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
@@ -568,8 +576,11 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 10;
 
-		public IconBarSettings iconBarSettings = new IconBarSettings();
+		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 
+		public IconBarSettings icon_bar_settings = new IconBarSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(-41);
 			public ValidatedInt offset_y = new ValidatedInt(5);
@@ -578,11 +589,12 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
 		}
 
-		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
+		public SmoothBarSettings smooth_bar_settings = new SmoothBarSettings();
 
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public PositionSettings positionSettings = new PositionSettings();
+			public PositionSettings position_settings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -596,11 +608,11 @@ public class ClientConfig extends Config {
 
 			public boolean show_current_value_overlay = false;
 
-			public TextureSettings textureSettings = new TextureSettings();
+			public TextureSettings texture_settings = new TextureSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class TextureSettings extends ConfigSection {
-				public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+				public BackgroundTextureSettings background_texture_settings = new BackgroundTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class BackgroundTextureSettings extends ConfigSection {
@@ -618,7 +630,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+				public ProgressTextureSettings progress_texture_settings = new ProgressTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class ProgressTextureSettings extends ConfigSection {
@@ -654,7 +666,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+				public OverlayTextureSettings overlay_texture_settings = new OverlayTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class OverlayTextureSettings extends ConfigSection {
@@ -679,45 +691,45 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public AnimationsSettings animationSettings = new AnimationsSettings();
+			public AnimationsSettings animation_settings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
 				public int animation_interval = 1;
 				public boolean max_value_change_is_animated = false;
 			}
-		}
 
-		public boolean show_icon = false;
+			public boolean show_icon = false;
 
-		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+			public IconTextureSettings icon_texture_settings = new IconTextureSettings();
 
-		@Translation(prefix = "overhauleddamage.client.texture_layer")
-		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class IconTextureSettings extends ConfigSection {
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_x = 0;
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_y = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_x = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_y = 0;
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public boolean show_when_bar_empty = false;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public boolean show_when_bar_empty = false;
 
-			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
-			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
 
-			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
-			}, new ValidatedInt(), new ValidatedIdentifier());
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+				}, new ValidatedInt(), new ValidatedIdentifier());
 
+			}
 		}
 
 		public boolean show_number = false;
 
-		public NumberSettings numberSettings = new NumberSettings();
+		public NumberSettings number_settings = new NumberSettings();
 
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
@@ -729,12 +741,11 @@ public class ClientConfig extends Config {
 		}
 	}
 
-	public ShockBuildUpSettings shockBuildUpSettings = new ShockBuildUpSettings();
+	public ShockBuildUpSettings shock_build_up_settings = new ShockBuildUpSettings();
 
 	@Translation(prefix = "overhauleddamage.client.resource_bar")
 	public static class ShockBuildUpSettings extends ConfigSection {
 
-		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 		public boolean show_empty_bar = false;
 
 		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
@@ -745,8 +756,11 @@ public class ClientConfig extends Config {
 		public int dynamic_offset_increase_x = 0;
 		public int dynamic_offset_increase_y = 10;
 
-		public IconBarSettings iconBarSettings = new IconBarSettings();
+		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 
+		public IconBarSettings icon_bar_settings = new IconBarSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(-41);
 			public ValidatedInt offset_y = new ValidatedInt(5);
@@ -755,11 +769,12 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
 		}
 
-		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
+		public SmoothBarSettings smooth_bar_settings = new SmoothBarSettings();
 
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public PositionSettings positionSettings = new PositionSettings();
+			public PositionSettings position_settings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -773,11 +788,11 @@ public class ClientConfig extends Config {
 
 			public boolean show_current_value_overlay = false;
 
-			public TextureSettings textureSettings = new TextureSettings();
+			public TextureSettings texture_settings = new TextureSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class TextureSettings extends ConfigSection {
-				public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+				public BackgroundTextureSettings background_texture_settings = new BackgroundTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class BackgroundTextureSettings extends ConfigSection {
@@ -795,7 +810,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+				public ProgressTextureSettings progress_texture_settings = new ProgressTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class ProgressTextureSettings extends ConfigSection {
@@ -831,7 +846,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+				public OverlayTextureSettings overlay_texture_settings = new OverlayTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class OverlayTextureSettings extends ConfigSection {
@@ -856,45 +871,45 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public AnimationsSettings animationSettings = new AnimationsSettings();
+			public AnimationsSettings animation_settings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
 				public int animation_interval = 1;
 				public boolean max_value_change_is_animated = false;
 			}
-		}
 
-		public boolean show_icon = false;
+			public boolean show_icon = false;
 
-		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+			public IconTextureSettings icon_texture_settings = new IconTextureSettings();
 
-		@Translation(prefix = "overhauleddamage.client.texture_layer")
-		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class IconTextureSettings extends ConfigSection {
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_x = 0;
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_y = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_x = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_y = 0;
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public boolean show_when_bar_empty = false;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public boolean show_when_bar_empty = false;
 
-			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
-			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
 
-			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
-			}, new ValidatedInt(), new ValidatedIdentifier());
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+				}, new ValidatedInt(), new ValidatedIdentifier());
 
+			}
 		}
 
 		public boolean show_number = false;
 
-		public NumberSettings numberSettings = new NumberSettings();
+		public NumberSettings number_settings = new NumberSettings();
 
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {
@@ -906,12 +921,11 @@ public class ClientConfig extends Config {
 		}
 	}
 
-	public StaggerBuildUpSettings staggerBuildUpSettings = new StaggerBuildUpSettings();
+	public StaggerBuildUpSettings stagger_build_up_settings = new StaggerBuildUpSettings();
 
 	@Translation(prefix = "overhauleddamage.client.resource_bar")
 	public static class StaggerBuildUpSettings extends ConfigSection {
 
-		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 		public boolean show_empty_bar = false;
 
 		public ResourceBarAPI.ResourceBarOrigin origin = ResourceBarAPI.ResourceBarOrigin.MIDDLE_MIDDLE;
@@ -922,8 +936,11 @@ public class ClientConfig extends Config {
 //		public int dynamic_offset_increase_x = 0;
 //		public int dynamic_offset_increase_y = 10;
 
-		public IconBarSettings iconBarSettings = new IconBarSettings();
+		public ResourceBarAPI.ResourceBarDisplay bar_display = ResourceBarAPI.ResourceBarDisplay.ICON;
 
+		public IconBarSettings icon_bar_settings = new IconBarSettings();
+
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class IconBarSettings extends ConfigSection {
 			public ValidatedInt offset_x = new ValidatedInt(-41);
 			public ValidatedInt offset_y = new ValidatedInt(5);
@@ -932,11 +949,12 @@ public class ClientConfig extends Config {
 			public ValidatedBoolean enable_icon_blinking = new ValidatedBoolean(true);
 		}
 
-		public SmoothBarSettings smoothBarSettings = new SmoothBarSettings();
+		public SmoothBarSettings smooth_bar_settings = new SmoothBarSettings();
 
+		@Translation(prefix = "overhauleddamage.client.resource_bar")
 		public static class SmoothBarSettings extends ConfigSection {
 
-			public PositionSettings positionSettings = new PositionSettings();
+			public PositionSettings position_settings = new PositionSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class PositionSettings extends ConfigSection {
@@ -950,11 +968,11 @@ public class ClientConfig extends Config {
 
 			public boolean show_current_value_overlay = false;
 
-			public TextureSettings textureSettings = new TextureSettings();
+			public TextureSettings texture_settings = new TextureSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class TextureSettings extends ConfigSection {
-				public BackgroundTextureSettings backgroundTextureSettings = new BackgroundTextureSettings();
+				public BackgroundTextureSettings background_texture_settings = new BackgroundTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class BackgroundTextureSettings extends ConfigSection {
@@ -972,7 +990,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public ProgressTextureSettings progressTextureSettings = new ProgressTextureSettings();
+				public ProgressTextureSettings progress_texture_settings = new ProgressTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class ProgressTextureSettings extends ConfigSection {
@@ -1008,7 +1026,7 @@ public class ClientConfig extends Config {
 
 				}
 
-				public OverlayTextureSettings overlayTextureSettings = new OverlayTextureSettings();
+				public OverlayTextureSettings overlay_texture_settings = new OverlayTextureSettings();
 
 				@Translation(prefix = "overhauleddamage.client.texture_layer")
 				public static class OverlayTextureSettings extends ConfigSection {
@@ -1033,45 +1051,45 @@ public class ClientConfig extends Config {
 
 			public boolean enable_smooth_animation = true;
 
-			public AnimationsSettings animationSettings = new AnimationsSettings();
+			public AnimationsSettings animation_settings = new AnimationsSettings();
 
 			@Translation(prefix = "overhauleddamage.client.resource_bar")
 			public static class AnimationsSettings extends ConfigSection {
 				public int animation_interval = 1;
 				public boolean max_value_change_is_animated = false;
 			}
-		}
 
-		public boolean show_icon = false;
+			public boolean show_icon = false;
 
-		public IconTextureSettings iconTextureSettings = new IconTextureSettings();
+			public IconTextureSettings icon_texture_settings = new IconTextureSettings();
 
-		@Translation(prefix = "overhauleddamage.client.texture_layer")
-		public static class IconTextureSettings extends ConfigSection {
+			@Translation(prefix = "overhauleddamage.client.texture_layer")
+			public static class IconTextureSettings extends ConfigSection {
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_x = 0;
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public int offset_y = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_x = 0;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public int offset_y = 0;
 
-			@Translation(prefix = "overhauleddamage.client.resource_icon")
-			public boolean show_when_bar_empty = false;
+				@Translation(prefix = "overhauleddamage.client.resource_icon")
+				public boolean show_when_bar_empty = false;
 
-			public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
-			public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-				put(0, 0);
-			}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_heights = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
+				public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
+					put(0, 0);
+				}}, new ValidatedInt(), new ValidatedInt());
 
-			public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
-			}, new ValidatedInt(), new ValidatedIdentifier());
+				public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {
+				}, new ValidatedInt(), new ValidatedIdentifier());
 
+			}
 		}
 
 		public boolean show_number = false;
 
-		public NumberSettings numberSettings = new NumberSettings();
+		public NumberSettings number_settings = new NumberSettings();
 
 		@Translation(prefix = "overhauleddamage.client.resource_number")
 		public static class NumberSettings extends ConfigSection {

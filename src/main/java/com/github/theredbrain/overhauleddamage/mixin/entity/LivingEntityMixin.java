@@ -152,12 +152,12 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z")
 	)
 	public boolean overhauleddamage$wrap_bypassesArmor(DamageSource instance, TagKey<DamageType> tag, Operation<Boolean> original) {
-		return (OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() && OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_armor_overhaul.get()) || original.call(instance, tag);
+		return (OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() && OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_armor_overhaul.get()) || original.call(instance, tag);
 	}
 
 	@WrapOperation(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;applyItemBlocking(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)F"))
 	private float overhauleddamage$wrap_applyItemBlocking(LivingEntity instance, ServerLevel level, DamageSource source, float damage, Operation<Float> original) {
-		if (OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() && OverhauledDamage.SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get()) {
+		if (OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() && OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_blocking_overhaul.get()) {
 			return 0.0F;
 		} else {
 			return original.call(instance, level, source, damage);

@@ -95,7 +95,7 @@ public class ClientEventsRegistry {
 
 				int currentDisplayBleedingBuildUp = bleedingBuildUp;
 
-				if (clientConfig.bleedingBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+				if (clientConfig.bleeding_build_up_settings.icon_bar_settings.enable_icon_blinking.get()) {
 					shouldBlink = gui.overhauleddamage$getBleedingBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getBleedingBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
 					long l = Util.getMillis();
 					if (bleedingBuildUp < gui.overhauleddamage$getLastBleedingBuildUp()) {
@@ -118,13 +118,13 @@ public class ClientEventsRegistry {
 				double maxBleedingBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxBleedingBuildUp()), Math.max(currentDisplayBleedingBuildUp, bleedingBuildUp));
 
 				if (maxBleedingBuildUp > 0) {
-					boolean should_bleeding_bar_be_rendered = bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.show_empty_bar;
-					boolean should_bleeding_icon_be_rendered = clientConfig.bleedingBuildUpSettings.show_icon && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.iconTextureSettings.show_when_bar_empty);
-					boolean should_bleeding_number_be_rendered = clientConfig.bleedingBuildUpSettings.show_number && (bleedingBuildUp > 0 || clientConfig.bleedingBuildUpSettings.numberSettings.show_when_bar_empty);
+					boolean should_bleeding_bar_be_rendered = bleedingBuildUp > 0 || clientConfig.bleeding_build_up_settings.show_empty_bar;
+					boolean should_bleeding_icon_be_rendered = clientConfig.bleeding_build_up_settings.smooth_bar_settings.show_icon && (bleedingBuildUp > 0 || clientConfig.bleeding_build_up_settings.smooth_bar_settings.icon_texture_settings.show_when_bar_empty);
+					boolean should_bleeding_number_be_rendered = clientConfig.bleeding_build_up_settings.show_number && (bleedingBuildUp > 0 || clientConfig.bleeding_build_up_settings.number_settings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.bleedingBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.bleeding_build_up_settings.origin);
 
-					if (clientConfig.bleedingBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_bleeding_bar_be_rendered) {
+					if (clientConfig.bleeding_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_bleeding_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
@@ -140,13 +140,13 @@ public class ClientEventsRegistry {
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.bleedingBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
-								clientConfig.bleedingBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
-								clientConfig.bleedingBuildUpSettings.fill_direction,
-								clientConfig.bleedingBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
-								clientConfig.bleedingBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
+								clientConfig.bleeding_build_up_settings.icon_bar_settings.offset_x.get() + dynamic_offset_x,
+								clientConfig.bleeding_build_up_settings.icon_bar_settings.offset_y.get() + dynamic_offset_y,
+								clientConfig.bleeding_build_up_settings.fill_direction,
+								clientConfig.bleeding_build_up_settings.icon_bar_settings.reverse_stack_direction.get(),
+								clientConfig.bleeding_build_up_settings.icon_bar_settings.max_icon_amount_per_bar.get()
 						);
-					} else if (clientConfig.bleedingBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_bleeding_bar_be_rendered) {
+					} else if (clientConfig.bleeding_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_bleeding_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
 								guiGraphicsExtractor,
@@ -184,42 +184,42 @@ public class ClientEventsRegistry {
 								maxBleedingBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.positionSettings.offsets_x,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.positionSettings.offsets_y,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.position_settings.offsets_x,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.position_settings.offsets_y,
 								dynamic_offset_x,
 								dynamic_offset_y,
-								clientConfig.bleedingBuildUpSettings.fill_direction,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_heights,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_widths,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_ids,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_x,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_y,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_heights,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_widths,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_decrease_animation_texture_ids,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_animation_texture_ids,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_value_texture_ids,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_texture_ids,
+								clientConfig.bleeding_build_up_settings.fill_direction,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_heights,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_widths,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_ids,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_x,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_y,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_heights,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_widths,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_decrease_animation_texture_ids,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_animation_texture_ids,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_value_texture_ids,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_texture_ids,
 								0,
 								0,
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedIdentifier()),
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.show_current_value_overlay,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_x,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_y,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_heights,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_widths,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_ids,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.show_current_value_overlay,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_x,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_y,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_heights,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_widths,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_ids,
 								should_bleeding_icon_be_rendered,
-								clientConfig.bleedingBuildUpSettings.iconTextureSettings.offset_x,
-								clientConfig.bleedingBuildUpSettings.iconTextureSettings.offset_y,
-								clientConfig.bleedingBuildUpSettings.iconTextureSettings.texture_heights,
-								clientConfig.bleedingBuildUpSettings.iconTextureSettings.texture_widths,
-								clientConfig.bleedingBuildUpSettings.iconTextureSettings.texture_ids,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.enable_smooth_animation,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.animationSettings.animation_interval,
-								clientConfig.bleedingBuildUpSettings.smoothBarSettings.animationSettings.max_value_change_is_animated
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_x,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_y,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_heights,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_widths,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_ids,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.enable_smooth_animation,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.animation_settings.animation_interval,
+								clientConfig.bleeding_build_up_settings.smooth_bar_settings.animation_settings.max_value_change_is_animated
 						);
 					}
 					if (should_bleeding_number_be_rendered) {
@@ -233,15 +233,15 @@ public class ClientEventsRegistry {
 								maxBleedingBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.bleedingBuildUpSettings.numberSettings.show_max_value,
-								clientConfig.bleedingBuildUpSettings.numberSettings.offset_x,
-								clientConfig.bleedingBuildUpSettings.numberSettings.offset_y,
-								clientConfig.bleedingBuildUpSettings.numberSettings.color.toInt()
+								clientConfig.bleeding_build_up_settings.number_settings.show_max_value,
+								clientConfig.bleeding_build_up_settings.number_settings.offset_x,
+								clientConfig.bleeding_build_up_settings.number_settings.offset_y,
+								clientConfig.bleeding_build_up_settings.number_settings.color.toInt()
 						);
 					}
-					if ((should_bleeding_bar_be_rendered && clientConfig.bleedingBuildUpSettings.bar_display != ResourceBarAPI.ResourceBarDisplay.NONE) || should_bleeding_icon_be_rendered || should_bleeding_number_be_rendered) {
-						dynamic_offset_x += clientConfig.bleedingBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y += clientConfig.bleedingBuildUpSettings.dynamic_offset_increase_y;
+					if ((should_bleeding_bar_be_rendered && clientConfig.bleeding_build_up_settings.bar_display != ResourceBarAPI.ResourceBarDisplay.NONE) || should_bleeding_icon_be_rendered || should_bleeding_number_be_rendered) {
+						dynamic_offset_x += clientConfig.bleeding_build_up_settings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.bleeding_build_up_settings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion bleeding
@@ -251,7 +251,7 @@ public class ClientEventsRegistry {
 
 				int currentDisplayBurnBuildUp = burnBuildUp;
 
-				if (clientConfig.burnBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+				if (clientConfig.burn_build_up_settings.icon_bar_settings.enable_icon_blinking.get()) {
 					shouldBlink = gui.overhauleddamage$getBurnBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getBurnBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
 					long l = Util.getMillis();
 					if (burnBuildUp < gui.overhauleddamage$getLastBurnBuildUp()) {
@@ -274,13 +274,13 @@ public class ClientEventsRegistry {
 				double maxBurnBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxBurnBuildUp()), Math.max(currentDisplayBurnBuildUp, burnBuildUp));
 
 				if (maxBurnBuildUp > 0) {
-					boolean should_burn_bar_be_rendered = burnBuildUp > 0 || clientConfig.burnBuildUpSettings.show_empty_bar;
-					boolean should_burn_icon_be_rendered = clientConfig.burnBuildUpSettings.show_icon && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.iconTextureSettings.show_when_bar_empty);
-					boolean should_burn_number_be_rendered = clientConfig.burnBuildUpSettings.show_number && (burnBuildUp > 0 || clientConfig.burnBuildUpSettings.numberSettings.show_when_bar_empty);
+					boolean should_burn_bar_be_rendered = burnBuildUp > 0 || clientConfig.burn_build_up_settings.show_empty_bar;
+					boolean should_burn_icon_be_rendered = clientConfig.burn_build_up_settings.smooth_bar_settings.show_icon && (burnBuildUp > 0 || clientConfig.burn_build_up_settings.smooth_bar_settings.icon_texture_settings.show_when_bar_empty);
+					boolean should_burn_number_be_rendered = clientConfig.burn_build_up_settings.show_number && (burnBuildUp > 0 || clientConfig.burn_build_up_settings.number_settings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.burnBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.burn_build_up_settings.origin);
 
-					if (clientConfig.burnBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_burn_bar_be_rendered) {
+					if (clientConfig.burn_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_burn_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
@@ -296,13 +296,13 @@ public class ClientEventsRegistry {
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.burnBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
-								clientConfig.burnBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
-								clientConfig.burnBuildUpSettings.fill_direction,
-								clientConfig.burnBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
-								clientConfig.burnBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
+								clientConfig.burn_build_up_settings.icon_bar_settings.offset_x.get() + dynamic_offset_x,
+								clientConfig.burn_build_up_settings.icon_bar_settings.offset_y.get() + dynamic_offset_y,
+								clientConfig.burn_build_up_settings.fill_direction,
+								clientConfig.burn_build_up_settings.icon_bar_settings.reverse_stack_direction.get(),
+								clientConfig.burn_build_up_settings.icon_bar_settings.max_icon_amount_per_bar.get()
 						);
-					} else if (clientConfig.burnBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_burn_bar_be_rendered) {
+					} else if (clientConfig.burn_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_burn_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
 								guiGraphicsExtractor,
@@ -340,42 +340,42 @@ public class ClientEventsRegistry {
 								maxBurnBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.burnBuildUpSettings.smoothBarSettings.positionSettings.offsets_x,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.positionSettings.offsets_y,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.position_settings.offsets_x,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.position_settings.offsets_y,
 								dynamic_offset_x,
 								dynamic_offset_y,
-								clientConfig.burnBuildUpSettings.fill_direction,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_heights,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_widths,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_ids,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_x,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_y,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_heights,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_widths,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_decrease_animation_texture_ids,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_animation_texture_ids,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_value_texture_ids,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_texture_ids,
+								clientConfig.burn_build_up_settings.fill_direction,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_heights,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_widths,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_ids,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_x,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_y,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_heights,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_widths,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_decrease_animation_texture_ids,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_animation_texture_ids,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_value_texture_ids,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_texture_ids,
 								0,
 								0,
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedIdentifier()),
-								clientConfig.burnBuildUpSettings.smoothBarSettings.show_current_value_overlay,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_x,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_y,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_heights,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_widths,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_ids,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.show_current_value_overlay,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_x,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_y,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_heights,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_widths,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_ids,
 								should_burn_icon_be_rendered,
-								clientConfig.burnBuildUpSettings.iconTextureSettings.offset_x,
-								clientConfig.burnBuildUpSettings.iconTextureSettings.offset_y,
-								clientConfig.burnBuildUpSettings.iconTextureSettings.texture_heights,
-								clientConfig.burnBuildUpSettings.iconTextureSettings.texture_widths,
-								clientConfig.burnBuildUpSettings.iconTextureSettings.texture_ids,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.enable_smooth_animation,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.animationSettings.animation_interval,
-								clientConfig.burnBuildUpSettings.smoothBarSettings.animationSettings.max_value_change_is_animated
+								clientConfig.burn_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_x,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_y,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_heights,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_widths,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_ids,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.enable_smooth_animation,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.animation_settings.animation_interval,
+								clientConfig.burn_build_up_settings.smooth_bar_settings.animation_settings.max_value_change_is_animated
 						);
 					}
 					if (should_burn_number_be_rendered) {
@@ -389,15 +389,15 @@ public class ClientEventsRegistry {
 								maxBurnBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.burnBuildUpSettings.numberSettings.show_max_value,
-								clientConfig.burnBuildUpSettings.numberSettings.offset_x,
-								clientConfig.burnBuildUpSettings.numberSettings.offset_y,
-								clientConfig.burnBuildUpSettings.numberSettings.color.toInt()
+								clientConfig.burn_build_up_settings.number_settings.show_max_value,
+								clientConfig.burn_build_up_settings.number_settings.offset_x,
+								clientConfig.burn_build_up_settings.number_settings.offset_y,
+								clientConfig.burn_build_up_settings.number_settings.color.toInt()
 						);
 					}
 					if (should_burn_bar_be_rendered || should_burn_icon_be_rendered || should_burn_number_be_rendered) {
-						dynamic_offset_x += clientConfig.burnBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y += clientConfig.burnBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.burn_build_up_settings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.burn_build_up_settings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion burn
@@ -407,7 +407,7 @@ public class ClientEventsRegistry {
 
 				int currentDisplayFreezeBuildUp = freezeBuildUp;
 
-				if (clientConfig.freezeBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+				if (clientConfig.freeze_build_up_settings.icon_bar_settings.enable_icon_blinking.get()) {
 					shouldBlink = gui.overhauleddamage$getFreezeBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getFreezeBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
 					long l = Util.getMillis();
 					if (freezeBuildUp < gui.overhauleddamage$getLastFreezeBuildUp()) {
@@ -430,13 +430,13 @@ public class ClientEventsRegistry {
 				double maxFreezeBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxFreezeBuildUp()), Math.max(currentDisplayFreezeBuildUp, freezeBuildUp));
 
 				if (maxFreezeBuildUp > 0) {
-					boolean should_freeze_bar_be_rendered = freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.show_empty_bar;
-					boolean should_freeze_icon_be_rendered = clientConfig.freezeBuildUpSettings.show_icon && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.iconTextureSettings.show_when_bar_empty);
-					boolean should_freeze_number_be_rendered = clientConfig.freezeBuildUpSettings.show_number && (freezeBuildUp > 0 || clientConfig.freezeBuildUpSettings.numberSettings.show_when_bar_empty);
+					boolean should_freeze_bar_be_rendered = freezeBuildUp > 0 || clientConfig.freeze_build_up_settings.show_empty_bar;
+					boolean should_freeze_icon_be_rendered = clientConfig.freeze_build_up_settings.smooth_bar_settings.show_icon && (freezeBuildUp > 0 || clientConfig.freeze_build_up_settings.smooth_bar_settings.icon_texture_settings.show_when_bar_empty);
+					boolean should_freeze_number_be_rendered = clientConfig.freeze_build_up_settings.show_number && (freezeBuildUp > 0 || clientConfig.freeze_build_up_settings.number_settings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.freezeBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.freeze_build_up_settings.origin);
 
-					if (clientConfig.freezeBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_freeze_bar_be_rendered) {
+					if (clientConfig.freeze_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_freeze_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
@@ -452,13 +452,13 @@ public class ClientEventsRegistry {
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.freezeBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
-								clientConfig.freezeBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
-								clientConfig.freezeBuildUpSettings.fill_direction,
-								clientConfig.freezeBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
-								clientConfig.freezeBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
+								clientConfig.freeze_build_up_settings.icon_bar_settings.offset_x.get() + dynamic_offset_x,
+								clientConfig.freeze_build_up_settings.icon_bar_settings.offset_y.get() + dynamic_offset_y,
+								clientConfig.freeze_build_up_settings.fill_direction,
+								clientConfig.freeze_build_up_settings.icon_bar_settings.reverse_stack_direction.get(),
+								clientConfig.freeze_build_up_settings.icon_bar_settings.max_icon_amount_per_bar.get()
 						);
-					} else if (clientConfig.freezeBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_freeze_bar_be_rendered) {
+					} else if (clientConfig.freeze_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_freeze_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
 								guiGraphicsExtractor,
@@ -496,42 +496,42 @@ public class ClientEventsRegistry {
 								maxFreezeBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.positionSettings.offsets_x,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.positionSettings.offsets_y,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.position_settings.offsets_x,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.position_settings.offsets_y,
 								dynamic_offset_x,
 								dynamic_offset_y,
-								clientConfig.freezeBuildUpSettings.fill_direction,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_heights,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_widths,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_ids,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_x,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_y,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_heights,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_widths,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_decrease_animation_texture_ids,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_animation_texture_ids,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_value_texture_ids,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_texture_ids,
+								clientConfig.freeze_build_up_settings.fill_direction,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_heights,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_widths,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_ids,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_x,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_y,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_heights,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_widths,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_decrease_animation_texture_ids,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_animation_texture_ids,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_value_texture_ids,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_texture_ids,
 								0,
 								0,
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedIdentifier()),
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.show_current_value_overlay,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_x,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_y,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_heights,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_widths,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_ids,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.show_current_value_overlay,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_x,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_y,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_heights,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_widths,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_ids,
 								should_freeze_icon_be_rendered,
-								clientConfig.freezeBuildUpSettings.iconTextureSettings.offset_x,
-								clientConfig.freezeBuildUpSettings.iconTextureSettings.offset_y,
-								clientConfig.freezeBuildUpSettings.iconTextureSettings.texture_heights,
-								clientConfig.freezeBuildUpSettings.iconTextureSettings.texture_widths,
-								clientConfig.freezeBuildUpSettings.iconTextureSettings.texture_ids,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.enable_smooth_animation,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.animationSettings.animation_interval,
-								clientConfig.freezeBuildUpSettings.smoothBarSettings.animationSettings.max_value_change_is_animated
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_x,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_y,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_heights,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_widths,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_ids,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.enable_smooth_animation,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.animation_settings.animation_interval,
+								clientConfig.freeze_build_up_settings.smooth_bar_settings.animation_settings.max_value_change_is_animated
 						);
 					}
 					if (should_freeze_number_be_rendered) {
@@ -545,15 +545,15 @@ public class ClientEventsRegistry {
 								maxFreezeBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.freezeBuildUpSettings.numberSettings.show_max_value,
-								clientConfig.freezeBuildUpSettings.numberSettings.offset_x,
-								clientConfig.freezeBuildUpSettings.numberSettings.offset_y,
-								clientConfig.freezeBuildUpSettings.numberSettings.color.toInt()
+								clientConfig.freeze_build_up_settings.number_settings.show_max_value,
+								clientConfig.freeze_build_up_settings.number_settings.offset_x,
+								clientConfig.freeze_build_up_settings.number_settings.offset_y,
+								clientConfig.freeze_build_up_settings.number_settings.color.toInt()
 						);
 					}
 					if (should_freeze_bar_be_rendered || should_freeze_icon_be_rendered || should_freeze_number_be_rendered) {
-						dynamic_offset_x += clientConfig.freezeBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y += clientConfig.freezeBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.freeze_build_up_settings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.freeze_build_up_settings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion freeze
@@ -563,7 +563,7 @@ public class ClientEventsRegistry {
 
 				int currentDisplayPoisonBuildUp = poisonBuildUp;
 
-				if (clientConfig.poisonBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+				if (clientConfig.poison_build_up_settings.icon_bar_settings.enable_icon_blinking.get()) {
 					shouldBlink = gui.overhauleddamage$getPoisonBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getPoisonBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
 					long l = Util.getMillis();
 					if (poisonBuildUp < gui.overhauleddamage$getLastPoisonBuildUp()) {
@@ -586,13 +586,13 @@ public class ClientEventsRegistry {
 				double maxPoisonBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxPoisonBuildUp()), Math.max(currentDisplayPoisonBuildUp, poisonBuildUp));
 
 				if (maxPoisonBuildUp > 0) {
-					boolean should_poison_bar_be_rendered = poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.show_empty_bar;
-					boolean should_poison_icon_be_rendered = clientConfig.poisonBuildUpSettings.show_icon && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.iconTextureSettings.show_when_bar_empty);
-					boolean should_poison_number_be_rendered = clientConfig.poisonBuildUpSettings.show_number && (poisonBuildUp > 0 || clientConfig.poisonBuildUpSettings.numberSettings.show_when_bar_empty);
+					boolean should_poison_bar_be_rendered = poisonBuildUp > 0 || clientConfig.poison_build_up_settings.show_empty_bar;
+					boolean should_poison_icon_be_rendered = clientConfig.poison_build_up_settings.smooth_bar_settings.show_icon && (poisonBuildUp > 0 || clientConfig.poison_build_up_settings.smooth_bar_settings.icon_texture_settings.show_when_bar_empty);
+					boolean should_poison_number_be_rendered = clientConfig.poison_build_up_settings.show_number && (poisonBuildUp > 0 || clientConfig.poison_build_up_settings.number_settings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.poisonBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.poison_build_up_settings.origin);
 
-					if (clientConfig.poisonBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_poison_bar_be_rendered) {
+					if (clientConfig.poison_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_poison_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
@@ -608,13 +608,13 @@ public class ClientEventsRegistry {
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.poisonBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
-								clientConfig.poisonBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
-								clientConfig.poisonBuildUpSettings.fill_direction,
-								clientConfig.poisonBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
-								clientConfig.poisonBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
+								clientConfig.poison_build_up_settings.icon_bar_settings.offset_x.get() + dynamic_offset_x,
+								clientConfig.poison_build_up_settings.icon_bar_settings.offset_y.get() + dynamic_offset_y,
+								clientConfig.poison_build_up_settings.fill_direction,
+								clientConfig.poison_build_up_settings.icon_bar_settings.reverse_stack_direction.get(),
+								clientConfig.poison_build_up_settings.icon_bar_settings.max_icon_amount_per_bar.get()
 						);
-					} else if (clientConfig.poisonBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_poison_bar_be_rendered) {
+					} else if (clientConfig.poison_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_poison_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
 								guiGraphicsExtractor,
@@ -652,42 +652,42 @@ public class ClientEventsRegistry {
 								maxPoisonBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.positionSettings.offsets_x,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.positionSettings.offsets_y,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.position_settings.offsets_x,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.position_settings.offsets_y,
 								dynamic_offset_x,
 								dynamic_offset_y,
-								clientConfig.poisonBuildUpSettings.fill_direction,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_heights,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_widths,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_ids,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_x,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_y,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_heights,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_widths,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_decrease_animation_texture_ids,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_animation_texture_ids,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_value_texture_ids,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_texture_ids,
+								clientConfig.poison_build_up_settings.fill_direction,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_heights,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_widths,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_ids,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_x,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_y,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_heights,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_widths,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_decrease_animation_texture_ids,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_animation_texture_ids,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_value_texture_ids,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_texture_ids,
 								0,
 								0,
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedIdentifier()),
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.show_current_value_overlay,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_x,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_y,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_heights,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_widths,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_ids,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.show_current_value_overlay,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_x,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_y,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_heights,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_widths,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_ids,
 								should_poison_icon_be_rendered,
-								clientConfig.poisonBuildUpSettings.iconTextureSettings.offset_x,
-								clientConfig.poisonBuildUpSettings.iconTextureSettings.offset_y,
-								clientConfig.poisonBuildUpSettings.iconTextureSettings.texture_heights,
-								clientConfig.poisonBuildUpSettings.iconTextureSettings.texture_widths,
-								clientConfig.poisonBuildUpSettings.iconTextureSettings.texture_ids,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.enable_smooth_animation,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.animationSettings.animation_interval,
-								clientConfig.poisonBuildUpSettings.smoothBarSettings.animationSettings.max_value_change_is_animated
+								clientConfig.poison_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_x,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_y,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_heights,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_widths,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_ids,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.enable_smooth_animation,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.animation_settings.animation_interval,
+								clientConfig.poison_build_up_settings.smooth_bar_settings.animation_settings.max_value_change_is_animated
 						);
 					}
 					if (should_poison_number_be_rendered) {
@@ -701,15 +701,15 @@ public class ClientEventsRegistry {
 								maxPoisonBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.poisonBuildUpSettings.numberSettings.show_max_value,
-								clientConfig.poisonBuildUpSettings.numberSettings.offset_x,
-								clientConfig.poisonBuildUpSettings.numberSettings.offset_y,
-								clientConfig.poisonBuildUpSettings.numberSettings.color.toInt()
+								clientConfig.poison_build_up_settings.number_settings.show_max_value,
+								clientConfig.poison_build_up_settings.number_settings.offset_x,
+								clientConfig.poison_build_up_settings.number_settings.offset_y,
+								clientConfig.poison_build_up_settings.number_settings.color.toInt()
 						);
 					}
 					if (should_poison_bar_be_rendered || should_poison_icon_be_rendered || should_poison_number_be_rendered) {
-						dynamic_offset_x += clientConfig.poisonBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y += clientConfig.poisonBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.poison_build_up_settings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.poison_build_up_settings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion poison
@@ -719,7 +719,7 @@ public class ClientEventsRegistry {
 
 				int currentDisplayShockBuildUp = shockBuildUp;
 
-				if (clientConfig.shockBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+				if (clientConfig.shock_build_up_settings.icon_bar_settings.enable_icon_blinking.get()) {
 					shouldBlink = gui.overhauleddamage$getShockBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getShockBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
 					long l = Util.getMillis();
 					if (shockBuildUp < gui.overhauleddamage$getLastShockBuildUp()) {
@@ -742,13 +742,13 @@ public class ClientEventsRegistry {
 				double maxShockBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxShockBuildUp()), Math.max(currentDisplayShockBuildUp, shockBuildUp));
 
 				if (maxShockBuildUp > 0) {
-					boolean should_shock_bar_be_rendered = shockBuildUp > 0 || clientConfig.shockBuildUpSettings.show_empty_bar;
-					boolean should_shock_icon_be_rendered = clientConfig.shockBuildUpSettings.show_icon && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.iconTextureSettings.show_when_bar_empty);
-					boolean should_shock_number_be_rendered = clientConfig.shockBuildUpSettings.show_number && (shockBuildUp > 0 || clientConfig.shockBuildUpSettings.numberSettings.show_when_bar_empty);
+					boolean should_shock_bar_be_rendered = shockBuildUp > 0 || clientConfig.shock_build_up_settings.show_empty_bar;
+					boolean should_shock_icon_be_rendered = clientConfig.shock_build_up_settings.smooth_bar_settings.show_icon && (shockBuildUp > 0 || clientConfig.shock_build_up_settings.smooth_bar_settings.icon_texture_settings.show_when_bar_empty);
+					boolean should_shock_number_be_rendered = clientConfig.shock_build_up_settings.show_number && (shockBuildUp > 0 || clientConfig.shock_build_up_settings.number_settings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.shockBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.shock_build_up_settings.origin);
 
-					if (clientConfig.shockBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_shock_bar_be_rendered) {
+					if (clientConfig.shock_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_shock_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
@@ -764,13 +764,13 @@ public class ClientEventsRegistry {
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.shockBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
-								clientConfig.shockBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
-								clientConfig.shockBuildUpSettings.fill_direction,
-								clientConfig.shockBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
-								clientConfig.shockBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
+								clientConfig.shock_build_up_settings.icon_bar_settings.offset_x.get() + dynamic_offset_x,
+								clientConfig.shock_build_up_settings.icon_bar_settings.offset_y.get() + dynamic_offset_y,
+								clientConfig.shock_build_up_settings.fill_direction,
+								clientConfig.shock_build_up_settings.icon_bar_settings.reverse_stack_direction.get(),
+								clientConfig.shock_build_up_settings.icon_bar_settings.max_icon_amount_per_bar.get()
 						);
-					} else if (clientConfig.shockBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_shock_bar_be_rendered) {
+					} else if (clientConfig.shock_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_shock_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
 								guiGraphicsExtractor,
@@ -808,42 +808,42 @@ public class ClientEventsRegistry {
 								maxShockBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.shockBuildUpSettings.smoothBarSettings.positionSettings.offsets_x,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.positionSettings.offsets_y,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.position_settings.offsets_x,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.position_settings.offsets_y,
 								dynamic_offset_x,
 								dynamic_offset_y,
-								clientConfig.shockBuildUpSettings.fill_direction,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_heights,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_widths,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_ids,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_x,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_y,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_heights,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_widths,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_decrease_animation_texture_ids,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_animation_texture_ids,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_value_texture_ids,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_texture_ids,
+								clientConfig.shock_build_up_settings.fill_direction,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_heights,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_widths,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_ids,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_x,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_y,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_heights,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_widths,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_decrease_animation_texture_ids,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_animation_texture_ids,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_value_texture_ids,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_texture_ids,
 								0,
 								0,
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedIdentifier()),
-								clientConfig.shockBuildUpSettings.smoothBarSettings.show_current_value_overlay,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_x,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_y,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_heights,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_widths,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_ids,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.show_current_value_overlay,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_x,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_y,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_heights,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_widths,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_ids,
 								should_shock_icon_be_rendered,
-								clientConfig.shockBuildUpSettings.iconTextureSettings.offset_x,
-								clientConfig.shockBuildUpSettings.iconTextureSettings.offset_y,
-								clientConfig.shockBuildUpSettings.iconTextureSettings.texture_heights,
-								clientConfig.shockBuildUpSettings.iconTextureSettings.texture_widths,
-								clientConfig.shockBuildUpSettings.iconTextureSettings.texture_ids,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.enable_smooth_animation,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.animationSettings.animation_interval,
-								clientConfig.shockBuildUpSettings.smoothBarSettings.animationSettings.max_value_change_is_animated
+								clientConfig.shock_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_x,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_y,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_heights,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_widths,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_ids,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.enable_smooth_animation,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.animation_settings.animation_interval,
+								clientConfig.shock_build_up_settings.smooth_bar_settings.animation_settings.max_value_change_is_animated
 						);
 					}
 					if (should_shock_number_be_rendered) {
@@ -857,15 +857,15 @@ public class ClientEventsRegistry {
 								maxShockBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.shockBuildUpSettings.numberSettings.show_max_value,
-								clientConfig.shockBuildUpSettings.numberSettings.offset_x,
-								clientConfig.shockBuildUpSettings.numberSettings.offset_y,
-								clientConfig.shockBuildUpSettings.numberSettings.color.toInt()
+								clientConfig.shock_build_up_settings.number_settings.show_max_value,
+								clientConfig.shock_build_up_settings.number_settings.offset_x,
+								clientConfig.shock_build_up_settings.number_settings.offset_y,
+								clientConfig.shock_build_up_settings.number_settings.color.toInt()
 						);
 					}
 					if (should_shock_bar_be_rendered || should_shock_icon_be_rendered || should_shock_number_be_rendered) {
-						dynamic_offset_x += clientConfig.shockBuildUpSettings.dynamic_offset_increase_x;
-						dynamic_offset_y += clientConfig.shockBuildUpSettings.dynamic_offset_increase_y;
+						dynamic_offset_x += clientConfig.shock_build_up_settings.dynamic_offset_increase_x;
+						dynamic_offset_y += clientConfig.shock_build_up_settings.dynamic_offset_increase_y;
 					}
 				}
 				// endregion shock
@@ -875,7 +875,7 @@ public class ClientEventsRegistry {
 
 				int currentDisplayStaggerBuildUp = staggerBuildUp;
 
-				if (clientConfig.staggerBuildUpSettings.iconBarSettings.enable_icon_blinking.get()) {
+				if (clientConfig.stagger_build_up_settings.icon_bar_settings.enable_icon_blinking.get()) {
 					shouldBlink = gui.overhauleddamage$getStaggerBuildUpIconBlinkTime() > gui.overhauleddamage$getTickCount() && (gui.overhauleddamage$getStaggerBuildUpIconBlinkTime() - gui.overhauleddamage$getTickCount()) / 3L % 2L == 1L;
 					long l = Util.getMillis();
 					if (staggerBuildUp < gui.overhauleddamage$getLastStaggerBuildUp()) {
@@ -898,13 +898,13 @@ public class ClientEventsRegistry {
 				double maxStaggerBuildUp = Math.max(Mth.ceil(((DuckLivingEntityMixin) localPlayer).overhauleddamage$getMaxStaggerBuildUp()), Math.max(currentDisplayStaggerBuildUp, staggerBuildUp));
 
 				if (maxStaggerBuildUp > 0) {
-					boolean should_stagger_bar_be_rendered = staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.show_empty_bar;
-					boolean should_stagger_icon_be_rendered = clientConfig.staggerBuildUpSettings.show_icon && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.iconTextureSettings.show_when_bar_empty);
-					boolean should_stagger_number_be_rendered = clientConfig.staggerBuildUpSettings.show_number && (staggerBuildUp > 0 || clientConfig.staggerBuildUpSettings.numberSettings.show_when_bar_empty);
+					boolean should_stagger_bar_be_rendered = staggerBuildUp > 0 || clientConfig.stagger_build_up_settings.show_empty_bar;
+					boolean should_stagger_icon_be_rendered = clientConfig.stagger_build_up_settings.smooth_bar_settings.show_icon && (staggerBuildUp > 0 || clientConfig.stagger_build_up_settings.smooth_bar_settings.icon_texture_settings.show_when_bar_empty);
+					boolean should_stagger_number_be_rendered = clientConfig.stagger_build_up_settings.show_number && (staggerBuildUp > 0 || clientConfig.stagger_build_up_settings.number_settings.show_when_bar_empty);
 
-					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.staggerBuildUpSettings.origin);
+					MutablePair<Integer, Integer> originPos = ResourceBarAPIClient.getOriginPos(guiGraphicsExtractor, clientConfig.stagger_build_up_settings.origin);
 
-					if (clientConfig.staggerBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_stagger_bar_be_rendered) {
+					if (clientConfig.stagger_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.ICON && should_stagger_bar_be_rendered) {
 
 						List<ResourceBarAPI.ResourceBarIconType> list = new ArrayList<>();
 						list.add(new ResourceBarAPI.ResourceBarIconType(
@@ -920,13 +920,13 @@ public class ClientEventsRegistry {
 								list,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.staggerBuildUpSettings.iconBarSettings.offset_x.get() + dynamic_offset_x,
-								clientConfig.staggerBuildUpSettings.iconBarSettings.offset_y.get() + dynamic_offset_y,
-								clientConfig.staggerBuildUpSettings.fill_direction,
-								clientConfig.staggerBuildUpSettings.iconBarSettings.reverse_stack_direction.get(),
-								clientConfig.staggerBuildUpSettings.iconBarSettings.max_icon_amount_per_bar.get()
+								clientConfig.stagger_build_up_settings.icon_bar_settings.offset_x.get() + dynamic_offset_x,
+								clientConfig.stagger_build_up_settings.icon_bar_settings.offset_y.get() + dynamic_offset_y,
+								clientConfig.stagger_build_up_settings.fill_direction,
+								clientConfig.stagger_build_up_settings.icon_bar_settings.reverse_stack_direction.get(),
+								clientConfig.stagger_build_up_settings.icon_bar_settings.max_icon_amount_per_bar.get()
 						);
-					} else if (clientConfig.staggerBuildUpSettings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_stagger_bar_be_rendered) {
+					} else if (clientConfig.stagger_build_up_settings.bar_display == ResourceBarAPI.ResourceBarDisplay.SMOOTH && should_stagger_bar_be_rendered) {
 						ResourceBarAPIClient.drawSmoothResourceBar(
 								minecraft,
 								guiGraphicsExtractor,
@@ -964,42 +964,42 @@ public class ClientEventsRegistry {
 								maxStaggerBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.positionSettings.offsets_x,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.positionSettings.offsets_y,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.position_settings.offsets_x,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.position_settings.offsets_y,
 								dynamic_offset_x,
 								dynamic_offset_y,
-								clientConfig.staggerBuildUpSettings.fill_direction,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_heights,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_widths,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.backgroundTextureSettings.texture_ids,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_x,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.offset_y,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_heights,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.texture_widths,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_decrease_animation_texture_ids,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_animation_texture_ids,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_increase_value_texture_ids,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.progressTextureSettings.progress_texture_ids,
+								clientConfig.stagger_build_up_settings.fill_direction,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_heights,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_widths,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.background_texture_settings.texture_ids,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_x,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.offset_y,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_heights,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.texture_widths,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_decrease_animation_texture_ids,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_animation_texture_ids,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_increase_value_texture_ids,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.progress_texture_settings.progress_texture_ids,
 								0,
 								0,
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedInt()),
 								new ValidatedMap<>(new HashMap<>(), new ValidatedInt(), new ValidatedIdentifier()),
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.show_current_value_overlay,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_x,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.offset_y,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_heights,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_widths,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.textureSettings.overlayTextureSettings.texture_ids,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.show_current_value_overlay,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_x,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.offset_y,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_heights,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_widths,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.texture_settings.overlay_texture_settings.texture_ids,
 								should_stagger_icon_be_rendered,
-								clientConfig.staggerBuildUpSettings.iconTextureSettings.offset_x,
-								clientConfig.staggerBuildUpSettings.iconTextureSettings.offset_y,
-								clientConfig.staggerBuildUpSettings.iconTextureSettings.texture_heights,
-								clientConfig.staggerBuildUpSettings.iconTextureSettings.texture_widths,
-								clientConfig.staggerBuildUpSettings.iconTextureSettings.texture_ids,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.enable_smooth_animation,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.animationSettings.animation_interval,
-								clientConfig.staggerBuildUpSettings.smoothBarSettings.animationSettings.max_value_change_is_animated
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_x,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.icon_texture_settings.offset_y,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_heights,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_widths,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.icon_texture_settings.texture_ids,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.enable_smooth_animation,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.animation_settings.animation_interval,
+								clientConfig.stagger_build_up_settings.smooth_bar_settings.animation_settings.max_value_change_is_animated
 						);
 					}
 					if (should_stagger_number_be_rendered) {
@@ -1013,10 +1013,10 @@ public class ClientEventsRegistry {
 								maxStaggerBuildUp,
 								originPos.getLeft(),
 								originPos.getRight(),
-								clientConfig.staggerBuildUpSettings.numberSettings.show_max_value,
-								clientConfig.staggerBuildUpSettings.numberSettings.offset_x,
-								clientConfig.staggerBuildUpSettings.numberSettings.offset_y,
-								clientConfig.staggerBuildUpSettings.numberSettings.color.toInt()
+								clientConfig.stagger_build_up_settings.number_settings.show_max_value,
+								clientConfig.stagger_build_up_settings.number_settings.offset_x,
+								clientConfig.stagger_build_up_settings.number_settings.offset_y,
+								clientConfig.stagger_build_up_settings.number_settings.color.toInt()
 						);
 					}
 //				if (should_stagger_bar_be_rendered || should_stagger_icon_be_rendered|| should_stagger_number_be_rendered) {

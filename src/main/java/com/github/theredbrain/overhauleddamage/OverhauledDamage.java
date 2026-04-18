@@ -159,7 +159,7 @@ public class OverhauledDamage implements ModInitializer {
 	}
 
 	public static boolean isBlockingOverhaulEnabled() {
-		return isBlockingOverhaulLoaded && SERVER_CONFIG.enable_overhauled_damage_calculation.get() && SERVER_CONFIG.damageCalculation.enable_blocking_overhaul.get();
+		return isBlockingOverhaulLoaded && SERVER_CONFIG.enable_overhauled_damage_calculation.get() && SERVER_CONFIG.overhauled_damage_calculation.enable_blocking_overhaul.get();
 	}
 
 	public static void applyBlockAttackStaminaCost(LivingEntity livingEntity, boolean parried) {
