@@ -1,9 +1,23 @@
 # 3.0.0
 
-- update to 26.1.x
+- updated to 26.1.x
 
 ## Additions
 
+- added the first iteration of new status effects. They are applied when an effect build up bar is filled. The server config still has the option to change this to other effects. Some of the effects have currently no impact on gameplay. This will be fixed when the required API mods are available.
+  - "overhauleddamage:bleeding"
+  - "overhauleddamage:burning"
+  - "overhauleddamage:chilled"
+  - "overhauleddamage:frozen"
+  - "overhauleddamage:poison"
+  - "overhauleddamage:shocked"
+  - "overhauleddamage:staggered"
+  - "overhauleddamage:hit_stun"
+- added new damage types
+  - "overhauleddamage:bleeding_damage_type"
+  - "overhauleddamage:burning_damage_type"
+  - "overhauleddamage:poison_damage_type"
+  - "overhauleddamage:shocked_damage_type"
 - added enchantment effects to add effect build up
   - "overhauleddamage:add_bleeding_build_up"
   - "overhauleddamage:add_burn_build_up"
@@ -12,19 +26,26 @@
   - "overhauleddamage:add_shock_build_up"
   - "overhauleddamage:add_stagger_build_up"
 - added "overhauleddamage:overhauled_damage_entity" entity sub predicate, which allows to check for each effect build up
-- added server config options to set default entity attribute values (only for players)
+- added Java API to give "Mob" entities a custom damage type
+- added server config options to set default entity attribute values (only affect players)
 - added server config option to disable overhauled damage calculation
   - this includes the overhauls to blocking attacks, protection enchantments, armor calculation and the entire "attack type" system. Note that the individual toggles for the various overhauls are still available, if you only want to disable individual systems.
   - this does not include the effect build up system
 - the effect build up icon bars now blink when their corresponding build up changes, similar to the vanilla health bar. This can be disabled in the client config.
-- added Java API to give "Mob" entities a custom damage type
+- added built-in data pack that integrates some vanilla enchantments with Overhauled Damage
+- added built-in data pack that adds new enchantments
 
 ## Changes
 
+- improved client/server config layout
+- improved default config values
 - reworked the blocking overhaul
   - now requires the mod "Blocking Overhaul" to be present, which is a standalone implementation of most blocking overhaul features
 - replaced game rule naturalArmourToughness with server config option
 - removed instant blocking feature (now possible with vanilla tech)
+- removed Protection Overhaul
+  - this feature made the specialised protection enchantments obsolete and was generally not very compatible with other mods/vanilla Minecraft
+  - an (optional) built-in data pack was added that integrates protection enchantments into the overhauled damage calculation
 
 ## Technical
 
