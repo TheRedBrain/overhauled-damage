@@ -103,65 +103,6 @@ public class ServerConfig extends Config {
 
 		}
 
-		public ValidatedBoolean enable_protection_overhaul = new ValidatedBoolean(true);
-
-		public ProtectionOverhaul protection_overhaul = new ProtectionOverhaul();
-
-		public static class ProtectionOverhaul extends ConfigSection {
-
-			//	@Comment("""
-//			The protection enchantment was changed to reduce damage by x percent per enchantment level, where x is defined here.
-//
-//			Default: 2.0, meaning 2% reduction per level
-//			""")
-			public double protection_damage_reduction_per_level = 2.0;
-			//	@Comment("""
-//			Damage reduction by the protection enchantment is modified based on the attack type.
-//			Each fraction of damage is reduced individually.
-//
-//			The array must contain exactly eight (8) values.
-//			They correspond to the attack types like so:
-//			{generic, bashing, piercing, slashing, poison, fire, frost, lightning}
-//
-//			Default: [1.0, 1.0, 0.5, 0.6, 0.0, 1.0, 0.0, 0.0]
-//			Example: By default the slashing part of each attack is reduced by 1.2 % per enchantment level. (0.6 * 2%)
-//			""")
-			public ValidatedAny<ProtectionMultipliers> protection_multipliers = new ValidatedAny<>(new ProtectionMultipliers(1.0F, 1.0F, 0.5F, 0.6F, 0.0F, 1.0F, 0.0F, 0.0F));
-
-
-			@Translation(prefix = "overhauleddamage.server.attack_type_multipliers")
-			public static class ProtectionMultipliers implements Walkable {
-
-				public ProtectionMultipliers() {
-					new ProtectionMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F);
-				}
-
-				public ProtectionMultipliers(float generic, float bashing, float piercing, float slashing, float poison, float fire, float frost, float lightning) {
-					this.generic = generic;
-					this.bashing = bashing;
-					this.piercing = piercing;
-					this.slashing = slashing;
-					this.poison = poison;
-					this.fire = fire;
-					this.frost = frost;
-					this.lightning = lightning;
-				}
-
-				public float generic;
-				public float bashing;
-				public float piercing;
-				public float slashing;
-				public float poison;
-				public float fire;
-				public float frost;
-				public float lightning;
-
-				public String toString() {
-					return "generic: " + this.generic + ", bashing: " + this.bashing + ", piercing: " + this.piercing + ", slashing: " + this.slashing + ", poison: " + this.poison + ", fire: " + this.fire + ", frost: " + this.frost + ", lightning: " + this.lightning;
-				}
-			}
-		}
-
 		public ValidatedBoolean enable_armor_overhaul = new ValidatedBoolean(true);
 
 		public ArmorOverhaul armor_overhaul = new ArmorOverhaul();

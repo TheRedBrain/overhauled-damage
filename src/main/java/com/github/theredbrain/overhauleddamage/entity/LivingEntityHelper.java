@@ -23,7 +23,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.BlocksAttacks;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.Optional;
 
@@ -338,71 +337,6 @@ public class LivingEntityHelper {
 				}
 			}
 			// endregion shield blocks
-
-			// region apply protection
-			if (!source.is(DamageTypeTags.BYPASSES_ENCHANTMENTS) && serverConfig.overhauled_damage_calculation.enable_protection_overhaul.get()) {
-
-				// the protection enchantments reduce damage, with a default value of 2 percent reduction per enchantment level
-				float protection = 0.0F;
-				if (livingEntity.level() instanceof ServerLevel serverWorld) {
-					protection = (float) (EnchantmentHelper.getDamageProtection(serverWorld, livingEntity, source) * serverConfig.overhauled_damage_calculation.protection_overhaul.protection_damage_reduction_per_level);
-				}
-
-				// band-aid solution to prevent fall damage being reduced a second time by Feather Falling
-				if (source.is(DamageTypeTags.IS_FALL)) {
-					protection = 0.0F;
-				}
-
-				if (enable_debug_log) {
-					OverhauledDamage.info("protection : " + protection);
-					OverhauledDamage.info("");
-				}
-
-				// the different attack types also have a protection_multiplier
-				ServerConfig.DamageCalculation.ProtectionOverhaul.ProtectionMultipliers protection_multipliers = serverConfig.overhauled_damage_calculation.protection_overhaul.protection_multipliers.get();
-
-				if (enable_debug_log) {
-					OverhauledDamage.info("protection_multipliers : " + protection_multipliers.toString());
-					OverhauledDamage.info("");
-				}
-
-				generic_amount = generic_amount - (generic_amount * protection * protection_multipliers.generic / 100);
-
-				bashing_amount = bashing_amount - (bashing_amount * protection * protection_multipliers.bashing / 100);
-
-				piercing_amount = piercing_amount - (piercing_amount * protection * protection_multipliers.piercing / 100);
-
-				slashing_amount = slashing_amount - (slashing_amount * protection * protection_multipliers.slashing / 100);
-
-				poison_amount = poison_amount - (poison_amount * protection * protection_multipliers.poison / 100);
-
-				fire_amount = fire_amount - (fire_amount * protection * protection_multipliers.fire / 100);
-
-				frost_amount = frost_amount - (frost_amount * protection * protection_multipliers.frost / 100);
-
-				lightning_amount = lightning_amount - (lightning_amount * protection * protection_multipliers.lightning / 100);
-
-				if (enable_debug_log) {
-					OverhauledDamage.info("--- attack amounts after protection ---");
-					OverhauledDamage.info("generic_amount : " + generic_amount);
-					OverhauledDamage.info("bashing_amount : " + bashing_amount);
-					OverhauledDamage.info("piercing_amount : " + piercing_amount);
-					OverhauledDamage.info("slashing_amount : " + slashing_amount);
-					OverhauledDamage.info("poison_amount : " + poison_amount);
-					OverhauledDamage.info("fire_amount : " + fire_amount);
-					OverhauledDamage.info("frost_amount : " + frost_amount);
-					OverhauledDamage.info("lightning_amount : " + lightning_amount);
-					OverhauledDamage.info("");
-				}
-			} else if (enable_debug_log) {
-				if (!serverConfig.overhauled_damage_calculation.enable_protection_overhaul.get()) {
-					OverhauledDamage.info("protection overhaul not active");
-				}
-				if (source.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-					OverhauledDamage.info("damage bypasses protection");
-				}
-			}
-			// endregion apply protection
 
 			// region apply armor
 			if (!source.is(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.overhauled_damage_calculation.enable_armor_overhaul.get()) {
