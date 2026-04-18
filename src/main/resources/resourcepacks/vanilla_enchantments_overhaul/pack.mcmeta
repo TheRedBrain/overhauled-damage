@@ -1,0 +1,15 @@
+{
+  "pack": {
+    "description": {
+      "translate": "resourcepack.overhauleddamage.vanilla_enchantments_overhaul.description"
+    },
+    "min_format": [
+      101,
+      1
+    ],
+    "max_format": [
+      101,
+      1
+    ]
+  }
+}

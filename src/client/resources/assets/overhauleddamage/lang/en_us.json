@@ -324,6 +324,9 @@
 	"overhauleddamage.server.natural_player_attribute_values.natural_stagger_build_up_reduction_delay_threshold": "Stagger Build Up Reduction Delay Threshold",
 
 	"overhauleddamage.server.natural_player_attribute_values.natural_damage_taken_from_mana_multiplier": "Damage Taken From Mana Multiplier",
-	"overhauleddamage.server.natural_player_attribute_values.natural_damage_taken_from_stamina_multiplier": "Damage Taken From Stamina Multiplier"
+	"overhauleddamage.server.natural_player_attribute_values.natural_damage_taken_from_stamina_multiplier": "Damage Taken From Stamina Multiplier",
+
+	"resourcepack.overhauleddamage.vanilla_enchantments_overhaul.name": "Vanilla Enchantments Overhaul",
+	"resourcepack.overhauleddamage.vanilla_enchantments_overhaul.description": "Integrates vanilla enchantments into Overhauled Damage"
 
 }

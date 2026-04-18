@@ -20,8 +20,12 @@ import com.mojang.serialization.MapCodec;
 import me.fzzyhmstrs.fzzy_config.api.ConfigApiJava;
 import me.fzzyhmstrs.fzzy_config.api.RegisterType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -31,6 +35,8 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 public class OverhauledDamage implements ModInitializer {
 	public static final String MOD_ID = "overhauleddamage";
@@ -231,6 +237,11 @@ public class OverhauledDamage implements ModInitializer {
 		EnchantmentEntityEffectRegistry.init();
 		EntitySubPredicateTypeRegistry.init();
 		MobEffectsRegistry.registerEffects();
+
+		Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(MOD_ID);
+		if (modContainer.isPresent()) {
+			ResourceLoader.registerBuiltinPack(identifier("vanilla_enchantments_overhaul"), modContainer.get(), Component.translatable("resourcepack.overhauleddamage.vanilla_enchantments_overhaul.name"), PackActivationType.DEFAULT_ENABLED);
+		}
 	}
 
 	public static Identifier identifier(String path) {
