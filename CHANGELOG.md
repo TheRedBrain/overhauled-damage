@@ -46,6 +46,7 @@
 - removed Protection Overhaul
   - this feature made the specialised protection enchantments obsolete and was generally not very compatible with other mods/vanilla Minecraft
   - an (optional) built-in data pack was added that integrates protection enchantments into the overhauled damage calculation
+- temporarily disabled the flat value based armor calculation, it will come back after I had more time to fix it's various design problems
 
 ## Technical
 

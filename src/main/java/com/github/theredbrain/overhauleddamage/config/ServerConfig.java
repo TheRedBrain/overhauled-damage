@@ -196,7 +196,7 @@ public class ServerConfig extends Config {
 
 		public static class ArmorOverhaul extends ConfigSection {
 
-			public ValidatedBoolean armor_calculation_works_with_flat_values = new ValidatedBoolean(false);
+//			public ValidatedBoolean armor_calculation_works_with_flat_values = new ValidatedBoolean(false);
 
 			public ValidatedBoolean enable_armor_toughness_attribute = new ValidatedBoolean(false);
 

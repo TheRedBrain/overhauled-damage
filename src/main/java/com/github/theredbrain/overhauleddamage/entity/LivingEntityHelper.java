@@ -335,65 +335,65 @@ public class LivingEntityHelper {
 
 			// region apply armor
 			if (!source.is(DamageTypeTags.BYPASSES_ARMOR) && serverConfig.overhauled_damage_calculation.enable_armor_overhaul.get()) {
-				float armorDamage = 0.0F;
-				if (serverConfig.overhauled_damage_calculation.armor_overhaul.armor_calculation_works_with_flat_values.get()) {
-					// TODO this calculation needs a serious overhaul
-					// armorToughness now directly determines how effective armor is
-					// effective armor reduces damage by its amount
-					// armor is more or less effective against different attack types
-					float effectiveArmor = livingEntity.getArmorValue();
-
-					if (serverConfig.overhauled_damage_calculation.armor_overhaul.enable_armor_toughness_attribute.get()) {
-						if (enable_debug_log) {
-							OverhauledDamage.info("armor toughness is enabled");
-							OverhauledDamage.info("");
-						}
-						effectiveArmor *= (float) livingEntity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
-					} else if (enable_debug_log) {
-						OverhauledDamage.info("armor toughness is disabled");
-						OverhauledDamage.info("");
-					}
-
-					if (enable_debug_log) {
-						OverhauledDamage.info("armor calculation uses flat values");
-						OverhauledDamage.info("effective_armor : " + effectiveArmor);
-						OverhauledDamage.info("");
-					}
-
-					if (piercing_amount * 1.25 <= effectiveArmor) {
-						effectiveArmor -= (float) (piercing_amount * 1.25);
-						piercing_amount = 0;
-					} else {
-						piercing_amount -= (float) (effectiveArmor * 0.75);
-						effectiveArmor = 0;
-					}
-
-					if (bashing_amount <= effectiveArmor) {
-						effectiveArmor -= bashing_amount;
-						bashing_amount = 0;
-					} else {
-						bashing_amount -= effectiveArmor;
-						effectiveArmor = 0;
-					}
-
-					if (fire_amount <= effectiveArmor) {
-						effectiveArmor -= fire_amount;
-						fire_amount = 0;
-					} else {
-						fire_amount -= effectiveArmor;
-						effectiveArmor = 0;
-					}
-
-					if (slashing_amount <= effectiveArmor) {
-						effectiveArmor -= slashing_amount;
-						slashing_amount = 0;
-					} else {
-						slashing_amount -= effectiveArmor;
-						slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
-						effectiveArmor = 0;
-					}
-					armorDamage = livingEntity.getArmorValue() - effectiveArmor;
-				} else {
+				float armorDamage;
+//				if (serverConfig.overhauled_damage_calculation.armor_overhaul.armor_calculation_works_with_flat_values.get()) {
+//					// TODO this calculation needs a serious overhaul
+//					// armorToughness now directly determines how effective armor is
+//					// effective armor reduces damage by its amount
+//					// armor is more or less effective against different attack types
+//					float effectiveArmor = livingEntity.getArmorValue();
+//
+//					if (serverConfig.overhauled_damage_calculation.armor_overhaul.enable_armor_toughness_attribute.get()) {
+//						if (enable_debug_log) {
+//							OverhauledDamage.info("armor toughness is enabled");
+//							OverhauledDamage.info("");
+//						}
+//						effectiveArmor *= (float) livingEntity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
+//					} else if (enable_debug_log) {
+//						OverhauledDamage.info("armor toughness is disabled");
+//						OverhauledDamage.info("");
+//					}
+//
+//					if (enable_debug_log) {
+//						OverhauledDamage.info("armor calculation uses flat values");
+//						OverhauledDamage.info("effective_armor : " + effectiveArmor);
+//						OverhauledDamage.info("");
+//					}
+//
+//					if (piercing_amount * 1.25 <= effectiveArmor) {
+//						effectiveArmor -= (float) (piercing_amount * 1.25);
+//						piercing_amount = 0;
+//					} else {
+//						piercing_amount -= (float) (effectiveArmor * 0.75);
+//						effectiveArmor = 0;
+//					}
+//
+//					if (bashing_amount <= effectiveArmor) {
+//						effectiveArmor -= bashing_amount;
+//						bashing_amount = 0;
+//					} else {
+//						bashing_amount -= effectiveArmor;
+//						effectiveArmor = 0;
+//					}
+//
+//					if (fire_amount <= effectiveArmor) {
+//						effectiveArmor -= fire_amount;
+//						fire_amount = 0;
+//					} else {
+//						fire_amount -= effectiveArmor;
+//						effectiveArmor = 0;
+//					}
+//
+//					if (slashing_amount <= effectiveArmor) {
+//						effectiveArmor -= slashing_amount;
+//						slashing_amount = 0;
+//					} else {
+//						slashing_amount -= effectiveArmor;
+//						slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
+//						effectiveArmor = 0;
+//					}
+//					armorDamage = livingEntity.getArmorValue() - effectiveArmor;
+//				} else {
 					// this is the alternative armor calculation
 					// armor reduces damage on a percentage base
 					// 1 armor point = 1 percent reduction
@@ -453,7 +453,7 @@ public class LivingEntityHelper {
 
 					armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
 
-				}
+//				}
 				livingEntity.hurtArmor(source, armorDamage);
 				if (enable_debug_log) {
 					OverhauledDamage.info("damage applied to equipped armor: " + armorDamage);
