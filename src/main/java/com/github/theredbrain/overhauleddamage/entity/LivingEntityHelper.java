@@ -28,6 +28,7 @@ import java.util.Optional;
 
 public class LivingEntityHelper {
 
+	// region --- overhauled damage calculation ---
 	public static float calculateOverhauledDamage(ServerLevel serverLevel, LivingEntity livingEntity, DamageSource source, float amount) {
 		ServerConfig serverConfig = OverhauledDamage.SERVER_CONFIG;
 		if (!OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get()) {
@@ -232,25 +233,19 @@ public class LivingEntityHelper {
 							// when no stamina is left after blocking/parrying the block/parry was not successful and the damage is not reduced
 							if (OverhauledDamage.getCurrentStamina(livingEntity) >= 0 || !OverhauledDamage.isStaminaAttributesLoaded) {
 
-								boolean isStaggered = false;
-
-								// apply stagger based on left over damage
-								ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.overhauled_damage_calculation.stagger_multipliers.get();
-								if (enable_debug_log) {
-									OverhauledDamage.info("--- apply stagger based on left over damage ---");
-									OverhauledDamage.info("");
-									OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
-									OverhauledDamage.info("");
-								}
-								float appliedStagger = (generic_amount * stagger_multipliers.generic) + ((bashing_amount - blockedBashingDamage) * stagger_multipliers.bashing) + ((piercing_amount - blockedPiercingDamage) * stagger_multipliers.piercing) + ((slashing_amount - blockedSlashingDamage) * stagger_multipliers.slashing) + ((poison_amount - blockedPoisonDamage) * stagger_multipliers.poison) + ((fire_amount - blockedFireDamage) * stagger_multipliers.fire) + ((frost_amount - blockedFrostDamage) * stagger_multipliers.frost) + ((lightning_amount - blockedLightningDamage) * stagger_multipliers.lightning);
-								if (appliedStagger > 0) {
-									if (enable_debug_log) {
-										OverhauledDamage.info("appliedStagger : " + appliedStagger);
-										OverhauledDamage.info("");
-									}
-									addStaggerBuildUp(livingEntity, appliedStagger);
-									isStaggered = getStaggerBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp();
-								}
+								boolean isStaggered = applyStaggerBasedOnLeftOverDamage(
+										livingEntity,
+										serverConfig,
+										enable_debug_log,
+										generic_amount,
+										bashing_amount - blockedBashingDamage,
+										piercing_amount - blockedPiercingDamage,
+										slashing_amount - blockedSlashingDamage,
+										poison_amount - blockedPoisonDamage,
+										fire_amount - blockedFireDamage,
+										frost_amount - blockedFrostDamage,
+										lightning_amount - blockedLightningDamage
+								);
 
 								// block/parry was successful
 								if (!isStaggered) {
@@ -497,7 +492,6 @@ public class LivingEntityHelper {
 			frost_amount = frost_amount - (frost_amount * ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFrostResistance()) / 100;
 
 			lightning_amount = lightning_amount - (lightning_amount * ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getLightningResistance()) / 100;
-			// endregion apply resistances
 
 			if (enable_debug_log) {
 				OverhauledDamage.info("--- attack amounts after resistances ---");
@@ -511,6 +505,11 @@ public class LivingEntityHelper {
 				OverhauledDamage.info("lightning_amount : " + lightning_amount);
 				OverhauledDamage.info("");
 			}
+			// endregion apply resistances
+
+			applyHitStun(livingEntity, serverConfig, enable_debug_log, damageTypeId);
+
+			applyBuildUps(livingEntity, source, serverConfig, enable_debug_log, triedBlocking, generic_amount, bashing_amount, piercing_amount, slashing_amount, poison_amount, fire_amount, frost_amount, lightning_amount);
 
 			ServerConfig.DamageCalculation.AttackTypeMultipliers applied_damage_multipliers = serverConfig.overhauled_damage_calculation.applied_damage_multipliers.get();
 			applied_damage = (generic_amount * applied_damage_multipliers.generic) + (bashing_amount * applied_damage_multipliers.bashing) + (piercing_amount * applied_damage_multipliers.piercing) + (slashing_amount * applied_damage_multipliers.slashing) + (poison_amount * applied_damage_multipliers.poison) + (fire_amount * applied_damage_multipliers.fire) + (frost_amount * applied_damage_multipliers.frost) + (lightning_amount * applied_damage_multipliers.lightning);
@@ -529,172 +528,10 @@ public class LivingEntityHelper {
 				}
 				livingEntity.releaseUsingItem();
 			}
-
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
-				OverhauledDamage.info("");
-			}
-
-			// apply hit stun
-			if (serverConfig.overhauled_damage_calculation.enable_hit_stun_mechanic.get()) {
-				Optional<Holder.Reference<Attribute>> attribute = BuiltInRegistries.ATTRIBUTE.get(serverConfig.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_counter_attribute_identifier.get());
-				if (attribute.isPresent()) {
-					if (livingEntity.getAttributes().hasAttribute(attribute.get())) {
-						double attributeValue = livingEntity.getAttributeValue(attribute.get());
-						ServerConfig.DamageCalculation.HitStunMechanic.HitStunSettings hitStunSettings = serverConfig.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_settings.get(damageTypeId);
-						if (hitStunSettings == null) {
-							hitStunSettings = serverConfig.overhauled_damage_calculation.hit_stun_mechanic.default_hit_stun_settings.get();
-						}
-
-						if (attributeValue <= hitStunSettings.required_attribute_threshold) {
-							// apply hit stun
-							Optional<Holder.Reference<MobEffect>> hit_stun_status_effect = BuiltInRegistries.MOB_EFFECT.get(serverConfig.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_status_effect_identifier.get());
-							if (hit_stun_status_effect.isPresent()) {
-								livingEntity.addEffect(new MobEffectInstance(hit_stun_status_effect.get(), hitStunSettings.duration, 0, false, false, true));
-							}
-						}
-					}
-				}
-			} else if (enable_debug_log) {
-				OverhauledDamage.info("no hit stun was applied");
-				OverhauledDamage.info("");
-			}
-
-			// apply bleeding
-			ServerConfig.DamageCalculation.AttackTypeMultipliers bleeding_multipliers = serverConfig.overhauled_damage_calculation.bleeding_multipliers.get();
-			if (source.is(Tags.APPLIES_BLEEDING)) {
-				float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
-
-				if (enable_debug_log) {
-					OverhauledDamage.info("--- apply bleeding build up ---");
-					OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers);
-				}
-
-				if (applied_bleeding > 0) {
-					if (enable_debug_log) {
-						OverhauledDamage.info("applied bleeding build up : " + applied_bleeding);
-						OverhauledDamage.info("");
-					}
-					addBleedingBuildUp(livingEntity, applied_bleeding);
-				} else if (enable_debug_log) {
-					OverhauledDamage.info("no bleeding build up was applied");
-					OverhauledDamage.info("");
-				}
-			}
-
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- apply burn build up ---");
-			}
-			// apply burn
-			if (fire_amount > 0) {
-				if (enable_debug_log) {
-					OverhauledDamage.info("applied burn build up : " + fire_amount);
-					OverhauledDamage.info("");
-				}
-				addBurnBuildUp(livingEntity, fire_amount);
-			} else if (enable_debug_log) {
-				OverhauledDamage.info("no burn build up was applied");
-				OverhauledDamage.info("");
-			}
-
-			// apply chilled effect and freeze build up
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- apply chilled effect and freeze build up ---");
-			}
-			if (frost_amount > 0) {
-				Optional<Holder.Reference<MobEffect>> chilled_status_effect = BuiltInRegistries.MOB_EFFECT.get(serverConfig.build_up_effects.freeze_build_up.chilled_mob_effect_identifier.get());
-				if (chilled_status_effect.isPresent()) {
-					int chilledDuration = (int) Math.ceil(frost_amount * serverConfig.build_up_effects.freeze_build_up.chilled_duration_multiplier);
-					int existingChilledDuration = 0;
-					int chilledAmplifier = 0;
-					MobEffectInstance statusEffectInstance = livingEntity.getEffect(chilled_status_effect.get());
-					if (statusEffectInstance != null) {
-						chilledDuration = chilledDuration + statusEffectInstance.getDuration();
-						if (serverConfig.build_up_effects.freeze_build_up.chilled_duration_is_additive.get()) {
-							existingChilledDuration = statusEffectInstance.getDuration();
-						}
-						if (serverConfig.build_up_effects.freeze_build_up.chilled_amplifier_is_additive.get()) {
-							chilledAmplifier = statusEffectInstance.getAmplifier();
-						}
-					}
-					if (enable_debug_log) {
-						OverhauledDamage.info("applied chilled effect with duration of : " + chilledDuration + existingChilledDuration + " and amplifier of : " + chilledAmplifier);
-						OverhauledDamage.info("");
-					}
-					livingEntity.addEffect(new MobEffectInstance(chilled_status_effect.get(), chilledDuration + existingChilledDuration, chilledAmplifier, false, false, true));
-				} else if (enable_debug_log) {
-					OverhauledDamage.info("no chilled effect was applied");
-					OverhauledDamage.info("");
-				}
-				if (enable_debug_log) {
-					OverhauledDamage.info("applied freeze build up : " + frost_amount);
-					OverhauledDamage.info("");
-				}
-				addFreezeBuildUp(livingEntity, frost_amount);
-			} else if (enable_debug_log) {
-				OverhauledDamage.info("no chilled effect was applied");
-				OverhauledDamage.info("");
-				OverhauledDamage.info("no freeze build up was applied");
-				OverhauledDamage.info("");
-			}
-
-			if (!triedBlocking) {
-				// apply stagger
-				ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.overhauled_damage_calculation.stagger_multipliers.get();
-				if (enable_debug_log) {
-					OverhauledDamage.info("--- apply stagger when no blocking was tried ---");
-					OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
-				}
-				float appliedStagger = (generic_amount * stagger_multipliers.generic) + (bashing_amount * stagger_multipliers.bashing) + (piercing_amount * stagger_multipliers.piercing) + (slashing_amount * stagger_multipliers.slashing) + (poison_amount * stagger_multipliers.poison) + (fire_amount * stagger_multipliers.fire) + (frost_amount * stagger_multipliers.frost) + (lightning_amount * stagger_multipliers.lightning);
-				if (appliedStagger > 0) {
-					if (enable_debug_log) {
-						OverhauledDamage.info("appliedStagger : " + appliedStagger);
-						OverhauledDamage.info("");
-					}
-					addStaggerBuildUp(livingEntity, appliedStagger);
-				} else if (enable_debug_log) {
-					OverhauledDamage.info("no stagger was applied");
-					OverhauledDamage.info("");
-				}
-			}
-
-			// apply poison build up
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- apply poison build up ---");
-			}
-			if (poison_amount > 0) {
-				addPoisonBuildUp(livingEntity, poison_amount);
-			}
-			if (poison_amount > 0) {
-				if (enable_debug_log) {
-					OverhauledDamage.info("applied poison build up : " + poison_amount);
-					OverhauledDamage.info("");
-				}
-				addPoisonBuildUp(livingEntity, poison_amount);
-			} else if (enable_debug_log) {
-				OverhauledDamage.info("no poison build up was applied");
-				OverhauledDamage.info("");
-			}
-
-			// apply shock build up
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- apply shock build up ---");
-			}
-			if (lightning_amount > 0) {
-				if (enable_debug_log) {
-					OverhauledDamage.info("applied shock build up : " + lightning_amount);
-					OverhauledDamage.info("");
-				}
-				addShockBuildUp(livingEntity, lightning_amount);
-			} else if (enable_debug_log) {
-				OverhauledDamage.info("no shock build up was applied");
-				OverhauledDamage.info("");
-			}
 		}
 
 		float health_damage = applied_damage + true_amount;
 
-		// TODO do these attributes need a rework? maybe clamp them between 0 and 100
 		float damageTakenFromMana = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getDamageTakenFromManaMultiplier();
 		float damageTakenFromStamina = ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getDamageTakenFromStaminaMultiplier();
 		float mana_damage = 0.0F;
@@ -721,6 +558,194 @@ public class LivingEntityHelper {
 
 		return health_damage;
 	}
+
+	public static boolean applyStaggerBasedOnLeftOverDamage(LivingEntity livingEntity, ServerConfig serverConfig, boolean enable_debug_log, float generic_amount, float bashing_amount, float piercing_amount, float slashing_amount, float poison_amount, float fire_amount, float frost_amount, float lightning_amount) {
+		ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.overhauled_damage_calculation.stagger_multipliers.get();
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply stagger based on left over damage ---");
+			OverhauledDamage.info("");
+			OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
+			OverhauledDamage.info("");
+		}
+		float appliedStagger = (generic_amount * stagger_multipliers.generic) + (bashing_amount * stagger_multipliers.bashing) + (piercing_amount * stagger_multipliers.piercing) + (slashing_amount * stagger_multipliers.slashing) + (poison_amount * stagger_multipliers.poison) + (fire_amount * stagger_multipliers.fire) + (frost_amount * stagger_multipliers.frost) + (lightning_amount * stagger_multipliers.lightning);
+		if (appliedStagger > 0) {
+			if (enable_debug_log) {
+				OverhauledDamage.info("appliedStagger : " + appliedStagger);
+				OverhauledDamage.info("");
+			}
+			addStaggerBuildUp(livingEntity, appliedStagger);
+			return getStaggerBuildUp(livingEntity) >= ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getMaxStaggerBuildUp();
+		}
+
+		return false;
+	}
+
+	public static void applyHitStun(LivingEntity livingEntity, ServerConfig serverConfig, boolean enable_debug_log, String damageTypeId) {
+
+		if (serverConfig.overhauled_damage_calculation.enable_hit_stun_mechanic.get()) {
+			Optional<Holder.Reference<Attribute>> attribute = BuiltInRegistries.ATTRIBUTE.get(serverConfig.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_counter_attribute_identifier.get());
+			if (attribute.isPresent()) {
+				if (livingEntity.getAttributes().hasAttribute(attribute.get())) {
+					double attributeValue = livingEntity.getAttributeValue(attribute.get());
+					ServerConfig.DamageCalculation.HitStunMechanic.HitStunSettings hitStunSettings = serverConfig.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_settings.get(damageTypeId);
+					if (hitStunSettings == null) {
+						hitStunSettings = serverConfig.overhauled_damage_calculation.hit_stun_mechanic.default_hit_stun_settings.get();
+					}
+
+					if (attributeValue <= hitStunSettings.required_attribute_threshold) {
+						// apply hit stun
+						Optional<Holder.Reference<MobEffect>> hit_stun_status_effect = BuiltInRegistries.MOB_EFFECT.get(serverConfig.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_status_effect_identifier.get());
+						if (hit_stun_status_effect.isPresent()) {
+							livingEntity.addEffect(new MobEffectInstance(hit_stun_status_effect.get(), hitStunSettings.duration, 0, false, false, true));
+						}
+					}
+				}
+			}
+		} else if (enable_debug_log) {
+			OverhauledDamage.info("no hit stun was applied");
+			OverhauledDamage.info("");
+		}
+	}
+
+	public static void applyBuildUps(LivingEntity livingEntity, DamageSource source, ServerConfig serverConfig, boolean enable_debug_log, boolean triedBlocking, float generic_amount, float bashing_amount, float piercing_amount, float slashing_amount, float poison_amount, float fire_amount, float frost_amount, float lightning_amount) {
+
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
+			OverhauledDamage.info("");
+		}
+
+		// apply bleeding
+		ServerConfig.DamageCalculation.AttackTypeMultipliers bleeding_multipliers = serverConfig.overhauled_damage_calculation.bleeding_multipliers.get();
+		if (source.is(Tags.APPLIES_BLEEDING)) {
+			float applied_bleeding = (generic_amount * bleeding_multipliers.generic) + (bashing_amount * bleeding_multipliers.bashing) + (piercing_amount * bleeding_multipliers.piercing) + (slashing_amount * bleeding_multipliers.slashing) + (poison_amount * bleeding_multipliers.poison) + (fire_amount * bleeding_multipliers.fire) + (frost_amount * bleeding_multipliers.frost) + (lightning_amount * bleeding_multipliers.lightning);
+
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply bleeding build up ---");
+				OverhauledDamage.info("bleeding_multipliers : " + bleeding_multipliers);
+			}
+
+			if (applied_bleeding > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied bleeding build up : " + applied_bleeding);
+					OverhauledDamage.info("");
+				}
+				addBleedingBuildUp(livingEntity, applied_bleeding);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no bleeding build up was applied");
+				OverhauledDamage.info("");
+			}
+		}
+
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply burn build up ---");
+		}
+		// apply burn
+		if (fire_amount > 0) {
+			if (enable_debug_log) {
+				OverhauledDamage.info("applied burn build up : " + fire_amount);
+				OverhauledDamage.info("");
+			}
+			addBurnBuildUp(livingEntity, fire_amount);
+		} else if (enable_debug_log) {
+			OverhauledDamage.info("no burn build up was applied");
+			OverhauledDamage.info("");
+		}
+
+		// apply chilled effect and freeze build up
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply chilled effect and freeze build up ---");
+		}
+		if (frost_amount > 0) {
+			Optional<Holder.Reference<MobEffect>> chilled_status_effect = BuiltInRegistries.MOB_EFFECT.get(serverConfig.build_up_effects.freeze_build_up.chilled_mob_effect_identifier.get());
+			if (chilled_status_effect.isPresent()) {
+				int chilledDuration = (int) Math.ceil(frost_amount * serverConfig.build_up_effects.freeze_build_up.chilled_duration_multiplier);
+				int existingChilledDuration = 0;
+				int chilledAmplifier = 0;
+				MobEffectInstance statusEffectInstance = livingEntity.getEffect(chilled_status_effect.get());
+				if (statusEffectInstance != null) {
+					chilledDuration = chilledDuration + statusEffectInstance.getDuration();
+					if (serverConfig.build_up_effects.freeze_build_up.chilled_duration_is_additive.get()) {
+						existingChilledDuration = statusEffectInstance.getDuration();
+					}
+					if (serverConfig.build_up_effects.freeze_build_up.chilled_amplifier_is_additive.get()) {
+						chilledAmplifier = statusEffectInstance.getAmplifier();
+					}
+				}
+				if (enable_debug_log) {
+					OverhauledDamage.info("applied chilled effect with duration of : " + chilledDuration + existingChilledDuration + " and amplifier of : " + chilledAmplifier);
+					OverhauledDamage.info("");
+				}
+				livingEntity.addEffect(new MobEffectInstance(chilled_status_effect.get(), chilledDuration + existingChilledDuration, chilledAmplifier, false, false, true));
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no chilled effect was applied");
+				OverhauledDamage.info("");
+			}
+			if (enable_debug_log) {
+				OverhauledDamage.info("applied freeze build up : " + frost_amount);
+				OverhauledDamage.info("");
+			}
+			addFreezeBuildUp(livingEntity, frost_amount);
+		} else if (enable_debug_log) {
+			OverhauledDamage.info("no chilled effect was applied");
+			OverhauledDamage.info("");
+			OverhauledDamage.info("no freeze build up was applied");
+			OverhauledDamage.info("");
+		}
+
+		if (!triedBlocking) {
+			// apply stagger
+			ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.overhauled_damage_calculation.stagger_multipliers.get();
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- apply stagger when no blocking was tried ---");
+				OverhauledDamage.info("stagger_multipliers : " + stagger_multipliers.toString());
+			}
+			float appliedStagger = (generic_amount * stagger_multipliers.generic) + (bashing_amount * stagger_multipliers.bashing) + (piercing_amount * stagger_multipliers.piercing) + (slashing_amount * stagger_multipliers.slashing) + (poison_amount * stagger_multipliers.poison) + (fire_amount * stagger_multipliers.fire) + (frost_amount * stagger_multipliers.frost) + (lightning_amount * stagger_multipliers.lightning);
+			if (appliedStagger > 0) {
+				if (enable_debug_log) {
+					OverhauledDamage.info("appliedStagger : " + appliedStagger);
+					OverhauledDamage.info("");
+				}
+				addStaggerBuildUp(livingEntity, appliedStagger);
+			} else if (enable_debug_log) {
+				OverhauledDamage.info("no stagger was applied");
+				OverhauledDamage.info("");
+			}
+		}
+
+		// apply poison build up
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply poison build up ---");
+		}
+		if (poison_amount > 0) {
+			addPoisonBuildUp(livingEntity, poison_amount);
+		}
+		if (poison_amount > 0) {
+			if (enable_debug_log) {
+				OverhauledDamage.info("applied poison build up : " + poison_amount);
+				OverhauledDamage.info("");
+			}
+			addPoisonBuildUp(livingEntity, poison_amount);
+		} else if (enable_debug_log) {
+			OverhauledDamage.info("no poison build up was applied");
+			OverhauledDamage.info("");
+		}
+
+		// apply shock build up
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- apply shock build up ---");
+		}
+		if (lightning_amount > 0) {
+			if (enable_debug_log) {
+				OverhauledDamage.info("applied shock build up : " + lightning_amount);
+				OverhauledDamage.info("");
+			}
+			addShockBuildUp(livingEntity, lightning_amount);
+		} else if (enable_debug_log) {
+			OverhauledDamage.info("no shock build up was applied");
+			OverhauledDamage.info("");
+		}
+	}
+	// endregion --- overhauled damage calculation ---
 
 	public static void tick(LivingEntity livingEntity) {
 
@@ -941,6 +966,7 @@ public class LivingEntityHelper {
 		}
 	}
 
+	// region --- effect build-ups ---
 	public static float getBleedingBuildUp(LivingEntity livingEntity) {
 		return DataAttachmentHelper.getBleedingBuildUp(livingEntity);
 	}
@@ -1107,5 +1133,6 @@ public class LivingEntityHelper {
 			}
 		}
 	}
+	// endregion --- effect build-ups ---
 
 }
