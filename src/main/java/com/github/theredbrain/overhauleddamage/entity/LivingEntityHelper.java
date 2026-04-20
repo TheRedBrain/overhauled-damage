@@ -70,7 +70,7 @@ public class LivingEntityHelper {
 				OverhauledDamage.info("");
 				OverhauledDamage.info("--- true damage can't be blocked and is not reduced by armor, protection or resistances ---");
 				OverhauledDamage.info("");
-				OverhauledDamage.info("--- true damage does not apply effect build ups ---"); // TODO maybe remove this?
+				OverhauledDamage.info("--- true damage does not apply effect build ups ---");
 				OverhauledDamage.info("");
 			}
 			return calculateAppliedHealthDamage(livingEntity, enable_debug_log, amount);
@@ -426,120 +426,132 @@ public class LivingEntityHelper {
 
 	public static AttackTypeDamageAmounts calculateDamageAmountAfterArmor(AttackTypeDamageAmounts attackTypeDamageAmounts, ServerConfig serverConfig, boolean enable_debug_log, LivingEntity livingEntity, DamageSource source) {
 
-		float armorDamage;
-//				if (serverConfig.overhauled_damage_calculation.armor_overhaul.armor_calculation_works_with_flat_values.get()) {
-//					// TODO this calculation needs a serious overhaul
-//					// armorToughness now directly determines how effective armor is
-//					// effective armor reduces damage by its amount
-//					// armor is more or less effective against different attack types
-//					float effectiveArmor = livingEntity.getArmorValue();
-//
-//					if (serverConfig.overhauled_damage_calculation.armor_overhaul.enable_armor_toughness_attribute.get()) {
-//						if (enable_debug_log) {
-//							OverhauledDamage.info("armor toughness is enabled");
-//							OverhauledDamage.info("");
-//						}
-//						effectiveArmor *= (float) livingEntity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
-//					} else if (enable_debug_log) {
-//						OverhauledDamage.info("armor toughness is disabled");
-//						OverhauledDamage.info("");
-//					}
-//
-//					if (enable_debug_log) {
-//						OverhauledDamage.info("armor calculation uses flat values");
-//						OverhauledDamage.info("effective_armor : " + effectiveArmor);
-//						OverhauledDamage.info("");
-//					}
-//
-//					if (piercing_amount * 1.25 <= effectiveArmor) {
-//						effectiveArmor -= (float) (piercing_amount * 1.25);
-//						piercing_amount = 0;
-//					} else {
-//						piercing_amount -= (float) (effectiveArmor * 0.75);
-//						effectiveArmor = 0;
-//					}
-//
-//					if (bashing_amount <= effectiveArmor) {
-//						effectiveArmor -= bashing_amount;
-//						bashing_amount = 0;
-//					} else {
-//						bashing_amount -= effectiveArmor;
-//						effectiveArmor = 0;
-//					}
-//
-//					if (fire_amount <= effectiveArmor) {
-//						effectiveArmor -= fire_amount;
-//						fire_amount = 0;
-//					} else {
-//						fire_amount -= effectiveArmor;
-//						effectiveArmor = 0;
-//					}
-//
-//					if (slashing_amount <= effectiveArmor) {
-//						effectiveArmor -= slashing_amount;
-//						slashing_amount = 0;
-//					} else {
-//						slashing_amount -= effectiveArmor;
-//						slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
-//						effectiveArmor = 0;
-//					}
-//					armorDamage = livingEntity.getArmorValue() - effectiveArmor;
-//				} else {
-		// this is the alternative armor calculation
-		// armor reduces damage on a percentage base
-		// 1 armor point = 1 percent reduction
-		// armor toughness is a multiplier to this
 		float effective_armor = livingEntity.getArmorValue();
 
 		if (serverConfig.overhauled_damage_calculation.armor_overhaul.enable_armor_toughness_attribute.get()) {
+			effective_armor *= (float) livingEntity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
 			if (enable_debug_log) {
 				OverhauledDamage.info("armor toughness is enabled");
 				OverhauledDamage.info("");
+				OverhauledDamage.info("effective_armor (armor * armor_toughness) : " + effective_armor);
+				OverhauledDamage.info("");
 			}
-			effective_armor *= (float) livingEntity.getAttributeValue(Attributes.ARMOR_TOUGHNESS);
 		} else if (enable_debug_log) {
 			OverhauledDamage.info("armor toughness is disabled");
 			OverhauledDamage.info("");
-		}
-
-		if (enable_debug_log) {
-			OverhauledDamage.info("armor calculation uses percentage values");
-			OverhauledDamage.info("effective_armor : " + effective_armor);
+			OverhauledDamage.info("armor : " + effective_armor);
 			OverhauledDamage.info("");
 		}
 
-		// notable difference to the first method:
-		// armor is not reduced when reducing the damage amount of one attack_type
+		float armorDamage;
+		AttackTypeDamageAmounts newAttackTypeDamageAmounts;
 
-		// the different attack types have an armor_multiplier on their own
-		ServerConfig.DamageCalculation.ArmorOverhaul.ArmorMultipliers armor_multipliers = serverConfig.overhauled_damage_calculation.armor_overhaul.armor_multipliers.get();
+//		if (serverConfig.overhauled_damage_calculation.armor_overhaul.armor_calculation_works_with_flat_values.get()) {
+//			// TODO this calculation needs a serious overhaul
+//			// effective armor reduces damage by its amount
+//			// armor is more or less effective against different attack types
+//			if (enable_debug_log) {
+//				OverhauledDamage.info("armor calculation uses flat values");
+//				OverhauledDamage.info("effective_armor : " + effective_armor);
+//				OverhauledDamage.info("");
+//			}
+//
+//			float newPiercingDamage;
+//			float newBashingDamage;
+//			float newFireDamage;
+//			float newPoisonDamage;
+//			float newFrostDamage;
+//			float newLightningDamage;
+//			float newSlashingDamage;
+//
+//			if (piercing_amount * 1.25 <= effective_armor) {
+//				effective_armor -= (float) (piercing_amount * 1.25);
+//				piercing_amount = 0;
+//			} else {
+//				piercing_amount -= (float) (effective_armor * 0.75);
+//				effective_armor = 0;
+//			}
+//
+//			if (attackTypeDamageAmounts.bashing_amount <= effective_armor) {
+//				effective_armor -= attackTypeDamageAmounts.bashing_amount;
+//				newBashingDamage = 0;
+//			} else {
+//				newBashingDamage = attackTypeDamageAmounts.bashing_amount - effective_armor;
+//				effective_armor = 0;
+//			}
+//
+//			if (fire_amount <= effective_armor) {
+//				effective_armor -= fire_amount;
+//				fire_amount = 0;
+//			} else {
+//				fire_amount -= effective_armor;
+//				effective_armor = 0;
+//			}
+//
+//			if (slashing_amount <= effective_armor) {
+//				effective_armor -= slashing_amount;
+//				slashing_amount = 0;
+//			} else {
+//				slashing_amount -= effective_armor;
+//				slashing_amount = (float) (slashing_amount * 1.25); // slashing damage not blocked by armor deals more damage
+//				effective_armor = 0;
+//			}
+//			armorDamage = livingEntity.getArmorValue() - effective_armor;
+//			newAttackTypeDamageAmounts = new AttackTypeDamageAmounts(
+//					attackTypeDamageAmounts.generic_amount,
+//					newBashingDamage,
+//					attackTypeDamageAmounts.piercing_amount - piercing_armor_damage,
+//					attackTypeDamageAmounts.slashing_amount - slashing_armor_damage,
+//					attackTypeDamageAmounts.poison_amount - poison_armor_damage,
+//					attackTypeDamageAmounts.fire_amount - fire_armor_damage,
+//					attackTypeDamageAmounts.frost_amount - frost_armor_damage,
+//					attackTypeDamageAmounts.lightning_amount - lightning_armor_damage
+//
+//			);
+//		} else {
+			// this is the alternative armor calculation
+			// armor reduces damage on a percentage base
+			// 1 armor point = 1 percent reduction
+			if (enable_debug_log) {
+				OverhauledDamage.info("armor calculation uses percentage values");
+				OverhauledDamage.info("");
+				OverhauledDamage.info("armor reduces each attack_type_amount separately");
+				OverhauledDamage.info("");
+				OverhauledDamage.info("1 armor point = 1 percent reduction ");
+				OverhauledDamage.info("");
+			}
 
-		if (enable_debug_log) {
-			OverhauledDamage.info("armor_multipliers: " + armor_multipliers.toString());
-			OverhauledDamage.info("");
-		}
-		float generic_armor_damage = attackTypeDamageAmounts.generic_amount * effective_armor * armor_multipliers.generic / 100;
-		float bashing_armor_damage = attackTypeDamageAmounts.bashing_amount * effective_armor * armor_multipliers.bashing / 100;
-		float piercing_armor_damage = attackTypeDamageAmounts.piercing_amount * effective_armor * armor_multipliers.piercing / 100;
-		float slashing_armor_damage = attackTypeDamageAmounts.slashing_amount * effective_armor * armor_multipliers.slashing / 100;
-		float poison_armor_damage = attackTypeDamageAmounts.poison_amount * effective_armor * armor_multipliers.poison / 100;
-		float fire_armor_damage = attackTypeDamageAmounts.fire_amount * effective_armor * armor_multipliers.fire / 100;
-		float frost_armor_damage = attackTypeDamageAmounts.frost_amount * effective_armor * armor_multipliers.frost / 100;
-		float lightning_armor_damage = attackTypeDamageAmounts.lightning_amount * effective_armor * armor_multipliers.lightning / 100;
+			// the different attack types have an armor_multiplier on their own
+			ServerConfig.DamageCalculation.ArmorOverhaul.ArmorMultipliers armor_multipliers = serverConfig.overhauled_damage_calculation.armor_overhaul.armor_multipliers.get();
 
-		armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
-		AttackTypeDamageAmounts newAttackTypeDamageAmounts = new AttackTypeDamageAmounts(
-				attackTypeDamageAmounts.generic_amount - generic_armor_damage,
-				attackTypeDamageAmounts.bashing_amount - bashing_armor_damage,
-				attackTypeDamageAmounts.piercing_amount - piercing_armor_damage,
-				attackTypeDamageAmounts.slashing_amount - slashing_armor_damage,
-				attackTypeDamageAmounts.poison_amount - poison_armor_damage,
-				attackTypeDamageAmounts.fire_amount - fire_armor_damage,
-				attackTypeDamageAmounts.frost_amount - frost_armor_damage,
-				attackTypeDamageAmounts.lightning_amount - lightning_armor_damage
+			if (enable_debug_log) {
+				OverhauledDamage.info("armor_multipliers: " + armor_multipliers.toString());
+				OverhauledDamage.info("");
+			}
+			float generic_armor_damage = attackTypeDamageAmounts.generic_amount * effective_armor * armor_multipliers.generic / 100;
+			float bashing_armor_damage = attackTypeDamageAmounts.bashing_amount * effective_armor * armor_multipliers.bashing / 100;
+			float piercing_armor_damage = attackTypeDamageAmounts.piercing_amount * effective_armor * armor_multipliers.piercing / 100;
+			float slashing_armor_damage = attackTypeDamageAmounts.slashing_amount * effective_armor * armor_multipliers.slashing / 100;
+			float poison_armor_damage = attackTypeDamageAmounts.poison_amount * effective_armor * armor_multipliers.poison / 100;
+			float fire_armor_damage = attackTypeDamageAmounts.fire_amount * effective_armor * armor_multipliers.fire / 100;
+			float frost_armor_damage = attackTypeDamageAmounts.frost_amount * effective_armor * armor_multipliers.frost / 100;
+			float lightning_armor_damage = attackTypeDamageAmounts.lightning_amount * effective_armor * armor_multipliers.lightning / 100;
 
-		);
-//				}
+			armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
+			newAttackTypeDamageAmounts = new AttackTypeDamageAmounts(
+					attackTypeDamageAmounts.generic_amount - generic_armor_damage,
+					attackTypeDamageAmounts.bashing_amount - bashing_armor_damage,
+					attackTypeDamageAmounts.piercing_amount - piercing_armor_damage,
+					attackTypeDamageAmounts.slashing_amount - slashing_armor_damage,
+					attackTypeDamageAmounts.poison_amount - poison_armor_damage,
+					attackTypeDamageAmounts.fire_amount - fire_armor_damage,
+					attackTypeDamageAmounts.frost_amount - frost_armor_damage,
+					attackTypeDamageAmounts.lightning_amount - lightning_armor_damage
+
+			);
+
+//		}
+
 		livingEntity.hurtArmor(source, armorDamage);
 		if (enable_debug_log) {
 			OverhauledDamage.info("damage applied to equipped armor: " + armorDamage);
