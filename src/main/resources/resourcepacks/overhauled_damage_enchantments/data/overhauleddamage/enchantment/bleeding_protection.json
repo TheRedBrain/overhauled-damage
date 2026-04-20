@@ -18,20 +18,10 @@
       {
         "amount": {
           "type": "minecraft:linear",
-          "base": 0.1,
-          "per_level_above_first": 0.1
-        },
-        "attribute": "overhauleddamage:bleeding_resistance",
-        "id": "overhauleddamage:enchantment.bleeding_protection",
-        "operation": "add_value"
-      },
-      {
-        "amount": {
-          "type": "minecraft:linear",
           "base": 2.0,
           "per_level_above_first": 2.0
         },
-        "attribute": "overhauleddamage:max_freeze_build_up",
+        "attribute": "overhauleddamage:max_bleeding_build_up",
         "id": "overhauleddamage:enchantment.bleeding_protection",
         "operation": "add_value"
       }
