@@ -206,7 +206,7 @@ public class OverhauledDamage implements ModInitializer {
 
 	public static boolean currentStaminaAllowsBlocking(LivingEntity livingEntity) {
 		boolean currentStaminaAllowsBlocking = true;
-		if (isStaminaAttributesLoaded) {
+		if (isBlockingOverhaulLoaded) {
 			currentStaminaAllowsBlocking = BlockingOverhaulIntegration.currentStaminaAllowsBlocking(livingEntity);
 		}
 		return currentStaminaAllowsBlocking;
