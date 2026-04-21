@@ -79,9 +79,9 @@ public class LivingEntityHelper {
 		}
 
 		// fallback
-		ServerConfig.DamageCalculation.DamageTypes.DamageTypeMultipliers damage_type_multiplier = null;
+		ServerConfig.DamageCalculation.AttackTypeMultipliers damage_type_multiplier = null;
 
-		ValidatedMap<String, ServerConfig.DamageCalculation.DamageTypes.DamageTypeMultipliers> damage_type_multipliers = serverConfig.overhauled_damage_calculation.damage_types.damage_type_multipliers;
+		ValidatedMap<String, ServerConfig.DamageCalculation.AttackTypeMultipliers> damage_type_multipliers = serverConfig.overhauled_damage_calculation.damage_type_multipliers;
 
 		String damageTypeId = "";
 		Optional<ResourceKey<DamageType>> optional = source.typeHolder().unwrapKey();
@@ -101,7 +101,7 @@ public class LivingEntityHelper {
 				OverhauledDamage.info("using default_damage_type_multipliers");
 				OverhauledDamage.info("");
 			}
-			damage_type_multiplier = serverConfig.overhauled_damage_calculation.damage_types.default_damage_type_multipliers.get();
+			damage_type_multiplier = serverConfig.overhauled_damage_calculation.default_damage_type_multipliers.get();
 		}
 		if (enable_debug_log) {
 			OverhauledDamage.info("used damage_type_multipliers : " + damage_type_multiplier.toString());

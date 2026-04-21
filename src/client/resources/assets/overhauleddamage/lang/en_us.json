@@ -185,9 +185,8 @@
 
 	"overhauleddamage.server.overhauled_damage_calculation": "Overhauled Damage Calculation Settings",
 
-	"overhauleddamage.server.overhauled_damage_calculation.damage_types": "Damage Types",
-	"overhauleddamage.server.overhauled_damage_calculation.damage_types.default_damage_type_multipliers": "Default Damage Type Multipliers",
-	"overhauleddamage.server.overhauled_damage_calculation.damage_types.damage_type_multipliers": "Damage Type Multipliers",
+	"overhauleddamage.server.overhauled_damage_calculation.default_damage_type_multipliers": "Default Damage Type Multipliers",
+	"overhauleddamage.server.overhauled_damage_calculation.damage_type_multipliers": "Damage Type Multipliers",
 
 	"overhauleddamage.server.overhauled_damage_calculation.enable_blocking_overhaul": "Enable Blocking Overhaul",
 	"overhauleddamage.server.overhauled_damage_calculation.blocking_overhaul": "Blocking Overhaul Settings",
