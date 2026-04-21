@@ -42,7 +42,7 @@ The status effects added by Overhauled Damage are:
 
 Every instance of damage that is dealt to an entity in Minecraft has a "damage type". This defines the death message and mechanics like resistances.
 
-Overhauled Damage expands this system.
+Overhauled Damage expands this system. Each enabled overhaul naturally disables the corresponding vanilla implementation.
 
 When an entity is damaged, this no longer just reduces health. Depending on the damage type, there can be a variety of effects. This can still include health reduction, but it can also be effect build-up increases and even mana/stamina can be modified.
 
@@ -178,7 +178,7 @@ The applied freeze build-up is simply the frost_amount.
 
 ### Stagger Build-Up
 
-If no attempt was made to block the attack with a shield, then stagger build-up is applied now. The amount is calculated by multiplying each attack type amount with a configurable multiplier and adding up the results.
+If no attempt was made to block/parry the attack with a shield, then stagger build-up is applied now. The amount is calculated by multiplying each attack type amount with a configurable multiplier and adding up the results.
 
 ### Poison Build-Up
 
@@ -187,6 +187,10 @@ The applied poison build-up is simply the poison_amount.
 ### Shock Build-Up
 
 The applied shock build-up is simply the lightning_amount.
+
+### Knockback
+
+If no attempt was made to block/parry the attack with a shield and the Knockback Overhaul is enabled, then the attack knockback is applied now. The amount is calculated by multiplying each attack type amount with a configurable multiplier and multiplying the sum with a configurable global multiplier .
 
 ### Damage applied to health/mana/stamina
 

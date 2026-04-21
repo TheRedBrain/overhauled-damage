@@ -26,11 +26,13 @@
   - "overhauleddamage:add_shock_build_up"
   - "overhauleddamage:add_stagger_build_up"
 - added "overhauleddamage:overhauled_damage_entity" entity sub predicate, which allows to check for each effect build up
+- added "overhauleddamage:no_applied_damage" damage type tag. Attacks with damage types in this tag don't deal damage to health/mana/stamina, but all other effects still apply
 - added Java API to give "Mob" entities a custom damage type
 - added server config options to set default entity attribute values (only affects players)
 - added server config option to disable overhauled damage calculation
   - this includes the overhauls to blocking attacks, protection enchantments, armor calculation and the entire "attack type" system. Note that the individual toggles for the various overhauls are still available, if you only want to disable individual systems.
   - this does not include the effect build up system
+- added Knockback Overhaul, allowing better control over how much knockback is applied when taking damage. This can be disabled in the server config
 - the effect build up icon bars now blink when their corresponding build up changes, similar to the vanilla health bar. This can be disabled in the client config.
 - added built-in data pack that integrates some vanilla enchantments with Overhauled Damage
 - added built-in data pack that adds new enchantments
@@ -53,6 +55,7 @@
 - removed "generic." prefix from all entity attributes, following vanillas example
 - improved integration of Stamina Attributes and Mana Attributes
 - migrated to Mojang Mappings
+- internal refactors which made the mod much easier to work with
 
 # 2.4.2
 
