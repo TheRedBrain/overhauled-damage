@@ -5,6 +5,7 @@ import com.github.theredbrain.overhauleddamage.entity.DuckLivingEntityMixin;
 import com.github.theredbrain.overhauleddamage.entity.LivingEntityHelper;
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -157,7 +159,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 
 	@WrapOperation(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;applyItemBlocking(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)F"))
 	private float overhauleddamage$wrap_applyItemBlocking(LivingEntity instance, ServerLevel level, DamageSource source, float damage, Operation<Float> original) {
-		if (OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() && OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_blocking_overhaul.get()) {
+		if (OverhauledDamage.isBlockingOverhaulEnabled()) {
 			return 0.0F;
 		} else {
 			return original.call(instance, level, source, damage);
@@ -171,25 +173,35 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 		return OverhauledDamage.SERVER_CONFIG.enable_overhauled_damage_calculation.get() ? LivingEntityHelper.calculateOverhauledDamage(level, ((LivingEntity) (Object) this), source, dmg) : dmg;
 	}
 
+	// effectively disables the vanilla knockback on attack
+	@WrapMethod(
+			method = "causeExtraKnockback"
+	)
+	private void overhauleddamage$wrap_causeExtraKnockback(Entity target, float knockback, Vec3 oldMovement, Operation<Void> original) {
+		if(!OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get()) {
+			original.call(target, knockback, oldMovement);
+		}
+	}
+
 	// disables the vanilla knockback on damage taken
 	@WrapOperation(
-			method = "damage",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;takeKnockback(DDD)V")
+			method = "hurtServer",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V")
 	)
-	public void overhauleddamage$wrap_takeKnockback(LivingEntity instance, double strength, double x, double z, Operation<Void> original) {
+	public void overhauleddamage$wrap_takeKnockback(LivingEntity instance, double power, double xd, double zd, Operation<Void> original) {
 		if (!OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get()) {
-			original.call(instance, strength, x, z);
+			original.call(instance, power, xd, zd);
 		}
 	}
 
 	// disables the vanilla screen tilting on damage taken
 	@WrapOperation(
-			method = "damage",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;tiltScreen(DD)V")
+			method = "hurtServer",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;indicateDamage(DD)V")
 	)
-	public void overhauleddamage$wrap_tiltScreen(LivingEntity instance, double deltaX, double deltaZ, Operation<Void> original) {
+	public void overhauleddamage$wrap_tiltScreen(LivingEntity instance, double xd, double zd, Operation<Void> original) {
 		if (!OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get()) {
-			original.call(instance, deltaX, deltaZ);
+			original.call(instance, xd, zd);
 		}
 	}
 

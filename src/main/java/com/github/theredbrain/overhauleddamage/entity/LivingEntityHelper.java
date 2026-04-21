@@ -3,28 +3,30 @@ package com.github.theredbrain.overhauleddamage.entity;
 import com.github.theredbrain.overhauleddamage.OverhauledDamage;
 import com.github.theredbrain.overhauleddamage.config.ServerConfig;
 import com.github.theredbrain.overhauleddamage.registry.Tags;
+import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.doubles.DoubleDoubleImmutablePair;
 import me.fzzyhmstrs.fzzy_config.validation.collection.ValidatedMap;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityStatuses;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlocksAttacks;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -133,10 +135,10 @@ public class LivingEntityHelper {
 			attack_type_damage_amounts = addAdditionalAttackAmountsFromAttacker(attack_type_damage_amounts, enable_debug_log, attacker);
 		}
 
-		boolean shouldApplyStaggerOutsideOfShieldBlocking = true;
+		boolean apply_stagger_and_knockback_outside_of_shield_blocking = true;
 		if (OverhauledDamage.isBlockingOverhaulEnabled()) {
 			Pair<Boolean, AttackTypeDamageAmounts> pair = applyShieldBlocking(attack_type_damage_amounts, serverLevel, serverConfig, enable_debug_log, livingEntity, source, attacker);
-			shouldApplyStaggerOutsideOfShieldBlocking = pair.getFirst();
+			apply_stagger_and_knockback_outside_of_shield_blocking = pair.getFirst();
 			attack_type_damage_amounts = pair.getSecond();
 		}
 
@@ -154,9 +156,16 @@ public class LivingEntityHelper {
 
 		applyHitStun(livingEntity, serverConfig, enable_debug_log, damageTypeId);
 
-		applyBuildUps(livingEntity, source, serverConfig, enable_debug_log, shouldApplyStaggerOutsideOfShieldBlocking, attack_type_damage_amounts);
+		applyBuildUps(livingEntity, source, serverConfig, enable_debug_log, apply_stagger_and_knockback_outside_of_shield_blocking, attack_type_damage_amounts);
 
 		ServerConfig.DamageCalculation.AttackTypeMultipliers applied_damage_multipliers = serverConfig.overhauled_damage_calculation.applied_damage_multipliers.get();
+
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- damage applied to resources like health is multiplied ---");
+			OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
+			OverhauledDamage.info("");
+		}
+
 		amount = (attack_type_damage_amounts.generic_amount * applied_damage_multipliers.generic)
 				+ (attack_type_damage_amounts.bashing_amount * applied_damage_multipliers.bashing)
 				+ (attack_type_damage_amounts.piercing_amount * applied_damage_multipliers.piercing)
@@ -166,41 +175,10 @@ public class LivingEntityHelper {
 				+ (attack_type_damage_amounts.frost_amount * applied_damage_multipliers.frost)
 				+ (attack_type_damage_amounts.lightning_amount * applied_damage_multipliers.lightning);
 
-		if (enable_debug_log) {
-			OverhauledDamage.info("--- damage applied to resources like health is multiplied ---");
-			OverhauledDamage.info("applied_damage_multipliers : " + applied_damage_multipliers);
-			OverhauledDamage.info("");
-		}
+		float applied_knockback = calculateAndApplyKnockback(livingEntity, source, serverConfig, enable_debug_log, apply_stagger_and_knockback_outside_of_shield_blocking, attack_type_damage_amounts);
 
-		float applied_knockback = 0.0F;
-		if (!triedBlocking && !source.isIn(DamageTypeTags.NO_KNOCKBACK)) {
-			ServerConfig.DamageCalculation.AttackTypeMultipliers applied_knockback_multipliers = serverConfig.damageCalculation.knockbackOverhaul.applied_knockback_multipliers.get();
-			applied_knockback = (generic_amount * applied_knockback_multipliers.generic) + (bashing_amount * applied_knockback_multipliers.bashing) + (piercing_amount * applied_knockback_multipliers.piercing) + (slashing_amount * applied_knockback_multipliers.slashing) + (poison_amount * applied_knockback_multipliers.poison) + (fire_amount * applied_knockback_multipliers.fire) + (frost_amount * applied_knockback_multipliers.frost) + (lightning_amount * applied_knockback_multipliers.lightning);
-
-
-			double d = 0.0;
-			double e = 0.0;
-			if (source.getSource() instanceof ProjectileEntity projectileEntity) {
-				DoubleDoubleImmutablePair doubleDoubleImmutablePair = projectileEntity.getKnockback(livingEntity, source);
-				d = -doubleDoubleImmutablePair.leftDouble();
-				e = -doubleDoubleImmutablePair.rightDouble();
-			} else if (source.getPosition() != null) {
-				d = source.getPosition().getX() - livingEntity.getX();
-				e = source.getPosition().getZ() - livingEntity.getZ();
-			}
-
-			livingEntity.takeKnockback(applied_knockback, d, e);
-
-			livingEntity.tiltScreen(d, e);
-
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- knockback is applied ---");
-				OverhauledDamage.info("applied_knockback (before knockback resistance) : " + applied_knockback);
-				OverhauledDamage.info("");
-			}
-		}
 		// taking actual damage interrupts eating food, drinking potions, etc
-		if (!livingEntity.isBlocking() && ((amount > 0.0f && serverConfig.overhauled_damage_calculation.damage_interrupts_item_usage.get()) || (applied_knockback > 0.0f && serverConfig.knockback_interrupts_item_usage.get()))) {
+		if (!livingEntity.isBlocking() && ((amount > 0.0f && serverConfig.overhauled_damage_calculation.damage_interrupts_item_usage.get()) || (applied_knockback > 0.0f && serverConfig.overhauled_damage_calculation.knockback_overhaul.knockback_interrupts_item_usage.get()))) {
 			if (enable_debug_log) {
 				OverhauledDamage.info("item usage was stopped");
 				OverhauledDamage.info("");
@@ -536,46 +514,46 @@ public class LivingEntityHelper {
 //
 //			);
 //		} else {
-			// this is the alternative armor calculation
-			// armor reduces damage on a percentage base
-			// 1 armor point = 1 percent reduction
-			if (enable_debug_log) {
-				OverhauledDamage.info("armor calculation uses percentage values");
-				OverhauledDamage.info("");
-				OverhauledDamage.info("armor reduces each attack_type_amount separately");
-				OverhauledDamage.info("");
-				OverhauledDamage.info("1 armor point = 1 percent reduction ");
-				OverhauledDamage.info("");
-			}
+		// this is the alternative armor calculation
+		// armor reduces damage on a percentage base
+		// 1 armor point = 1 percent reduction
+		if (enable_debug_log) {
+			OverhauledDamage.info("armor calculation uses percentage values");
+			OverhauledDamage.info("");
+			OverhauledDamage.info("armor reduces each attack_type_amount separately");
+			OverhauledDamage.info("");
+			OverhauledDamage.info("1 armor point = 1 percent reduction ");
+			OverhauledDamage.info("");
+		}
 
-			// the different attack types have an armor_multiplier on their own
-			ServerConfig.DamageCalculation.ArmorOverhaul.ArmorMultipliers armor_multipliers = serverConfig.overhauled_damage_calculation.armor_overhaul.armor_multipliers.get();
+		// the different attack types have an armor_multiplier on their own
+		ServerConfig.DamageCalculation.ArmorOverhaul.ArmorMultipliers armor_multipliers = serverConfig.overhauled_damage_calculation.armor_overhaul.armor_multipliers.get();
 
-			if (enable_debug_log) {
-				OverhauledDamage.info("armor_multipliers: " + armor_multipliers.toString());
-				OverhauledDamage.info("");
-			}
-			float generic_armor_damage = attackTypeDamageAmounts.generic_amount * effective_armor * armor_multipliers.generic / 100;
-			float bashing_armor_damage = attackTypeDamageAmounts.bashing_amount * effective_armor * armor_multipliers.bashing / 100;
-			float piercing_armor_damage = attackTypeDamageAmounts.piercing_amount * effective_armor * armor_multipliers.piercing / 100;
-			float slashing_armor_damage = attackTypeDamageAmounts.slashing_amount * effective_armor * armor_multipliers.slashing / 100;
-			float poison_armor_damage = attackTypeDamageAmounts.poison_amount * effective_armor * armor_multipliers.poison / 100;
-			float fire_armor_damage = attackTypeDamageAmounts.fire_amount * effective_armor * armor_multipliers.fire / 100;
-			float frost_armor_damage = attackTypeDamageAmounts.frost_amount * effective_armor * armor_multipliers.frost / 100;
-			float lightning_armor_damage = attackTypeDamageAmounts.lightning_amount * effective_armor * armor_multipliers.lightning / 100;
+		if (enable_debug_log) {
+			OverhauledDamage.info("armor_multipliers: " + armor_multipliers.toString());
+			OverhauledDamage.info("");
+		}
+		float generic_armor_damage = attackTypeDamageAmounts.generic_amount * effective_armor * armor_multipliers.generic / 100;
+		float bashing_armor_damage = attackTypeDamageAmounts.bashing_amount * effective_armor * armor_multipliers.bashing / 100;
+		float piercing_armor_damage = attackTypeDamageAmounts.piercing_amount * effective_armor * armor_multipliers.piercing / 100;
+		float slashing_armor_damage = attackTypeDamageAmounts.slashing_amount * effective_armor * armor_multipliers.slashing / 100;
+		float poison_armor_damage = attackTypeDamageAmounts.poison_amount * effective_armor * armor_multipliers.poison / 100;
+		float fire_armor_damage = attackTypeDamageAmounts.fire_amount * effective_armor * armor_multipliers.fire / 100;
+		float frost_armor_damage = attackTypeDamageAmounts.frost_amount * effective_armor * armor_multipliers.frost / 100;
+		float lightning_armor_damage = attackTypeDamageAmounts.lightning_amount * effective_armor * armor_multipliers.lightning / 100;
 
-			armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
-			newAttackTypeDamageAmounts = new AttackTypeDamageAmounts(
-					attackTypeDamageAmounts.generic_amount - generic_armor_damage,
-					attackTypeDamageAmounts.bashing_amount - bashing_armor_damage,
-					attackTypeDamageAmounts.piercing_amount - piercing_armor_damage,
-					attackTypeDamageAmounts.slashing_amount - slashing_armor_damage,
-					attackTypeDamageAmounts.poison_amount - poison_armor_damage,
-					attackTypeDamageAmounts.fire_amount - fire_armor_damage,
-					attackTypeDamageAmounts.frost_amount - frost_armor_damage,
-					attackTypeDamageAmounts.lightning_amount - lightning_armor_damage
+		armorDamage = generic_armor_damage + bashing_armor_damage + piercing_armor_damage + slashing_armor_damage + poison_armor_damage + fire_armor_damage + frost_armor_damage + lightning_armor_damage;
+		newAttackTypeDamageAmounts = new AttackTypeDamageAmounts(
+				attackTypeDamageAmounts.generic_amount - generic_armor_damage,
+				attackTypeDamageAmounts.bashing_amount - bashing_armor_damage,
+				attackTypeDamageAmounts.piercing_amount - piercing_armor_damage,
+				attackTypeDamageAmounts.slashing_amount - slashing_armor_damage,
+				attackTypeDamageAmounts.poison_amount - poison_armor_damage,
+				attackTypeDamageAmounts.fire_amount - fire_armor_damage,
+				attackTypeDamageAmounts.frost_amount - frost_armor_damage,
+				attackTypeDamageAmounts.lightning_amount - lightning_armor_damage
 
-			);
+		);
 
 //		}
 
@@ -664,7 +642,7 @@ public class LivingEntityHelper {
 		}
 	}
 
-	public static void applyBuildUps(LivingEntity livingEntity, DamageSource source, ServerConfig serverConfig, boolean enable_debug_log, boolean shouldApplyStaggerOutsideOfShieldBlocking, AttackTypeDamageAmounts attackTypeDamageAmounts) {
+	public static void applyBuildUps(LivingEntity livingEntity, DamageSource source, ServerConfig serverConfig, boolean enable_debug_log, boolean shouldApplyStaggerAndKnockbackOutsideOfShieldBlocking, AttackTypeDamageAmounts attackTypeDamageAmounts) {
 
 		if (enable_debug_log) {
 			OverhauledDamage.info("--- apply damage by increasing effect build ups ---");
@@ -755,7 +733,7 @@ public class LivingEntityHelper {
 		}
 
 		// apply stagger if no stagger was applied during shield blocking calculation
-		if (shouldApplyStaggerOutsideOfShieldBlocking) {
+		if (shouldApplyStaggerAndKnockbackOutsideOfShieldBlocking) {
 			ServerConfig.DamageCalculation.AttackTypeMultipliers stagger_multipliers = serverConfig.overhauled_damage_calculation.stagger_multipliers.get();
 			if (enable_debug_log) {
 				OverhauledDamage.info("--- apply stagger when no blocking was tried ---");
@@ -803,6 +781,52 @@ public class LivingEntityHelper {
 			OverhauledDamage.info("no shock build up was applied");
 			OverhauledDamage.info("");
 		}
+	}
+
+	public static float calculateAndApplyKnockback(LivingEntity livingEntity, DamageSource source, ServerConfig serverConfig, boolean enable_debug_log, boolean shouldApplyStaggerAndKnockbackOutsideOfShieldBlocking, AttackTypeDamageAmounts attackTypeDamageAmounts) {
+		if (!shouldApplyStaggerAndKnockbackOutsideOfShieldBlocking || source.is(DamageTypeTags.NO_KNOCKBACK)) {
+
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- no knockback is applied ---");
+				OverhauledDamage.info("");
+			}
+
+			return 0.0F;
+		}
+
+		ServerConfig.DamageCalculation.AttackTypeMultipliers applied_knockback_multipliers = serverConfig.overhauled_damage_calculation.knockback_overhaul.applied_knockback_multipliers.get();
+		float applied_knockback = ((attackTypeDamageAmounts.generic_amount * applied_knockback_multipliers.generic)
+				+ (attackTypeDamageAmounts.bashing_amount * applied_knockback_multipliers.bashing)
+				+ (attackTypeDamageAmounts.piercing_amount * applied_knockback_multipliers.piercing)
+				+ (attackTypeDamageAmounts.slashing_amount * applied_knockback_multipliers.slashing)
+				+ (attackTypeDamageAmounts.poison_amount * applied_knockback_multipliers.poison)
+				+ (attackTypeDamageAmounts.fire_amount * applied_knockback_multipliers.fire)
+				+ (attackTypeDamageAmounts.frost_amount * applied_knockback_multipliers.frost)
+				+ (attackTypeDamageAmounts.lightning_amount * applied_knockback_multipliers.lightning)
+		) * serverConfig.overhauled_damage_calculation.knockback_overhaul.global_knockback_multiplier.get();
+
+
+		double d = 0.0;
+		double e = 0.0;
+		if (source.getDirectEntity() instanceof Projectile projectile) {
+			DoubleDoubleImmutablePair doubleDoubleImmutablePair = projectile.calculateHorizontalHurtKnockbackDirection(livingEntity, source);
+			d = -doubleDoubleImmutablePair.leftDouble();
+			e = -doubleDoubleImmutablePair.rightDouble();
+		} else if (source.getSourcePosition() != null) {
+			d = source.getSourcePosition().x() - livingEntity.getX();
+			e = source.getSourcePosition().z() - livingEntity.getZ();
+		}
+
+		if (enable_debug_log) {
+			OverhauledDamage.info("--- knockback is applied ---");
+			OverhauledDamage.info("applied_knockback (before knockback resistance) : " + applied_knockback);
+			OverhauledDamage.info("");
+		}
+		livingEntity.knockback(applied_knockback, d, e);
+
+		livingEntity.indicateDamage(d, e);
+
+		return applied_knockback;
 	}
 
 	public static float calculateAppliedHealthDamage(LivingEntity livingEntity, boolean enable_debug_log, float amount) {
@@ -1256,7 +1280,7 @@ public class LivingEntityHelper {
 			float fire_amount,
 			float frost_amount,
 			float lightning_amount
-			) {
+	) {
 
 	}
 }

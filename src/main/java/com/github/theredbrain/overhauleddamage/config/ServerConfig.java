@@ -285,11 +285,15 @@ public class ServerConfig extends Config {
 
 		public ValidatedBoolean enable_knockback_overhaul = new ValidatedBoolean(true);
 
-		public KnockbackOverhaul knockbackOverhaul = new KnockbackOverhaul();
+		public KnockbackOverhaul knockback_overhaul = new KnockbackOverhaul();
 
 		public static class KnockbackOverhaul extends ConfigSection {
 
 			public ValidatedAny<AttackTypeMultipliers> applied_knockback_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(1.0F, 2.0F, 1.25F, 0.75F, 0.0F, 0.0F, 0.0F, 0.0F));
+
+			public ValidatedFloat global_knockback_multiplier = new ValidatedFloat(0.1F);
+
+			public ValidatedBoolean knockback_interrupts_item_usage = new ValidatedBoolean(true);
 
 		}
 

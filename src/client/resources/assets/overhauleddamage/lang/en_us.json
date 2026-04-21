@@ -212,6 +212,12 @@
 	"overhauleddamage.server.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_setting.duration": "Duration",
 	"overhauleddamage.server.overhauled_damage_calculation.hit_stun_mechanic.hit_stun_setting.required_attribute_threshold": "Required Attribute Threshold",
 
+	"overhauleddamage.server.overhauled_damage_calculation.enable_knockback_overhaul": "Enable Knockback Overhaul",
+	"overhauleddamage.server.overhauled_damage_calculation.knockback_overhaul": "Knockback Overhaul Settings",
+	"overhauleddamage.server.overhauled_damage_calculation.knockback_overhaul.applied_knockback_multipliers": "Applied Knockback Multipliers",
+	"overhauleddamage.server.overhauled_damage_calculation.knockback_overhaul.global_knockback_multiplier": "Global Knockback Multiplier",
+	"overhauleddamage.server.overhauled_damage_calculation.knockback_overhaul.knockback_interrupts_item_usage": "Knockback Interrupts Item Usage",
+
 	"overhauleddamage.server.overhauled_damage_calculation.bleeding_multipliers": "Attack Type Bleeding Multipliers",
 	"overhauleddamage.server.overhauled_damage_calculation.stagger_multipliers": "Attack Type Stagger Multipliers",
 	"overhauleddamage.server.overhauled_damage_calculation.applied_damage_multipliers": "Attack Type Applied Damage Multipliers",
