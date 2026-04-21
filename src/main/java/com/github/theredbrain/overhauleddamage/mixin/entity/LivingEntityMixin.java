@@ -178,7 +178,7 @@ public abstract class LivingEntityMixin extends Entity implements DuckLivingEnti
 			method = "causeExtraKnockback"
 	)
 	private void overhauleddamage$wrap_causeExtraKnockback(Entity target, float knockback, Vec3 oldMovement, Operation<Void> original) {
-		if(!OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get()) {
+		if (!OverhauledDamage.SERVER_CONFIG.overhauled_damage_calculation.enable_knockback_overhaul.get()) {
 			original.call(target, knockback, oldMovement);
 		}
 	}

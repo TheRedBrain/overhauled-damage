@@ -37,6 +37,7 @@
 	},
 	"suggests": {
 		"staminaattributes": "*",
-		"manaattributes": "*"
+		"manaattributes": "*",
+		"blockingoverhaul": "*"
 	}
 }

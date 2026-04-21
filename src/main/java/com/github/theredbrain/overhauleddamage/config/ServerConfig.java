@@ -34,96 +34,96 @@ public class ServerConfig extends Config {
 
 	public static class DamageCalculation extends ConfigSection {
 
-			public ValidatedAny<AttackTypeMultipliers> default_damage_type_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+		public ValidatedAny<AttackTypeMultipliers> default_damage_type_multipliers = new ValidatedAny<>(new AttackTypeMultipliers(1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 
-			public ValidatedMap<String, AttackTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(new HashMap<>() {{
-				// bashing
-				put("minecraft:fall",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:ender_pearl",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:fly_into_wall",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:falling_block",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:falling_anvil",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:mob_attack",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:mob_attack_no_aggro",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:player_attack",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:spit",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:wind_charge",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:thrown",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:explosion",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:player_explosion",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:bad_respawn_point",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:mace_smash",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("overhauleddamage:mob_bashing_damage_type",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				// piercing
-				put("minecraft:cactus",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:sweet_berry_bush",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:stalagmite",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:falling_stalactite",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:spear",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:arrow",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:trident",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:mob_projectile",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:thorns",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("overhauleddamage:mob_piercing_damage_type",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				// slashing
-				put("overhauleddamage:mob_slashing_damage_type",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				// fire
-				put("minecraft:in_fire",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				put("minecraft:campfire",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				put("minecraft:on_fire",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				put("minecraft:lava",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				put("minecraft:hot_floor",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				// frost
-				put("minecraft:freeze",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F));
-				// lightning
-				put("minecraft:lightning_bolt",
-						new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
-				// combinations
-				put("minecraft:sting",
-						new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:fireworks",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				put("minecraft:fireball",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				put("minecraft:unattributed_fireball",
-						new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
-				put("minecraft:wither_skull",
-						new AttackTypeMultipliers(0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
-				put("minecraft:sonic_boom",
-						new AttackTypeMultipliers(0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+		public ValidatedMap<String, AttackTypeMultipliers> damage_type_multipliers = new ValidatedMap<>(new HashMap<>() {{
+			// bashing
+			put("minecraft:fall",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:ender_pearl",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:fly_into_wall",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:falling_block",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:falling_anvil",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:mob_attack",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:mob_attack_no_aggro",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:player_attack",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:spit",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:wind_charge",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:thrown",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:explosion",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:player_explosion",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:bad_respawn_point",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:mace_smash",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("overhauleddamage:mob_bashing_damage_type",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			// piercing
+			put("minecraft:cactus",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:sweet_berry_bush",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:stalagmite",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:falling_stalactite",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:spear",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:arrow",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:trident",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:mob_projectile",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:thorns",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("overhauleddamage:mob_piercing_damage_type",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			// slashing
+			put("overhauleddamage:mob_slashing_damage_type",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			// fire
+			put("minecraft:in_fire",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:campfire",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:on_fire",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:lava",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:hot_floor",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			// frost
+			put("minecraft:freeze",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F));
+			// lightning
+			put("minecraft:lightning_bolt",
+					new AttackTypeMultipliers(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F));
+			// combinations
+			put("minecraft:sting",
+					new AttackTypeMultipliers(0.0F, 0.0F, 1.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:fireworks",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:fireball",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:unattributed_fireball",
+					new AttackTypeMultipliers(0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F));
+			put("minecraft:wither_skull",
+					new AttackTypeMultipliers(0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
+			put("minecraft:sonic_boom",
+					new AttackTypeMultipliers(0.5F, 0.5F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F));
 				/* use default:
 				"minecraft:in_wall"
 				"minecraft:cramming"
@@ -139,7 +139,7 @@ public class ServerConfig extends Config {
 				"minecraft:outside_border"
 				"minecraft:generic_kill"
 				 */
-			}}, new ValidatedString(), new ValidatedAny<>(new AttackTypeMultipliers()));
+		}}, new ValidatedString(), new ValidatedAny<>(new AttackTypeMultipliers()));
 
 		public ValidatedBoolean enable_blocking_overhaul = new ValidatedBoolean(true);
 
