@@ -27,7 +27,7 @@
   - "overhauleddamage:add_stagger_build_up"
 - added "overhauleddamage:overhauled_damage_entity" entity sub predicate, which allows to check for each effect build up
 - added Java API to give "Mob" entities a custom damage type
-- added server config options to set default entity attribute values (only affect players)
+- added server config options to set default entity attribute values (only affects players)
 - added server config option to disable overhauled damage calculation
   - this includes the overhauls to blocking attacks, protection enchantments, armor calculation and the entire "attack type" system. Note that the individual toggles for the various overhauls are still available, if you only want to disable individual systems.
   - this does not include the effect build up system

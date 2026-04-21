@@ -1,116 +1,237 @@
 # Overhauled Damage
 
 A complete overhaul to several mechanics revolving around damage. It is inspired by games like Dark Souls and Valheim and aims to deepen Minecraft's combat.
-It is however not a content mod, more of an API for other mods.
 
-## New Damage Calculation
+# Effect Build-Ups
 
-Generic, bashing, piercing, slashing, poison, fire, frost and lightning are from now on referred to as "attack types". (Not to be confused with the existing "damage types").
+Effect Build-Ups are a resource (like health) and are zero by default. Certain events (like taking damage) increase or reduce these resources. Build-Ups are also slowly reduced over time.
 
-Damage is split into physical and elemental damage which are split further into generic, bashing, piercing and slashing (physical) and poison, fire, frost and lightning (elemental).
+If a build-up reaches a certain threshold, the corresponding status effect is applied and the build-up is set to zero again.
 
-Physical damage is reduced by armor and directly reduces health.
+Currently, there are the following effect build-ups:
+- Bleeding
+- Burning
+- Freezing
+- Poisoned
+- Shocked
+- Staggered
 
-Armor and Armor Toughness work different to vanilla Minecraft. Armor is multiplied with Armor Toughness and the result is subtracted from the incoming damage.
+Effect Build-ups are displayed in the HUD.
 
-Elemental damage is reduced by resistances, applies status effect build-ups but doesn't directly reduce health.
+> Almost all aspects of this system are configurable via entity attributes, config files and/or data packs.
 
-Piercing and slashing damage can apply bleeding build-up.
+# Status Effects
 
-Taking physical or lightning damage adds to the stagger build-up.
+Overhauled Damage adds several status effects that are used by the effect build-ups. They can be configured in the server config.
 
-Damage can be 'true damage', which means it is not reduced by armor or other resistances.
+Some of these effects currently don't have a gameplay effect, since the required third-party APIs are not updated yet.
 
-The mod can be configured extensively via the server config file.
+The Effect Build-Ups can also be configured to use other effects.
 
-### Wait, what are "Effect build-ups"?
+The status effects added by Overhauled Damage are:
+- "overhauleddamage:bleeding", deals a percentage amount of the entities maximum health as damage. The damage is doubled when the entity is moving.
+- "overhauleddamage:burning", deals damage. This effect attempts to recreate the hardcoded "on_fire" entity flag as a status effect.
+- "overhauleddamage:chilled", reduces attack and movement speed. 
+- "overhauleddamage:frozen", has currently no gameplay effect. Is planned to immobilise the entity and prevent any actions. Currently waiting on third-party mods to update.
+- "overhauleddamage:poison", a configurable version of the vanilla status effect. Unlike it's vanilla counter-part, this effect can kill.
+- "overhauleddamage:shocked", has currently no gameplay effect. Is planned to increase damage dealt to the entity. Currently waiting on third-party mods to update.
+- "overhauleddamage:staggered", has currently no gameplay effect. Is planned to immobilise the entity and prevent any actions. Currently waiting on third-party mods to update.
+- "overhauleddamage:hit_stun", reduces attack and movement speed.
 
-Build-ups are a value just like health, which is normally 0. Attacks can apply build-ups to the player (or other entities).
-When a build-up reaches a threshold, the corresponding status effect is applied and the build-up is set to 0. Build-ups are also lowered over time.
+# Overhauled Damage Calculation
 
-The effects applied when a build-up reaches the threshold are defined in the server config.
-When no valid status effect is defined, the build-up will not be applied by attacks.
+Every instance of damage that is dealt to an entity in Minecraft has a "damage type". This defines the death message and mechanics like resistances.
 
-Build-ups are displayed in the HUD, which can be disabled in the client config.
+Overhauled Damage expands this system.
 
-## (Expanded) Blocking Overhaul
+When an entity is damaged, this no longer just reduces health. Depending on the damage type, there can be a variety of effects. This can still include health reduction, but it can also be effect build-up increases and even mana/stamina can be modified.
 
-The blocking overhaul was extracted into a stand-alone mod (Blocking Overhaul), which is an optional dependency, but required for this part of Overhauled Damage.
+What exactly happens, is determined by the damage type or more precisely, to which category (or attack type) the damage type belongs.
 
-### Changed amount of blocked damage
+## Attack Types
 
-The amount of blocked damage is no longer determined by the "minecraft:blocks_attacks" data component, but is now depending on the damage_type (more specifically on its attack_types) of the attack and on several entity attributes.
+Each "damage type" belongs to one or more categories (called "attack types"). This is defined by a list of float values (called multipliers), one for each attack type.
 
-### Changed parry effect
+The attack types are:
+- Generic
+- Bashing
+- Piercing
+- Slashing
+- Poison
+- Fire
+- Frost
+- Lightning
 
-Parrying is also changed. It is no longer a simple multiplier to blocked damage and knockback.
+By default, every damage type has a multiplier of 1.0 for Generic and 0.0 for the rest. Exceptions to this are defined in the server config.
 
-Parrying increases stagger build-up for the blocking entity and when the build-up reaches the threshold, the parry fails and the parrying entity is staggered. In that case, no damage is blocked.
-A successful parry multiplies the blocked damage and staggers the attacker.
 
-### Changed blocking/parrying knockback
+The first step of the new damage calculation is to determine the amount of each attack type, using the damage amount that was dealt to the entity.
 
-The calculation for the knockback applied on blocking is also changed. The attack_knockback of the attacker is increased depending on the damage_type (more specifically by its attack_types) of the attack. This also depends on several attack_type specific multipliers, which can be set in the server config.
+> attack_type_amount = damage_amount * attack_type_multiplier
 
-If you are familiar with the calculation used by "Blocking Overhaul", this changes the "additional_attack_knockback" part of that calculation.
+### True Damage
 
-## Additional features
+Damage types in the "overhauleddamage:is_true_damage" damage type tag will ignore the custom damage calculation. They are not affected by shield blocking, armor or resistance. They don't apply Effect Build-Ups. They just deal damage to health (and/or mana/stamina, if applicable).
 
-3 entity type tags which allow for easy customization of mob attack types. (include vanilla melee mobs by default, eg zombies deal bashing damage)
+---
 
-Optional features enabled in the server config:
-- disable "jump crit mechanic"
-- taking damage cancels using items (doesn't apply when blocking or when damage is "true")
-- blocking requires at least 1 stamina
+## Blocked Damage
 
-## Customization
+This part of the calculation only happens if:
+- the attacked entity is currently blocking with a shield
+- the damage type can be blocked by the equipped shield (determined by the "minecraft:blocks_attacks" data component)
+- the mod "Blocking Overhaul" is installed
+- Overhauled Damage's "Blocking Overhaul" version is enabled in the server config
+- if "Stamina Attributes" is installed, the entity also has to have at least one stamina (or the "blocking_requires_stamina" server config has to be set to false)
 
-The client config allows customizing the HUD elements.
+### Parrying
 
-## How does it work?
+Parrying replaces normal blocking and increases the parry_multiplier if certain conditions are met:
+- the entity is in the "blockingoverhaul:can_parry" entity type tag
+- the blocking time (the amount of ticks since the blocking was started) is equal or lower than the entity's "blockingoverhaul:parry_window" attribute
+- the attack is caused by a LivingEntity
+- the item used for blocking has the "blockingoverhaul:parries_attacks" data component
 
-Overhauled Damage uses damage type tags, entity attributes and its server config file for its damage calculation.
+> parry_multiplier = (if parrying) ? ("blockingoverhaul:parry_multiplier" attribute) : 1
 
-> Damage in Minecraft consists of an amount and a "damage source". The source includes the attacking entity, its position and a "damage type".
+### Stamina Cost Application
 
-> The damage type determines the death message and is also used to check several things. This includes checking for immunities, damage reductions based on enchantments and damaging armor items.
+If Stamina Attributes is installed, the stamina cost for blocking/parrying an attack is applied. If the entity's stamina is lower than zero after that, the attempt to block/parry the attack fails and the damage amount is not reduced.
 
-> These checks don't look for each individual damage type, but for "tags", which are collections of damage types defined via a data pack.
+### Blocked Damage Calculation
 
-Overhauled Damage uses tags to determine if a damage_type can apply bleeding build-up and if it applies 'true damage'.
+The amount of blocked damage is no longer determined by the "minecraft:blocks_attacks" data component, but is now depending on the damage_type (more specifically on its attack_types) of the attack and on several entity attributes. There are 2 different modes, flat damage reduction and percentage based damage reduction.
 
-> "Entity attributes" control things like maximum health, armor and attack strength. Status effects, potions and commands can manipulate these attributes.
+- Flat Value Mode:
+> blocked_attack_type_amount = blocked_attack_type_damage_attribute * parry_multiplier
 
-Most aspects of Overhauled Damage are controlled by attributes, like the thresholds for effect build-ups, blocked damage, elemental resistances, etc.
+- Percentage Based Mode:
+> blocked_attack_type_amount = attack_type_amount * blocked_attack_type_damage_attribute * parry_multiplier / 100
 
-In the server config damage types can be associated with an array of values, which determine the multipliers used when calculating the different elemental and physical damage amounts.
-The multipliers can also be configured.
+### Stagger Application
 
-## Examples
+The sum of all attack_type_stagger_amount is then applied to the stagger build-up of the attacked entity. If the entity gets staggered by this, then the block/parry attempt fails and no damage is blocked.
 
-We look at an attack of the damage type "mod_id:test_damage_type" with an amount of 4.
+> attack_type_stagger_amount = (attack_type_amount - blocked_attack_type_amount) * attack_type_stagger_multiplier
 
-### Example 1
+### Damage Reduction
 
-"mod_id:test_damage_type" has the following damage_type_multipliers: [0.0, **1.0**, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+If the blocking/parrying attempt was successful, then the attack amount is reduced.
 
-Our attack deals 4 points of bashing damage.
+> new_attack_type_amount = old_attack_type_amount - blocked_attack_type_amount
 
-### Example 2
+### Additional Effects
 
-"mod_id:test_damage_type" has the following damage_type_multipliers: [0.0, **1.0**, **1.0**, 0.0, 0.0, 0.0, 0.0, 0.0]
+If the attack had an attacker, then blocking/parrying has additional consequences. If the attack was parried, then the attacker gets staggered instantly.
 
-Our attack deals 4 points of bashing and 4 points of piercing damage, so 8 points in total.
+If the attack was blocked normally, then either the attacking or the defending entity are knocked back by a variable amount.
 
-### Example 3
+> additional_attack_type_knockback = old_attack_type_amount * attack_type_negative_block_force_multiplier
 
-"mod_id:test_damage_type" has the following damage_type_multipliers: [0.0, **0.5**, **0.5**, 0.0, 0.0, 0.0, 0.0, 0.0]
+> applied_knock_back = ((defender's "blockingoverhaul:block_force" attribute) * parry_multiplier) - (attacker's "minecraft:attack_knockback" attribute) + (sum of all additional_attack_type_knockback) * total_applied_blocking_knockback_multiplier_config_option
 
-Our attack deals 2 points of bashing and 2 points of piercing damage, so 4 points in total.
+If applied_knock_back is greater zero, it is applied to the attacking entity.
 
-### Example 4
+If applied_knock_back is lesser zero, its absolute value is applied to the blocking entity.
 
-"mod_id:test_damage_type" has the following damage_type_multipliers: [0.0, **1.5**, **0.5**, 0.0, 0.0, 0.0, 0.0, **1.0**]
+---
 
-Our attack deals 6 points of bashing and 2 points of piercing damage, so 8 points in total.
-It also applies 4 points of shock build-up.
+## Damage Reduction by Armor
+
+The remaining attack type amounts are reduced by armor, using the following formula:
+
+> effective_armor = armor_attribute * armor_toughness_attribute (This can be disabled in the server config)
+
+> attack_type_armor_damage = attack_type_amount * effective_armor * attack_type_armor_multiplier / 100;
+
+> attack_type_amount = attack_type_amount - attack_type_armor_damage
+
+The sum of all attack_type_armor_damage is then used to damage the entities armor.
+
+---
+
+## Damage Reduction by Resistances
+
+Each attack type has a corresponding resistance attribute. The remaining attack type amounts are reduced by resistance using the following formula:
+
+> attack_type_amount = attack_type_amount - (attack_type_amount * attack_type_resistance_attribute) / 100;
+
+---
+
+## Effects of the Attack
+
+The remaining attack type amounts apply their effects to the attacked entity.
+
+### Bleeding Build-Up
+
+If the damage type is in the "overhauleddamage:applies_bleeding" damage type tag, the attack can apply bleeding build-up. The amount is calculated by multiplying each attack type amount with a configurable multiplier and adding up the results.
+
+### Burn Build-Up
+
+The applied burn build-up is simply the fire_amount.
+
+### Chilled Effect and Freeze Build-Up
+
+Frost damage applies the Chilled effect. The effect duration is the frost_amount * a configurable multiplier.
+
+The applied freeze build-up is simply the frost_amount.
+
+### Stagger Build-Up
+
+If no attempt was made to block the attack with a shield, then stagger build-up is applied now. The amount is calculated by multiplying each attack type amount with a configurable multiplier and adding up the results.
+
+### Poison Build-Up
+
+The applied poison build-up is simply the poison_amount.
+
+### Shock Build-Up
+
+The applied shock build-up is simply the lightning_amount.
+
+### Damage applied to health/mana/stamina
+
+The amount of "applied damage" is calculated by multiplying each remaining attack type amount with a configurable multiplier and adding up the results.
+
+If Mana Attributes and/or Stamina Attributes is installed, a portion of "applied damage" can be taken from mana/stamina. The remaining amount of "applied damage" is then taken from the entity's health.
+
+# Integration of Overhauled Damage into vanilla Minecraft and mod packs
+
+How exactly Overhauled Damage should be integrated into the gameplay and balance of a mod pack is highly subjective, which is why most features can be configured extensively and/or use data driven methods for configuration.
+
+Most features have default values that are somewhat reasonable and could be used as a baseline for customisations.
+
+If you have any questions or problems when configuring Overhauled Damage, you can contact me on GitHub or Discord.
+
+## API
+
+Overhauled Damage provides a Java API that allows any Mob entity to deal damage with a custom damage type.
+
+Implement the "UsesCustomDamageType" interface and override the "overhauleddamage$getCustomDamageType()" method.
+
+## Built-in Data Packs
+
+Overhauled Damage also comes with several built-in data packs, which further integrate existing or add new content.
+
+### Overhauled Damage Enchantments
+
+This data pack adds several new enchantments:
+
+- Bleeding Protection
+- Frost Aspect
+- Frost Protection
+- Lightning Aspect
+- Lightning Protection
+- Poison Aspect
+- Poison Protection
+
+### Vanilla Enchantments Overhaul
+
+This data pack reworks some vanilla enchantments to use mechanics introduced by Overhauled Damage.
+
+This includes:
+
+- Blast Protection
+- Fire Aspect
+- Fire Protection
+- Projectile Protection
+- Protection
