@@ -257,6 +257,18 @@ public class LivingEntityHelper {
 			OverhauledDamage.info("");
 		}
 
+		// reduce the stamina of the blocking/parrying entity by the block/parry stamina cost
+		OverhauledDamage.applyBlockAttackStaminaCost(livingEntity, tryParry);
+
+		// when stamina is lower than zero after blocking/parrying the block/parry was not successful and the damage is not reduced
+		if (OverhauledDamage.getCurrentStamina(livingEntity) < 0) {
+			if (enable_debug_log) {
+				OverhauledDamage.info("--- blocking/parrying attempt consumed too much stamina ---");
+				OverhauledDamage.info("");
+			}
+			return new Pair<>(true, attackTypeDamageAmounts);
+		}
+
 		float blockedBashingDamage;
 		float blockedPiercingDamage;
 		float blockedSlashingDamage;
@@ -300,18 +312,6 @@ public class LivingEntityHelper {
 			OverhauledDamage.info("blockedLightningDamage : " + blockedLightningDamage);
 			OverhauledDamage.info("blockedPoisonDamage : " + blockedPoisonDamage);
 			OverhauledDamage.info("");
-		}
-
-		// reduce the stamina of the blocking/parrying entity by the block/parry stamina cost
-		OverhauledDamage.applyBlockAttackStaminaCost(livingEntity, tryParry);
-
-		// when stamina is lower than zero after blocking/parrying the block/parry was not successful and the damage is not reduced
-		if (OverhauledDamage.getCurrentStamina(livingEntity) < 0) {
-			if (enable_debug_log) {
-				OverhauledDamage.info("--- blocking/parrying attempt consumed too much stamina ---");
-				OverhauledDamage.info("");
-			}
-			return new Pair<>(true, attackTypeDamageAmounts);
 		}
 
 		if (applyStaggerBasedOnLeftOverDamage(

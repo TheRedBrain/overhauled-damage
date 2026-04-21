@@ -181,7 +181,7 @@ public class OverhauledDamage implements ModInitializer {
 	}
 
 	public static boolean canParry(LivingEntity livingEntity, DamageSource damageSource, ItemStack shieldItemStack) {
-		boolean canParry = true;
+		boolean canParry = false;
 		if (isBlockingOverhaulLoaded) {
 			canParry = BlockingOverhaulIntegration.canParry(livingEntity, damageSource, shieldItemStack);
 		}
