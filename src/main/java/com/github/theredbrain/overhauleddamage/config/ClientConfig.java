@@ -82,7 +82,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
@@ -104,7 +104,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					// TODO prepend text explaining what the different textures are used for
@@ -262,7 +262,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
@@ -284,7 +284,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					// TODO prepend text explaining what the different textures are used for
@@ -442,7 +442,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
@@ -464,7 +464,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					// TODO prepend text explaining what the different textures are used for
@@ -622,7 +622,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
@@ -644,7 +644,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					// TODO prepend text explaining what the different textures are used for
@@ -802,7 +802,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
@@ -824,7 +824,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					// TODO prepend text explaining what the different textures are used for
@@ -982,7 +982,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					public ValidatedMap<Integer, Identifier> texture_ids = new ValidatedMap<>(new HashMap<>() {{
@@ -1004,7 +1004,7 @@ public class ClientConfig extends Config {
 						put(0, 5);
 					}}, new ValidatedInt(), new ValidatedInt());
 					public ValidatedMap<Integer, Integer> texture_widths = new ValidatedMap<>(new HashMap<>() {{
-						put(0, 62);
+						put(0, 11);
 					}}, new ValidatedInt(), new ValidatedInt());
 
 					// TODO prepend text explaining what the different textures are used for
