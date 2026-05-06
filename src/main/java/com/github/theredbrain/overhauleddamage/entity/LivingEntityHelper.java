@@ -917,7 +917,7 @@ public class LivingEntityHelper {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUpReductionDelayThreshold());
 			}
-			if (getBleedingBuildUp(livingEntity) > 0) {
+			if (getBleedingBuildUp(livingEntity) > 0 || ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUpReduction() < 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBleedingReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBleedingTickTimer(0);
@@ -951,7 +951,7 @@ public class LivingEntityHelper {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUpReductionDelayThreshold());
 			}
-			if (getBurnBuildUp(livingEntity) > 0) {
+			if (getBurnBuildUp(livingEntity) > 0 || ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUpReduction() < 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getBurnReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setBurnTickTimer(0);
@@ -985,7 +985,7 @@ public class LivingEntityHelper {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUpReductionDelayThreshold());
 			}
-			if (getFreezeBuildUp(livingEntity) > 0) {
+			if (getFreezeBuildUp(livingEntity) > 0 || ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUpReduction() < 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getFreezeReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setFreezeTickTimer(0);
@@ -1019,7 +1019,7 @@ public class LivingEntityHelper {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUpReductionDelayThreshold());
 			}
-			if (getStaggerBuildUp(livingEntity) > 0) {
+			if (getStaggerBuildUp(livingEntity) > 0 || ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUpReduction() < 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getStaggerReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setStaggerTickTimer(0);
@@ -1053,7 +1053,7 @@ public class LivingEntityHelper {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUpReductionDelayThreshold());
 			}
-			if (getPoisonBuildUp(livingEntity) > 0) {
+			if (getPoisonBuildUp(livingEntity) > 0 || ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUpReduction() < 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getPoisonReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setPoisonTickTimer(0);
@@ -1087,7 +1087,7 @@ public class LivingEntityHelper {
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockTickTimer(0);
 				((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUpReductionDelayThreshold());
 			}
-			if (getShockBuildUp(livingEntity) > 0) {
+			if (getShockBuildUp(livingEntity) > 0 || ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUpReduction() < 0) {
 				if (((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockReductionDelayTimer() < ((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockBuildUpReductionDelayThreshold()) {
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockReductionDelayTimer(((DuckLivingEntityMixin) livingEntity).overhauleddamage$getShockReductionDelayTimer() + 1);
 					((DuckLivingEntityMixin) livingEntity).overhauleddamage$setShockTickTimer(0);

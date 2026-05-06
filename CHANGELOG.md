@@ -1,3 +1,13 @@
+# 3.1.0
+
+## Changes
+
+- effect build up reductions can now be negative, which increases build-up over time.
+
+## Fixes
+
+- fixed attribute sentiments (define what text colour is used for attribute modifier tooltips)
+
 # 3.0.0
 
 - updated to 26.1.x
